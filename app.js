@@ -1,4 +1,5 @@
 const handlebars = require('handlebars')
+const got = require('got')
 const path = require('path')
 const fs = require('fs')
 require('dotenv').config()
@@ -16,6 +17,11 @@ const template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, './s
   encoding: 'utf-8'
 }))
 
+async function fetchFooter() {
+  const res = await got.get('https://www.kth.se/cm/1.202278')
+  return res.body
+}
+
 app.use('/kpm/dist', express.static('dist'))
 
 app.get('/kpm/_monitor', (req, res) => {
@@ -23,8 +29,11 @@ app.get('/kpm/_monitor', (req, res) => {
   res.send('APPLICATION_STATUS: OK')
 })
 
-app.get('/kpm', (req, res) => {
-  res.send(template());
+app.get('/kpm', async (req, res) => {
+  const footer = await fetchFooter()
+  res.send(template({
+    footer,
+  }));
 });
 
 app.listen(3000, () => {
