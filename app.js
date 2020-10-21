@@ -1,4 +1,6 @@
+const handlebars = require('handlebars')
 const path = require('path')
+const fs = require('fs')
 require('dotenv').config()
 require('skog/bunyan').createLogger({
   app: 'kpm',
@@ -10,6 +12,10 @@ const log = require('skog')
 const express = require('express')
 const app = express()
 
+const template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, './src/index.html'), {
+  encoding: 'utf-8'
+}))
+
 app.use('/kpm/dist', express.static('dist'))
 
 app.get('/kpm/_monitor', (req, res) => {
@@ -18,7 +24,7 @@ app.get('/kpm/_monitor', (req, res) => {
 })
 
 app.get('/kpm', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './src/index.html'))
+  res.send(template());
 });
 
 app.listen(3000, () => {
