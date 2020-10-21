@@ -1,3 +1,4 @@
+const path = require('path')
 require('dotenv').config()
 require('skog/bunyan').createLogger({
   app: 'kpm',
@@ -13,6 +14,10 @@ app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.send('APPLICATION_STATUS: OK')
 })
+
+app.get('/kpm', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './src/index.html'))
+});
 
 app.listen(3000, () => {
   log.info('Starting app KPM in port 3000')

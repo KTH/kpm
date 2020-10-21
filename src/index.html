@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="The new KTH Personal Menu is a development project trying to improve your access to all of KTH"/>
+  <title>KTH Personal Menu</title>
+  <script src="/kpm/index.js" defer></script>
+  <link rel="stylesheet" href="{{page_css}}"/>
+</head>
+<body>
+  <header>
+    <div class="container-fluid">
+      <div class="container">
+        <div class="header-container__top">
+          <figure class="block figure defaultTheme mainLogo" data-cid="1.77257" lang="en">
+            <a href="https://www.kth.se/en"><img class="figure-img img-fluid" src="https://www.kth.se/polopoly_fs/1.77259.1600721582!/KTH_Logotyp_RGB_2013-2.svg" alt="KTH logotype" title="KTH_Logotyp_RGB_2013-2.svg" height="70" width="70"/></a>
+          </figure>
+          <div class="block siteName" data-cid="1.260060">
+            <a href="/kpm/">KTH Personal Menu</a>
+          </div>
+          <div class="block list links secondaryMenu" data-cid="1.865038" lang="en">
+            <nav aria-label="Secondary top menu">
+              <ul>
+                <li><a href="https://www.kth.se/en/student">Student</a></li>
+                <li><a href="https://www.kth.se/en/alumni">Alumni</a></li>
+                <li><a href="https://intra.kth.se/en">Staff</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="header-container__bottom"><!--empty--></div>
+      </div>
+    </div>
+    <div id="gradientBorder"></div>
+  </header>
+  <div class="container main">
+    <div class="row">
+      <div class="col" style="flex-basis: 27em; padding-top: 1em">
+        <main>
+          <header role="presentation" id="articleHeader" class="mb-4">
+            <h1 id="page-heading" class="mb-0" aria-labelledby="page-heading page-sub-heading">KTH Personal Menu</h1>
+            <p id="page-sub-heading" class="t4 mt-1" aria-hidden="true">
+              A development project trying to improve your access to all of KTH
+            </p>
+          </header>
+          <div class="paragraphs">
+            <p>The personal menu has been around at KTH for a long time.
+              Now is the time to make a new start and try to make it better.</p>
+
+            <p>Currently, this new start is pretty much a blank slate.
+              It is up to us in the kpm development team to make it
+              work, but it is up to <em>you</em>, the student, faculty,
+              or staff at KTH to tell us what it should contain.</p>
+
+            <p>What new features should we try to include?  What parts
+              of the old personal menu is better left out, and what parts
+              are important to include in the new menu?</p>
+          </div>
+        </main>
+      </div>
+      <div class="col" style="flex-basis: 18em; flex-grow: .5; padding-top: 2.5em;">
+        <h2>Toggle <abbr title="KTH Personal Menu">KPM</abbr></h2>
+        <form method="post" action="/kpm/">
+          {% if is_active %}
+          <p>You are currently using the experimental KPM.</p>
+          <p>If you disable KPM, pages other than this will show the
+            stable personal menu.</p>
+          <p>
+            <input type="hidden" name="action" value="disable"/>
+            <button type="submit" class="btn btn-primary">Disable experimental
+              KPM</button></p>
+          {% else %}
+          <p>You are currently using the stable personal menu.</p>
+          <p>You can look at KPM on this page, or enable it to
+            replace the stable personal menu on all pages.</p>
+          <p>If you activate KPM, there is a link back here in it, so
+            you can turn it back off.</p>
+          <p>
+            <input type="hidden" name="action" value="enable"/>
+            <button type="submit" class="btn btn-success">Enable experimental
+              KPM</button></p>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer class="container">{{ kth_footer | safe }}</footer>
+</body>
+</html>
