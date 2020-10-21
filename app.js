@@ -10,6 +10,8 @@ const log = require('skog')
 const express = require('express')
 const app = express()
 
+app.use('/kpm/dist', express.static('dist'))
+
 app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.send('APPLICATION_STATUS: OK')
