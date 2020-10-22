@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "style": "cp -r ./node_modules/kth-style/dist ./dist"
+    "build:kth-style": "cp -r ./node_modules/kth-style/dist ./dist",
+    "postinstall": "npm run build:kth-style"
   },
   "keywords": [],
   "author": "KTH Royal Institute of Technology",
