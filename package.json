@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:kth-style": "cp -r ./node_modules/kth-style/dist ./dist",
+    "postinstall": "npm run build:kth-style"
   },
   "keywords": [],
   "author": "KTH Royal Institute of Technology",
@@ -13,6 +15,9 @@
     "bunyan": "^1.8.14",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "got": "^11.8.0",
+    "handlebars": "^4.7.6",
+    "kth-style": "^6.0.1",
     "skog": "^1.0.1-alpha.0"
   }
 }
