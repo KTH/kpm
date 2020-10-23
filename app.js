@@ -1,8 +1,11 @@
 const handlebars = require('handlebars')
-const got = require('got')
 const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto');
+const got = require('got')
+
+const { addDays } = require('date-fns');
+
 require('dotenv').config()
 require('skog/bunyan').createLogger({
   app: 'kpm',
@@ -63,7 +66,7 @@ app.get('/kpm/_monitor', (req, res) => {
 
 app.get(`/kpm/${menuCssName}`, (req, res) => {
   res.setHeader('Content-Type', 'text/css')
-  // TODO: Far expire
+  res.setHeader('Expires', addDays(new Date(), 180).toUTCString())
   res.send(menuCssData)
 })
 
