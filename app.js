@@ -71,10 +71,12 @@ app.get(`/kpm/${menuCssName}`, (req, res) => {
 })
 
 app.get('/kpm/kpm.js', (req, res) => {
-  const css_url = `/kpm/${menuCssName}` // TODO: Absolute, with host.
+  const kpm_base = `${process.env.SERVER_HOST_URL}/kpm/`;
+  const css_url = `${kpm_base}${menuCssName}`
   res.setHeader('Content-Type', 'application/javascript');
   res.send(kpmJsTemplate({
     css_url,
+    kpm_base,
   }));
 })
 
