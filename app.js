@@ -38,6 +38,14 @@ function compileTemplate(name) {
 const template = compileTemplate('index.handlebars')
 const kpmJsTemplate = compileTemplate('kpm.js.handlebars')
 
+// TODO: Sass?
+const menuCssData = fs.readFileSync(path.resolve(__dirname, 'src', 'menu.css'))
+const menuCssName = `menu-${hash(menuCssData)}.css`
+
+function hash(data) {
+  return 'fakehash' // TODO
+}
+
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`)
   return res.body
@@ -50,9 +58,17 @@ app.get('/kpm/_monitor', (req, res) => {
   res.send('APPLICATION_STATUS: OK')
 })
 
+app.get(`/kpm/${menuCssName}`, (req, res) => {
+  res.setHeader('Content-Type', 'text/css')
+  // TODO: Far expire
+  res.send(menuCssData)
+})
+
 app.get('/kpm/kpm.js', (req, res) => {
-  res.setHeader('Content-Type', 'application/javascript')
+  const css_url = `/kpm/${menuCssName}` // TODO: Absolute, with host.
+  res.setHeader('Content-Type', 'application/javascript');
   res.send(kpmJsTemplate({
+    css_url,
   }));
 })
 
