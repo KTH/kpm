@@ -29,9 +29,14 @@ const blocks = {
   gtmNoscript: '1.714099',
 }
 
-const template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, './src/index.handlebars'), {
-  encoding: 'utf-8'
-}))
+function compileTemplate(name) {
+    return handlebars.compile(fs.readFileSync(path.resolve(__dirname, 'src', name), {
+        encoding: 'utf-8'
+    }))
+}
+
+const template = compileTemplate('index.handlebars')
+const kpmJsTemplate = compileTemplate('kpm.js.handlebars')
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`)
@@ -43,6 +48,12 @@ app.use('/kpm/dist', express.static('dist'))
 app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.send('APPLICATION_STATUS: OK')
+})
+
+app.get('/kpm/kpm.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript')
+  res.send(kpmJsTemplate({
+  }));
 })
 
 app.get('/kpm', async (req, res) => {
