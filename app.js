@@ -2,6 +2,7 @@ const handlebars = require('handlebars')
 const got = require('got')
 const path = require('path')
 const fs = require('fs')
+const crypto = require('crypto');
 require('dotenv').config()
 require('skog/bunyan').createLogger({
   app: 'kpm',
@@ -43,7 +44,9 @@ const menuCssData = fs.readFileSync(path.resolve(__dirname, 'src', 'menu.css'))
 const menuCssName = `menu-${hash(menuCssData)}.css`
 
 function hash(data) {
-  return 'fakehash' // TODO
+  const hash = crypto.createHash('sha256')
+  hash.update(data)
+  return hash.digest('base64').slice(0, 12)
 }
 
 async function fetchBlock(str) {
