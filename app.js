@@ -1,7 +1,11 @@
 const handlebars = require('handlebars')
-const got = require('got')
 const path = require('path')
 const fs = require('fs')
+const crypto = require('crypto');
+const got = require('got')
+
+const { addDays } = require('date-fns');
+
 require('dotenv').config()
 require('skog/bunyan').createLogger({
   app: 'kpm',
@@ -29,9 +33,24 @@ const blocks = {
   gtmNoscript: '1.714099',
 }
 
-const template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, './src/index.handlebars'), {
-  encoding: 'utf-8'
-}))
+function compileTemplate(name) {
+    return handlebars.compile(fs.readFileSync(path.resolve(__dirname, 'src', name), {
+        encoding: 'utf-8'
+    }))
+}
+
+const template = compileTemplate('index.handlebars')
+const kpmJsTemplate = compileTemplate('kpm.js.handlebars')
+
+// TODO: Sass?
+const menuCssData = fs.readFileSync(path.resolve(__dirname, 'src', 'menu.css'))
+const menuCssName = `menu-${hash(menuCssData)}.css`
+
+function hash(data) {
+  const hash = crypto.createHash('sha256')
+  hash.update(data)
+  return hash.digest('base64').slice(0, 12)
+}
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`)
@@ -43,6 +62,22 @@ app.use('/kpm/dist', express.static('dist'))
 app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.send('APPLICATION_STATUS: OK')
+})
+
+app.get(`/kpm/${menuCssName}`, (req, res) => {
+  res.setHeader('Content-Type', 'text/css')
+  res.setHeader('Expires', addDays(new Date(), 180).toUTCString())
+  res.send(menuCssData)
+})
+
+app.get('/kpm/kpm.js', (req, res) => {
+  const kpm_base = `${process.env.SERVER_HOST_URL}/kpm/`;
+  const css_url = `${kpm_base}${menuCssName}`
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(kpmJsTemplate({
+    css_url,
+    kpm_base,
+  }));
 })
 
 app.get('/kpm', async (req, res) => {
