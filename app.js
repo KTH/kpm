@@ -61,7 +61,14 @@ app.use('/kpm/dist', express.static('dist'))
 
 app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
-  res.send('APPLICATION_STATUS: OK')
+  version = 'unknown'
+  try {
+    const info = require('./buildinfo.js')
+    version = `${info.dockerName}-${info.dockerVersion} (${info.gitBranch})`
+  } catch(err) {
+    log.warn(`Failed to get app version: ${err}`)
+  }
+  res.send(`APPLICATION_STATUS: OK ${version}`)
 })
 
 app.get(`/kpm/${menuCssName}`, (req, res) => {
