@@ -61,7 +61,7 @@ app.use('/kpm/dist', express.static('dist'))
 
 app.get('/kpm/_monitor', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
-  version = 'unknown'
+  let version = 'unknown'
   try {
     const info = require('./buildinfo.js')
     version = `${info.dockerName}-${info.dockerVersion} (${info.gitBranch})`
