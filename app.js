@@ -3,6 +3,9 @@ const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto');
 const got = require('got')
+const https = require('https')
+const http = require('http')
+const { readFileSync } = require('fs')
 
 const { addDays } = require('date-fns');
 
@@ -98,6 +101,9 @@ app.get('/kpm', async (req, res) => {
   }));
 });
 
-app.listen(3000, () => {
-  log.info('Starting app KPM in port 3000')
-})
+http.createServer(app).listen(80)
+https.createServer({
+  key: readFileSync('./certs/key.pem'),
+  cert: readFileSync('./certs/cert.pem'),
+  passphrase: 'lolo'
+}, app).listen(443)
