@@ -1,11 +1,12 @@
-const handlebars = require('handlebars')
-const path = require('path')
-const fs = require('fs')
-const crypto = require('crypto');
-const got = require('got')
-const https = require('https')
-const http = require('http')
-const { readFileSync } = require('fs')
+const handlebars = require("handlebars");
+const path = require("path");
+const fs = require("fs");
+const crypto = require("crypto");
+const got = require("got");
+const https = require("https");
+const http = require("http");
+const { readFileSync } = require("fs");
+const { validate, parse } = require("fast-xml-parser");
 
 const { addDays } = require("date-fns");
 
@@ -44,7 +45,7 @@ function compileTemplate(name) {
   );
 }
 
-const template = compileTemplate("index.handlebars");
+const loggedInTemplate = compileTemplate("index.handlebars");
 const kpmJsTemplate = compileTemplate("kpm.js.handlebars");
 
 // TODO: Sass?
@@ -82,14 +83,39 @@ app.get(`/kpm/${menuCssName}`, (req, res) => {
   res.send(menuCssData);
 });
 
-app.get("/kpm/kpm.js", (req, res) => {
-  const kpm_base = `${process.env.SERVER_HOST_URL}/kpm/`;
-  const css_url = `${kpm_base}${menuCssName}`;
+app.get("/kpm/kpm.js", async (req, res) => {
+  const baseUrl = `${process.env.SERVER_HOST_URL}/kpm/`;
+  const cssUrl = `${baseUrl}${menuCssName}`;
+  let userName;
+
+  const serviceUrl = "http://localdev.kth.se/kpm/kpm.js";
+  const loginUrl = new URL("https://login-r.referens.sys.kth.se/login");
+  const serviceValidateUrl = new URL(
+    "https://login-r.referens.sys.kth.se/serviceValidate"
+  );
+
+  if (!req.query.ticket) {
+    loginUrl.searchParams.set("service", serviceUrl);
+    loginUrl.searchParams.set("gateway", true);
+    console.log(`Redirecting user to ${loginUrl}`);
+    res.redirect(loginUrl);
+    return;
+  }
+
+  serviceValidateUrl.searchParams.set("ticket", req.query.ticket);
+  serviceValidateUrl.searchParams.set("service", serviceUrl);
+
+  const { body } = await got(serviceValidateUrl);
+
+  if (validate(body) === true) {
+    userName = parse(body)['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
+  }
   res.setHeader("Content-Type", "application/javascript");
   res.send(
     kpmJsTemplate({
-      css_url,
-      kpm_base,
+      baseUrl,
+      cssUrl,
+      userName,
     })
   );
 });
@@ -98,8 +124,9 @@ app.get("/kpm", async (req, res) => {
   const footer = await fetchBlock("footer");
   const megaMenu = await fetchBlock("megaMenu");
   const search = await fetchBlock("search");
+
   res.send(
-    template({
+    loggedInTemplate({
       footer,
       megaMenu,
       search,
@@ -107,9 +134,14 @@ app.get("/kpm", async (req, res) => {
   );
 });
 
-http.createServer(app).listen(80)
-https.createServer({
-  key: readFileSync('./certs/key.pem'),
-  cert: readFileSync('./certs/cert.pem'),
-  passphrase: 'lolo'
-}, app).listen(443)
+http.createServer(app).listen(80);
+https
+  .createServer(
+    {
+      key: readFileSync("./certs/key.pem"),
+      cert: readFileSync("./certs/cert.pem"),
+      passphrase: "lolo",
+    },
+    app
+  )
+  .listen(443);

@@ -11,7 +11,7 @@
   }
   function fetch_css() {
     var el = d.createElement('link');
-    el.href = "{{css_url}}";
+    el.href = "{{cssUrl}}";
     el.rel = "stylesheet";
     el.type = "text/css";
     d.head.appendChild(el);
@@ -20,7 +20,7 @@
     console.log("Open panel for", e.target)
     kpm.classList.toggle('open')
     // TODO: Load this from the server
-    kpm.querySelector('.kpmpanel').innerHTML = '<p>Hello world</p><p><a href="{{kpm_base}}">About KTH Personal Menu</a> – here you can enable or disable the new personal menu.</p>'
+    kpm.querySelector('.kpmpanel').innerHTML = '<p>Hello, {{userName}}</p><p><a href="{{baseUrl}}">About KTH Personal Menu</a> – here you can enable or disable the new personal menu.</p>'
     e.preventDefault();
     e.stopPropagation();
   }
