@@ -1,0 +1,6 @@
+*.handlebars
+
+# From here on, everything is a copy from .gitignore
+node_modules
+dist
+.env
