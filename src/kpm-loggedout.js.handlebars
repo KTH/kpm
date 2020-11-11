@@ -1,0 +1,18 @@
+(function(d){
+  var kpm;
+  function create_menu() {
+    kpm = d.createElement('nav');
+    kpm.id = "kpm"
+    kpm.innerHTML = '<div class="kpmbar"><a href="{{loginUrl}}">Logga in</a></div>';
+    d.body.insertBefore(kpm, d.body.firstChild);
+  }
+  function fetch_css() {
+    var el = d.createElement('link');
+    el.href = "{{cssUrl}}";
+    el.rel = "stylesheet";
+    el.type = "text/css";
+    d.head.appendChild(el);
+  }
+  fetch_css();
+  create_menu();
+})(document)
