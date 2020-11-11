@@ -46,8 +46,8 @@ function compileTemplate(name) {
 }
 
 const template = compileTemplate("index.handlebars");
-const loggedInTemplate = compileTemplate("kpm.js.handlebars");
-const loggedOutTemplate = compileTemplate("loginMenu.js.handlebars");
+const loggedInTemplate = compileTemplate("kpm-loggedin.js.handlebars");
+const loggedOutTemplate = compileTemplate("kpm-loggedout.js.handlebars");
 
 // TODO: Sass?
 const menuCssData = fs.readFileSync(path.resolve(__dirname, "src", "menu.css"));
