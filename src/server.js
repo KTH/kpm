@@ -67,7 +67,7 @@ app.get("/kpm/_monitor", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
   let version = "unknown";
   try {
-    const info = require("./buildinfo.js");
+    const info = require("../buildinfo.js");
     version = `${info.dockerName}-${info.dockerVersion} (${info.gitBranch})`;
   } catch (err) {
     log.warn(`Failed to get app version: ${err}`);
