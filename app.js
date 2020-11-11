@@ -103,14 +103,15 @@ app.get("/kpm/kpm.js", async (req, res) => {
     const { body } = await got(serviceValidateUrl);
     const parsedBody = parse(body);
 
-    userName =
-      parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
-        "cas:user"
-      ];
-
     isAuth =
       validate(body) === true &&
       !parsedBody["cas:serviceResponse"]["cas:authenticationFailure"];
+    if (isAuth) {
+      userName =
+        parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
+          "cas:user"
+        ];
+    }
   }
 
   res.setHeader("Content-type", "application/javascript");
