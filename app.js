@@ -6,8 +6,8 @@ require("skog/bunyan").createLogger({
   serializers: require("bunyan").stdSerializers,
 });
 
-const server = require('./src/server')
+const server = require("./src/server");
 const log = require("skog");
 server.listen(process.env.PORT || 3000, () => {
-  log.info('Started HTTP server')
-})
+  log.info("Started HTTP server");
+});

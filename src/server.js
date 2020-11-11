@@ -89,7 +89,9 @@ app.get("/kpm/kpm.js", async (req, res) => {
 
   const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
   const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
-  const serviceValidateUrl = new URL(`${process.env.SSO_ROOT_URL}/serviceValidate`);
+  const serviceValidateUrl = new URL(
+    `${process.env.SSO_ROOT_URL}/serviceValidate`
+  );
 
   loginUrl.searchParams.set("service", baseUrl);
   logoutUrl.searchParams.set("service", baseUrl);
