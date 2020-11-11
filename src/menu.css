@@ -27,6 +27,8 @@ nav#kpm > .kpmbar {
   background: #006cb7;
   color: white;
   border-bottom: solid 1px #fff;
+  display: flex;
+  justify-content: space-between;
 }
 nav#kpm > .kpmbar a {
   color: white;
