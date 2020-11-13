@@ -21,7 +21,7 @@
     console.log("Open panel for", e.target)
     kpm.classList.toggle('open')
     // TODO: Load this from the server
-    kpm.querySelector('.kpmpanel').innerHTML = '<p>Hello, {{userName}}</p><p><a href="{{baseUrl}}">About KTH Personal Menu</a> – here you can enable or disable the new personal menu.</p><p><a href="{{logoutUrl}}">Logga ut</a></p>'
+    kpm.querySelector('.kpmpanel').innerHTML = '<p>Hello, {{userName}}</p><p><a href="{{baseUrl}}">About KTH Personal Menu</a> – here you can enable or disable the new personal menu.</p><p><a href="{{baseUrl}}/logout">Logga ut</a></p>'
     e.preventDefault();
     e.stopPropagation();
   }

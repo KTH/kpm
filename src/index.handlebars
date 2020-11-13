@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="The new KTH Personal Menu is a development project trying to improve your access to all of KTH"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="The new KTH Personal Menu is a development project trying to improve your access to all of KTH" />
   <title>KTH Personal Menu</title>
-  <link rel="stylesheet" href="/kpm/dist/css/kth-bootstrap.css"/>
+  <link rel="stylesheet" href="/kpm/dist/css/kth-bootstrap.css" />
   <script src="/kpm/dist/js/vendor.js"></script>
   <!--script src="/kpm/dist/js/menus.js"></script-->
   <!--script src="/kpm/dist/js/backtotop.js"></script-->
-  <script src="/kpm/kpm.js?ticket={{ticket}}" defer></script>
+  <script src="/kpm/kpm.js" defer></script>
 </head>
+
 <body>
   <header>
     <div class="container-fluid">
       <div class="container">
         <div class="header-container__top">
           <figure class="block figure defaultTheme mainLogo" data-cid="1.77257" lang="en">
-            <a href="https://www.kth.se/en"><img class="figure-img img-fluid" src="https://www.kth.se/polopoly_fs/1.77259.1600721582!/KTH_Logotyp_RGB_2013-2.svg" alt="KTH logotype" title="KTH_Logotyp_RGB_2013-2.svg" height="70" width="70"/></a>
+            <a href="https://www.kth.se/en"><img class="figure-img img-fluid"
+                src="https://www.kth.se/polopoly_fs/1.77259.1600721582!/KTH_Logotyp_RGB_2013-2.svg" alt="KTH logotype"
+                title="KTH_Logotyp_RGB_2013-2.svg" height="70" width="70" /></a>
           </figure>
           <div class="block siteName" data-cid="1.260060">
             <a href="/kpm/">KTH Personal Menu</a>
@@ -56,7 +61,7 @@
               work, but it is up to <em>you</em>, the student, faculty,
               or staff at KTH to tell us what it should contain.</p>
 
-            <p>What new features should we try to include?  What parts
+            <p>What new features should we try to include? What parts
               of the old personal menu is better left out, and what parts
               are important to include in the new menu?</p>
           </div>
@@ -70,7 +75,7 @@
           <p>If you disable KPM, pages other than this will show the
             stable personal menu.</p>
           <p>
-            <input type="hidden" name="action" value="disable"/>
+            <input type="hidden" name="action" value="disable" />
             <button type="submit" class="btn btn-primary">Disable experimental
               KPM</button></p>
           {% else %}
@@ -80,7 +85,7 @@
           <p>If you activate KPM, there is a link back here in it, so
             you can turn it back off.</p>
           <p>
-            <input type="hidden" name="action" value="enable"/>
+            <input type="hidden" name="action" value="enable" />
             <button type="submit" class="btn btn-success">Enable experimental
               KPM</button></p>
           {% endif %}
@@ -90,4 +95,5 @@
   </div>
   <footer class="container">{{{ footer }}}</footer>
 </body>
+
 </html>
