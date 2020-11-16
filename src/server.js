@@ -19,6 +19,8 @@ const express = require("express");
 const authenticationMiddleware = require("./middleware/authenticationMiddleware.js");
 const app = express();
 
+const isDev = (process.env.NODE_ENV === 'production');
+
 const blocks = {
   title: "1.260060",
   megaMenu: "1.855134",
@@ -72,9 +74,8 @@ app.use(
     name: "kpm",
     secret: process.env.SESSION_SECRET,
     cookie: {
-      // TODO: should be false in localdev, true otherwise
-      secure: false,
-      httpOnly: true,
+      secure: isDev,
+      httpOnly: isDev,
       expires,
       domain: "kth.se",
     },
