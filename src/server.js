@@ -71,7 +71,8 @@ app.use(
   session({
     name: "kpm",
     secret: process.env.SESSION_SECRET,
-    cookie: { // TODO: should be false in localdev, true otherwise
+    cookie: {
+      // TODO: should be false in localdev, true otherwise
       secure: false,
       httpOnly: true,
       expires,
