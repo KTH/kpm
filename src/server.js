@@ -71,8 +71,8 @@ app.use(
   session({
     name: "kpm",
     secret: process.env.SESSION_SECRET,
-    cookie: { // TODO: secure needs to me false in localdev
-      secure: true,
+    cookie: { // TODO: should be false in localdev, true otherwise
+      secure: false,
       httpOnly: true,
       expires,
       domain: "kth.se",
