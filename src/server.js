@@ -2,8 +2,8 @@ const handlebars = require("handlebars");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const session = require("express-session");
 const got = require("got");
-const { validate, parse } = require("fast-xml-parser");
 
 const { addDays } = require("date-fns");
 
@@ -16,6 +16,7 @@ require("skog/bunyan").createLogger({
 });
 const log = require("skog");
 const express = require("express");
+const authenticationMiddleware = require("./middleware/authenticationMiddleware.js");
 const app = express();
 
 const blocks = {
@@ -61,7 +62,27 @@ async function fetchBlock(str) {
   return res.body;
 }
 
+app.set("trust proxy", 1);
+
+var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
+
+// TODO: how shall we decide on naming this?
+app.use(
+  session({
+    name: "kpm",
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      expires,
+      domain: "kth.se",
+    },
+  })
+);
+
 app.use("/kpm/dist", express.static("dist"));
+
+app.use(authenticationMiddleware);
 
 app.get("/kpm/_monitor", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -84,60 +105,37 @@ app.get(`/kpm/${menuCssName}`, (req, res) => {
 app.get("/kpm/kpm.js", async (req, res) => {
   const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
   const cssUrl = `${baseUrl}/${menuCssName}`;
-  let userName;
-  let isAuth = false;
 
   const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
-  const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
-  const serviceValidateUrl = new URL(
-    `${process.env.SSO_ROOT_URL}/serviceValidate`
-  );
 
   loginUrl.searchParams.set("service", baseUrl);
-  logoutUrl.searchParams.set("service", baseUrl);
-
-  if (req.query.ticket) {
-    serviceValidateUrl.searchParams.set("ticket", req.query.ticket);
-    serviceValidateUrl.searchParams.set("service", baseUrl);
-
-    const { body } = await got(serviceValidateUrl);
-    const parsedBody = parse(body);
-
-    isAuth =
-      validate(body) === true &&
-      !parsedBody["cas:serviceResponse"]["cas:authenticationFailure"];
-    if (isAuth) {
-      userName =
-        parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
-          "cas:user"
-        ];
-    }
-  }
 
   res.setHeader("Content-type", "application/javascript");
 
-  if (isAuth) {
+  if (req.session.userId) {
     res.send(
       loggedInTemplate({
         baseUrl,
         cssUrl,
-        userName,
+        userName: req.session.userId,
         loginUrl,
-        logoutUrl,
       })
     );
-    return;
+  } else {
+    res.send(
+      loggedOutTemplate({
+        baseUrl,
+        cssUrl,
+        loginUrl,
+      })
+    );
   }
+});
 
-  res.send(
-    loggedOutTemplate({
-      baseUrl,
-      cssUrl,
-      userName,
-      loginUrl,
-      logoutUrl,
-    })
-  );
+app.get("/kpm/logout", (req, res) => {
+  req.session = null;
+  const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
+  res.redirect(logoutUrl);
 });
 
 app.get("/kpm", async (req, res) => {
@@ -150,7 +148,6 @@ app.get("/kpm", async (req, res) => {
       footer,
       megaMenu,
       search,
-      ticket: req.query.ticket,
     })
   );
 });
