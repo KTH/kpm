@@ -62,7 +62,7 @@ async function fetchBlock(str) {
   return res.body;
 }
 
-app.set("trust proxy", 1); // TODO: note to self: what does this actually do?
+app.set("trust proxy", 1);
 
 var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
 
