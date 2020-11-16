@@ -2,7 +2,7 @@ const handlebars = require("handlebars");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
-const session = require("cookie-session");
+const session = require("express-session");
 const got = require("got");
 
 const { addDays } = require("date-fns");
@@ -69,13 +69,8 @@ var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
 // TODO: how shall we decide on naming this?
 app.use(
   session({
-    name: "some-very-cool-name",
-    keys: ["some", "cool", "keys"],
-    cookie: {
-      secure: true,
-      httpOnly: true,
-      expires,
-    },
+    secret: process.env.SESSION_SECRET,
+    name: 'kpm'
   })
 );
 
