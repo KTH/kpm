@@ -165,13 +165,10 @@ app.get("/kpm/login/callback", async (req, res) => {
         const { body } = await got(serviceValidateUrl);
         const parsedBody = parse(body);
 
-        log.info(body);
-
         if (
           validate(body) === true &&
           !parsedBody["cas:serviceResponse"]["cas:authenticationFailure"]
         ) {
-          log.info("Helllloooo");
           req.session.userId =
             parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
               "cas:user"
