@@ -19,7 +19,7 @@ const express = require("express");
 const authenticationMiddleware = require("./middleware/authenticationMiddleware.js");
 const app = express();
 
-const isDev = (process.env.NODE_ENV === 'production');
+const isDev = process.env.NODE_ENV === "production";
 
 const blocks = {
   title: "1.260060",
