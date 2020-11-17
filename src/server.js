@@ -2,7 +2,7 @@ const handlebars = require("handlebars");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
-const session = require("cookie-session");
+const session = require("express-session");
 const got = require("got");
 const { validate, parse } = require("fast-xml-parser");
 const { addDays } = require("date-fns");
@@ -17,6 +17,8 @@ require("skog/bunyan").createLogger({
 const log = require("skog");
 const express = require("express");
 const app = express();
+
+const isDev = process.env.NODE_ENV !== "production";
 
 const blocks = {
   title: "1.260060",
@@ -68,13 +70,13 @@ var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
 // TODO: how shall we decide on naming this?
 app.use(
   session({
-    name: "session",
-    domain: "kth.se",
-    keys: ["some", "cool", "keys"],
+    name: "kpm",
+    secret: process.env.SESSION_SECRET,
     cookie: {
-      secure: true,
-      httpOnly: true,
+      secure: !isDev,
+      httpOnly: !isDev,
       expires,
+      domain: "kth.se",
     },
   })
 );
@@ -195,7 +197,7 @@ app.get("/kpm/login/callback", async (req, res) => {
 });
 
 app.get("/kpm/logout", (req, res) => {
-  req.session = null;
+  req.session.destroy();
   const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
   res.redirect(logoutUrl);
 });
