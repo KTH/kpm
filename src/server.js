@@ -135,7 +135,7 @@ app.get("/kpm/kpm.js", async (req, res) => {
 });
 
 app.get("/kpm/logout", (req, res) => {
-  req.session = null;
+  req.session.destroy();
   const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
   res.redirect(logoutUrl);
 });
