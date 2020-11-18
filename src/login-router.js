@@ -1,10 +1,10 @@
-const log = require('skog')
+const log = require("skog");
 const { Router } = require("express");
-const { parse, validate } = require('fast-xml-parser')
-const got = require('got')
-// const loginRouter = Router();
+const { parse, validate } = require("fast-xml-parser");
+const got = require("got");
 
-module.exports = loginRouter = Router();
+const loginRouter = Router();
+module.exports = loginRouter;
 
 loginRouter.get("/", (req, res) => {
   // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
@@ -45,11 +45,12 @@ loginRouter.get("/callback", async (req, res) => {
           validate(body) === true &&
           !parsedBody["cas:serviceResponse"]["cas:authenticationFailure"]
         ) {
-          const userId = parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
-            "cas:user"
-          ];
-          log.info(`User ${userId} logged in`)
-          req.session.userId = userId
+          const userId =
+            parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
+              "cas:user"
+            ];
+          log.info(`User ${userId} logged in`);
+          req.session.userId = userId;
         }
       }
     }
