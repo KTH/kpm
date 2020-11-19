@@ -4,10 +4,8 @@
     const userName = "{{userName}}";
     kpm = d.createElement('nav');
     kpm.id = "kpm"
-    kpm.innerHTML= '<div class="kpmbar"><a href="#kpm" data-open="hello">Menu</a></div><div class="kpmpanel"></div>';
-    [].forEach.call(kpm.querySelectorAll('a[href="#kpm"]'), function(a) {
-      a.addEventListener('click', open_panel);
-    });
+    kpm.innerHTML= '<div class="kpmbar"><a href="#kpm">Menu</a></div><div class="kpmpanel"></div>';
+    kpm.querySelector('a[href="#kpm"]').addEventListener('click', open_panel);
     d.body.insertBefore(kpm, d.body.firstChild);
   }
   function fetch_css() {
@@ -18,7 +16,6 @@
     d.head.appendChild(el);
   }
   function open_panel(e) {
-    console.log("Open panel for", e.target)
     kpm.classList.toggle('open')
     // TODO: Load this from the server
     kpm.querySelector('.kpmpanel').innerHTML = '<p>Hello, {{userName}}</p><p><a href="{{baseUrl}}">About KTH Personal Menu</a> – here you can enable or disable the new personal menu.</p><p><a href="{{baseUrl}}/logout">Logga ut</a></p>'
