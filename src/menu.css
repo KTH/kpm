@@ -76,7 +76,7 @@ div#main.ic-Layout-columns > span > span,
   top: calc(2rem + 1px);
 }
 
-#kpm .alert {
+#kpm .kpm-alert {
   animation: kpmopenalert 0.2s linear;
   display: flex;
   justify-content: center;
@@ -85,7 +85,7 @@ div#main.ic-Layout-columns > span > span,
   padding: 1rem 0;
   margin-top: -1px;
 }
-#kpm .alert button {
+#kpm .kpm-alert button {
   background: none;
   outline: none;
   border: none;
@@ -94,7 +94,7 @@ div#main.ic-Layout-columns > span > span,
   top: 0;
   right: 0;
 }
-#kpm .alert > .container {
+#kpm .kpm-alert > .container {
   background: none;
   position: relative;
   padding: 0 2rem;
