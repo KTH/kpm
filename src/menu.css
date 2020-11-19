@@ -93,9 +93,8 @@ div#main.ic-Layout-columns > span > span,
   position: absolute;
   top: 0;
   right: 0;
-
 }
-.alert>.container {
+.alert > .container {
   background: none;
   position: relative;
   padding: 0 2rem;
@@ -107,4 +106,4 @@ div#main.ic-Layout-columns > span > span,
   100% {
     height: auto;
   }
-};
+} ;
