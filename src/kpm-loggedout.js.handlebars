@@ -1,5 +1,27 @@
 (function(d){
   var kpm;
+  function alert_message() {
+    const message = '{{alert}}'
+    if (message.length) {
+      const alert = d.createElement('div');
+      alert.className = 'alert';
+
+      const container = d.createElement('div');
+      container.className = 'container';
+      container.innerHTML = message;
+      alert.append(container);
+
+      const cross = d.createElement('button');
+      cross.innerHTML = '<svg width="12px" height="12px" viewBox="0 0 11 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"><g id="Line" transform="translate(1.000000, 0.000000)" stroke="#FFFFFF"><line x1="0.132352941" y1="0.132352941" x2="8.86764706" y2="8.86764706" transform="translate(4.500000, 4.500000) scale(-1, 1) translate(-4.500000, -4.500000) "></line><line x1="0.132352941" y1="0.132352941" x2="8.86764706" y2="8.86764706"></line></g></g></svg>';
+      container.append(cross)
+
+      cross.addEventListener('click', () => {
+        alert.remove();
+      })
+      
+      kpm.after(alert);
+    }
+  }
   function create_menu() {
     kpm = d.createElement('nav');
     kpm.id = "kpm"
@@ -15,4 +37,5 @@
   }
   fetch_css();
   create_menu();
+  alert_message();
 })(document)

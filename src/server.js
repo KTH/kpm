@@ -105,6 +105,8 @@ app.get(`/kpm/${menuCssName}`, (req, res) => {
 });
 
 app.get("/kpm/kpm.js", async (req, res) => {
+  const loggedInAlert = process.env.LOGGED_IN_ALERT;
+  const loggedOutAlert = process.env.LOGGED_OUT_ALERT;
   const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
   const cssUrl = `${baseUrl}/${menuCssName}`;
 
@@ -121,6 +123,7 @@ app.get("/kpm/kpm.js", async (req, res) => {
         cssUrl,
         userName: req.session.userId,
         loginUrl,
+        alert: loggedInAlert,
       })
     );
   } else {
@@ -129,6 +132,7 @@ app.get("/kpm/kpm.js", async (req, res) => {
         baseUrl,
         cssUrl,
         loginUrl,
+        alert: loggedOutAlert,
       })
     );
   }

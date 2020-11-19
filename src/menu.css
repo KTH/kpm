@@ -75,3 +75,36 @@ div#main.ic-Layout-columns > span > span,
 #discussion-toolbar > div {
   top: calc(2rem + 1px);
 }
+
+.alert {
+  animation: openalert 0.2s linear;
+  display: flex;
+  justify-content: center;
+  background-color: #e01f28;
+  color: #fff;
+  padding: 1rem 0;
+  margin-top: -1px;
+}
+.alert button {
+  background: none;
+  outline: none;
+  border: none;
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+}
+.alert>.container {
+  background: none;
+  position: relative;
+  padding: 0 2rem;
+}
+@keyframes openalert {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: auto;
+  }
+};
