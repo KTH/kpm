@@ -6,6 +6,39 @@ const got = require("got");
 const loginRouter = Router();
 module.exports = loginRouter;
 
+async function authenticateUser(req) {
+  // If user is already logged in, we don't do anything
+  if (req.session.userId) {
+    return;
+  }
+
+  if (!req.query.ticket) {
+    log.error("Missing query parameter [ticket]");
+    return;
+  }
+
+  serviceValidateUrl.searchParams.set("ticket", req.query.ticket);
+  serviceValidateUrl.searchParams.set("service", serviceUrl);
+
+  const { body } = await got(serviceValidateUrl);
+  const parsedBody = parse(body);
+
+  if (validate(body) === false) {
+    log.error("Error when validating XML returned from login server");
+    return;
+  }
+
+  if (parsedBody["cas:serviceResponse"]["cas:authenticationFailure"]) {
+    log.error('XML from login server returned "Authentication failure"');
+    return;
+  }
+
+  const userId =
+    parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"]["cas:user"];
+
+  req.session.userId = userId;
+}
+
 loginRouter.get("/", (req, res) => {
   // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
   const serviceUrl = new URL(
@@ -22,38 +55,7 @@ loginRouter.get("/", (req, res) => {
 
 loginRouter.get("/callback", async (req, res) => {
   try {
-    if (!req.session.userId) {
-      const serviceUrl = new URL(
-        `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
-      );
-      serviceUrl.searchParams.set("next", req.query.next);
-
-      const serviceValidateUrl = new URL(
-        `${process.env.SSO_ROOT_URL}/serviceValidate`
-      );
-
-      log.info(serviceUrl);
-
-      if (req.query.ticket) {
-        serviceValidateUrl.searchParams.set("ticket", req.query.ticket);
-        serviceValidateUrl.searchParams.set("service", serviceUrl);
-
-        const { body } = await got(serviceValidateUrl);
-        const parsedBody = parse(body);
-
-        if (
-          validate(body) === true &&
-          !parsedBody["cas:serviceResponse"]["cas:authenticationFailure"]
-        ) {
-          const userId =
-            parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"][
-              "cas:user"
-            ];
-          log.info(`User ${userId} logged in`);
-          req.session.userId = userId;
-        }
-      }
-    }
+    await authenticateUser(req);
   } catch (err) {
     log.error(err);
   } finally {
@@ -61,6 +63,7 @@ loginRouter.get("/callback", async (req, res) => {
       res.redirect("/kpm");
       return;
     }
+
     // Avoid loops
     if (req.query.next.endsWith("/kpm/login/callback")) {
       res.redirect("/kpm");
