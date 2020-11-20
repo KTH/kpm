@@ -1,10 +1,9 @@
 (function(d){
   var kpm;
   function create_menu() {
-    var loginUrl = "{{loginUrl}}?next=" + window.encodeURI(window.location)
     kpm = d.createElement('nav');
     kpm.id = "kpm"
-    kpm.innerHTML = '<div class="kpmbar"><a href="' + loginUrl + '">Logga in</a></div>';
+    kpm.innerHTML = '<div class="kpmbar"><a href="{{loginUrl}}?next=' + window.encodeURI(window.location) + '">Logga in</a></div>';
     d.body.insertBefore(kpm, d.body.firstChild);
   }
   function fetch_css() {
