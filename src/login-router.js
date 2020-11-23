@@ -17,6 +17,10 @@ async function authenticateUser(req) {
     return;
   }
 
+  const serviceValidateUrl = new URL(
+    `${process.env.SSO_ROOT_URL}/serviceValidate`
+  );
+
   serviceValidateUrl.searchParams.set("ticket", req.query.ticket);
   serviceValidateUrl.searchParams.set("service", serviceUrl);
 
