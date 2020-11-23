@@ -44,10 +44,10 @@ async function authenticateUser(req) {
 }
 
 loginRouter.get("/", (req, res) => {
-  // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
   const serviceUrl = new URL(
     `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
   );
+  // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
   serviceUrl.searchParams.set("next", req.query.next);
 
   const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
