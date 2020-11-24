@@ -19,6 +19,9 @@ const express = require("express");
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
+if (isDev) {
+  log.info("App is in development mode");
+}
 
 const blocks = {
   title: "1.260060",

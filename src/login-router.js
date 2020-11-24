@@ -45,6 +45,7 @@ async function authenticateUser(req) {
   const userId =
     parsedBody["cas:serviceResponse"]["cas:authenticationSuccess"]["cas:user"];
 
+  log.info(`Logging in user ${userId}`);
   req.session.userId = userId;
 }
 
