@@ -4,7 +4,9 @@
   "description": "",
   "//main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js | bunyan -o short",
+    "dev": "concurrently -n server,parcel -k \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "nodemon --watch server app.js | bunyan -o short",
+    "dev:client": "parcel watch client/kpm.js",
     "format": "prettier --write .",
     "start": "node app.js",
     "test:lint": "prettier --check .",
@@ -30,6 +32,7 @@
     "skog": "^1.0.1-alpha.0"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "nodemon": "^2.0.6",
     "parcel": "^2.0.0-nightly.462",
     "prettier": "^2.1.2"
