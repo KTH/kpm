@@ -15,6 +15,7 @@ RUN apk add --no-cache python make g++
 
 # See: https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
 RUN npm ci --unsafe-perm
+COPY . .
 RUN npm run build
 
 
