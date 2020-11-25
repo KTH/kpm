@@ -34,6 +34,7 @@ RUN npm ci --production --unsafe-perm
 FROM kthse/kth-nodejs:12.0.0 AS production
 COPY --from=builder node_modules node_modules
 COPY --from=development /usr/src/app/dist dist
+COPY . .
 
 EXPOSE 3000
 
