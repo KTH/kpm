@@ -11,7 +11,7 @@
     "clean": "rm -rf ./dist",
     "build:kth-style": "mkdir -p ./dist && cp -r ./node_modules/kth-style/dist/* ./dist",
     "build:frontend": "parcel build client/kpm.js",
-    "postinstall": "npm run clean && npm run build:kth-style"
+    "postinstall": "npm run clean && npm run build:kth-style && npm run build:frontend"
   },
   "keywords": [],
   "author": "KTH Royal Institute of Technology",
