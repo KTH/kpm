@@ -4,7 +4,7 @@ const fs = require("fs");
 const crypto = require("crypto");
 const session = require("express-session");
 const got = require("got");
-
+const loginRouter = require("./login-router");
 const { addDays } = require("date-fns");
 
 require("dotenv").config();
@@ -16,10 +16,12 @@ require("skog/bunyan").createLogger({
 });
 const log = require("skog");
 const express = require("express");
-const authenticationMiddleware = require("./middleware/authenticationMiddleware.js");
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
+if (isDev) {
+  log.info("App is in development mode");
+}
 
 const blocks = {
   title: "1.260060",
@@ -84,8 +86,6 @@ app.use(
 
 app.use("/kpm/dist", express.static("dist"));
 
-app.use(authenticationMiddleware);
-
 app.get("/kpm/_monitor", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
   let version = "unknown";
@@ -108,10 +108,6 @@ app.get("/kpm/kpm.js", async (req, res) => {
   const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
   const cssUrl = `${baseUrl}/${menuCssName}`;
 
-  const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
-
-  loginUrl.searchParams.set("service", baseUrl);
-
   res.setHeader("Content-type", "application/javascript");
 
   if (req.session.userId) {
@@ -120,20 +116,20 @@ app.get("/kpm/kpm.js", async (req, res) => {
         baseUrl,
         cssUrl,
         userName: req.session.userId,
-        loginUrl,
+        loginUrl: baseUrl,
       })
     );
   } else {
     res.send(
       loggedOutTemplate({
-        baseUrl,
         cssUrl,
-        loginUrl,
+        loginUrl: `${baseUrl}/login`,
       })
     );
   }
 });
 
+app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
   const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
