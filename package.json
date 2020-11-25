@@ -8,8 +8,9 @@
     "start": "node app.js",
     "test:lint": "prettier --check .",
     "test": "npm run test:lint",
-    "build:kth-style": "cp -r ./node_modules/kth-style/dist ./dist",
-    "postinstall": "npm run build:kth-style"
+    "clean": "rm -rf ./dist",
+    "build:kth-style": "mkdir -p ./dist && cp -r ./node_modules/kth-style/dist/* ./dist",
+    "postinstall": "npm run clean && npm run build:kth-style"
   },
   "keywords": [],
   "author": "KTH Royal Institute of Technology",
