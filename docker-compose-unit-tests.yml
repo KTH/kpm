@@ -2,8 +2,9 @@ version: "3.2"
 
 services:
   unit_tests:
-    build: .
-    target: development
+    build:
+      context: .
+      target: development
     tty: false
     command: >
       sh -c "npm test"
