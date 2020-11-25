@@ -48,11 +48,17 @@ function compileTemplate(name) {
 }
 
 const infoPageTemplate = compileTemplate("info-page.handlebars");
-const loggedInTemplate = compileTemplate("../client/kpm-loggedin.js.handlebars");
-const loggedOutTemplate = compileTemplate("../client/kpm-loggedout.js.handlebars");
+const loggedInTemplate = compileTemplate(
+  "../client/kpm-loggedin.js.handlebars"
+);
+const loggedOutTemplate = compileTemplate(
+  "../client/kpm-loggedout.js.handlebars"
+);
 
 // TODO: Sass?
-const menuCssData = fs.readFileSync(path.resolve(__dirname, "../client/menu.css"));
+const menuCssData = fs.readFileSync(
+  path.resolve(__dirname, "../client/menu.css")
+);
 const menuCssName = `menu-${hash(menuCssData)}.css`;
 
 function hash(data) {
