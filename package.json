@@ -2,7 +2,7 @@
   "name": "kpm",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "//main": "app.js",
   "scripts": {
     "format": "prettier --write .",
     "start": "node app.js",
@@ -10,6 +10,7 @@
     "test": "npm run test:lint",
     "clean": "rm -rf ./dist",
     "build:kth-style": "mkdir -p ./dist && cp -r ./node_modules/kth-style/dist/* ./dist",
+    "build:frontend": "parcel build client/kpm.js",
     "postinstall": "npm run clean && npm run build:kth-style"
   },
   "keywords": [],
@@ -28,6 +29,7 @@
     "skog": "^1.0.1-alpha.0"
   },
   "devDependencies": {
+    "parcel": "^2.0.0-beta.1",
     "prettier": "^2.1.2"
   }
 }

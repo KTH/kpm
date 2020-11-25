@@ -7,3 +7,5 @@ buildinfo.js
 node_modules
 dist
 .env
+certs
+.parcel-cache
