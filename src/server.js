@@ -58,7 +58,7 @@ const menuCssName = `menu-${hash(menuCssData)}.css`;
 function hash(data) {
   const hash = crypto.createHash("md5");
   hash.update(data);
-  return hash.digest("base64").slice(0, 12);
+  return hash.digest("hex").slice(0, 12);
 }
 
 async function fetchBlock(str) {
@@ -70,7 +70,6 @@ app.set("trust proxy", 1);
 
 var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
 
-// TODO: how shall we decide on naming this?
 app.use(
   session({
     name: "kpm",
@@ -105,6 +104,8 @@ app.get(`/kpm/${menuCssName}`, (req, res) => {
 });
 
 app.get("/kpm/kpm.js", async (req, res) => {
+  const loggedInAlert = process.env.LOGGED_IN_ALERT;
+  const loggedOutAlert = process.env.LOGGED_OUT_ALERT;
   const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
   const cssUrl = `${baseUrl}/${menuCssName}`;
 
@@ -117,6 +118,7 @@ app.get("/kpm/kpm.js", async (req, res) => {
         cssUrl,
         userName: req.session.userId,
         loginUrl: baseUrl,
+        alert: loggedInAlert,
       })
     );
   } else {
@@ -124,6 +126,7 @@ app.get("/kpm/kpm.js", async (req, res) => {
       loggedOutTemplate({
         cssUrl,
         loginUrl: `${baseUrl}/login`,
+        alert: loggedOutAlert,
       })
     );
   }
