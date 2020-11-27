@@ -68,7 +68,6 @@ app.set("trust proxy", 1);
 
 var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
 
-// TODO: how shall we decide on naming this?
 app.use(
   session({
     name: "kpm",
