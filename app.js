@@ -6,6 +6,7 @@ require("skog/bunyan").createLogger({
   serializers: require("bunyan").stdSerializers,
 });
 
+require('@kth/reqvars').check();
 const server = require("./src/server");
 const log = require("skog");
 server.listen(process.env.PORT || 3000, () => {
