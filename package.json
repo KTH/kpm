@@ -2,7 +2,7 @@
   "name": "kpm",
   "version": "1.0.0",
   "description": "",
-  "//main": "app.js",
+  "main": "app.js",
   "scripts": {
     "dev": "concurrently -n server,parcel -k \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon --watch server app.js | bunyan -o short",
