@@ -51,6 +51,7 @@ nav#kpm > .kpmpanel {
 }
 nav#kpm.open > .kpmpanel {
   display: block;
+  position: absolute;
 }
 /* And some special page-level adaptions for canvas */
 /* Some rules specially for canvas */
@@ -84,6 +85,9 @@ div#main.ic-Layout-columns > span > span,
   color: #fff;
   padding: 1rem 0;
   margin-top: -1px;
+  z-index: 9999;
+  position: absolute;
+  width: 100%;
 }
 #kpm .kpm-alert button {
   background: none;
