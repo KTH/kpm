@@ -56,7 +56,7 @@ const menuCssName = `menu-${hash(menuCssData)}.css`;
 function hash(data) {
   const hash = crypto.createHash("md5");
   hash.update(data);
-  return hash.digest("base64").slice(0, 12);
+  return hash.digest("hex").slice(0, 12);
 }
 
 async function fetchBlock(str) {
