@@ -68,8 +68,6 @@ async function fetchBlock(str) {
 
 app.set("trust proxy", 1);
 
-var expires = new Date(Date.now() + 60 * 60 * 1000); // TODO: is 1h fine?
-
 app.use(
   session({
     name: "kpm",
@@ -77,7 +75,7 @@ app.use(
     cookie: {
       secure: !isDev,
       httpOnly: !isDev,
-      expires,
+      maxAge: 60 * 60 * 1000, // 1 hour
       domain: "kth.se",
     },
   })
