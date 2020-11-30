@@ -51,6 +51,7 @@ nav#kpm > .kpmpanel {
 }
 nav#kpm.open > .kpmpanel {
   display: block;
+  position: absolute;
 }
 /* And some special page-level adaptions for canvas */
 /* Some rules specially for canvas */
@@ -75,3 +76,38 @@ div#main.ic-Layout-columns > span > span,
 #discussion-toolbar > div {
   top: calc(2rem + 1px);
 }
+
+#kpm .kpm-alert {
+  animation: kpmopenalert 0.2s linear;
+  display: flex;
+  justify-content: center;
+  background-color: #e01f28;
+  color: #fff;
+  padding: 1rem 0;
+  margin-top: -1px;
+  z-index: 9999;
+  position: absolute;
+  width: 100%;
+}
+#kpm .kpm-alert button {
+  background: none;
+  outline: none;
+  border: none;
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#kpm .kpm-alert > .container {
+  background: none;
+  position: relative;
+  padding: 0 2rem;
+}
+@keyframes kpmopenalert {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: auto;
+  }
+} ;
