@@ -100,42 +100,6 @@ app.get("/kpm/_monitor", (req, res) => {
   }
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
-
-app.get(`/kpm/${menuCssName}`, (req, res) => {
-  res.setHeader("Content-Type", "text/css");
-  res.setHeader("Expires", addDays(new Date(), 180).toUTCString());
-  res.send(menuCssData);
-});
-
-app.get("/kpm/kpm.js", async (req, res) => {
-  const loggedInAlert = process.env.LOGGED_IN_ALERT;
-  const loggedOutAlert = process.env.LOGGED_OUT_ALERT;
-  const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
-  const cssUrl = `${baseUrl}/${menuCssName}`;
-
-  res.setHeader("Content-type", "application/javascript");
-
-  if (req.session.userId) {
-    res.send(
-      loggedInTemplate({
-        baseUrl,
-        cssUrl,
-        userName: req.session.userId,
-        loginUrl: baseUrl,
-        alert: loggedInAlert,
-      })
-    );
-  } else {
-    res.send(
-      loggedOutTemplate({
-        cssUrl,
-        loginUrl: `${baseUrl}/login`,
-        alert: loggedOutAlert,
-      })
-    );
-  }
-});
-
 app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
