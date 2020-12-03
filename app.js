@@ -8,8 +8,8 @@ require("skog/bunyan").createLogger({
 });
 
 require("@kth/reqvars").check();
-const server = require("./src/server");
+const server = require("./server/server");
 const log = require("skog");
 server.listen(process.env.PORT || 3000, () => {
-  log.info("Started HTTP server");
+  log.info(`Starting KPM at ${process.env.SERVER_HOST_URL}/kpm`);
 });

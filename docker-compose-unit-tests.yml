@@ -1,10 +1,10 @@
-version: "3.2"
+version: "3.4"
 
 services:
   unit_tests:
-    build: .
-    image: $LOCAL_IMAGE_ID
+    build:
+      context: .
+      target: development
     tty: false
     command: >
-      sh -c "npm ci &&
-             npm test"
+      sh -c "npm test"
