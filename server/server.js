@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
-const blocksRouter = require("./blocks/router")
+const blocksRouter = require("./blocks/router");
 const { addDays } = require("date-fns");
 
 require("dotenv").config();
