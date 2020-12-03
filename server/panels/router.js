@@ -7,7 +7,7 @@ const path = require("path");
 const panelsRouter = Router();
 module.exports = panelsRouter;
 
-function compileBlock(name) {
+function compilePanel(name) {
   return handlebars.compile(
     fs.readFileSync(path.resolve(__dirname, name), {
       encoding: "utf-8",
@@ -15,8 +15,10 @@ function compileBlock(name) {
   );
 }
 
-const indexLoggedOut = compileBlock("index-loggedout.handlebars");
-const indexLoggedIn = compileBlock("index-loggedin.handlebars");
+const indexLoggedOut = compilePanel("index-loggedout.handlebars");
+const indexLoggedIn = compilePanel("index-loggedin.handlebars");
+const errorPanel = compilePanel("error.handlebars")
+const helloPanel = compilePanel("hello.handlebars")
 
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
@@ -31,3 +33,15 @@ panelsRouter.get("/", (req, res) => {
     );
   }
 });
+
+panelsRouter.get("/hello", (req, res) => {
+  if (req.session.userId) {
+    res.send(helloPanel({
+      userName: req.session.userId,
+      infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
+      logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`
+    }))
+  } else {
+    res.send(errorPanel())
+  }
+})
