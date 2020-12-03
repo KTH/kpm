@@ -4,7 +4,7 @@ const fs = require("fs");
 const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
-const blocksRouter = require("./blocks/router");
+const panelsRouter = require("./panels/router");
 
 require("dotenv").config();
 require("skog/bunyan").createLogger({
@@ -83,7 +83,7 @@ app.get("/kpm/logout", (req, res) => {
   res.redirect(logoutUrl);
 });
 
-app.use("/kpm/blocks", blocksRouter);
+app.use("/kpm/panels", panelsRouter);
 app.get("/kpm", async (req, res) => {
   const footer = await fetchBlock("footer");
   const megaMenu = await fetchBlock("megaMenu");

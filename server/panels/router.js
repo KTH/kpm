@@ -4,8 +4,8 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 
-const blocksRouter = Router();
-module.exports = blocksRouter;
+const panelsRouter = Router();
+module.exports = panelsRouter;
 
 function compileBlock(name) {
   return handlebars.compile(
@@ -19,7 +19,7 @@ const indexLoggedOut = compileBlock("index-loggedout.handlebars");
 const indexLoggedIn = compileBlock("index-loggedin.handlebars");
 
 // Returns the menu itself
-blocksRouter.get("/", (req, res) => {
+panelsRouter.get("/", (req, res) => {
   if (req.session.userId) {
     res.send(indexLoggedIn());
   } else {
