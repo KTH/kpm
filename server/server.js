@@ -1,12 +1,10 @@
 const handlebars = require("handlebars");
 const path = require("path");
 const fs = require("fs");
-const crypto = require("crypto");
 const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
 const blocksRouter = require("./blocks/router");
-const { addDays } = require("date-fns");
 
 require("dotenv").config();
 require("skog/bunyan").createLogger({
@@ -40,33 +38,11 @@ const blocks = {
   gtmNoscript: "1.714099",
 };
 
-function compileTemplate(name) {
-  return handlebars.compile(
-    fs.readFileSync(path.resolve(__dirname, name), {
-      encoding: "utf-8",
-    })
-  );
-}
-
-const infoPageTemplate = compileTemplate("info-page.handlebars");
-const loggedInTemplate = compileTemplate(
-  "../client/kpm-loggedin.js.handlebars"
+const infoPageTemplate = handlebars.compile(
+  fs.readFileSync(path.resolve(__dirname, "info-page.handlebars"), {
+    encoding: "utf-8",
+  })
 );
-const loggedOutTemplate = compileTemplate(
-  "../client/kpm-loggedout.js.handlebars"
-);
-
-// TODO: Sass?
-const menuCssData = fs.readFileSync(
-  path.resolve(__dirname, "../client/menu.css")
-);
-const menuCssName = `menu-${hash(menuCssData)}.css`;
-
-function hash(data) {
-  const hash = crypto.createHash("md5");
-  hash.update(data);
-  return hash.digest("hex").slice(0, 12);
-}
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`);
