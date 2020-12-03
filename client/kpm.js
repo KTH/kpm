@@ -5,7 +5,7 @@ document.body.insertBefore(kpm, document.body.firstChild);
 
 async function start() {
   await import("./menu.css");
-  const content = await fetchBlock("");
+  const content = await fetchPanel("");
   kpm.innerHTML = content;
 
   const loginButton = kpm.getElementsByClassName("kpm-login")[0];
@@ -21,8 +21,16 @@ async function start() {
   }
 
   if (openMenuButton) {
-
+    openMenuButton.addEventListener("click", openMenu);
   }
+}
+
+async function openMenu(event) {
+  kpm.classList.toggle("open");
+  event.preventDefault();
+  event.stopPropagation();
+  kpm.querySelector(".kpmpanel").innerHTML = "<p>Loading...</p>";
+  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel("hello");
 }
 
 async function fetchPanel(panel) {
@@ -40,10 +48,8 @@ async function fetchPanel(panel) {
     console.log(content);
     return content;
   } catch (err) {
-    console.error(`Error when fetching the "${block}" panel: `, err);
+    console.error(`Error when fetching the "${panel}" panel: `, err);
   }
-
-  return "Content!!";
 }
 
 start();
