@@ -17,8 +17,8 @@ function compilePanel(name) {
 
 const indexLoggedOut = compilePanel("index-loggedout.handlebars");
 const indexLoggedIn = compilePanel("index-loggedin.handlebars");
-const errorPanel = compilePanel("error.handlebars")
-const helloPanel = compilePanel("hello.handlebars")
+const errorPanel = compilePanel("error.handlebars");
+const helloPanel = compilePanel("hello.handlebars");
 
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
@@ -36,12 +36,14 @@ panelsRouter.get("/", (req, res) => {
 
 panelsRouter.get("/hello", (req, res) => {
   if (req.session.userId) {
-    res.send(helloPanel({
-      userName: req.session.userId,
-      infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
-      logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`
-    }))
+    res.send(
+      helloPanel({
+        userName: req.session.userId,
+        infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
+        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
+      })
+    );
   } else {
-    res.send(errorPanel())
+    res.send(errorPanel());
   }
-})
+});
