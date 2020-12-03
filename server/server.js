@@ -87,8 +87,7 @@ app.use(
   })
 );
 
-app.use("/kpm/dist", express.static("dist"));
-
+app.use("/kpm", express.static("dist"));
 app.get("/kpm/_monitor", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
   let version = "unknown";

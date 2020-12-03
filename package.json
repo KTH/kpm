@@ -12,7 +12,7 @@
     "test:lint": "prettier --check .",
     "test": "npm run test:lint",
     "clean": "rm -rf ./dist",
-    "build:kth-style": "mkdir -p ./dist && cp -r ./node_modules/kth-style/dist/* ./dist",
+    "build:kth-style": "mkdir -p ./dist/kth-style && cp -r ./node_modules/kth-style/dist/* ./dist/kth-style",
     "build:client": "parcel build client/kpm.js",
     "build": "npm run clean && npm run build:kth-style && npm run build:client"
   },
