@@ -23,7 +23,11 @@ const helloPanel = compilePanel("hello.handlebars");
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
   if (req.session.userId) {
-    res.send(indexLoggedIn());
+    res.send(
+      indexLoggedIn({
+        message: process.env.LOGGED_IN_ALERT,
+      })
+    );
   } else {
     res.send(
       indexLoggedOut({
