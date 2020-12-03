@@ -45,7 +45,6 @@ async function fetchPanel(panel) {
       })
       .then((r) => r.text());
 
-    console.log(content);
     return content;
   } catch (err) {
     console.error(`Error when fetching the "${panel}" panel: `, err);
