@@ -40,7 +40,7 @@ const blocks = {
   gtmNoscript: "1.714099",
 };
 
-const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars")
+const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`);
