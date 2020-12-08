@@ -3,22 +3,15 @@ const { Router } = require("express");
 const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
+const { compileTemplate } = require("../utils");
 
 const panelsRouter = Router();
 module.exports = panelsRouter;
 
-function compilePanel(name) {
-  return handlebars.compile(
-    fs.readFileSync(path.resolve(__dirname, name), {
-      encoding: "utf-8",
-    })
-  );
-}
-
-const indexLoggedOut = compilePanel("index-loggedout.handlebars");
-const indexLoggedIn = compilePanel("index-loggedin.handlebars");
-const errorPanel = compilePanel("error.handlebars");
-const helloPanel = compilePanel("hello.handlebars");
+const indexLoggedOut = compileTemplate(__dirname, "index-loggedout.handlebars");
+const indexLoggedIn = compileTemplate(__dirname, "index-loggedin.handlebars");
+const errorPanel = compileTemplate(__dirname, "error.handlebars");
+const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {

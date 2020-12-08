@@ -15,6 +15,8 @@ require("skog/bunyan").createLogger({
 });
 const log = require("skog");
 const express = require("express");
+const { compileTemplate } = require("./utils");
+
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -38,11 +40,7 @@ const blocks = {
   gtmNoscript: "1.714099",
 };
 
-const infoPageTemplate = handlebars.compile(
-  fs.readFileSync(path.resolve(__dirname, "info-page.handlebars"), {
-    encoding: "utf-8",
-  })
-);
+const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars")
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`);
