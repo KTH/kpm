@@ -36,7 +36,7 @@ async function openMenu(event) {
 async function fetchPanel(panel) {
   try {
     const content = await window
-      .fetch(`/kpm/panels/${panel}`)
+      .fetch(`${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`)
       .then((r) => {
         if (r.status > 400) {
           throw new Error(`${r.status} ${r.statusText}`);
