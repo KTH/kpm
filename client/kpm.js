@@ -34,20 +34,13 @@ async function openMenu(event) {
 }
 
 async function fetchPanel(panel) {
-  try {
-    const content = await window
-      .fetch(`${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`)
-      .then((r) => {
-        if (r.status > 400) {
-          throw new Error(`${r.status} ${r.statusText}`);
-        }
-        return r;
-      })
-      .then((r) => r.text());
-
-    return content;
-  } catch (err) {
-    console.error(`Error when fetching the "${panel}" panel: `, err);
+  const response = await window.fetch(
+    `${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`
+  );
+  if (response.status > 400) {
+    console.error(`Error when fetching the "${panel}" panel: `, response);
+  } else {
+    return await response.text();
   }
 }
 
