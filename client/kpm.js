@@ -38,7 +38,7 @@ async function fetchPanel(panel) {
     `${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`
   );
   if (response.status > 400) {
-    console.error(`Error when fetching the "${panel}" panel: `, err);
+    console.error(`Error when fetching the "${panel}" panel: `, response);
   } else {
     return await response.text();
   }
