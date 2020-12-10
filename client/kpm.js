@@ -39,8 +39,9 @@ async function fetchPanel(panel) {
   );
   if (response.status > 400) {
     console.error(`Error when fetching the "${panel}" panel: `, err);
+  } else {
+    return await response.text();
   }
-  return await response.text();
 }
 
 start();
