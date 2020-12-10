@@ -8,22 +8,22 @@ const { compileTemplate } = require("../utils");
 const panelsRouter = Router();
 module.exports = panelsRouter;
 
-const indexLoggedOut = compileTemplate(__dirname, "index-loggedout.handlebars");
-const indexLoggedIn = compileTemplate(__dirname, "index-loggedin.handlebars");
+const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
 const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
+  console.log(req.session.userId);
   if (req.session.userId) {
     res.send(
-      indexLoggedIn({
+      indexTemplate({
         message: process.env.LOGGED_IN_ALERT,
       })
     );
   } else {
     res.send(
-      indexLoggedOut({
+      indexTemplate({
         loginUrl: `${process.env.SERVER_HOST_URL}/kpm/login`,
         message: process.env.LOGGED_OUT_ALERT,
       })
