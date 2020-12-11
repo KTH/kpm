@@ -1,6 +1,3 @@
-const handlebars = require("handlebars");
-const path = require("path");
-const fs = require("fs");
 const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
