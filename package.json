@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "concurrently -n server,parcel -k \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "npm run build:kth-style && concurrently -n server,parcel -k \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon --watch server app.js | bunyan -o short",
     "dev:client": "parcel watch client/kpm.js",
     "format": "prettier --write .",
