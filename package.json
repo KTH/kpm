@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run build:kth-style && concurrently -n server,parcel -k \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon --watch server app.js | bunyan -o short",
-    "dev:client": "parcel watch client/kpm.js",
+    "dev:client": "parcel watch --public-url /kpm/ client/kpm.js",
     "format": "prettier --write .",
     "start": "node app.js",
     "test:lint": "prettier --check .",
