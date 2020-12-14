@@ -23,6 +23,11 @@ async function start() {
   if (openMenuButton) {
     openMenuButton.addEventListener("click", openMenu);
   }
+
+  const btn = document.getElementById("kpm-alert-btn");
+  btn.addEventListener("click", (e) => {
+    document.getElementById("kpm-alert").remove();
+  });
 }
 
 async function openMenu(event) {
