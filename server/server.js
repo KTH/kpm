@@ -1,11 +1,7 @@
-const handlebars = require("handlebars");
-const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
 const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
-const { addDays } = require("date-fns");
+const panelsRouter = require("./panels/router");
 
 require("dotenv").config();
 require("skog/bunyan").createLogger({
@@ -16,6 +12,8 @@ require("skog/bunyan").createLogger({
 });
 const log = require("skog");
 const express = require("express");
+const { compileTemplate } = require("./utils");
+
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -39,33 +37,7 @@ const blocks = {
   gtmNoscript: "1.714099",
 };
 
-function compileTemplate(name) {
-  return handlebars.compile(
-    fs.readFileSync(path.resolve(__dirname, name), {
-      encoding: "utf-8",
-    })
-  );
-}
-
-const infoPageTemplate = compileTemplate("info-page.handlebars");
-const loggedInTemplate = compileTemplate(
-  "../client/kpm-loggedin.js.handlebars"
-);
-const loggedOutTemplate = compileTemplate(
-  "../client/kpm-loggedout.js.handlebars"
-);
-
-// TODO: Sass?
-const menuCssData = fs.readFileSync(
-  path.resolve(__dirname, "../client/menu.css")
-);
-const menuCssName = `menu-${hash(menuCssData)}.css`;
-
-function hash(data) {
-  const hash = crypto.createHash("md5");
-  hash.update(data);
-  return hash.digest("hex").slice(0, 12);
-}
+const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
 
 async function fetchBlock(str) {
   const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`);
@@ -87,8 +59,7 @@ app.use(
   })
 );
 
-app.use("/kpm/dist", express.static("dist"));
-
+app.use("/kpm", express.static("dist"));
 app.get("/kpm/_monitor", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
   let version = "unknown";
@@ -100,42 +71,6 @@ app.get("/kpm/_monitor", (req, res) => {
   }
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
-
-app.get(`/kpm/${menuCssName}`, (req, res) => {
-  res.setHeader("Content-Type", "text/css");
-  res.setHeader("Expires", addDays(new Date(), 180).toUTCString());
-  res.send(menuCssData);
-});
-
-app.get("/kpm/kpm.js", async (req, res) => {
-  const loggedInAlert = process.env.LOGGED_IN_ALERT;
-  const loggedOutAlert = process.env.LOGGED_OUT_ALERT;
-  const baseUrl = `${process.env.SERVER_HOST_URL}/kpm`;
-  const cssUrl = `${baseUrl}/${menuCssName}`;
-
-  res.setHeader("Content-type", "application/javascript");
-
-  if (req.session.userId) {
-    res.send(
-      loggedInTemplate({
-        baseUrl,
-        cssUrl,
-        userName: req.session.userId,
-        loginUrl: baseUrl,
-        alert: loggedInAlert,
-      })
-    );
-  } else {
-    res.send(
-      loggedOutTemplate({
-        cssUrl,
-        loginUrl: `${baseUrl}/login`,
-        alert: loggedOutAlert,
-      })
-    );
-  }
-});
-
 app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
@@ -143,6 +78,7 @@ app.get("/kpm/logout", (req, res) => {
   res.redirect(logoutUrl);
 });
 
+app.use("/kpm/panels", panelsRouter);
 app.get("/kpm", async (req, res) => {
   const footer = await fetchBlock("footer");
   const megaMenu = await fetchBlock("megaMenu");
