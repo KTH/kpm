@@ -1,7 +1,11 @@
+const intl = require("./translation");
+
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
-kpm.innerHTML = '<div class="kpmbar">Loading...</div>';
+kpm.innerHTML = `<div class="kpmbar">${intl("loading", "sv")}...</div>`;
 document.body.insertBefore(kpm, document.body.firstChild);
+
+function setLanguage() {}
 
 async function start() {
   await import("./menu.css");
@@ -12,6 +16,7 @@ async function start() {
   const openMenuButton = kpm.getElementsByClassName("kpm-open-menu")[0];
 
   if (loginButton) {
+    loginButton.textContent = intl("login", "sv");
     const loginUrl = loginButton.getAttribute("href");
 
     loginButton.setAttribute(
@@ -21,6 +26,7 @@ async function start() {
   }
 
   if (openMenuButton) {
+    openMenuButton.textContent = intl("menu", "sv");
     openMenuButton.addEventListener("click", openMenu);
   }
 
@@ -34,7 +40,9 @@ async function openMenu(event) {
   kpm.classList.toggle("open");
   event.preventDefault();
   event.stopPropagation();
-  kpm.querySelector(".kpmpanel").innerHTML = "<p>Loading...</p>";
+  kpm.querySelector(
+    ".kpmpanel"
+  ).innerHTML = `<p class="kpm-menu-loading">${intl("loading", "sv")}...</p>`;
   kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel("hello");
 }
 
