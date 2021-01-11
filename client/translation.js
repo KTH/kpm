@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const translations = {
   en: {
     loading: "Loading",
@@ -11,15 +13,39 @@ const translations = {
   },
 };
 
-/**
- *
- * @param {string} input input you want to translate
- * @param {string} lang language you want to translate into
- * @returns {string}
- */
+const cookieOptions = {};
 
-function intl(input, lang) {
+function setLang(lang) {
+  return Cookies.set("kpm_lang", lang, cookieOptions);
+}
+
+function getLang() {
+  return Cookies.get("kpm_lang").toLocaleUpperCase();
+}
+
+function setLanguage(recreate) {
+  const currentLang = Cookies.get("kpm_lang");
+  if (currentLang === "sv") {
+    setLang("en");
+  } else {
+    setLang("sv");
+  }
+  document.getElementById("kpm-lang-selector").textContent = getLang();
+  recreate();
+}
+
+export function intl(input) {
+  const lang = Cookies.get("kpm_lang") || "sv";
   return translations[lang][input];
 }
 
-module.exports = intl;
+export function addLanguageSelector(recreate) {
+  const langButton = document.createElement("button");
+  langButton.id = "kpm-lang-selector";
+  langButton.addEventListener("click", () => setLanguage(recreate));
+  if (!Cookies.get("kpm_lang")) {
+    Cookies.set("kpm_lang", "sv", cookieOptions);
+  }
+  langButton.textContent = getLang();
+  document.getElementsByClassName("kpmbar")[0].appendChild(langButton);
+}

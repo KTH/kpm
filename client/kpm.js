@@ -1,13 +1,17 @@
-const intl = require("./translation");
+import { intl, addLanguageSelector } from "./translation";
 
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
 kpm.innerHTML = `<div class="kpmbar">${intl("loading", "sv")}...</div>`;
 document.body.insertBefore(kpm, document.body.firstChild);
 
-function setLanguage() {}
+function recreate() {
+  document.getElementById("kpm").childNodes.forEach((node) => node.remove());
+  kpm.innerHTML = `<div class="kpmbar">${intl("loading", "sv")}...</div>`;
+  create();
+}
 
-async function start() {
+async function create() {
   await import("./menu.css");
   const content = await fetchPanel("");
   kpm.innerHTML = content;
@@ -16,7 +20,7 @@ async function start() {
   const openMenuButton = kpm.getElementsByClassName("kpm-open-menu")[0];
 
   if (loginButton) {
-    loginButton.textContent = intl("login", "sv");
+    loginButton.textContent = intl("login");
     const loginUrl = loginButton.getAttribute("href");
 
     loginButton.setAttribute(
@@ -26,14 +30,20 @@ async function start() {
   }
 
   if (openMenuButton) {
-    openMenuButton.textContent = intl("menu", "sv");
+    openMenuButton.textContent = intl("menu");
     openMenuButton.addEventListener("click", openMenu);
   }
+
+  addLanguageSelector(recreate);
 
   const btn = document.getElementById("kpm-alert-btn");
   btn.addEventListener("click", (e) => {
     document.getElementById("kpm-alert").remove();
   });
+}
+
+async function start() {
+  create();
 }
 
 async function openMenu(event) {
@@ -42,7 +52,7 @@ async function openMenu(event) {
   event.stopPropagation();
   kpm.querySelector(
     ".kpmpanel"
-  ).innerHTML = `<p class="kpm-menu-loading">${intl("loading", "sv")}...</p>`;
+  ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
   kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel("hello");
 }
 
