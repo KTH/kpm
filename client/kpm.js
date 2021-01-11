@@ -2,12 +2,12 @@ import { intl, addLanguageSelector } from "./translation";
 
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
-kpm.innerHTML = `<div class="kpmbar">${intl("loading", "sv")}...</div>`;
+kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
 document.body.insertBefore(kpm, document.body.firstChild);
 
 function recreate() {
   document.getElementById("kpm").childNodes.forEach((node) => node.remove());
-  kpm.innerHTML = `<div class="kpmbar">${intl("loading", "sv")}...</div>`;
+  kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
   create();
 }
 
