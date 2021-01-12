@@ -29,6 +29,7 @@
     "fast-xml-parser": "^3.17.4",
     "got": "^11.8.0",
     "handlebars": "^4.7.6",
+    "js-cookie": "^2.2.1",
     "kth-style": "^6.0.1",
     "skog": "^1.0.1-alpha.0"
   },
