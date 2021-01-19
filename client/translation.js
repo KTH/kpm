@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
 
 const translations = {
   en: {
@@ -16,15 +16,18 @@ const translations = {
 const cookieOptions = {};
 
 function setLang(lang) {
-  return Cookies.set("kpm_lang", lang, cookieOptions);
+  // FIXME
+  //return Cookies.set("kpm_lang", lang, cookieOptions);
 }
 
 function getLang() {
-  return Cookies.get("kpm_lang").toLocaleUpperCase();
+  // FIXME
+  return 'SV';
+  //return Cookies.get("kpm_lang").toLocaleUpperCase();
 }
 
 function setLanguage(recreate) {
-  const currentLang = Cookies.get("kpm_lang");
+  const currentLang = 'sv'; // Cookies.get("kpm_lang");
   if (currentLang === "sv") {
     setLang("en");
   } else {
@@ -35,7 +38,7 @@ function setLanguage(recreate) {
 }
 
 export function intl(input) {
-  const lang = Cookies.get("kpm_lang") || "sv";
+  const lang = 'sv'; // Cookies.get("kpm_lang") || "sv";
   return translations[lang][input];
 }
 
@@ -43,9 +46,9 @@ export function addLanguageSelector(recreate) {
   const langButton = document.createElement("button");
   langButton.id = "kpm-lang-selector";
   langButton.addEventListener("click", () => setLanguage(recreate));
-  if (!Cookies.get("kpm_lang")) {
+  /*if (!Cookies.get("kpm_lang")) {
     Cookies.set("kpm_lang", "sv", cookieOptions);
-  }
+  }*/
   langButton.textContent = getLang();
   document.getElementsByClassName("kpmbar")[0].appendChild(langButton);
 }
