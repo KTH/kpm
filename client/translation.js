@@ -22,12 +22,12 @@ function setLang(lang) {
 
 function getLang() {
   // FIXME
-  return 'SV';
+  return "SV";
   //return Cookies.get("kpm_lang").toLocaleUpperCase();
 }
 
 function setLanguage(recreate) {
-  const currentLang = 'sv'; // Cookies.get("kpm_lang");
+  const currentLang = "sv"; // Cookies.get("kpm_lang");
   if (currentLang === "sv") {
     setLang("en");
   } else {
@@ -38,7 +38,7 @@ function setLanguage(recreate) {
 }
 
 export function intl(input) {
-  const lang = 'sv'; // Cookies.get("kpm_lang") || "sv";
+  const lang = "sv"; // Cookies.get("kpm_lang") || "sv";
   return translations[lang][input];
 }
 
