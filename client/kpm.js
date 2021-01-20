@@ -1,9 +1,15 @@
+console.log("Starting kpm.js");
+
 import { intl, addLanguageSelector } from "./translation";
+
+console.log("Imported translation");
 
 // Note: src is the resolved url, not the raw attribute
 const scriptUrl = (
   document.currentScript || document.querySelector("script[src$='/kpm.js']")
 ).src;
+
+console.log("Script url is", scriptUrl);
 
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
@@ -62,7 +68,9 @@ async function openMenu(event) {
 }
 
 async function fetchPanel(panel) {
-  const response = await window.fetch(new URL(`panels/${panel}`, scriptUrl));
+  url = new URL(`panels/${panel}`, scriptUrl);
+  console.log("Fetch panel", panel, "from", url);
+  const response = await window.fetch(url);
   if (response.status > 400) {
     console.error(`Error when fetching the "${panel}" panel: `, response);
   } else {
