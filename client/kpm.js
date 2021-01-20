@@ -1,5 +1,10 @@
 import { intl, addLanguageSelector } from "./translation";
 
+// Note: src is the resolved url, not the raw attribute
+const scriptUrl = (
+  document.currentScript || document.querySelector("script[src$='/kpm.js']")
+).src;
+
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
 kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
@@ -57,9 +62,7 @@ async function openMenu(event) {
 }
 
 async function fetchPanel(panel) {
-  const response = await window.fetch(
-    `${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`
-  );
+  const response = await window.fetch(new URL(`panels/${panel}`, scriptUrl));
   if (response.status > 400) {
     console.error(`Error when fetching the "${panel}" panel: `, response);
   } else {
