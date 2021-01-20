@@ -24,8 +24,8 @@ function recreate() {
 
 async function create() {
   console.log("kpm: Load menu css");
-  const t = import("./menu.css");
-  console.log("kpm: Loaded menu css:", t);
+  const style = import("./menu.css");
+  console.log("kpm: Loaded menu css:", style);
 
   const content = await fetchPanel("");
   kpm.innerHTML = content;
@@ -54,6 +54,8 @@ async function create() {
   btn.addEventListener("click", (e) => {
     document.getElementById("kpm-alert").remove();
   });
+
+  await style;
 }
 
 async function start() {
