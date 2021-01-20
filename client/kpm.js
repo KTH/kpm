@@ -24,8 +24,8 @@ function recreate() {
 
 async function create() {
   console.log("kpm: Load menu css");
-  import("./menu.css");
-  console.log("kpm: Loaded menu css");
+  const t = import("./menu.css");
+  console.log("kpm: Loaded menu css:", t);
 
   const content = await fetchPanel("");
   kpm.innerHTML = content;
