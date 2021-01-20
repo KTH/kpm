@@ -71,7 +71,7 @@ async function openMenu(event) {
 }
 
 async function fetchPanel(panel) {
-  url = new URL(`panels/${panel}`, scriptUrl);
+  const url = new URL(`panels/${panel}`, scriptUrl);
   console.log("kpm: Fetch panel", panel, "from", url);
   const response = await window.fetch(url);
   if (response.status > 400) {
