@@ -51,9 +51,12 @@ async function create() {
   addLanguageSelector(recreate);
 
   const btn = document.getElementById("kpm-alert-btn");
-  btn.addEventListener("click", (e) => {
-    document.getElementById("kpm-alert").remove();
-  });
+
+  if (btn) {
+    btn.addEventListener("click", (e) => {
+      document.getElementById("kpm-alert").remove();
+    });
+  }
 
   await style;
 }
