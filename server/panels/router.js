@@ -50,5 +50,6 @@ panelsRouter.get("/hello", (req, res) => {
 function corsAllow(res, req) {
   res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Vary", "Origin");
 }
