@@ -15,6 +15,7 @@ const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
   console.log(req.session.userId);
+  corsAllow(res, req);
   if (req.session.userId) {
     res.send(
       indexTemplate({
@@ -32,6 +33,7 @@ panelsRouter.get("/", (req, res) => {
 });
 
 panelsRouter.get("/hello", (req, res) => {
+  corsAllow(res, req);
   if (req.session.userId) {
     res.send(
       helloPanel({
@@ -44,3 +46,11 @@ panelsRouter.get("/hello", (req, res) => {
     res.send(errorPanel());
   }
 });
+
+function corsAllow(res, req) {
+  res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Vary", "Origin");
+}
