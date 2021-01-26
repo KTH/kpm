@@ -2,18 +2,9 @@ const session = require("express-session");
 const got = require("got");
 const loginRouter = require("./login-router");
 const panelsRouter = require("./panels/router");
-
-require("dotenv").config();
-require("skog/bunyan").createLogger({
-  app: "kpm",
-  name: "kpm",
-  level: "info",
-  serializers: require("bunyan").stdSerializers,
-});
 const log = require("skog");
 const express = require("express");
-const { compileTemplate } = require("./utils");
-
+const { compileTemplate, fetchCortinaBlock } = require("./utils");
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -80,9 +71,9 @@ app.get("/kpm/logout", (req, res) => {
 
 app.use("/kpm/panels", panelsRouter);
 app.get("/kpm", async (req, res) => {
-  const footer = await fetchBlock("footer");
-  const megaMenu = await fetchBlock("megaMenu");
-  const search = await fetchBlock("search");
+  const footer = await fetchCortinaBlock("footer");
+  const megaMenu = await fetchCortinaBlock("megaMenu");
+  const search = await fetchCortinaBlock("search");
 
   res.send(
     infoPageTemplate({
