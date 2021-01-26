@@ -78,7 +78,10 @@ async function openMenu(event) {
 async function fetchPanel(panel) {
   const url = new URL(`panels/${panel}`, scriptUrl);
   console.log("kpm: Fetch panel", panel, "from", url);
-  const response = await window.fetch(url, { credentials: "include" });
+  const response = await window.fetch(url, {
+    mode: "cors",
+    credentials: "include",
+  });
   if (response.status > 400) {
     console.error(`kpm: Error when fetching the "${panel}" panel: `, response);
   } else {
