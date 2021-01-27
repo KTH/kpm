@@ -1,4 +1,15 @@
+console.log("kpm: Starting kpm.js");
+
 import { intl, addLanguageSelector } from "./translation";
+
+console.log("kpm: Imported translation");
+
+// Note: src is the resolved url, not the raw attribute
+const scriptUrl = (
+  document.currentScript || document.querySelector("script[src$='/kpm.js']")
+).src;
+
+console.log("kpm: Script url is", scriptUrl);
 
 const kpm = document.createElement("nav");
 kpm.id = "kpm";
@@ -12,7 +23,10 @@ function recreate() {
 }
 
 async function create() {
-  await import("./menu.css");
+  console.log("kpm: Load menu css");
+  const style = import("./menu.css");
+  console.log("kpm: Loaded menu css:", style);
+
   const content = await fetchPanel("");
   kpm.innerHTML = content;
 
@@ -37,9 +51,14 @@ async function create() {
   addLanguageSelector(recreate);
 
   const btn = document.getElementById("kpm-alert-btn");
-  btn.addEventListener("click", (e) => {
-    document.getElementById("kpm-alert").remove();
-  });
+
+  if (btn) {
+    btn.addEventListener("click", (e) => {
+      document.getElementById("kpm-alert").remove();
+    });
+  }
+
+  await style;
 }
 
 async function start() {
@@ -57,11 +76,14 @@ async function openMenu(event) {
 }
 
 async function fetchPanel(panel) {
-  const response = await window.fetch(
-    `${process.env.SERVER_HOST_URL}/kpm/panels/${panel}`
-  );
+  const url = new URL(`panels/${panel}`, scriptUrl);
+  console.log("kpm: Fetch panel", panel, "from", url);
+  const response = await window.fetch(url, {
+    mode: "cors",
+    credentials: "include",
+  });
   if (response.status > 400) {
-    console.error(`Error when fetching the "${panel}" panel: `, response);
+    console.error(`kpm: Error when fetching the "${panel}" panel: `, response);
   } else {
     return await response.text();
   }

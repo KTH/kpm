@@ -43,7 +43,15 @@ nav#kpm > .kpmbar a:focus {
 nav#kpm > .kpmpanel {
   border: solid 1px #006cb7;
   border-width: 0 1px 1ex 1px;
-  margin: -1px max(calc(50vw - 620px - 1em), 0px) 0;
+  /**
+  Why the second argument in "max" is "1px" instead of "0px":
+
+  Parcel converts the "0px" to "0"
+    So if we write this ---> "margin: -1px max(... 0px) 0"
+    it will be converted to  "margin: -1px max(... 0) 0"
+    and CSS will break because 0 is not a valid value for "max".
+  */
+  margin: -1px max(calc(50vw - 620px - 1em), 1px) 0;
   max-width: 50em;
   background: white;
   padding: 1em;
