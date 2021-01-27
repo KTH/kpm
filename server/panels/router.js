@@ -14,33 +14,42 @@ const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
-  console.log(req.session.userId);
-  if (req.session.userId) {
-    res.send(
-      indexTemplate({
-        message: process.env.LOGGED_IN_ALERT,
-      })
-    );
-  } else {
-    res.send(
-      indexTemplate({
-        loginUrl: `${process.env.SERVER_HOST_URL}/kpm/login`,
-        message: process.env.LOGGED_OUT_ALERT,
-      })
-    );
+  try {
+    if (req.session.userId) {
+      res.send(
+        indexTemplate({
+          message: process.env.LOGGED_IN_ALERT,
+        })
+      );
+    } else {
+      res.send(
+        indexTemplate({
+          loginUrl: `${process.env.SERVER_HOST_URL}/kpm/login`,
+          message: process.env.LOGGED_OUT_ALERT,
+        })
+      );
+    }
+  } catch (err) {
+    log.error(err);
+    return res.status(400).send("");
   }
 });
 
 panelsRouter.get("/hello", (req, res) => {
-  if (req.session.userId) {
-    res.send(
-      helloPanel({
-        userName: req.session.userId,
-        infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
-        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
-      })
-    );
-  } else {
-    res.send(errorPanel());
+  try {
+    if (req.session.userId) {
+      res.send(
+        helloPanel({
+          userName: req.session.userId,
+          infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
+          logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
+        })
+      );
+    } else {
+      res.send(errorPanel());
+    }
+  } catch (err) {
+    log.error(err);
+    return res.status(400).send("");
   }
 });

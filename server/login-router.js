@@ -7,6 +7,8 @@ const loginRouter = Router();
 module.exports = loginRouter;
 
 async function authenticateUser(req) {
+  try {
+  }
   // If user is already logged in, we don't do anything
   if (req.session.userId) {
     return;
@@ -50,17 +52,22 @@ async function authenticateUser(req) {
 }
 
 loginRouter.get("/", (req, res) => {
-  // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
-  const serviceUrl = new URL(
-    `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
-  );
-  serviceUrl.searchParams.set("next", req.query.next);
+  try {
+    // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
+    const serviceUrl = new URL(
+      `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
+    );
+    serviceUrl.searchParams.set("next", req.query.next);
 
-  const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
-  loginUrl.searchParams.set("service", serviceUrl);
+    const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
+    loginUrl.searchParams.set("service", serviceUrl);
 
-  log.info(`Redirect user to ${loginUrl}`);
-  res.redirect(loginUrl);
+    log.info(`Redirect user to ${loginUrl}`);
+    res.redirect(loginUrl);
+  } catch (err) {
+    log.error(err);
+    return res.status(400).send("");
+  }
 });
 
 loginRouter.get("/callback", async (req, res) => {
