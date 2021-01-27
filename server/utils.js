@@ -36,29 +36,16 @@ async function renewCortinaBlock(str) {
   log.info(`Renewing Cortina block ${str}`);
 
   const body = got
-    .get(`https://www.kth.se/cm/${blocks[str]}`)
-    .then((res) => res.body);
-
-  await body;
-
-  // We store the Promise after getting the value, not the value
-  cachedBlocks[str] = body;
-}
-
-/** Returns the cached-version of the block or fetches it */
-async function fetchCortinaBlock(str) {
-  if (cachedBlocks[str]) {
-    log.debug(`Cache hit for Cortina block ${str}`);
-    return cachedBlocks[str];
-  }
-
-  // We don't await here. Instead we return the promise
-  const body = got
     .get(`https://www.kth.se/cm/${blockIds[str]}`)
     .then((res) => res.body);
 
-  cachedBlocks[str] = body;
-  return body;
+  // We store the Promise after getting the value, not the value
+  cachedBlocks[str] = await body;
+}
+
+/** Returns the cached-version of the block or fetches it */
+function fetchCortinaBlock(str) {
+  return cachedBlocks[str] || `<!-- Missing Cortina block ${str} -->`;
 }
 
 module.exports = { compileTemplate, fetchCortinaBlock, renewCortinaBlock };

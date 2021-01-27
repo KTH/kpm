@@ -47,10 +47,10 @@ app.get("/kpm/logout", (req, res) => {
 });
 
 app.use("/kpm/panels", panelsRouter);
-app.get("/kpm", async (req, res) => {
-  const footer = await fetchCortinaBlock("footer");
-  const megaMenu = await fetchCortinaBlock("megaMenu");
-  const search = await fetchCortinaBlock("search");
+app.get("/kpm", (req, res) => {
+  const footer = fetchCortinaBlock("footer");
+  const megaMenu = fetchCortinaBlock("megaMenu");
+  const search = fetchCortinaBlock("search");
 
   res.send(
     infoPageTemplate({

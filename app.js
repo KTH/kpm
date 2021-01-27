@@ -16,9 +16,12 @@ server.listen(process.env.PORT || 3000, async () => {
   log.info(
     `Starting KPM at ${process.env.SERVER_HOST_URL}/kpm. Fetching Cortina blocks`
   );
-  await fetchCortinaBlock("footer");
-  await fetchCortinaBlock("megaMenu");
-  await fetchCortinaBlock("search");
+  await Promise.all([
+    renewCortinaBlock("footer"),
+    renewCortinaBlock("megaMenu"),
+    renewCortinaBlock("search"),
+  ]);
+  log.info("Cortina blocks ready");
 });
 
 setInterval(async function renewAllCortinaBlocks() {
