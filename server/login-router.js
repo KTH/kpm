@@ -7,8 +7,6 @@ const loginRouter = Router();
 module.exports = loginRouter;
 
 async function authenticateUser(req) {
-  try {
-  }
   // If user is already logged in, we don't do anything
   if (req.session.userId) {
     return;

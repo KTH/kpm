@@ -6,7 +6,6 @@ const path = require("path");
 const { compileTemplate } = require("../utils");
 
 const panelsRouter = Router();
-module.exports = panelsRouter;
 
 const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
@@ -53,3 +52,5 @@ panelsRouter.get("/hello", (req, res) => {
     return res.status(400).send("");
   }
 });
+
+module.exports = panelsRouter;
