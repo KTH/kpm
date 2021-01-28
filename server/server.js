@@ -1,19 +1,9 @@
 const session = require("express-session");
-const got = require("got");
 const loginRouter = require("./login-router");
 const panelsRouter = require("./panels/router");
-
-require("dotenv").config();
-require("skog/bunyan").createLogger({
-  app: "kpm",
-  name: "kpm",
-  level: "info",
-  serializers: require("bunyan").stdSerializers,
-});
 const log = require("skog");
 const express = require("express");
-const { compileTemplate } = require("./utils");
-
+const { compileTemplate, fetchCortinaBlock } = require("./utils");
 const app = express();
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -21,31 +11,9 @@ if (isDev) {
   log.info("App is in development mode");
 }
 
-const blocks = {
-  title: "1.260060",
-  megaMenu: "1.855134",
-  secondaryMenu: "1.865038",
-  image: "1.77257",
-  footer: "1.202278",
-  search: "1.77262",
-  language: {
-    en: "1.77273",
-    sv: "1.272446",
-  },
-  analytics: "1.464751",
-  gtmAnalytics: "1.714097",
-  gtmNoscript: "1.714099",
-};
-
 const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
 
-async function fetchBlock(str) {
-  const res = await got.get(`https://www.kth.se/cm/${blocks[str]}`);
-  return res.body;
-}
-
 app.set("trust proxy", 1);
-
 app.use(
   session({
     name: "kpm",
@@ -79,10 +47,10 @@ app.get("/kpm/logout", (req, res) => {
 });
 
 app.use("/kpm/panels", panelsRouter);
-app.get("/kpm", async (req, res) => {
-  const footer = await fetchBlock("footer");
-  const megaMenu = await fetchBlock("megaMenu");
-  const search = await fetchBlock("search");
+app.get("/kpm", (req, res) => {
+  const footer = fetchCortinaBlock("footer");
+  const megaMenu = fetchCortinaBlock("megaMenu");
+  const search = fetchCortinaBlock("search");
 
   res.send(
     infoPageTemplate({
