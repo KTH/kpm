@@ -63,11 +63,14 @@ app.get("/kpm", (req, res) => {
 });
 
 app.use(function catchAll(err, req, res, next) {
-  log.error({
-    req,
-    res,
-    err,
-  }, "Unexpected error. Sending 500 to the user");
+  log.error(
+    {
+      req,
+      res,
+      err,
+    },
+    "Unexpected error. Sending 500 to the user"
+  );
   res.status(500).send("Unexpected error. Status 500");
 });
 
