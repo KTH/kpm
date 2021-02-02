@@ -47,6 +47,7 @@ app.get("/kpm/logout", (req, res) => {
 });
 
 app.use("/kpm/panels", panelsRouter);
+
 app.get("/kpm", (req, res) => {
   const footer = fetchCortinaBlock("footer");
   const megaMenu = fetchCortinaBlock("megaMenu");
@@ -59,6 +60,18 @@ app.get("/kpm", (req, res) => {
       search,
     })
   );
+});
+
+app.use(function catchAll(err, req, res, next) {
+  log.error(
+    {
+      req,
+      res,
+      err,
+    },
+    "Unexpected error. Sending 500 to the user"
+  );
+  res.status(500).send("Unexpected error. Status 500");
 });
 
 module.exports = app;

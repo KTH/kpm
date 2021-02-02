@@ -1,20 +1,25 @@
 const log = require("skog");
 const { Router } = require("express");
-const handlebars = require("handlebars");
-const fs = require("fs");
-const path = require("path");
 const { compileTemplate } = require("../utils");
 
 const panelsRouter = Router();
-module.exports = panelsRouter;
 
 const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
 const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 
+function permissionDenied(res) {
+  log.warn("A user requested a panel without permission. Response: 403");
+  res.status(403).send(
+    errorPanel({
+      message: "This menu cannot be requested without logging in",
+    })
+  );
+}
+
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
-  console.log(req.session.userId);
+  log.info(`Requesting panel '/'. User ID: ${req.session.userId}`);
   corsAllow(res, req);
   if (req.session.userId) {
     res.send(
@@ -33,6 +38,7 @@ panelsRouter.get("/", (req, res) => {
 });
 
 panelsRouter.get("/hello", (req, res) => {
+  log.info("Requesting panel '/hello'");
   corsAllow(res, req);
   if (req.session.userId) {
     res.send(
@@ -43,7 +49,7 @@ panelsRouter.get("/hello", (req, res) => {
       })
     );
   } else {
-    res.send(errorPanel());
+    permissionDenied(res);
   }
 });
 
@@ -54,3 +60,5 @@ function corsAllow(res, req) {
   //res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Vary", "Origin");
 }
+
+module.exports = panelsRouter;
