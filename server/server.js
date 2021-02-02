@@ -48,23 +48,20 @@ app.get("/kpm/logout", (req, res) => {
 
 app.use("/kpm/panels", panelsRouter);
 
-app.get("/kpm", async (req, res) => {
-  try {
-    const footer = await fetchBlock("footer");
-    const megaMenu = await fetchBlock("megaMenu");
-    const search = await fetchBlock("search");
+app.get("/kpm", (req, res) => {
+  const footer = fetchCortinaBlock("footer");
+  const megaMenu = fetchCortinaBlock("megaMenu");
+  const search = fetchCortinaBlock("search");
 
-    res.send(
-      infoPageTemplate({
-        footer,
-        megaMenu,
-        search,
-      })
-    );
-  } catch (err) {
-    log.error(err);
-    return res.status(400).send("");
-  }
+  res.send(
+    infoPageTemplate({
+      footer,
+      megaMenu,
+      search,
+    })
+  );
+
+  // TODO: res.status(400).send("");
 });
 
 app.use(function catchAll(err, req, res, next) {
