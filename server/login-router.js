@@ -50,22 +50,17 @@ async function authenticateUser(req) {
 }
 
 loginRouter.get("/", (req, res) => {
-  try {
-    // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
-    const serviceUrl = new URL(
-      `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
-    );
-    serviceUrl.searchParams.set("next", req.query.next);
+  // service URL is SERVER_HOST_URL + (path to the router) + "/callback"
+  const serviceUrl = new URL(
+    `${process.env.SERVER_HOST_URL}${req.baseUrl}/callback`
+  );
+  serviceUrl.searchParams.set("next", req.query.next);
 
-    const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
-    loginUrl.searchParams.set("service", serviceUrl);
+  const loginUrl = new URL(`${process.env.SSO_ROOT_URL}/login`);
+  loginUrl.searchParams.set("service", serviceUrl);
 
-    log.info(`Redirect user to ${loginUrl}`);
-    res.redirect(loginUrl);
-  } catch (err) {
-    log.error(err);
-    return res.status(400).send("");
-  }
+  log.info(`Redirect user to ${loginUrl}`);
+  res.redirect(loginUrl);
 });
 
 loginRouter.get("/callback", async (req, res) => {
