@@ -67,7 +67,7 @@ app.use(function catchAll(err, req, res, next) {
     req,
     res,
     err,
-  });
+  }, "Unexpected error. Sending 500 to the user");
   res.status(500).send("Unexpected error. Status 500");
 });
 
