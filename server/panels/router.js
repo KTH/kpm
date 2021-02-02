@@ -11,6 +11,16 @@ const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
 const helloPanel = compileTemplate(__dirname, "hello.handlebars");
 
+function permissionDenied(res) {
+  res
+    .status(403)
+    .send(
+      errorPanel({
+        message: "This menu cannot be requested without logging in",
+      })
+    );
+}
+
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
   console.log(req.session.userId);
@@ -29,7 +39,6 @@ panelsRouter.get("/", (req, res) => {
       })
     );
   }
-  // TODO: res.status(400).send("") ?
 });
 
 panelsRouter.get("/hello", (req, res) => {
@@ -43,10 +52,8 @@ panelsRouter.get("/hello", (req, res) => {
       })
     );
   } else {
-    res.send(errorPanel());
+    permissionDenied(res);
   }
-
-  // TODO: res.status(400).send("")
 });
 
 function corsAllow(res, req) {
