@@ -60,8 +60,6 @@ app.get("/kpm", (req, res) => {
       search,
     })
   );
-
-  // TODO: res.status(400).send("");
 });
 
 app.use(function catchAll(err, req, res, next) {
