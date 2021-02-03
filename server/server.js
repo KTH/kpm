@@ -1,5 +1,6 @@
 const session = require("express-session");
 const loginRouter = require("./login-router");
+const logRouter = require("./log-router");
 const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
@@ -39,6 +40,7 @@ app.get("/kpm/_monitor", (req, res) => {
   }
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
+
 app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
@@ -47,6 +49,8 @@ app.get("/kpm/logout", (req, res) => {
 });
 
 app.use("/kpm/panels", panelsRouter);
+
+app.use("/kpm/log", logRouter);
 
 app.get("/kpm", (req, res) => {
   const footer = fetchCortinaBlock("footer");

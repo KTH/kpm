@@ -35,7 +35,7 @@
             </nav>
           </div>
         </div>
-        <div class="header-container__bottom">{{{  megaMenu }}} {{{ search }}}</div>
+        <div class="header-container__bottom">{{{ megaMenu }}} {{{ search }}}</div>
       </div>
     </div>
     <div id="gradientBorder"></div>
@@ -67,27 +67,7 @@
       </div>
       <div class="col" style="flex-basis: 18em; flex-grow: .5; padding-top: 2.5em;">
         <h2>Toggle <abbr title="KTH Personal Menu">KPM</abbr></h2>
-        <form method="post" action="/kpm/">
-          {% if is_active %}
-          <p>You are currently using the experimental KPM.</p>
-          <p>If you disable KPM, pages other than this will show the
-            stable personal menu.</p>
-          <p>
-            <input type="hidden" name="action" value="disable" />
-            <button type="submit" class="btn btn-primary">Disable experimental
-              KPM</button></p>
-          {% else %}
-          <p>You are currently using the stable personal menu.</p>
-          <p>You can look at KPM on this page, or enable it to
-            replace the stable personal menu on all pages.</p>
-          <p>If you activate KPM, there is a link back here in it, so
-            you can turn it back off.</p>
-          <p>
-            <input type="hidden" name="action" value="enable" />
-            <button type="submit" class="btn btn-success">Enable experimental
-              KPM</button></p>
-          {% endif %}
-        </form>
+        <div id="toggle_menu_container"></div>
       </div>
     </div>
   </div>

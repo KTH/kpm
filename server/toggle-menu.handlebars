@@ -1,0 +1,20 @@
+{{#if is_active }}
+<p>You are currently using the experimental KPM.</p>
+<p>If you disable KPM, pages other than this will show the
+  stable personal menu.</p>
+<p>
+  <button id="toggle_kpm" type="submit" class="btn btn-primary">Disable experimental
+    KPM</button>
+</p>
+{{else}}
+<p>You are currently using the stable personal menu.</p>
+<p>You can look at KPM on this page, or enable it to
+  replace the stable personal menu on all pages.</p>
+<p>If you activate KPM, there is a link back here in it, so
+  you can turn it back off.</p>
+<p>
+  <input type="hidden" name="action" value="enable" />
+  <button id="toggle_kpm" type="submit" class="btn btn-success">Enable experimental
+    KPM</button>
+</p>
+{{/if}}
