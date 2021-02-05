@@ -1,6 +1,7 @@
 console.log("kpm: Starting kpm.js");
 
 import { intl, addLanguageSelector } from "./translation";
+import { toggleMenu } from "./toggle-menu";
 
 console.log("kpm: Imported translation");
 
@@ -63,6 +64,7 @@ async function create() {
 
 async function start() {
   create();
+  toggleMenu();
 }
 
 async function openMenu(event) {
