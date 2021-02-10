@@ -1,6 +1,6 @@
 const session = require("express-session");
 const loginRouter = require("./login-router");
-const logRouter = require("./log-router");
+const cookieRouter = require("./cookie-router");
 const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
@@ -50,7 +50,7 @@ app.get("/kpm/logout", (req, res) => {
 
 app.use("/kpm/panels", panelsRouter);
 
-app.use("/kpm/log", logRouter);
+app.use("/kpm/cookie", cookieRouter);
 
 app.get("/kpm", (req, res) => {
   const footer = fetchCortinaBlock("footer");
