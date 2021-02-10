@@ -7,7 +7,7 @@ const expires = 365 * 24 * 3600 * 1000;
 const options = {
   ...(isProd && { secure: true }),
   expires,
-  ...(isProd && { domain: "*.kth.se" }),
+  ...(isProd && { domain: ".kth.se" }),
 };
 console.log({ options });
 async function logStatus(status) {
