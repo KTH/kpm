@@ -1,10 +1,20 @@
 import Cookies from "js-cookie";
 
 const COOKIE_NAME = "use_kpm";
+const isProd = process.env.NODE_ENV === "production";
+const expires = 365 * 24 * 3600 * 1000;
 
+const options = {
+  ...(isProd && { secure: true }),
+  expires,
+  ...(isProd && { domain: "*.kth.se" }),
+};
+console.log({ options });
 async function logStatus(status) {
   try {
-    const res = await fetch(`/kpm/log/${status ? "enabled" : "disabled"}`);
+    const res = await fetch(`/kpm/cookie/${status ? "enabled" : "disabled"}`, {
+      method: "POST",
+    });
     if (res.ok) {
       const container = document.getElementById("toggle_menu_container");
       container.innerHTML = "";
@@ -30,7 +40,7 @@ function getButton(id) {
 function onClick(e) {
   const cookie = Cookies.get(COOKIE_NAME);
   if (!cookie) {
-    Cookies.set(COOKIE_NAME, "true");
+    Cookies.set(COOKIE_NAME, "true", options);
     logStatus(true);
   } else {
     Cookies.remove(COOKIE_NAME);
