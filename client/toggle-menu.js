@@ -8,6 +8,7 @@ const options = {
   ...(isProd && { secure: true }),
   expires,
   ...(isProd && { domain: ".kth.se" }),
+  sameSite: "strict",
 };
 console.log({ options });
 async function logStatus(status) {
