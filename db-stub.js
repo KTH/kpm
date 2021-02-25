@@ -3,10 +3,9 @@ module.exports = {
     kthid: "u1znmoik",
     givenName: "Emil",
     surName: "Stenberg",
-    courses: [
+    studentCourses: [
       {
         courseCode: "A11IAA",
-        ladokId: "123123123123123123123",
         name: {
           sv: "Introduktion till Arkitekturämnet",
           en: "Introduction to the Discipline of Architecture",
@@ -16,6 +15,7 @@ module.exports = {
           startYear: '2020',
           startTerm: 'HT',
           roundId: 1,
+          ladok_uid:	"cdca7048-0b8a-11ea-b635-76a5f35c4a62",
           canvasLink: 'https://canvas.kth.se/courses/19784'
         }]
       },
