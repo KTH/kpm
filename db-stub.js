@@ -3,9 +3,30 @@ module.exports = {
     kthid: "u1znmoik",
     givenName: "Emil",
     surName: "Stenberg",
-    studentCourses: [
+    
+    completedStudentCourses: [
+      {
+        courseCode: "SF1624",
+        name: {
+          sv: "Jättematematik-kursen!",
+          en: "A giant math course",
+        },
+        coursePMLink: "http://www.example.com",
+      },{
+        courseCode: "A11IAA",
+        name: {
+          sv: "Introduktion till Arkitekturämnet",
+          en: "Introduction to the Discipline of Architecture",
+        },
+        coursePMLink: "http://www.example.com",
+      },
+
+    ],
+
+    activeStudentCourses: [
       {
         courseCode: "A11IAA",
+        status: ['ANTAGEN', 'REGISTRERAD'],
         name: {
           sv: "Introduktion till Arkitekturämnet",
           en: "Introduction to the Discipline of Architecture",
