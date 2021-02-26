@@ -7,6 +7,7 @@ const panelsRouter = Router();
 const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
 const helloPanel = compileTemplate(__dirname, "hello.handlebars");
+const studiesPanel = compileTemplate(__dirname, "studies.handlebars");
 
 function permissionDenied(res) {
   log.warn("A user requested a panel without permission. Response: 403");
@@ -48,6 +49,16 @@ panelsRouter.get("/hello", (req, res) => {
         logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
       })
     );
+  } else {
+    permissionDenied(res);
+  }
+});
+
+panelsRouter.get("/studies", (req, res) => {
+  log.info("Requesting panel '/studies'");
+  corsAllow(res, req);
+  if (req.session.userId) {
+    res.send(studiesPanel());
   } else {
     permissionDenied(res);
   }

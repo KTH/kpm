@@ -32,7 +32,7 @@ async function create() {
   kpm.innerHTML = content;
 
   const loginButton = kpm.getElementsByClassName("kpm-login")[0];
-  const openMenuButton = kpm.getElementsByClassName("kpm-open-menu")[0];
+  const openMenuButton = kpm.getElementsByClassName("kpm-open-menu");
 
   if (loginButton) {
     loginButton.textContent = intl("login");
@@ -44,9 +44,8 @@ async function create() {
     );
   }
 
-  if (openMenuButton) {
-    openMenuButton.textContent = intl("menu");
-    openMenuButton.addEventListener("click", openMenu);
+  for (const panel of openMenuButton) {
+    panel.addEventListener("click", openMenu);
   }
 
   addLanguageSelector(recreate);
@@ -68,13 +67,14 @@ async function start() {
 }
 
 async function openMenu(event) {
+  const menuName = event.target.dataset.name;
   kpm.classList.toggle("open");
   event.preventDefault();
   event.stopPropagation();
   kpm.querySelector(
     ".kpmpanel"
   ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
-  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel("hello");
+  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
 }
 
 async function fetchPanel(panel) {
