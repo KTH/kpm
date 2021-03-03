@@ -6,14 +6,11 @@ const COOKIE_NAME = "use_kpm";
 
 const cookieRouter = Router();
 
-const expireDate = new Date();
-
 let options = {
   secure: !isDev,
   httpOnly: false,
   maxAge: 1000 * 3600 * 24 * 365,
   domain: ".kth.se",
-  expires: expireDate.setDate(expireDate.getDate() + 365),
 };
 
 const toggleMenuTemplate = compileTemplate(__dirname, "toggle-menu.handlebars");
