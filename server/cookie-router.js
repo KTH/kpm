@@ -11,9 +11,9 @@ const expireDate = new Date();
 let options = {
   secure: !isDev,
   httpOnly: false,
-  maxAge: 360000,
+  maxAge: 1000 * 3600 * 24 * 365,
   domain: ".kth.se",
-  expires: expireDate.setDate(expireDate.getDate() + 7),
+  expires: expireDate.setDate(expireDate.getDate() + 365),
 };
 
 const toggleMenuTemplate = compileTemplate(__dirname, "toggle-menu.handlebars");
