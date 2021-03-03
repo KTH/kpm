@@ -1,14 +1,17 @@
 <h2>Aktuella studier</h2>
 <ul>
   {{#each activeStudentCourses}}
-  <li>{{this.courseCode}} - {{this.name.sv}}</li>
-  <ul>
-    {{#each this.canvasLinks}}
-    <li>
-      <a href="{{this.url}}">{{this.name}}</a>
-    </li>
-    {{/each}}
-  </ul>
+  <li>
+    {{this.courseCode}} - {{this.name.sv}}
+    <a href="{{this.pmUrl}}">Kurs-PM</a>
+    <ul>
+      {{#each this.canvasLinks}}
+      <li>
+        <a href="{{this.url}}">{{this.name}}</a>
+      </li>
+      {{/each}}
+    </ul>
+  </li>
   {{/each}}
 </ul>
 <h2>Avklarade studier</h2>

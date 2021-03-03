@@ -70,6 +70,7 @@ panelsRouter.get("/studies", (req, res) => {
         }
       }
       course.canvasLinks = canvasLinks;
+      course.pmUrl = `https://www.kth.se/kurs-pm/${course.courseCode}?l=sv`;
     }
     res.send(studiesPanel(data));
   } else {
