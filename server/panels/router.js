@@ -56,7 +56,22 @@ panelsRouter.get("/hello", (req, res) => {
 panelsRouter.get("/studies", (req, res) => {
   log.info("Requesting panel '/studies'");
   if (req.session.userId) {
-    res.send(studiesPanel(mock.u1znmoik));
+    const data = mock.u1znmoik;
+    for (const course of data.activeStudentCourses) {
+      const canvasLinks = [];
+      for (const round of course.courseRounds) {
+        for (const link of round.canvas) {
+          if (link.published) {
+            canvasLinks.push({
+              name: `${round.startTerm} ${round.startYear}-${round.roundId}`,
+              url: link.url,
+            });
+          }
+        }
+      }
+      course.canvasLinks = canvasLinks;
+    }
+    res.send(studiesPanel(data));
   } else {
     permissionDenied(res);
   }
