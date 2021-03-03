@@ -34,6 +34,7 @@ function onClick(e) {
   if (!cookie) {
     logStatus(true);
   } else {
+    Cookies.remove(COOKIE_NAME);
     logStatus(false);
   }
 }

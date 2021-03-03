@@ -6,11 +6,14 @@ const COOKIE_NAME = "use_kpm";
 
 const cookieRouter = Router();
 
-const options = {
+const expireDate = new Date();
+
+let options = {
   secure: !isDev,
   httpOnly: false,
   maxAge: 360000,
   domain: ".kth.se",
+  expires: expireDate.setDate(expireDate.getDate() + 7),
 };
 
 const toggleMenuTemplate = compileTemplate(__dirname, "toggle-menu.handlebars");
@@ -23,8 +26,9 @@ cookieRouter.post("/enabled", (_, res) => {
 cookieRouter.post("/disabled", (_, res) => {
   log.info("kpm_use cookie disabled");
   res.clearCookie(COOKIE_NAME, {
-    expires: new Date(0),
     ...options,
+    expires: Date.now(),
+    maxAge: 0,
   });
   res.send(toggleMenuTemplate({ is_active: false }));
 });
