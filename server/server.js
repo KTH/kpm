@@ -4,10 +4,9 @@ const cookieRouter = require("./cookie-router");
 const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
-const { compileTemplate, fetchCortinaBlock } = require("./utils");
+const { compileTemplate, fetchCortinaBlock, isDev } = require("./utils");
 const app = express();
 
-const isDev = process.env.NODE_ENV !== "production";
 if (isDev) {
   log.info("App is in development mode");
 }

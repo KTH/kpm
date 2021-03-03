@@ -4,6 +4,8 @@ const fs = require("fs");
 const log = require("skog");
 const got = require("got");
 
+const isDev = process.env.NODE_ENV !== "production";
+
 function compileTemplate(resolvePath, name) {
   return handlebars.compile(
     fs.readFileSync(path.resolve(resolvePath, name), {
@@ -48,4 +50,9 @@ function fetchCortinaBlock(str) {
   return cachedBlocks[str] || `<!-- Missing Cortina block ${str} -->`;
 }
 
-module.exports = { compileTemplate, fetchCortinaBlock, renewCortinaBlock };
+module.exports = {
+  compileTemplate,
+  fetchCortinaBlock,
+  renewCortinaBlock,
+  isDev,
+};
