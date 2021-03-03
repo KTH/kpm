@@ -21,7 +21,6 @@ function permissionDenied(res) {
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
   log.info(`Requesting panel '/'. User ID: ${req.session.userId}`);
-  corsAllow(res, req);
   if (req.session.userId) {
     res.send(
       indexTemplate({
@@ -40,7 +39,6 @@ panelsRouter.get("/", (req, res) => {
 
 panelsRouter.get("/hello", (req, res) => {
   log.info("Requesting panel '/hello'");
-  corsAllow(res, req);
   if (req.session.userId) {
     res.send(
       helloPanel({
@@ -56,20 +54,11 @@ panelsRouter.get("/hello", (req, res) => {
 
 panelsRouter.get("/studies", (req, res) => {
   log.info("Requesting panel '/studies'");
-  corsAllow(res, req);
   if (req.session.userId) {
     res.send(studiesPanel());
   } else {
     permissionDenied(res);
   }
 });
-
-function corsAllow(res, req) {
-  res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Vary", "Origin");
-}
 
 module.exports = panelsRouter;

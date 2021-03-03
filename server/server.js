@@ -14,6 +14,17 @@ if (isDev) {
 
 const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
 
+function corsAllow(req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Vary", "Origin");
+  next();
+}
+
+app.use(corsAllow);
+
 app.set("trust proxy", 1);
 app.use(
   session({
