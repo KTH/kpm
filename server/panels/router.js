@@ -1,6 +1,7 @@
 const log = require("skog");
 const { Router } = require("express");
 const { compileTemplate } = require("../utils");
+const mock = require("../../db-stub");
 
 const panelsRouter = Router();
 
@@ -55,7 +56,7 @@ panelsRouter.get("/hello", (req, res) => {
 panelsRouter.get("/studies", (req, res) => {
   log.info("Requesting panel '/studies'");
   if (req.session.userId) {
-    res.send(studiesPanel());
+    res.send(studiesPanel(mock.u1znmoik));
   } else {
     permissionDenied(res);
   }

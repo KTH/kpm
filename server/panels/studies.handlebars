@@ -1,2 +1,13 @@
 <p>Hello, {{userName}}</p>
 <h2>Aktuella studier</h2>
+<ul>
+  {{#each activeStudentCourses}}
+  <li>{{this.courseCode}} - {{this.name.sv}}</li>
+  {{/each}}
+</ul>
+<h2>Avklarade studier</h2>
+<ul>
+  {{#each completedStudentCourses}}
+  <li>{{this.courseCode}} - {{this.name.sv}}</li>
+  {{/each}}
+</ul>
