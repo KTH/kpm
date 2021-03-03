@@ -8,7 +8,7 @@ const cookieRouter = Router();
 
 const options = {
   secure: !isDev,
-  httpOnly: !isDev,
+  httpOnly: false,
   maxAge: 360000,
   domain: ".kth.se",
 };
