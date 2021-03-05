@@ -4,7 +4,9 @@ const COOKIE_NAME = "use_kpm";
 
 async function logStatus(status) {
   try {
-    const res = await fetch(`/kpm/log/${status ? "enabled" : "disabled"}`);
+    const res = await fetch(`/kpm/cookie/${status ? "enabled" : "disabled"}`, {
+      method: "POST",
+    });
     if (res.ok) {
       const container = document.getElementById("toggle_menu_container");
       container.innerHTML = "";
@@ -30,7 +32,6 @@ function getButton(id) {
 function onClick(e) {
   const cookie = Cookies.get(COOKIE_NAME);
   if (!cookie) {
-    Cookies.set(COOKIE_NAME, "true");
     logStatus(true);
   } else {
     Cookies.remove(COOKIE_NAME);
