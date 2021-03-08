@@ -4,15 +4,20 @@ export default function studies() {
   const navigation = el.getElementsByClassName("course-nav")[0].children;
 
   function onClick(e) {
-    if (e.target.dataset.id === "misc") {
+    const { id } = e.target.dataset;
+    if (id === "misc") {
       return;
     }
-    console.log(e.target.dataset.id);
+    e.target.classList.add("active");
     const sections = document.getElementsByTagName("section");
     for (const section of sections) {
       section.style.display = "none";
     }
-    document.getElementById(e.target.dataset.id).style.display = "block";
+    document.getElementById(id).style.display = "block";
+    for (const nav of navigation) {
+      nav.firstElementChild.classList.remove("active");
+    }
+    e.target.classList.add("active");
   }
   for (const nav of navigation) {
     nav.firstElementChild.addEventListener("click", onClick);

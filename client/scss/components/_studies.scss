@@ -6,6 +6,7 @@
     list-style: none;
   }
   .course-type {
+    margin-bottom: 1em;
     ul {
       display: inline-flex;
       li {
@@ -20,9 +21,15 @@
           padding-left: 0.5em;
         }
         a {
+          color: $grey;
           &:hover {
             border-bottom: 2px solid $blueHover;
             text-decoration: none;
+          }
+          &.active {
+            border-bottom: 2px solid $blueHover;
+            font-weight: bold;
+            color: $black;
           }
         }
       }
@@ -30,5 +37,12 @@
   }
   #completed {
     display: none;
+  }
+  section {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
   }
 }

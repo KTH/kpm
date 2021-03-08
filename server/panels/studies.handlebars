@@ -20,13 +20,14 @@
     </ul>
   </nav>
   <section id="current">
-    <h2>Aktuella studier</h2>
     <ul>
       {{#each activeStudentCourses}}
       <li>
         {{this.courseCode}} - {{this.name.sv}}
-        <a href="{{this.pmUrl}}">Kurs-PM</a>
         <ul>
+          <li>
+            <a href="{{this.pmUrl}}">Kursinformation</a>
+          </li>
           {{#each this.canvasLinks}}
           <li>
             <a href="{{this.url}}">{{this.name}}</a>
@@ -38,7 +39,6 @@
     </ul>
   </section>
   <section id="completed">
-    <h2>Avklarade studier</h2>
     <ul>
       {{#each completedStudentCourses}}
       <li>{{this.courseCode}} - {{this.name.sv}}</li>
