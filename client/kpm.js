@@ -3,6 +3,13 @@ console.log("kpm: Starting kpm.js");
 import { intl, addLanguageSelector } from "./translation";
 import { toggleMenu } from "./toggle-menu";
 
+// Panels
+import studies from "./panels/studies";
+
+const panelsJs = {
+  studies,
+};
+
 console.log("kpm: Imported translation");
 
 // Note: src is the resolved url, not the raw attribute
@@ -25,7 +32,7 @@ function recreate() {
 
 async function create() {
   console.log("kpm: Load menu css");
-  const style = import("./menu.css");
+  const style = import("./scss/main.scss");
   console.log("kpm: Loaded menu css:", style);
 
   const content = await fetchPanel("");
@@ -64,6 +71,7 @@ async function create() {
 async function start() {
   create();
   toggleMenu();
+  studies();
 }
 
 async function openMenu(event) {
@@ -75,6 +83,7 @@ async function openMenu(event) {
     ".kpmpanel"
   ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
   kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
+  panelsJs[menuName]();
 }
 
 async function fetchPanel(panel) {

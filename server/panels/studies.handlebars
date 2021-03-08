@@ -1,22 +1,48 @@
-<h2>Aktuella studier</h2>
-<ul>
-  {{#each activeStudentCourses}}
-  <li>
-    {{this.courseCode}} - {{this.name.sv}}
-    <a href="{{this.pmUrl}}">Kurs-PM</a>
-    <ul>
-      {{#each this.canvasLinks}}
+<div id="studies">
+  <h2>Mina kurser</h2>
+  <nav class="course-type">
+    <ul class="course-nav">
       <li>
-        <a href="{{this.url}}">{{this.name}}</a>
+        <a data-id="current" href="#">
+          Aktuella
+        </a>
+      </li>
+      <li>
+        <a data-id="completed" href="#">
+          Avslutade
+        </a>
+      </li>
+      <li>
+        <a data-id="misc" style="cursor: not-allowed;" href="#">
+          Övriga
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <section id="current">
+    <h2>Aktuella studier</h2>
+    <ul>
+      {{#each activeStudentCourses}}
+      <li>
+        {{this.courseCode}} - {{this.name.sv}}
+        <a href="{{this.pmUrl}}">Kurs-PM</a>
+        <ul>
+          {{#each this.canvasLinks}}
+          <li>
+            <a href="{{this.url}}">{{this.name}}</a>
+          </li>
+          {{/each}}
+        </ul>
       </li>
       {{/each}}
     </ul>
-  </li>
-  {{/each}}
-</ul>
-<h2>Avklarade studier</h2>
-<ul>
-  {{#each completedStudentCourses}}
-  <li>{{this.courseCode}} - {{this.name.sv}}</li>
-  {{/each}}
-</ul>
+  </section>
+  <section id="completed">
+    <h2>Avklarade studier</h2>
+    <ul>
+      {{#each completedStudentCourses}}
+      <li>{{this.courseCode}} - {{this.name.sv}}</li>
+      {{/each}}
+    </ul>
+  </section>
+</div>

@@ -1,0 +1,34 @@
+#studies {
+  width: 100%;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .course-type {
+    ul {
+      display: inline-flex;
+      li {
+        cursor: pointer;
+        padding: 0 0.5em;
+        &:first-child {
+          padding-left: 0;
+        }
+        &::after {
+          content: "|";
+          color: $borderGrey;
+          padding-left: 0.5em;
+        }
+        a {
+          &:hover {
+            border-bottom: 2px solid $blueHover;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+  #completed {
+    display: none;
+  }
+}
