@@ -71,7 +71,6 @@ async function create() {
 async function start() {
   create();
   toggleMenu();
-  studies();
 }
 
 async function openMenu(event) {
