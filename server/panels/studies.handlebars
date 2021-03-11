@@ -13,8 +13,9 @@
       </a>
     </div>
   </header>
-  <nav class="course-type">
-    <ul class="course-nav">
+
+  <div class="tabs" data-opened-tab="current">
+    <ul class="tabs-navigation">
       <li>
         <a data-id="current" href="#">
           Aktuella
@@ -31,31 +32,35 @@
         </a>
       </li>
     </ul>
-  </nav>
-  <section id="current">
-    <ul>
-      {{#each activeStudentCourses}}
-      <li>
-        {{this.courseCode}} - {{this.name.sv}}
+
+    <div class="tabs-current-tab">
+      <section data-id="current">
         <ul>
+          {{#each activeStudentCourses}}
           <li>
-            <a href="{{this.pmUrl}}">Kursinformation</a>
-          </li>
-          {{#each this.canvasLinks}}
-          <li>
-            <a href="{{this.url}}">{{this.name}}</a>
+            {{this.courseCode}} - {{this.name.sv}}
+            <ul>
+              <li>
+                <a href="{{this.pmUrl}}">Kursinformation</a>
+              </li>
+              {{#each this.canvasLinks}}
+              <li>
+                <a href="{{this.url}}">{{this.name}}</a>
+              </li>
+              {{/each}}
+            </ul>
           </li>
           {{/each}}
         </ul>
-      </li>
-      {{/each}}
-    </ul>
-  </section>
-  <section id="completed">
-    <ul>
-      {{#each completedStudentCourses}}
-      <li>{{this.courseCode}} - {{this.name.sv}}</li>
-      {{/each}}
-    </ul>
-  </section>
+      </section>
+      <section data-id="completed">
+        <ul>
+          {{#each completedStudentCourses}}
+          <li>{{this.courseCode}} - {{this.name.sv}}</li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
+  </div>
+  <script></script>
 </div>

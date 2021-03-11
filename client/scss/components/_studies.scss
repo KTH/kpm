@@ -1,14 +1,35 @@
 #studies {
   width: 100%;
+
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .course-type {
-    margin-bottom: 1em;
-    border-bottom: 1px solid $borderGrey;
-    ul {
+
+  header {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1em 0;
+    h2 {
+      margin: 0;
+    }
+    div {
+      display: flex;
+      align-items: center;
+      a {
+        &:first-child {
+          margin-right: 1em;
+        }
+      }
+    }
+  }
+
+  .tabs {
+    ul.tabs-navigation {
+      margin-bottom: 1em;
+      border-bottom: 1px solid $borderGrey;
       display: inline-flex;
       li {
         cursor: pointer;
@@ -36,32 +57,13 @@
       }
     }
   }
-  #completed {
-    display: none;
-  }
+
   section {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
+    // ul {
+    //   margin: 0;
+    //   padding: 0;
+    //   list-style: none;
+    // }
   }
-  header {
-    display: inline-flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 1em 0;
-    h2 {
-      margin: 0;
-    }
-    div {
-      display: flex;
-      align-items: center;
-      a {
-        &:first-child {
-          margin-right: 1em;
-        }
-      }
-    }
-  }
+
 }

@@ -1,14 +1,10 @@
+// THIS IS THE ONLY FILE WHERE WE ACCESS THE DOM
 console.log("kpm: Starting kpm.js");
 
 import { intl, addLanguageSelector } from "./translation";
 import { toggleMenu } from "./toggle-menu";
 
-// Panels
-import studies from "./panels/studies";
-
-const panelsJs = {
-  studies,
-};
+import * as Components from "./components";
 
 console.log("kpm: Imported translation");
 
@@ -82,7 +78,10 @@ async function openMenu(event) {
     ".kpmpanel"
   ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
   kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
-  panelsJs[menuName]();
+
+  for (const t of document.getElementsByClassName("tabs")) {
+    Components.tabGroup(t);
+  }
 }
 
 async function fetchPanel(panel) {
