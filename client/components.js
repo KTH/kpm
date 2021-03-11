@@ -32,7 +32,7 @@ export function tabGroup(element) {
     link.addEventListener("click", () => {
       element.dataset.openedTab = link.dataset.id;
 
-      updateTabs(element);
+      updateTabs();
     });
   }
 }
