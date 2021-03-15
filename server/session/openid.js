@@ -36,6 +36,9 @@ async function init() {
     client_secret: process.env.OPENID_CLIENT_SECRET,
     redirect_uris: [`http://localhost:3000/kpm/auth/callback`],
     response_types: ["id_token"],
+
+    // TODO: the line below doesn't do anything
+    // post_logout_redirect_uris: ["https://kth.se"],
   });
 }
 
@@ -79,8 +82,14 @@ async function processCallback(req, res) {
   req.session.save();
 }
 
+async function redirectToLogout(req, res) {
+  req.session.destroy();
+  res.redirect(client.endSessionUrl());
+}
+
 module.exports = {
   init,
   redirectToLogin,
+  redirectToLogout,
   processCallback,
 };

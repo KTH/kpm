@@ -46,7 +46,7 @@ panelsRouter.get("/hello", (req, res) => {
       helloPanel({
         userName: req.session.userId,
         infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
-        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
+        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/auth/logout`,
       })
     );
   } else {

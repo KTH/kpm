@@ -46,6 +46,7 @@ app.get("/kpm/_monitor", (req, res) => {
 
 app.get("/kpm/auth/login", openid.redirectToLogin);
 app.post("/kpm/auth/callback", openid.processCallback);
+app.get("/kpm/auth/logout", openid.redirectToLogout);
 app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
