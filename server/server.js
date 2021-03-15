@@ -1,5 +1,4 @@
 const session = require("express-session");
-const loginRouter = require("./login-router");
 const cookieRouter = require("./cookie-router");
 const panelsRouter = require("./panels/router");
 const log = require("skog");
@@ -47,13 +46,6 @@ app.get("/kpm/_monitor", (req, res) => {
 app.get("/kpm/auth/login", openid.redirectToLogin);
 app.post("/kpm/auth/callback", openid.processCallback);
 app.get("/kpm/auth/logout", openid.redirectToLogout);
-app.use("/kpm/login", loginRouter);
-app.get("/kpm/logout", (req, res) => {
-  req.session.destroy();
-  const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
-  res.redirect(logoutUrl);
-});
-
 app.use("/kpm/panels", panelsRouter);
 
 app.use("/kpm/cookie", cookieRouter);
