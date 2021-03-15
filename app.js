@@ -9,10 +9,12 @@ require("skog/bunyan").createLogger({
 
 require("@kth/reqvars").check();
 const server = require("./server/server");
+const openid = require("./server/session/openid");
 const log = require("skog");
 const { renewCortinaBlock, fetchCortinaBlock } = require("./server/utils");
 
 server.listen(process.env.PORT || 3000, async () => {
+  await openid.init();
   log.info(
     `Starting KPM at ${process.env.SERVER_HOST_URL}/kpm. Fetching Cortina blocks`
   );

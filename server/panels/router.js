@@ -30,7 +30,7 @@ panelsRouter.get("/", (req, res) => {
   } else {
     res.send(
       indexTemplate({
-        loginUrl: `${process.env.SERVER_HOST_URL}/kpm/login`,
+        loginUrl: `${process.env.SERVER_HOST_URL}/kpm/auth/login`,
         message: process.env.LOGGED_OUT_ALERT,
       })
     );

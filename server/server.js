@@ -5,6 +5,7 @@ const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
 const { compileTemplate, fetchCortinaBlock, isDev } = require("./utils");
+const openid = require("./session/openid");
 const app = express();
 
 if (isDev) {
@@ -22,10 +23,13 @@ app.use(
       secure: !isDev,
       httpOnly: !isDev,
       maxAge: 60 * 60 * 1000, // 1 hour
-      domain: "kth.se",
+      domain: process.env.DOMAIN || "kth.se",
     },
   })
 );
+
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.use("/kpm", express.static("dist"));
 app.get("/kpm/_monitor", (req, res) => {
@@ -40,6 +44,8 @@ app.get("/kpm/_monitor", (req, res) => {
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
 
+app.get("/kpm/auth/login", openid.redirectToLogin);
+app.post("/kpm/auth/callback", openid.processCallback);
 app.use("/kpm/login", loginRouter);
 app.get("/kpm/logout", (req, res) => {
   req.session.destroy();
