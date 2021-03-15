@@ -37,14 +37,14 @@
       <section data-id="current">
         <ul>
           {{#each activeStudentCourses}}
-          <li>
+          <li class="half">
             {{this.courseCode}} - {{this.name.sv}}
             <ul>
               <li>
                 <a href="{{this.pmUrl}}">Kursinformation</a>
               </li>
               {{#each this.canvasLinks}}
-              <li>
+              <li class="course-item">
                 <a href="{{this.url}}">{{this.name}}</a>
               </li>
               {{/each}}
