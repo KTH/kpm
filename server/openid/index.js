@@ -1,30 +1,10 @@
 let client;
 const { Issuer, generators } = require("openid-client");
+const { Router } = require("express");
+const extractInfoFromToken = require("./extract-info");
 
-async function lookupCourseData(courseCode) {
-  // TODO
-  return { courseCode, name: { en: "TODO", sv: "ATTGÖRA" } };
-}
+const router = Router();
 
-async function extractInfoFromToken(token) {
-  const completedCourses = [];
-  const COMPLETED_COURSE_REGEX = /^ladok2\.kurser\.(\w+)\.(\w+)\.godkand$/;
-
-  for (const group of token.memberOf) {
-    const match = COMPLETED_COURSE_REGEX.exec(group);
-
-    if (match) {
-      const courseCode = `${match[1]}${match[2]}`;
-      const courseData = await lookupCourseData(courseCode);
-      completedCourses.push(courseData);
-    }
-  }
-
-  return {
-    fullName: token.unique_name[0],
-    completedCourses,
-  };
-}
 /**
  * Initializes the OpenID Connect client.
  * Must be called before handling authentication
@@ -42,8 +22,7 @@ async function init() {
   });
 }
 
-/** Redirects the user to the authentication server */
-async function redirectToLogin(req, res) {
+router.get("/login", async function (req, res) {
   const nonce = generators.nonce();
   const url = client.authorizationUrl({
     scope: "openid email profile",
@@ -56,10 +35,10 @@ async function redirectToLogin(req, res) {
     next: req.query.next,
   };
   res.redirect(url);
-}
+});
 
 /** Process an incoming request from the authentication server */
-async function processCallback(req, res) {
+router.post("/callback", async function (req, res) {
   const params = client.callbackParams(req);
   const { nonce, next } = req.session.tmp;
   delete req.session.tmp;
@@ -80,16 +59,14 @@ async function processCallback(req, res) {
 
   req.session.userData = await extractInfoFromToken(token);
   req.session.save();
-}
+});
 
-async function redirectToLogout(req, res) {
+router.get("/logout", async function (req, res) {
   req.session.destroy();
   res.redirect(client.endSessionUrl());
-}
+});
 
 module.exports = {
   init,
-  redirectToLogin,
-  redirectToLogout,
-  processCallback,
+  router,
 };

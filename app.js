@@ -9,7 +9,7 @@ require("skog/bunyan").createLogger({
 
 require("@kth/reqvars").check();
 const server = require("./server/server");
-const openid = require("./server/session/openid");
+const openid = require("./server/openid");
 const log = require("skog");
 const { renewCortinaBlock, fetchCortinaBlock } = require("./server/utils");
 

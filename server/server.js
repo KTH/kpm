@@ -4,7 +4,7 @@ const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
 const { compileTemplate, fetchCortinaBlock, isDev } = require("./utils");
-const openid = require("./session/openid");
+const openid = require("./openid");
 const app = express();
 
 if (isDev) {
@@ -43,13 +43,9 @@ app.get("/kpm/_monitor", (req, res) => {
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
 
-app.get("/kpm/auth/login", openid.redirectToLogin);
-app.post("/kpm/auth/callback", openid.processCallback);
-app.get("/kpm/auth/logout", openid.redirectToLogout);
 app.use("/kpm/panels", panelsRouter);
-
 app.use("/kpm/cookie", cookieRouter);
-
+app.use("/kpm/auth", openid.router);
 app.get("/kpm", (req, res) => {
   const footer = fetchCortinaBlock("footer");
   const megaMenu = fetchCortinaBlock("megaMenu");
