@@ -48,14 +48,18 @@ async function redirectToLogin(req, res) {
     nonce,
   });
 
-  req.session.nonce = nonce;
+  req.session.tmp = {
+    nonce,
+    next: req.query.next,
+  };
   res.redirect(url);
 }
 
 /** Process an incoming request from the authentication server */
 async function processCallback(req, res) {
   const params = client.callbackParams(req);
-  const nonce = req.session.nonce;
+  const { nonce, next } = req.session.tmp;
+  delete req.session.tmp;
 
   // Get the Token
   const token = await client
@@ -69,7 +73,7 @@ async function processCallback(req, res) {
     });
 
   req.session.userId = token.kthid;
-  res.send("Hello ");
+  res.redirect(next);
 
   req.session.userData = await extractInfoFromToken(token);
   req.session.save();
