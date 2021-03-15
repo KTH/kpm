@@ -14,11 +14,8 @@ async function init() {
   client = new issuer.Client({
     client_id: process.env.OPENID_CLIENT_ID,
     client_secret: process.env.OPENID_CLIENT_SECRET,
-    redirect_uris: [`http://localhost:3000/kpm/auth/callback`],
+    redirect_uris: [`${process.env.SERVER_HOST_URL}/kpm/auth/callback`],
     response_types: ["id_token"],
-
-    // TODO: the line below doesn't do anything
-    // post_logout_redirect_uris: ["https://kth.se"],
   });
 }
 
@@ -43,14 +40,11 @@ router.post("/callback", async function (req, res) {
   const { nonce, next } = req.session.tmp;
   delete req.session.tmp;
 
-  // Get the Token
   const token = await client
     .callback(`${process.env.SERVER_HOST_URL}/auth/callback`, params, {
       nonce,
-    }) // => Promise
+    })
     .then(function (tokenSet) {
-      console.log("received and validated tokens %j", tokenSet);
-      console.log("validated ID Token claims %j", tokenSet.claims());
       return tokenSet.claims();
     });
 

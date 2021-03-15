@@ -12,6 +12,10 @@ if (isDev) {
 }
 
 const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
+const domain = new URL(process.env.SERVER_HOST_URL).hostname
+  .split(".")
+  .slice(-2)
+  .join(".");
 
 app.set("trust proxy", 1);
 app.use(
@@ -22,7 +26,7 @@ app.use(
       secure: !isDev,
       httpOnly: !isDev,
       maxAge: 60 * 60 * 1000, // 1 hour
-      domain: process.env.DOMAIN || "kth.se",
+      domain,
     },
   })
 );
