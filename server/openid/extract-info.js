@@ -1,6 +1,21 @@
+const log = require("skog");
+
+const kopps = require("got").extend({
+  prefixUrl: "https://api.kth.se/api/kopps/v2",
+  responseType: "json",
+});
+
 async function lookupCourseData(courseCode) {
-  // TODO
-  return { courseCode, name: { en: "TODO", sv: "ATTGÖRA" } };
+  try {
+    const { body } = await kopps(`course/${courseCode}`);
+    return {
+      courseCode,
+      name: body.title,
+    };
+  } catch (error) {
+    log.error({ courseCode, error }, "Failed to get kopps info.");
+    return { courseCode, name: { en: "-", sv: "-" } };
+  }
 }
 
 module.exports = async function extractInfoFromToken(token) {
