@@ -1,19 +1,35 @@
 const log = require("skog");
+const redis = require("redis").createClient();
 
 const kopps = require("got").extend({
   prefixUrl: "https://api.kth.se/api/kopps/v2",
   responseType: "json",
 });
 
+const { promisify } = require("util");
+const cache = {
+  get: promisify(redis.get).bind(redis),
+  set: promisify(redis.set).bind(redis),
+};
+
 async function lookupCourseData(courseCode) {
   try {
-    const { body } = await kopps(`course/${courseCode}`);
-    return {
+    const key = `course/${courseCode}`;
+    const cached = await cache.get(key);
+    if (cached) {
+      log.debug({ cached }, "Kopps from redis");
+      return JSON.parse(cached);
+    }
+    log.info({ courseCode }, "Should get course data from kopps");
+    const { body } = await kopps(key);
+    const data = {
       courseCode,
       name: body.title,
     };
+    await cache.set(key, JSON.stringify(data));
+    return data;
   } catch (error) {
-    log.error({ courseCode, error }, "Failed to get kopps info.");
+    log.error({ courseCode, err: error }, "Failed to get kopps info.");
     return { courseCode, name: { en: "-", sv: "-" } };
   }
 }

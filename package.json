@@ -31,6 +31,7 @@
     "js-cookie": "^2.2.1",
     "kth-style": "^6.0.1",
     "openid-client": "^4.5.0",
+    "redis": "^3.0.2",
     "skog": "^1.0.1-alpha.0"
   },
   "devDependencies": {
