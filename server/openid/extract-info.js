@@ -10,6 +10,7 @@ const { promisify } = require("util");
 const cache = {
   get: promisify(redis.get).bind(redis),
   set: promisify(redis.set).bind(redis),
+  expire: 61 * 60 * 24, // slightly more than 24 hours.
 };
 
 async function lookupCourseData(courseCode) {
@@ -26,7 +27,7 @@ async function lookupCourseData(courseCode) {
       courseCode,
       name: body.title,
     };
-    await cache.set(key, JSON.stringify(data));
+    await cache.set(key, JSON.stringify(data), "EX", cache.expire);
     return data;
   } catch (error) {
     log.error({ courseCode, err: error }, "Failed to get kopps info.");
