@@ -7,10 +7,20 @@ require("skog/bunyan").createLogger({
   serializers: require("bunyan").stdSerializers,
 });
 
+const log = require("skog");
+process.on("uncaughtException", (err) => {
+  log.fatal({ err }, "Uncaught exception");
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  log.fatal({ err }, "Unhandled rejection");
+  process.exit(1);
+});
+
 require("@kth/reqvars").check();
 const server = require("./server/server");
 const openid = require("./server/openid");
-const log = require("skog");
 const { renewCortinaBlock, fetchCortinaBlock } = require("./server/utils");
 
 server.listen(process.env.PORT || 3000, async () => {
