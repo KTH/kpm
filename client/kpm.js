@@ -3,6 +3,8 @@ console.log("kpm: Starting kpm.js");
 import { intl, addLanguageSelector } from "./translation";
 import { toggleMenu } from "./toggle-menu";
 
+import * as Components from "./components";
+
 console.log("kpm: Imported translation");
 
 // Note: src is the resolved url, not the raw attribute
@@ -25,14 +27,14 @@ function recreate() {
 
 async function create() {
   console.log("kpm: Load menu css");
-  const style = import("./menu.css");
+  const style = import("./scss/main.scss");
   console.log("kpm: Loaded menu css:", style);
 
   const content = await fetchPanel("");
   kpm.innerHTML = content;
 
   const loginButton = kpm.getElementsByClassName("kpm-login")[0];
-  const openMenuButton = kpm.getElementsByClassName("kpm-open-menu")[0];
+  const openMenuButton = kpm.getElementsByClassName("kpm-open-menu");
 
   if (loginButton) {
     loginButton.textContent = intl("login");
@@ -44,9 +46,8 @@ async function create() {
     );
   }
 
-  if (openMenuButton) {
-    openMenuButton.textContent = intl("menu");
-    openMenuButton.addEventListener("click", openMenu);
+  for (const panel of openMenuButton) {
+    panel.addEventListener("click", openMenu);
   }
 
   addLanguageSelector(recreate);
@@ -68,13 +69,18 @@ async function start() {
 }
 
 async function openMenu(event) {
+  const menuName = event.target.dataset.name;
   kpm.classList.toggle("open");
   event.preventDefault();
   event.stopPropagation();
   kpm.querySelector(
     ".kpmpanel"
   ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
-  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel("hello");
+  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
+
+  for (const t of document.getElementsByClassName("tabs")) {
+    Components.tabGroup(t);
+  }
 }
 
 async function fetchPanel(panel) {

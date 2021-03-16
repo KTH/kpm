@@ -1,3 +1,5 @@
+@import "./variables";
+@import "components/studies";
 html,
 body {
   scroll-padding-top: calc(2rem + 3px);
@@ -60,6 +62,7 @@ nav#kpm > .kpmpanel {
 nav#kpm.open > .kpmpanel {
   display: block;
   position: absolute;
+  width: 100%;
 }
 /* And some special page-level adaptions for canvas */
 /* Some rules specially for canvas */

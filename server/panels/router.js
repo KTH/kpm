@@ -1,12 +1,14 @@
 const log = require("skog");
 const { Router } = require("express");
 const { compileTemplate } = require("../utils");
+const mock = require("../../db-stub");
 
 const panelsRouter = Router();
 
 const indexTemplate = compileTemplate(__dirname, "index.handlebars");
 const errorPanel = compileTemplate(__dirname, "error.handlebars");
 const helloPanel = compileTemplate(__dirname, "hello.handlebars");
+const studiesPanel = compileTemplate(__dirname, "studies.handlebars");
 
 function permissionDenied(res) {
   log.warn("A user requested a panel without permission. Response: 403");
@@ -20,7 +22,6 @@ function permissionDenied(res) {
 // Returns the menu itself
 panelsRouter.get("/", (req, res) => {
   log.info(`Requesting panel '/'. User ID: ${req.session.userId}`);
-  corsAllow(res, req);
   if (req.session.userId) {
     res.send(
       indexTemplate({
@@ -39,7 +40,6 @@ panelsRouter.get("/", (req, res) => {
 
 panelsRouter.get("/hello", (req, res) => {
   log.info("Requesting panel '/hello'");
-  corsAllow(res, req);
   if (req.session.userId) {
     log.info(req.session.userData);
     res.send(
@@ -54,12 +54,29 @@ panelsRouter.get("/hello", (req, res) => {
   }
 });
 
-function corsAllow(res, req) {
-  res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Vary", "Origin");
-}
+panelsRouter.get("/studies", (req, res) => {
+  log.info("Requesting panel '/studies'");
+  if (req.session.userId) {
+    const data = mock.u1znmoik;
+    for (const course of data.activeStudentCourses) {
+      const canvasLinks = [];
+      for (const round of course.courseRounds) {
+        for (const link of round.canvas) {
+          if (link.published) {
+            canvasLinks.push({
+              name: `${round.startTerm} ${round.startYear}-${round.roundId}`,
+              url: link.url,
+            });
+          }
+        }
+      }
+      course.canvasLinks = canvasLinks;
+      course.pmUrl = `https://www.kth.se/kurs-pm/${course.courseCode}?l=sv`;
+    }
+    res.send(studiesPanel(data));
+  } else {
+    permissionDenied(res);
+  }
+});
 
 module.exports = panelsRouter;
