@@ -1,4 +1,3 @@
-// THIS IS THE ONLY FILE WHERE WE ACCESS THE DOM
 console.log("kpm: Starting kpm.js");
 
 import { intl, addLanguageSelector } from "./translation";
