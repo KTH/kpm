@@ -1,10 +1,10 @@
 const session = require("express-session");
-const loginRouter = require("./login-router");
 const cookieRouter = require("./cookie-router");
 const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
 const { compileTemplate, fetchCortinaBlock, isDev } = require("./utils");
+const openid = require("./openid");
 const app = express();
 
 if (isDev) {
@@ -12,6 +12,10 @@ if (isDev) {
 }
 
 const infoPageTemplate = compileTemplate(__dirname, "info-page.handlebars");
+const domain = new URL(process.env.SERVER_HOST_URL).hostname
+  .split(".")
+  .slice(-2)
+  .join(".");
 
 app.set("trust proxy", 1);
 app.use(
@@ -22,10 +26,13 @@ app.use(
       secure: !isDev,
       httpOnly: !isDev,
       maxAge: 60 * 60 * 1000, // 1 hour
-      domain: "kth.se",
+      domain,
     },
   })
 );
+
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.use("/kpm", express.static("dist"));
 app.get("/kpm/_monitor", (req, res) => {
@@ -40,17 +47,9 @@ app.get("/kpm/_monitor", (req, res) => {
   res.send(`APPLICATION_STATUS: OK ${version}`);
 });
 
-app.use("/kpm/login", loginRouter);
-app.get("/kpm/logout", (req, res) => {
-  req.session.destroy();
-  const logoutUrl = new URL(`${process.env.SSO_ROOT_URL}/logout`);
-  res.redirect(logoutUrl);
-});
-
 app.use("/kpm/panels", panelsRouter);
-
 app.use("/kpm/cookie", cookieRouter);
-
+app.use("/kpm/auth", openid.router);
 app.get("/kpm", (req, res) => {
   const footer = fetchCortinaBlock("footer");
   const megaMenu = fetchCortinaBlock("megaMenu");

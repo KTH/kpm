@@ -30,7 +30,7 @@ panelsRouter.get("/", (req, res) => {
   } else {
     res.send(
       indexTemplate({
-        loginUrl: `${process.env.SERVER_HOST_URL}/kpm/login`,
+        loginUrl: `${process.env.SERVER_HOST_URL}/kpm/auth/login`,
         message: process.env.LOGGED_OUT_ALERT,
       })
     );
@@ -41,11 +41,12 @@ panelsRouter.get("/hello", (req, res) => {
   log.info("Requesting panel '/hello'");
   corsAllow(res, req);
   if (req.session.userId) {
+    log.info(req.session.userData);
     res.send(
       helloPanel({
         userName: req.session.userId,
         infoUrl: `${process.env.SERVER_HOST_URL}/kpm/`,
-        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/logout`,
+        logoutUrl: `${process.env.SERVER_HOST_URL}/kpm/auth/logout`,
       })
     );
   } else {
