@@ -1,5 +1,7 @@
 const log = require("skog");
-const redis = require("redis").createClient();
+const redis = require("redis").createClient({
+  'url': process.env.REDIS_URL,
+});
 
 const kopps = require("got").extend({
   prefixUrl: "https://api.kth.se/api/kopps/v2",
