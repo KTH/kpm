@@ -41,7 +41,6 @@ panelsRouter.get("/", (req, res) => {
 panelsRouter.get("/hello", (req, res) => {
   log.info("Requesting panel '/hello'");
   if (req.session.userId) {
-    log.info(req.session.userData);
     res.send(
       helloPanel({
         userName: req.session.userId,
