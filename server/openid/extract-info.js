@@ -36,7 +36,8 @@ async function lookupCourseData(courseCode) {
 }
 
 module.exports = async function extractInfoFromToken(token) {
-  const completedCourses = [];
+  const completedStudentCourses = [];
+  const activeStudentCourses = []; // TODO
   const COMPLETED_COURSE_REGEX = /^ladok2\.kurser\.(\w+)\.(\w+)\.godkand$/;
 
   for (const group of token.memberOf) {
@@ -45,12 +46,13 @@ module.exports = async function extractInfoFromToken(token) {
     if (match) {
       const courseCode = `${match[1]}${match[2]}`;
       const courseData = await lookupCourseData(courseCode);
-      completedCourses.push(courseData);
+      completedStudentCourses.push(courseData);
     }
   }
 
   return {
     fullName: token.unique_name[0],
-    completedCourses,
+    completedStudentCourses,
+    activeStudentCourses,
   };
 };

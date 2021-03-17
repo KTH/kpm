@@ -57,7 +57,7 @@ panelsRouter.get("/hello", (req, res) => {
 panelsRouter.get("/studies", (req, res) => {
   log.info("Requesting panel '/studies'");
   if (req.session.userId) {
-    const data = mock.u1znmoik;
+    const data = req.session.userData;
     for (const course of data.activeStudentCourses) {
       const canvasLinks = [];
       for (const round of course.courseRounds) {
