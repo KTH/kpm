@@ -6,6 +6,7 @@ const redis = require("redis").createClient({
 const kopps = require("got").extend({
   prefixUrl: "https://api.kth.se/api/kopps/v2",
   responseType: "json",
+  timeout: 200, // milliseconds
 });
 
 const { promisify } = require("util");
