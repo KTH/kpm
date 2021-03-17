@@ -14,7 +14,7 @@ process.on("uncaughtException", (err) => {
 });
 
 process.on("unhandledRejection", (reason) => {
-  log.fatal({ err }, "Unhandled rejection");
+  log.fatal({ err: reason }, "Unhandled rejection");
   process.exit(1);
 });
 
