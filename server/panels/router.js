@@ -1,7 +1,6 @@
 const log = require("skog");
 const { Router } = require("express");
 const { compileTemplate } = require("../utils");
-const mock = require("../../db-stub");
 
 const panelsRouter = Router();
 
@@ -41,7 +40,6 @@ panelsRouter.get("/", (req, res) => {
 panelsRouter.get("/hello", (req, res) => {
   log.info("Requesting panel '/hello'");
   if (req.session.userId) {
-    log.info(req.session.userData);
     res.send(
       helloPanel({
         userName: req.session.userId,
@@ -57,7 +55,7 @@ panelsRouter.get("/hello", (req, res) => {
 panelsRouter.get("/studies", (req, res) => {
   log.info("Requesting panel '/studies'");
   if (req.session.userId) {
-    const data = mock.u1znmoik;
+    const data = req.session.userData;
     for (const course of data.activeStudentCourses) {
       const canvasLinks = [];
       for (const round of course.courseRounds) {
