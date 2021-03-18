@@ -38,6 +38,8 @@ async function lookupCourseData(courseCode) {
     return data;
   } catch (error) {
     log.error({ courseCode, err: error }, "Failed to get kopps info.");
+    // Mock some empty data, so the panel doesn't 500 and the course code
+    // and other names are still visible.
     return { courseCode, name: { en: "-", sv: "-" } };
   }
 }

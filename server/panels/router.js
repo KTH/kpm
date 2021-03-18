@@ -1,7 +1,6 @@
 const log = require("skog");
 const { Router } = require("express");
 const { compileTemplate } = require("../utils");
-const mock = require("../../db-stub");
 
 const panelsRouter = Router();
 
