@@ -3,10 +3,14 @@ const redis = require("redis").createClient({
   url: process.env.REDIS_URL,
 });
 
+// Note about the kopps timeout: For most courses we get our reply in
+// less than 200 ms but some (e.g. SF1624) gives a timeout even at 500
+// ms.  But since that is the rare case and we cache the results in
+// redis, just increase the timeout to a whole second.
 const kopps = require("got").extend({
   prefixUrl: "https://api.kth.se/api/kopps/v2",
   responseType: "json",
-  timeout: 500, // milliseconds
+  timeout: 1000, // milliseconds
 });
 
 const { promisify } = require("util");
