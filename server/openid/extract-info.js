@@ -66,63 +66,114 @@ function addActive(buildActive, { courseCode, year, term, round, status }) {
   }
 }
 
-module.exports = async function extractInfoFromToken(token) {
-  const completedStudentCourses = [];
-  const buildActive = new Map();
-  const LADOK_COURSE_REGEX = /^ladok2\.kurser\.(\w+)\.(\w+)\.(.*)$/;
-  const REG_ROUND_REGEX = /^registrerade_(\d{4})(\d)\.(\w+)$/;
-  // Note: I'm not sure we should look at REG_TERM_REGEX at all.
-  // The relevant groups should have course rounds.
-  const REG_TERM_REGEX = /^(om)?registrerade_(\d{4})(\d)$/;
-  for (const group of token.memberOf) {
-    const match = LADOK_COURSE_REGEX.exec(group);
-    if (match) {
-      const courseCode = `${match[1]}${match[2]}`;
-      if (match[3] == "godkand") {
-        const courseData = await lookupCourseData(courseCode);
-        completedStudentCourses.push(courseData);
-      } else {
-        const regmatch = REG_ROUND_REGEX.exec(match[3]);
-        if (regmatch) {
-          addActive(buildActive, {
-            courseCode,
-            year: regmatch[1],
-            term: regmatch[2],
-            round: regmatch[3],
-            status: "REGISTRERAD",
-          });
-        } else {
-          const regmatch = REG_TERM_REGEX.exec(match[3]);
-          if (regmatch) {
-            addActive(buildActive, {
-              courseCode,
-              year: regmatch[2],
-              term: regmatch[3],
-              status: "REGISTRERAD",
-            });
-          } else {
-            log.info({ courseCode, sub: match[3] }, "TODO");
-          }
-        }
-      }
+function parseUgGroup(name) {
+  const LADOK_COURSE_PREFIX = /^ladok2\.kurser\.(\w+)\.(\w+)\.(.*)$/;
+  const matchPrefix = LADOK_COURSE_PREFIX.exec(name);
+
+  if (!matchPrefix) {
+    return null;
+  }
+
+  const courseCode = `${matchPrefix[1]}${matchPrefix[2]}`;
+
+  if (matchPrefix[3] === "godkand") {
+    // This is a godkänd course, not a course round
+    return {
+      courseCode,
+    };
+  }
+
+  const REGISTRERADE_SUFFIX = /^registrerade_(\d{4})(\d)\.(\w+)$/;
+  const matchRegistered = REGISTRERADE_SUFFIX.exec(matchPrefix[3]);
+
+  if (matchRegistered) {
+    const yy = matchRegistered[1].slice(0, 2);
+    const tt = matchRegistered[2] === "1" ? "HT" : "VT";
+
+    return {
+      sisId: `${courseCode}${tt}${yy}${matchRegistered[3]}`,
+      courseCode,
+      year: matchRegistered[1],
+      term: matchRegistered[2],
+      round: matchRegistered[3],
+      status: "REGISTRERAD",
+    };
+  }
+
+  // TODO: regex for antagna
+}
+
+function groupCourseRounds(courseRounds) {
+  // 1. group "status"
+  const groupedRounds = new Map();
+
+  for (const round of courseRounds) {
+    const existingRound = groupedRounds.get(round.sisId);
+
+    if (existingRound) {
+      existingRound.status.push(round.status);
+    } else {
+      groupedRounds.set(round.sisId, {
+        ...round,
+        status: [round.status],
+      });
     }
   }
 
+  // 2. group by courseCode
+  const groupedCourses = new Map();
+
+  for (const round of groupedRounds.values()) {
+    const existingCourse = groupedCourses.get(round.courseCode);
+
+    if (existingCourse) {
+      existingCourse.courseRounds.push(round);
+    } else {
+      groupedCourses.set(round.courseCode, {
+        courseCode: round.courseCode,
+        courseRounds: [round],
+      });
+    }
+  }
+
+  return groupedCourses.values();
+}
+
+module.exports = async function extractInfoFromToken(token) {
+  const completedStudentCourses = [];
   const activeStudentCourses = [];
-  for (const [courseCode, data] of buildActive) {
-    const courseData = await lookupCourseData(courseCode);
-    courseData.courseRounds = [...data.values()].map((value) => {
-      const t = {
-        status: [...value.status],
-        startYear: value.startYear,
-        startTerm: value.startTerm,
-        roundId: value.roundId,
-        canvas: [], // TODO?
+
+  const parsedGroups = token.memberOf
+    .map((groupName) => parseUgGroup(groupName))
+    .filter((group) => group);
+
+  const completedCourses = parsedGroups.filter(
+    (group) => group.courseCode && !group.sisId
+  );
+  const activeCourseRounds = parsedGroups.filter(
+    (group) => group.courseCode && group.sisId
+  );
+  const activeCourses = groupCourseRounds(activeCourseRounds);
+
+  for (const course of completedCourses) {
+    completedStudentCourses.push(await lookupCourseData(course.courseCode));
+  }
+
+  for (const course of activeCourses) {
+    const courseData = await lookupCourseData(course.courseCode);
+    courseData.courseRounds = [];
+
+    for (const round of course.courseRounds) {
+      const courseRoundData = {
+        ...round,
+        canvas: [],
       };
-      return t;
-    });
+      courseData.courseRounds.push(courseRoundData);
+    }
+
     activeStudentCourses.push(courseData);
   }
+
   log.info({ activeStudentCourses }, "Collected active courses");
   return {
     fullName: token.unique_name[0],
