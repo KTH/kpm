@@ -3,6 +3,13 @@ const redis = require("redis").createClient({
   url: process.env.REDIS_URL,
 });
 
+//
+const Canvas = require("@kth/canvas-api");
+const canvas = new Canvas(
+  process.env.CANVAS_API_URL,
+  process.env.CANVAS_API_TOKEN
+);
+
 // Note about the kopps timeout: For most courses we get our reply in
 // less than 200 ms but some (e.g. SF1624) gives a timeout even at 500
 // ms.  But since that is the rare case and we cache the results in
@@ -44,25 +51,28 @@ async function lookupCourseData(courseCode) {
   }
 }
 
-function addActive(buildActive, { courseCode, year, term, round, status }) {
-  log.info({ courseCode, year, term, round }, "Registrerad");
-  const roundStr = `${year}-${term}-${round || "x"}`;
-  let course;
-  if (buildActive.has(courseCode)) {
-    course = buildActive.get(courseCode);
-  } else {
-    course = new Map();
-    buildActive.set(courseCode, course);
-  }
-  if (course.has(roundStr)) {
-    course.get(roundStr).status.add(status);
-  } else {
-    course.set(roundStr, {
-      status: new Set([status]),
-      startYear: year,
-      startTerm: term,
-      roundId: round,
-    });
+async function lookupCanvasLinks(courseRound) {
+  const sisId = courseRound.sisId;
+
+  try {
+    const key = `canvas/${sisId}`;
+    const cached = await cache.get(key);
+
+    if (cached) {
+      return [JSON.parse(cached)];
+    }
+
+    const { body } = await canvas.get(`courses/sis_course_id:${sisId}`);
+
+    const data = {
+      url: `https://canvas.kth.se/courses/${body.id}`,
+      published: body.workflow_state === "available",
+    };
+
+    await cache.set(key, JSON.stringify(data), "EX", cache.expire);
+    return [data];
+  } catch (error) {
+    log.error({ sisId, err: error }, "Failed to get canvas information");
   }
 }
 
@@ -88,14 +98,14 @@ function parseUgGroup(name) {
 
   if (matchRegistered) {
     const yy = matchRegistered[1].slice(0, 2);
-    const tt = matchRegistered[2] === "1" ? "HT" : "VT";
+    const tt = matchRegistered[2] === "1" ? "VT" : "HT";
 
     return {
       sisId: `${courseCode}${tt}${yy}${matchRegistered[3]}`,
       courseCode,
-      year: matchRegistered[1],
-      term: matchRegistered[2],
-      round: matchRegistered[3],
+      startYear: matchRegistered[1],
+      startTerm: tt,
+      roundId: matchRegistered[3],
       status: "REGISTRERAD",
     };
   }
@@ -164,11 +174,11 @@ module.exports = async function extractInfoFromToken(token) {
     courseData.courseRounds = [];
 
     for (const round of course.courseRounds) {
-      const courseRoundData = {
+      const canvasLinks = await lookupCanvasLinks(round);
+      courseData.courseRounds.push({
         ...round,
-        canvas: [],
-      };
-      courseData.courseRounds.push(courseRoundData);
+        canvas: canvasLinks,
+      });
     }
 
     activeStudentCourses.push(courseData);
