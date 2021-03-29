@@ -163,6 +163,7 @@ module.exports = async function extractInfoFromToken(token) {
   const activeCourseRounds = parsedGroups.filter(
     (group) => group.courseCode && group.sisId
   );
+
   const activeCourses = groupCourseRounds(activeCourseRounds);
 
   for (const course of completedCourses) {
