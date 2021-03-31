@@ -51,6 +51,10 @@ router.post("/callback", async function (req, res) {
   req.session.userId = token.kthid;
   res.redirect(next);
 
+  if (process.env.USE_MOCK_DATA === "true") {
+    token.memberOf.push("ladok2.kurser.SF.1625.registrerade_20211.1");
+  }
+
   req.session.userData = await extractInfoFromToken(token);
   req.session.save();
 });
