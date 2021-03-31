@@ -37,8 +37,8 @@
       <section data-id="current">
         <ul>
           {{#each activeStudentCourses}}
-          <li class="half">
-            {{this.courseCode}} - {{this.name.sv}}
+          <li class="{{this.status}}">
+            <strong>{{this.courseCode}} - {{this.name.sv}}</strong>
             <ul>
               <li>
                 <a href="{{this.pmUrl}}">Kursinformation</a>

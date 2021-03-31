@@ -59,7 +59,11 @@ panelsRouter.get("/studies", (req, res) => {
 
     for (const course of data.activeStudentCourses) {
       const canvasLinks = [];
+      const status = new Set();
       for (const round of course.courseRounds) {
+        for (const s of round.status) {
+          status.add(s);
+        }
         for (const link of round.canvas) {
           if (link.published) {
             canvasLinks.push({
@@ -69,6 +73,7 @@ panelsRouter.get("/studies", (req, res) => {
           }
         }
       }
+      course.status = [...status.keys()].join(" ").toLowerCase();
       course.canvasLinks = canvasLinks;
       course.pmUrl = `https://www.kth.se/kurs-pm/${course.courseCode}?l=sv`;
     }
