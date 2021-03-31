@@ -111,7 +111,24 @@ function parseUgGroup(name) {
     };
   }
 
-  // TODO: regex for antagna
+  const ADMITTED_SUFFIX = /^antagna_(\d{4})(\d)\.(\w+)$/;
+  const matchAdmitted = ADMITTED_SUFFIX.exec(matchPrefix[3]);
+
+  if (matchAdmitted) {
+    const yy = matchAdmitted[1].slice(0, 2);
+    const tt = matchAdmitted[2] === "1" ? "VT" : "HT";
+
+    return {
+      sisId: `${courseCode}${tt}${yy}${matchAdmitted[3]}`,
+      courseCode,
+      startYear: matchAdmitted[1],
+      startTerm: tt,
+      roundId: matchAdmitted[3],
+      status: "ANTAGEN",
+    };
+  }
+
+  log.debug({ courseCode, suffix: matchPrefix[3] }, "Group not yet handled.");
 }
 
 function groupCourseRounds(courseRounds) {
