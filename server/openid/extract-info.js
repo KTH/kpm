@@ -73,6 +73,7 @@ async function lookupCanvasLinks(courseRound) {
     return [data];
   } catch (error) {
     log.error({ sisId, err: error }, "Failed to get canvas information");
+    return [];
   }
 }
 
