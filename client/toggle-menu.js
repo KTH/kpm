@@ -32,7 +32,6 @@ function createSetCookieEvent() {
   }
 }
 
-
 async function logStatus(status) {
   try {
     const res = await fetch(`/kpm/cookie/${status ? "enabled" : "disabled"}`, {
