@@ -19,10 +19,32 @@ kpm.id = "kpm";
 kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
 document.body.insertBefore(kpm, document.body.firstChild);
 
-function recreate() {
-  document.getElementById("kpm").childNodes.forEach((node) => node.remove());
-  kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
-  create();
+async function fetchPanel(panel) {
+  const url = new URL(`panels/${panel}`, scriptUrl);
+  console.log("kpm: Fetch panel", panel, "from", url);
+  const response = await window.fetch(url, {
+    mode: "cors",
+    credentials: "include",
+  });
+  if (response.status > 400) {
+    console.error(`kpm: Error when fetching the "${panel}" panel: `, response);
+  }
+  return response.text();
+}
+
+async function openMenu(event) {
+  const menuName = event.target.dataset.name;
+  kpm.classList.toggle("open");
+  event.preventDefault();
+  event.stopPropagation();
+  kpm.querySelector(
+    ".kpmpanel"
+  ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
+  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
+
+  for (const t of document.getElementsByClassName("tabs")) {
+    Components.tabGroup(t);
+  }
 }
 
 async function create() {
@@ -42,7 +64,7 @@ async function create() {
 
     loginButton.setAttribute(
       "href",
-      `${loginUrl}?next=${window.encodeURIComponent(location.href)}`
+      `${loginUrl}?next=${window.encodeURIComponent(window.location.href)}`
     );
   }
 
@@ -50,12 +72,13 @@ async function create() {
     panel.addEventListener("click", openMenu);
   }
 
+  /* eslint-disable no-use-before-define */
   addLanguageSelector(recreate);
 
   const btn = document.getElementById("kpm-alert-btn");
 
   if (btn) {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", () => {
       document.getElementById("kpm-alert").remove();
     });
   }
@@ -63,38 +86,14 @@ async function create() {
   await style;
 }
 
+function recreate() {
+  document.getElementById("kpm").childNodes.forEach((node) => node.remove());
+  kpm.innerHTML = `<div class="kpmbar">${intl("loading")}...</div>`;
+  create();
+}
 async function start() {
   create();
   toggleMenu();
-}
-
-async function openMenu(event) {
-  const menuName = event.target.dataset.name;
-  kpm.classList.toggle("open");
-  event.preventDefault();
-  event.stopPropagation();
-  kpm.querySelector(
-    ".kpmpanel"
-  ).innerHTML = `<p class="kpm-menu-loading">${intl("loading")}...</p>`;
-  kpm.querySelector(".kpmpanel").innerHTML = await fetchPanel(menuName);
-
-  for (const t of document.getElementsByClassName("tabs")) {
-    Components.tabGroup(t);
-  }
-}
-
-async function fetchPanel(panel) {
-  const url = new URL(`panels/${panel}`, scriptUrl);
-  console.log("kpm: Fetch panel", panel, "from", url);
-  const response = await window.fetch(url, {
-    mode: "cors",
-    credentials: "include",
-  });
-  if (response.status > 400) {
-    console.error(`kpm: Error when fetching the "${panel}" panel: `, response);
-  } else {
-    return await response.text();
-  }
 }
 
 start();
