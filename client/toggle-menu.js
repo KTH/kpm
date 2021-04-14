@@ -2,25 +2,6 @@ import Cookies from "js-cookie";
 
 const COOKIE_NAME = "use_kpm";
 
-async function logStatus(status) {
-  try {
-    const res = await fetch(`/kpm/cookie/${status ? "enabled" : "disabled"}`, {
-      method: "POST",
-    });
-    if (res.ok) {
-      const container = document.getElementById("toggle_menu_container");
-      container.innerHTML = "";
-      container.innerHTML = await res.text();
-      createSetCookieEvent();
-      return true;
-    }
-    return false;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
 function getButton(id) {
   const btn = document.getElementById(id);
   if (btn) {
@@ -29,7 +10,7 @@ function getButton(id) {
   return false;
 }
 
-function onClick(e) {
+function onClick() {
   const cookie = Cookies.get(COOKIE_NAME);
   if (!cookie) {
     logStatus(true);
@@ -38,7 +19,6 @@ function onClick(e) {
     logStatus(false);
   }
 }
-
 function createSetCookieEvent() {
   try {
     const btn = getButton("toggle_kpm");
@@ -52,6 +32,26 @@ function createSetCookieEvent() {
   }
 }
 
+
+async function logStatus(status) {
+  try {
+    const res = await fetch(`/kpm/cookie/${status ? "enabled" : "disabled"}`, {
+      method: "POST",
+    });
+    if (res.ok) {
+      const container = document.getElementById("toggle_menu_container");
+      container.innerHTML = "";
+      container.innerHTML = await res.text();
+      // FIXME: is this really correct? Should we create an event in a logging function?
+      createSetCookieEvent();
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
 export async function toggleMenu() {
   const cookie = !!Cookies.get(COOKIE_NAME);
   await logStatus(cookie);
