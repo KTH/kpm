@@ -1,6 +1,7 @@
 {
   "extends": ["@kth/eslint-config-kth"],
   "rules": {
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "import/prefer-default-export": "off"
   }
 }

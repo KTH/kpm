@@ -22,7 +22,7 @@ process.on("unhandledRejection", (reason) => {
 require("@kth/reqvars").check();
 const server = require("./server/server");
 const openid = require("./server/openid");
-const { renewCortinaBlock, fetchCortinaBlock } = require("./server/utils");
+const { renewCortinaBlock } = require("./server/utils");
 
 server.listen(process.env.PORT || 3000, async () => {
   await openid.init();
