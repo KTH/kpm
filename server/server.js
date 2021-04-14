@@ -76,7 +76,7 @@ app.get("/kpm", (req, res) => {
   );
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   log.error(
     {
       req,
