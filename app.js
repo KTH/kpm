@@ -8,6 +8,7 @@ require("skog/bunyan").createLogger({
 });
 
 const log = require("skog");
+
 process.on("uncaughtException", (err) => {
   log.fatal({ err }, "Uncaught exception");
   process.exit(1);
@@ -36,7 +37,7 @@ server.listen(process.env.PORT || 3000, async () => {
   log.info("Cortina blocks ready");
 });
 
-setInterval(async function renewAllCortinaBlocks() {
+setInterval(async () => {
   await renewCortinaBlock("footer");
   await renewCortinaBlock("megaMenu");
   await renewCortinaBlock("search");

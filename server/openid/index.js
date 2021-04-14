@@ -19,7 +19,7 @@ async function init() {
   });
 }
 
-router.get("/login", async function (req, res) {
+router.get("/login", async (req, res) => {
   const nonce = generators.nonce();
   const url = client.authorizationUrl({
     scope: "openid email profile",
@@ -35,7 +35,7 @@ router.get("/login", async function (req, res) {
 });
 
 /** Process an incoming request from the authentication server */
-router.post("/callback", async function (req, res) {
+router.post("/callback", async (req, res) => {
   const params = client.callbackParams(req);
   const { nonce, next } = req.session.tmp;
   delete req.session.tmp;
@@ -44,9 +44,7 @@ router.post("/callback", async function (req, res) {
     .callback(`${process.env.SERVER_HOST_URL}/auth/callback`, params, {
       nonce,
     })
-    .then(function (tokenSet) {
-      return tokenSet.claims();
-    });
+    .then((tokenSet) => tokenSet.claims());
 
   req.session.userId = token.kthid;
   res.redirect(next);
@@ -55,7 +53,7 @@ router.post("/callback", async function (req, res) {
   req.session.save();
 });
 
-router.get("/logout", async function (req, res) {
+router.get("/logout", async (req, res) => {
   req.session.destroy();
   res.redirect(client.endSessionUrl());
 });

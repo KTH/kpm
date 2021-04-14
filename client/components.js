@@ -7,7 +7,7 @@ export function tabGroup(element) {
     .getElementsByTagName("a");
 
   function updateTabs() {
-    const openedTab = element.dataset.openedTab;
+    const { openedTab } = element.dataset;
 
     for (const link of linkList) {
       if (link.dataset.id === openedTab) {

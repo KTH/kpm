@@ -6,7 +6,7 @@ const COOKIE_NAME = "use_kpm";
 
 const cookieRouter = Router();
 
-let options = {
+const options = {
   secure: !isDev,
   httpOnly: false,
   maxAge: 1000 * 3600 * 24 * 365,

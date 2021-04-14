@@ -14,6 +14,7 @@ const kopps = require("got").extend({
 });
 
 const { promisify } = require("util");
+
 const cache = {
   get: promisify(redis.get).bind(redis),
   set: promisify(redis.set).bind(redis),

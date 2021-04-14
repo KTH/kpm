@@ -53,7 +53,7 @@ function createSetCookieEvent() {
 }
 
 export async function toggleMenu() {
-  const cookie = Cookies.get(COOKIE_NAME) ? true : false;
+  const cookie = !!Cookies.get(COOKIE_NAME);
   await logStatus(cookie);
   createSetCookieEvent();
 }

@@ -1,10 +1,11 @@
 const session = require("express-session");
-const cookieRouter = require("./cookie-router");
-const panelsRouter = require("./panels/router");
 const log = require("skog");
 const express = require("express");
+const cookieRouter = require("./cookie-router");
+const panelsRouter = require("./panels/router");
 const { compileTemplate, fetchCortinaBlock, isDev } = require("./utils");
 const openid = require("./openid");
+
 const app = express();
 
 if (isDev) {
@@ -18,10 +19,10 @@ const domain = new URL(process.env.SERVER_HOST_URL).hostname
   .join(".");
 
 function corsAllow(req, res, next) {
-  res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  //res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  // res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Vary", "Origin");
   next();
 }
@@ -75,7 +76,7 @@ app.get("/kpm", (req, res) => {
   );
 });
 
-app.use(function catchAll(err, req, res, next) {
+app.use((err, req, res, next) => {
   log.error(
     {
       req,

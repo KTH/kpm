@@ -1,9 +1,9 @@
-console.log("kpm: Starting kpm.js");
-
 import { intl, addLanguageSelector } from "./translation";
 import { toggleMenu } from "./toggle-menu";
 
 import * as Components from "./components";
+
+console.log("kpm: Starting kpm.js");
 
 console.log("kpm: Imported translation");
 
