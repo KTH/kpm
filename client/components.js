@@ -30,6 +30,7 @@ export function tabGroup(element) {
 
   for (const link of linkList) {
     link.addEventListener("click", () => {
+      /* eslint-disable no-param-reassign */
       element.dataset.openedTab = link.dataset.id;
 
       updateTabs();
