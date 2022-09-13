@@ -1,0 +1,21 @@
+{
+  "name": "my-teaching-api",
+  "version": "0.1.0",
+  "description": "API for which courses/programs I teach, KPM.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn src/index.ts"
+  },
+  "author": "KTH Royal Institute of Technology",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "ts-node": "^10.9.1"
+  }
+}
