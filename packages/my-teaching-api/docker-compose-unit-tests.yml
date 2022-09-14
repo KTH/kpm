@@ -1,0 +1,11 @@
+version: '3.2'
+
+services:
+  unit_tests:
+    build: .
+    image: $LOCAL_IMAGE_ID
+    tty: false
+    command: >
+      sh -c "apk add openssl git python make &&
+             npm ci && \
+             npm test"
