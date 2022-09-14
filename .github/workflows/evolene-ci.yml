@@ -37,7 +37,7 @@ jobs:
           # BRANCHES_TAG_AS_MAIN: "True"                    # Do not add branch names to build artifacts
           SLACK_CHANNELS: "#team-e-larande-build" # List of Slack channels for user information
           # SKIP_DRY_RUN: True                              # Skip "dry run" step
-          WORKSPACE: packages/${{matrix.package}}
+          MONOREPO_SUBPATH: packages/${{matrix.package}}
 
         run: |
-          ${{ secrets.EVOLENE_RUN_COMMAND }}
+          ${{ secrets.EVOLENE_LATEST_RUN_COMMAND }}
