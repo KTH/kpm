@@ -39,5 +39,5 @@ jobs:
           # SKIP_DRY_RUN: True                              # Skip "dry run" step
 
         run: |
-          cd ${{matrix.package}}
+          cd packages/${{matrix.package}}
           ${{ secrets.EVOLENE_RUN_COMMAND }}
