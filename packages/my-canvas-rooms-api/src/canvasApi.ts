@@ -1,0 +1,62 @@
+/**
+ * This module contains functions to call Canvas API.
+ * Functions do not contain any logic
+ */
+import assert from "assert";
+import CanvasAPI, { minimalErrorHandler } from "@kth/canvas-api";
+import { Request } from "express";
+import { UnauthorizedError } from "../apiHandlers/error";
+
+export interface CanvasRoom {
+  id: number;
+  workflow_state: "unpublished" | "available" | "completed" | "deleted";
+  name: string;
+  sections: CanvasSection[];
+  course_code: string; // NOT a course code but a short room name
+  sis_course_id: string;
+}
+
+export interface CanvasSection {
+  sis_section_id: string | null;
+  integration_id: string | null;
+  name: string;
+}
+
+function getToken(token = "") {
+  if (token.startsWith("Bearer ")) {
+    return token.substring(7);
+  }
+
+  throw new UnauthorizedError(
+    "Unauthorized. You must access this endpoint either with a session or an authorization header"
+  );
+}
+
+export default class CanvasClient {
+  client: CanvasAPI;
+
+  constructor(req: Request<unknown>) {
+    const canvasApiUrl = process.env.CANVAS_API_URL;
+    assert(
+      typeof canvasApiUrl === "string",
+      "Missing environmental variable [CANVAS_API_URL]"
+    );
+    const token =
+      req.session.accessToken || getToken(req.headers.authorization);
+
+    this.client = new CanvasAPI(canvasApiUrl, token);
+    this.client.errorHandler = minimalErrorHandler;
+  }
+
+  getRooms(user: string) {
+    return this.client.listItems<CanvasRoom>(`users/${user}/courses`, {
+      include: ["sections"],
+    });
+  }
+
+  getSelf() {
+    return this.client
+      .get<{ id: number; login_id?: string }>("users/self")
+      .then((r) => r.body);
+  }
+}
