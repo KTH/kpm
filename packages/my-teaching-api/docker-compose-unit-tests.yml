@@ -6,4 +6,4 @@ services:
     image: $LOCAL_IMAGE_ID
     tty: false
     command: >
-      sh -c "npm test"
+      sh -c "npm ci --development && npm test"
