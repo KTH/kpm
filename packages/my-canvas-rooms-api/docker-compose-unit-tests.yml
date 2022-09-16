@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  unit_tests:
+    build: .
+    image: $LOCAL_IMAGE_ID
+    tty: false
+    command: >
+      sh -c "npm ci --development && npm test"
