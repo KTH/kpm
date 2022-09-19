@@ -3,6 +3,7 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
+    "clean": "npm exec --workspaces --include-workspace-root -c 'rm -rf node_modules package-lock.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/KTH/kpm/issues"
   },
-  "homepage": "https://github.com/KTH/kpm#readme"
+  "homepage": "https://github.com/KTH/kpm#readme",
+  "workspaces": [
+    "packages/*"
+  ]
 }
