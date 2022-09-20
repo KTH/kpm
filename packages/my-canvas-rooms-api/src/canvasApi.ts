@@ -5,7 +5,6 @@
 import assert from "assert";
 import CanvasAPI, { minimalErrorHandler } from "@kth/canvas-api";
 import { Request } from "express";
-import { UnauthorizedError } from "../apiHandlers/error";
 
 export interface CanvasRoom {
   id: number;
@@ -17,8 +16,6 @@ export interface CanvasRoom {
 }
 
 export interface CanvasSection {
-  sis_section_id: string | null;
-  integration_id: string | null;
   name: string;
 }
 
@@ -27,7 +24,7 @@ function getToken(token = "") {
     return token.substring(7);
   }
 
-  throw new UnauthorizedError(
+  throw new Error(
     "Unauthorized. You must access this endpoint either with a session or an authorization header"
   );
 }
@@ -41,8 +38,7 @@ export default class CanvasClient {
       typeof canvasApiUrl === "string",
       "Missing environmental variable [CANVAS_API_URL]"
     );
-    const token =
-      req.session.accessToken || getToken(req.headers.authorization);
+    const token = getToken(req.headers.authorization);
 
     this.client = new CanvasAPI(canvasApiUrl, token);
     this.client.errorHandler = minimalErrorHandler;
