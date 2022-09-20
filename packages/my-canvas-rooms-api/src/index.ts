@@ -24,16 +24,16 @@ api.get("/user/:user", async (req, res, next) => {
   try {
     const canvas = new CanvasClient(req);
     const rooms = canvas.getRooms(`sis_user_id:${req.params.user}`);
-    let result: { [index: string]: Set<Link> } = {};
+    let result: { [index: string]: Array<Link> } = {};
     for await (let room of rooms) {
       // Each canvas room may belong to multiple courses, and each
       // course usually has many canvas rooms.
       let { course_codes, link } = get_rooms_courses_and_link(room);
       for (let code of course_codes) {
         if (result[code]) {
-          result[code].add(link);
+          result[code].push(link);
         } else {
-          result[code] = new Set([link]);
+          result[code] = [link];
         }
       }
     }
