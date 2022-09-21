@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npm exec --workspaces -c 'rm -rf package-lock.json'",
-    "postinstall": "npm exec --workspaces -c 'npm i && rm -rf node_modules'",
+    "postinstall": "npm exec --workspaces -c 'npm i --package-lock-only'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
