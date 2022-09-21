@@ -1,6 +1,7 @@
-import "../src/config";
 import { describe, expect, test } from "@jest/globals";
 import { get_rooms_courses_and_link } from "../src/api";
+
+process.env.CANVAS_API_URL = "https://mock.kth.se/api/v1";
 
 describe("New Standard format room data can be parsed", () => {
   test("one", () => {
