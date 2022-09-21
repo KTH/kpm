@@ -11,8 +11,11 @@ const prefix = process.env.PREFIX || "/kpm/canvas-rooms";
 
 const api = express.Router();
 
-api.get("/", (req, res) => {
+api.get("/", (_req, res) => {
   res.send({ msg: "Hello World!!!" });
+});
+api.get("/_monitor", (_req, res) => {
+  res.send("APPLICATION_STATUS: Ok");
 });
 
 api.get("/mine", (req, res) => {
