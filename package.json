@@ -3,8 +3,9 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "preinstall": "npm exec --workspaces -c 'rm -rf package-lock.json'",
-    "postinstall": "npm exec --workspaces -c 'npm i --package-lock-only'",
+    "init": "npm run init:clean && npm i && npm run init:workspaces",
+    "init:clean": "npm exec --workspaces -c 'rm -rf package-lock.json'",
+    "init:workspaces": "npm exec --workspaces -c 'npm i --package-lock-only'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
