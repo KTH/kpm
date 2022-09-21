@@ -19,7 +19,7 @@ describe("New Standard format room data can be parsed", () => {
         "link": {
           "name": "SF1691 VT20 (60321) Komplex analys",
           "state": "available",
-          "url": "https://kth.test.instructure.com/courses/17738",
+          "url": "https://mock.kth.se/courses/17738",
         },
       }
     `);
