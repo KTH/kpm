@@ -3,7 +3,7 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "publish": "source bin/publish.sh my-canvas-rooms-api my-teaching-api",
+    "update-workspaces": "source bin/update.sh my-canvas-rooms-api my-teaching-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
