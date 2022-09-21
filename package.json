@@ -3,7 +3,8 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "clean": "npm exec --workspaces --include-workspace-root -c 'rm -rf node_modules package-lock.json'",
+    "preinstall": "npm exec --workspaces -c 'rm -rf package-lock.json'",
+    "postinstall": "npm exec --workspaces -c 'npm i && rm -rf node_modules'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
