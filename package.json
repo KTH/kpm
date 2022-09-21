@@ -3,9 +3,7 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "init": "npm run init:clean && npm i && npm run init:workspaces",
-    "init:clean": "npm exec --workspaces -c 'rm -rf package-lock.json'",
-    "init:workspaces": "npm exec --workspaces -c 'npm i --package-lock-only'",
+    "publish": "source bin/publish.sh my-canvas-rooms-api my-teaching-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
