@@ -12,7 +12,7 @@ export interface CanvasRoom {
   name: string;
   sections: CanvasSection[];
   course_code: string; // NOT a course code but a short room name
-  sis_course_id: string;
+  sis_course_id?: string;
 }
 
 export interface CanvasSection {
