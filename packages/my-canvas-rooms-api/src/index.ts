@@ -60,9 +60,9 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
+export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   const room_id = canvas_data.id;
-  const link = {
+  const link: Link = {
     'url': new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
@@ -88,36 +88,36 @@ function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     return { course_codes, link }
   }
 
-  return { course_codes, link }
-  /* FIXME: Handle old format, something like this:
   // Old SIS_COURSE_ID format for fallback handling
   const sis_course_id_format = /^(.*)([VH]T[0-9][0-9])([0-9A-Z])$/i;
 
-  sis_course_id = canvas_data.get('sis_course_id') or ''
-  logger.info("Fallback for room %s %s (%s: %s).  Sections: %s",
-    room_id, sis_course_id, canvas_data.get('course_code'),
-    canvas_data.get('name'), sections)
+  const sis_course_id = canvas_data.sis_course_id || '';
+  //logger.info("Fallback for room %s %s (%s: %s).  Sections: %s",
+  //  room_id, sis_course_id, canvas_data.get('course_code'),
+  //  canvas_data.get('name'), sections)
 
-  match = sis_course_id_format.match(sis_course_id)
-    # Note; The sections returned from the Canvas API are limited to those
-    # where the current user is enrolled.
-    course_code = match.group(1) if match and any(
-      match.group(1) in section for section in sections) else '-'
-  if course_code != '-':
-    result['text'] = match.group(2) + '-' + match.group(3)
-  result['name'] = canvas_data.get('name')
-    else:
-        # Not a "correct" sis id or high likelihood of xlisting;
-        # get some data to search for course codes.
-    logger.debug("Full canvas data: %r", canvas_data)
-        result['text'] = canvas_data.get('name')
-        result['name'] = canvas_data.get('course_code') + ' ' + ' '.join(sections)
-  return set([course_code]), result
-  */
+  const match = sis_course_id.match(sis_course_id_format);
+  // Note; The sections returned from the Canvas API are limited to those
+  // where the current user is enrolled.
+  let course_code = '-';
+  if (match && sections.find((section) => section.includes(match[1]))) {
+    course_code = match[1];
+    link.name = `${match[2]}-${match[3]}`;
+    link.text = canvas_data.name;
+  } else {
+    // Not a "correct" sis id or high likelihood of xlisting;
+    // get some data to search for course codes.
+    // logger.debug("Full canvas data: %r", canvas_data)
+    link.name = canvas_data.name;
+    link.text = `${canvas_data.course_code} ${sections.join(' ')}`;
+  }
+  course_codes.add(course_code);
+  return { course_codes, link }
 }
 
 type Link = {
   url: URL,
   name: string,
-  state: "unpublished" | "available" | "completed" | "deleted";
+  state: "unpublished" | "available" | "completed" | "deleted",
+  text?: string,
 };
