@@ -3,8 +3,8 @@ import { get_rooms_courses_and_link } from "../src/api";
 
 process.env.CANVAS_API_URL = "https://mock.kth.se/api/v1";
 
-describe("New Standard format room data can be parsed", () => {
-  test("one", () => {
+describe("Known room formats data can be parsed", () => {
+  test("New Standard", () => {
     expect(
       get_rooms_courses_and_link(
         JSON.parse(
@@ -20,6 +20,27 @@ describe("New Standard format room data can be parsed", () => {
           "name": "SF1691 VT20 (60321) Komplex analys",
           "state": "available",
           "url": "https://mock.kth.se/courses/17738",
+        },
+      }
+    `);
+  });
+
+  test("rapp", () => {
+    expect(
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":15152,"name":"RAPP_DH1600:komm11 Kommunikation i ingenjörsvetenskap","account_id":56,"uuid":"OhRYeqg2zQDIeVlQPZEuSpHKgeqQycqEesop7Kjp","start_at":"2010-09-01T22:00:00Z","grading_standard_id":null,"is_public":null,"created_at":"2018-12-11T10:41:48Z","course_code":"DH1600","default_view":"modules","root_account_id":1,"enrollment_term_id":1,"license":null,"grade_passback_setting":null,"end_at":"2021-01-01T00:00:00Z","public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"apply_assignment_group_weights":false,"sections":[{"id":12712,"name":"Section for the course RAPP_DH1600:komm11","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"}],"calendar":{"ics":"https://kth.test.instructure.com/feeds/calendars/course_OhRYeqg2zQDIeVlQPZEuSpHKgeqQycqEesop7Kjp.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"RAPP_DH1600:komm11","sis_import_id":986064,"integration_id":null,"enrollments":[{"type":"teacher","role":"TeacherEnrollment","role_id":4,"user_id":97,"enrollment_state":"active","limit_privileges_to_course_section":false}],"hide_final_grades":false,"workflow_state":"unpublished","restrict_enrollments_to_course_dates":true}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "DH1600",
+        },
+        "link": {
+          "name": "RAPP_DH1600:komm11 Kommunikation i ingenjörsvetenskap",
+          "state": "unpublished",
+          "url": "https://mock.kth.se/courses/15152",
         },
       }
     `);
