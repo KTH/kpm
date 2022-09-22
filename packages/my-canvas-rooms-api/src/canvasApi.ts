@@ -47,6 +47,7 @@ export default class CanvasClient {
   getRooms(user: string) {
     return this.client.listItems<CanvasRoom>(`users/${user}/courses`, {
       include: ["sections"],
+      per_page: 96,
     });
   }
 
