@@ -1,8 +1,16 @@
 /* Top-level source file for my-teaching-api */
-import { config } from "dotenv";
-config();
-
+import "./config";
+import assert from 'node:assert/strict';
 import express from "express";
+import { UGRestClient } from "./ugRestClient";
+
+const OAUTH_SERVER_BASE_URI = process.env.OAUTH_SERVER_BASE_URI || "https://login.ref.ug.kth.se/adfs";
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const UG_REST_BASE_URI = process.env.UG_REST_BASE_URI || "https://integral-api.sys.kth.se/test/ug";
+
+assert(typeof CLIENT_ID === "string" && CLIENT_ID, "Missing CLIENT_ID for OpenID auth");
+assert(typeof CLIENT_SECRET === "string" && CLIENT_SECRET, "Missing CLIENT_SECRET for OpenID auth");
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000");
@@ -17,8 +25,21 @@ api.get("/", (req, res) => {
 api.get("/mine", (req, res) => {
   res.send({ msg: "Not implemented yet." });
 });
-api.get("/user/:user", (req, res) => {
-  res.send({ msg: `todo: data for ${req.params.user}` });
+
+api.get("/user/:user", async (req, res) => {
+  const userName = req.params.user;
+
+  const ugClient = new UGRestClient({
+    authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
+    resourceBaseURI: UG_REST_BASE_URI,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET
+  })
+  const { data, json, statusCode } = await ugClient.get(`users/${userName}`);
+  res.status(statusCode || 200).send({
+    text: data,
+    data: json
+  });
 });
 
 app.use((req, res, next) => {
