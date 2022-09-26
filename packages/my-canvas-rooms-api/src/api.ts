@@ -48,21 +48,29 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
   }
+  const course_codes = new Set<string>()
+
+  // Rapp courses may not be the most common or important, but we can
+  // identify them based on only course name and ignore sections.
+  const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/);
+  if (rapp) {
+    course_codes.add(rapp[1])
+    return { course_codes, link }
+  }
+
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
   const sections = canvas_data.sections.map(s => s.name);
 
-
   const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) [HV]T[0-9]{2,4} \(\d+\)/i;
 
-  const course_codes = new Set<string>()
   for (const section of sections) {
     const match = section.match(section_name_format);
     if (match) {
       // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
       course_codes.add(match[1])
     } else {
-      // logger.debug("Room %s Section %r; no match.", room_id, section)
+      // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
   }
   if (course_codes.size > 0) {
