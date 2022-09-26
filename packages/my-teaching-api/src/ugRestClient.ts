@@ -64,7 +64,8 @@ export class UGRestClient {
 
     const client = await this.getClient();
     const accessToken = await client.grant({
-      grant_type: "client_credentials"
+      grant_type: "client_credentials",
+      scope: "openid"
     });
     assert(typeof accessToken.access_token === "string", "No access token provided by auth server");
     this._accessTokenSet = accessToken;
