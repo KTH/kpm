@@ -2,16 +2,6 @@ import assert from 'node:assert/strict';
 
 const _mockResponses: { [index: string]: any } = {};
 
-type TClient = {
-  client_id: string,
-  client_secret: string
-}
-
-type Tgrant = {
-  grant_type: string,
-  scope: string
-}
-
 class Client {
   _client_id: string;
   _client_secret: string;
@@ -21,7 +11,7 @@ class Client {
   constructor({
     client_id,
     client_secret
-  }: TClient) {
+  }: any) {
     this._client_id = client_id;
     this._client_secret = client_secret;
   }
@@ -29,7 +19,7 @@ class Client {
   async grant({
     grant_type,
     scope
-  }: Tgrant) {
+  }: any) {
     this._grant_type = grant_type;
     this._scope = scope;
 
