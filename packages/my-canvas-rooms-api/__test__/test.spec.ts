@@ -19,6 +19,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "name": "SF1691 VT20 (60321) Komplex analys",
           "state": "available",
+          "type": "course",
           "url": "https://mock.kth.se/courses/17738",
         },
       }
@@ -40,6 +41,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "name": "RAPP_DH1600:komm11 Kommunikation i ingenjörsvetenskap",
           "state": "unpublished",
+          "type": "rapp",
           "url": "https://mock.kth.se/courses/15152",
         },
       }
