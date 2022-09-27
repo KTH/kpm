@@ -51,6 +51,7 @@ export default class CanvasClient {
     });
   }
 
+  // getSelf is NOT USED FOR NOW
   getSelf() {
     return this.client
       .get<{ id: number; login_id?: string }>("users/self")
