@@ -44,7 +44,19 @@ type Link = {
   name: string,
   state: "unpublished" | "available" | "completed" | "deleted",
   text?: string,
+  type: "course" | "rapp" | undefined,
 };
+
+type TLinkMetaData = {
+  type: Link["type"],
+  name?: Link["name"],
+  text?: Link["text"],
+}
+
+type TGetRoomsReturnValue = {
+  course_codes: Set<string>,
+  link_meta_data: TLinkMetaData
+}
 
 
 /*
@@ -62,6 +74,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'url': new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
+    'type': undefined,
   }
 
   const { course_codes, link_meta_data } = getRoomsByRapp(canvas_data) || getRoomsByNewFormat(canvas_data) || getRoomsByOldFormat(canvas_data);
@@ -76,7 +89,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
 
 
 
-function getRoomsByRapp(canvas_data: CanvasRoom) {
+function getRoomsByRapp(canvas_data: CanvasRoom) : TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
     // Rapp courses may not be the most common or important, but we can
@@ -85,12 +98,14 @@ function getRoomsByRapp(canvas_data: CanvasRoom) {
   if (rapp) {
     course_codes.add(rapp[1]);
     
-    const link_meta_data = {};
+    const link_meta_data: TLinkMetaData = {
+      type: "rapp"
+    };
     return { course_codes, link_meta_data };
   }
 }
 
-function getRoomsByNewFormat(canvas_data: CanvasRoom) {
+function getRoomsByNewFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
   // Note; It would be nice if we got the sis id for the sections, but that
@@ -110,18 +125,21 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom) {
   }
 
   if (course_codes.size > 0) {
-    const link_meta_data = {};
+    const link_meta_data: TLinkMetaData = {
+      type: "course"
+    };
 
     return { course_codes, link_meta_data };
   }
 }
 
 
-function getRoomsByOldFormat(canvas_data: CanvasRoom) {
+function getRoomsByOldFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue {
   const course_codes = new Set<string>();
-  const link_meta_data = {
+  const link_meta_data: TLinkMetaData = {
     name: "",
-    text: ""
+    text: "",
+    type: "course" // INVESTIGATE: Can we assume that rooms that hit this function are of type course?
   };
 
   // Note; It would be nice if we got the sis id for the sections, but that
@@ -155,8 +173,6 @@ function getRoomsByOldFormat(canvas_data: CanvasRoom) {
 
   // INVESTIGATE: Should this function only return one (1) course code?
   course_codes.add(course_code);
-
-  // TODO: Add link meta data
 
   return { course_codes, link_meta_data }
 }
