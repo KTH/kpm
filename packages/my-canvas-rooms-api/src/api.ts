@@ -39,7 +39,12 @@ api.get("/user/:user", async (req, res, next) => {
   }
 });
 
-
+type Link = {
+  url: URL,
+  name: string,
+  state: "unpublished" | "available" | "completed" | "deleted",
+  text?: string,
+};
 
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   const room_id = canvas_data.id;
@@ -48,15 +53,36 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
   }
-  const course_codes = new Set<string>()
+  let course_codes: Set<string> | undefined;
 
-  // Rapp courses may not be the most common or important, but we can
+  course_codes = getRoomsByRapp(canvas_data);
+  if (course_codes) {
+    return { course_codes, link };
+  }
+
+  course_codes = getRoomsByNewFormat(canvas_data);
+  if (course_codes) {
+    return { course_codes, link };
+  }
+
+  return getRoomsByOldFormat(canvas_data, link);
+}
+
+
+function getRoomsByRapp(canvas_data: CanvasRoom) {
+  const course_codes = new Set<string>();
+
+    // Rapp courses may not be the most common or important, but we can
   // identify them based on only course name and ignore sections.
   const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/);
   if (rapp) {
-    course_codes.add(rapp[1])
-    return { course_codes, link }
+    course_codes.add(rapp[1]);
+    return course_codes;
   }
+}
+
+function getRoomsByNewFormat(canvas_data: CanvasRoom) {
+  const course_codes = new Set<string>();
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
@@ -73,9 +99,19 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
       // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
   }
+
   if (course_codes.size > 0) {
-    return { course_codes, link }
+    return course_codes;
   }
+}
+
+function getRoomsByOldFormat(canvas_data: CanvasRoom, link: Link) {
+  const course_codes = new Set<string>();
+
+  // Note; It would be nice if we got the sis id for the sections, but that
+  // requires further API calls.
+  const sections = canvas_data.sections.map(s => s.name);
+
 
   // Old SIS_COURSE_ID format for fallback handling
   const sis_course_id_format = /^(.*)([VH]T[0-9][0-9])([0-9A-Z])$/i;
@@ -103,10 +139,3 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   course_codes.add(course_code);
   return { course_codes, link }
 }
-
-type Link = {
-  url: URL,
-  name: string,
-  state: "unpublished" | "available" | "completed" | "deleted",
-  text?: string,
-};
