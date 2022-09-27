@@ -46,6 +46,16 @@ type Link = {
   text?: string,
 };
 
+
+/*
+  TODO: Add
+  - "typ": är denna länk kopplad med kursrum? tentarum? rapp? intern kurs?...
+  - Termin/år (gäller endast kursrum)
+  - Roll: lärare? student? examinator?
+  - ~~Short name ("prosam18")~~
+  - Examinationsdatum, (gäller tentarum)
+*/
+
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   const room_id = canvas_data.id;
   const link: Link = {
@@ -53,20 +63,17 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
   }
-  let course_codes: Set<string> | undefined;
 
-  course_codes = getRoomsByRapp(canvas_data);
-  if (course_codes) {
-    return { course_codes, link };
-  }
-
-  course_codes = getRoomsByNewFormat(canvas_data);
-  if (course_codes) {
-    return { course_codes, link };
-  }
-
-  return getRoomsByOldFormat(canvas_data, link);
+  const { course_codes, link_meta_data } = getRoomsByRapp(canvas_data) || getRoomsByNewFormat(canvas_data) || getRoomsByOldFormat(canvas_data);
+  return {
+    course_codes,
+    link: {
+      ...link,
+      ...link_meta_data
+    }
+  };
 }
+
 
 
 function getRoomsByRapp(canvas_data: CanvasRoom) {
@@ -77,7 +84,9 @@ function getRoomsByRapp(canvas_data: CanvasRoom) {
   const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/);
   if (rapp) {
     course_codes.add(rapp[1]);
-    return course_codes;
+    
+    const link_meta_data = {};
+    return { course_codes, link_meta_data };
   }
 }
 
@@ -101,12 +110,19 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom) {
   }
 
   if (course_codes.size > 0) {
-    return course_codes;
+    const link_meta_data = {};
+
+    return { course_codes, link_meta_data };
   }
 }
 
-function getRoomsByOldFormat(canvas_data: CanvasRoom, link: Link) {
+
+function getRoomsByOldFormat(canvas_data: CanvasRoom) {
   const course_codes = new Set<string>();
+  const link_meta_data = {
+    name: "",
+    text: ""
+  };
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
@@ -127,15 +143,20 @@ function getRoomsByOldFormat(canvas_data: CanvasRoom, link: Link) {
   let course_code = '-';
   if (match && sections.find((section) => section.includes(match[1]))) {
     course_code = match[1];
-    link.name = `${match[2]}-${match[3]}`;
-    link.text = canvas_data.name;
+    link_meta_data.name = `${match[2]}-${match[3]}`;
+    link_meta_data.text = canvas_data.name;
   } else {
     // Not a "correct" sis id or high likelihood of xlisting;
     // get some data to search for course codes.
     // logger.debug("Full canvas data: %r", canvas_data)
-    link.name = canvas_data.name;
-    link.text = `${canvas_data.course_code} ${sections.join(' ')}`;
+    link_meta_data.name = canvas_data.name;
+    link_meta_data.text = `${canvas_data.course_code} ${sections.join(' ')}`;
   }
+
+  // INVESTIGATE: Should this function only return one (1) course code?
   course_codes.add(course_code);
-  return { course_codes, link }
+
+  // TODO: Add link meta data
+
+  return { course_codes, link_meta_data }
 }
