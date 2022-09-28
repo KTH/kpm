@@ -95,8 +95,6 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   };
 }
 
-
-
 function getRoomsByRapp(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
@@ -115,6 +113,9 @@ function getRoomsByRapp(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefin
 
 function getRoomsByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
+  const link_meta_data: TLinkMetaData = {
+    type: "course"
+  };
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
@@ -130,21 +131,39 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | un
       // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
       course_codes.add(courseCode);
 
-      if (startTerm) {
-
-      }
+      // INVESTIGATE: Which section determines startTerm? Right now last wins
+      link_meta_data.startTerm = convertStartTerm(startTerm);
     } else {
       // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
   }
 
   if (course_codes.size > 0) {
-    const link_meta_data: TLinkMetaData = {
-      type: "course"
-    };
-
     return { course_codes, link_meta_data };
   }
+}
+
+function convertStartTerm(inp: string) : Link["startTerm"] {
+  let suffix = "";
+  if (inp.startsWith("VT")) suffix = "1";
+  if (inp.startsWith("HT")) suffix = "2";
+  
+  if (!suffix) {
+    throw new Error('Unsupported term format "${inp}"');
+  }
+  
+  let outp;
+  const tmp = inp.slice(2);
+  const tmpInt = parseInt(tmp);
+  if (tmpInt < 70) {
+    outp = `20${tmp}`;
+  } else if (tmpInt < 100) {
+    outp = `19${tmp}`;
+  } else {
+    outp = tmp;
+  }
+
+  return `${outp}${suffix}`;
 }
 
 
