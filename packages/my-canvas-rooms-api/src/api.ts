@@ -53,7 +53,8 @@ type TLinkMetaData = {
   type: Link["type"],
   name?: Link["name"],
   text?: Link["text"],
-  
+  startTerm?: Link["startTerm"],
+  examDate?: Link["examDate"],
 }
 
 type TGetRoomsReturnValue = {
@@ -80,7 +81,11 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'type': undefined,
   }
 
-  const { course_codes, link_meta_data } = getRoomsByRapp(canvas_data) || getRoomsByNewFormat(canvas_data) || getRoomsByOldFormat(canvas_data);
+  const { course_codes, link_meta_data } =
+    getRoomsByRapp(canvas_data)
+    || getRoomsByNewFormat(canvas_data)
+    || getRoomsByOldFormat(canvas_data)
+    || getRoomsFallback(canvas_data);
   return {
     course_codes,
     link: {
@@ -92,15 +97,15 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
 
 
 
-function getRoomsByRapp(canvas_data: CanvasRoom) : TGetRoomsReturnValue | undefined {
+function getRoomsByRapp(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
-    // Rapp courses may not be the most common or important, but we can
+  // Rapp courses may not be the most common or important, but we can
   // identify them based on only course name and ignore sections.
   const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/);
   if (rapp) {
     course_codes.add(rapp[1]);
-    
+
     const link_meta_data: TLinkMetaData = {
       type: "rapp"
     };
@@ -108,7 +113,7 @@ function getRoomsByRapp(canvas_data: CanvasRoom) : TGetRoomsReturnValue | undefi
   }
 }
 
-function getRoomsByNewFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue | undefined {
+function getRoomsByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
   // Note; It would be nice if we got the sis id for the sections, but that
@@ -143,14 +148,9 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue | u
 }
 
 
-function getRoomsByOldFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue {
+function getRoomsByOldFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
-  const link_meta_data: TLinkMetaData = {
-    name: "",
-    text: "",
-    type: "course" // INVESTIGATE: Can we assume that rooms that hit this function are of type course?
-  };
-
+  
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
   const sections = canvas_data.sections.map(s => s.name);
@@ -167,21 +167,36 @@ function getRoomsByOldFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue {
   const match = sis_course_id.match(sis_course_id_format);
   // Note; The sections returned from the Canvas API are limited to those
   // where the current user is enrolled.
-  let course_code = '-';
-  if (match && sections.find((section) => section.includes(match[1]))) {
-    course_code = match[1];
-    link_meta_data.name = `${match[2]}-${match[3]}`;
-    link_meta_data.text = canvas_data.name;
-  } else {
-    // Not a "correct" sis id or high likelihood of xlisting;
-    // get some data to search for course codes.
-    // logger.debug("Full canvas data: %r", canvas_data)
-    link_meta_data.name = canvas_data.name;
-    link_meta_data.text = `${canvas_data.course_code} ${sections.join(' ')}`;
+  if (match && sections.find((section) => section.includes(match[1]))) {  
+    const course_code = match[1];
+    const link_meta_data: TLinkMetaData = {
+      name: `${match[2]}-${match[3]}`,
+      text: canvas_data.name,
+      type: "course" // Always course for this function
+    };
+    // For now this function only return one (1) course code.
+    // Could be improved by looking at the sections
+    course_codes.add(course_code);
+  
+    return { course_codes, link_meta_data }
   }
+}
 
-  // INVESTIGATE: Should this function only return one (1) course code?
-  course_codes.add(course_code);
+function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
+  const course_codes = new Set<string>(['-']); // The fallback can't determine course code
+
+  // Note; It would be nice if we got the sis id for the sections, but that
+  // requires further API calls.
+  const sections = canvas_data.sections.map(s => s.name);
+
+  // Not a "correct" sis id or high likelihood of xlisting;
+  // get some data to search for course codes.
+  // logger.debug("Full canvas data: %r", canvas_data)
+  const link_meta_data: TLinkMetaData = {
+    name: canvas_data.name,
+    text: `${canvas_data.course_code} ${sections.join(' ')}`,
+    type: undefined // We don't know what the type is at this poin,
+  };
 
   return { course_codes, link_meta_data }
 }
