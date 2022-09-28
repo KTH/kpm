@@ -45,12 +45,15 @@ type Link = {
   state: "unpublished" | "available" | "completed" | "deleted",
   text?: string,
   type: "course" | "rapp" | undefined,
+  startTerm?: string, // YYYYn (n = 1 | 2)
+  examDate?: string // YYYY-mm-dd
 };
 
 type TLinkMetaData = {
   type: Link["type"],
   name?: Link["name"],
   text?: Link["text"],
+  
 }
 
 type TGetRoomsReturnValue = {
@@ -60,8 +63,8 @@ type TGetRoomsReturnValue = {
 
 
 /*
-  TODO: Add
-  - "typ": är denna länk kopplad med kursrum? tentarum? rapp? intern kurs?...
+  STARTED: Add
+  - DONE: "typ": är denna länk kopplad med kursrum? tentarum? rapp? intern kurs?...
   - Termin/år (gäller endast kursrum)
   - Roll: lärare? student? examinator?
   - ~~Short name ("prosam18")~~
@@ -112,13 +115,19 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom) : TGetRoomsReturnValue | u
   // requires further API calls.
   const sections = canvas_data.sections.map(s => s.name);
 
-  const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) [HV]T[0-9]{2,4} \(\d+\)/i;
+  const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(\d+\)/i;
 
   for (const section of sections) {
     const match = section.match(section_name_format);
     if (match) {
+      const courseCode = match[1];
+      const startTerm = match[2];
       // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
-      course_codes.add(match[1])
+      course_codes.add(courseCode);
+
+      if (startTerm) {
+
+      }
     } else {
       // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
