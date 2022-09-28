@@ -27,6 +27,29 @@ describe("Known room formats data can be parsed", () => {
     `);
   });
 
+  test("examroom new format", () => {
+    expect(
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":39158,"name":"IE1206 TEN1 [2022-08-24] Salsexamination - omtentamen","account_id":113,"uuid":"HC0DgJySCl3bOtD7GUNLWYEIYdSgIqtIUmMWVLZ8","start_at":null,"grading_standard_id":null,"is_public":null,"created_at":"2022-06-25T00:38:51Z","course_code":"IE1206 TEN1 [2022-08-24] Salsexamination - omtentamen","default_view":"modules","root_account_id":1,"enrollment_term_id":1,"license":null,"grade_passback_setting":null,"end_at":null,"public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"hide_final_grades":false,"apply_assignment_group_weights":false,"sections":[{"id":49798,"name":"IE1206 TEN1 - Section 2","start_at":null,"end_at":null},{"id":49797,"name":"IE1206 TEN1 - Section 1","start_at":null,"end_at":null}],"calendar":{"ics":"https://canvas.kth.se/feeds/calendars/course_HC0DgJySCl3bOtD7GUNLWYEIYdSgIqtIUmMWVLZ8.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"AKT.0008abc3-f2c5-11ec-a17f-ba4a8f01475d","sis_import_id":1294285,"integration_id":null,"enrollments":[],"workflow_state":"unpublished","restrict_enrollments_to_course_dates":false}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "IE1206",
+        },
+        "link": {
+          "examDate": "2022-08-24",
+          "name": "IE1206 TEN1 [2022-08-24] Salsexamination - omtentamen",
+          "state": "unpublished",
+          "type": "exam",
+          "url": "https://mock.kth.se/courses/39158",
+        },
+      }
+    `);
+  });
+
   test("rapp", () => {
     expect(
       get_rooms_courses_and_link(

@@ -44,7 +44,7 @@ type Link = {
   name: string,
   state: "unpublished" | "available" | "completed" | "deleted",
   text?: string,
-  type: "course" | "rapp" | undefined,
+  type: "course" | "exam" | "rapp" | undefined,
   startTerm?: string, // YYYYn (n = 1 | 2)
   examDate?: string // YYYY-mm-dd
 };
@@ -62,14 +62,12 @@ type TGetRoomsReturnValue = {
   link_meta_data: TLinkMetaData
 }
 
-
 /*
-  STARTED: Add
+  DONE: Add
   - DONE: "typ": är denna länk kopplad med kursrum? tentarum? rapp? intern kurs?...
-  - Termin/år (gäller endast kursrum)
-  - Roll: lärare? student? examinator?
-  - ~~Short name ("prosam18")~~
-  - Examinationsdatum, (gäller tentarum)
+  - DONE: Termin/år (gäller endast kursrum)
+  - DONE: Examinationsdatum, (gäller tentarum) (We currently don't parse exam rooms)
+  - LATER: ~~Short name ("prosam18")~~
 */
 
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
@@ -85,6 +83,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     getRoomsByRapp(canvas_data)
     || getRoomsByNewFormat(canvas_data)
     || getRoomsByOldFormat(canvas_data)
+    || getExamRoomByNewFormat(canvas_data)
     || getRoomsFallback(canvas_data);
   return {
     course_codes,
@@ -199,6 +198,43 @@ function getRoomsByOldFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | un
   
     return { course_codes, link_meta_data }
   }
+}
+
+function getExamRoomByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
+  const course_codes = new Set<string>();
+  const link_meta_data: TLinkMetaData = {
+    type: "exam"
+  };
+
+  // Note; It would be nice if we got the sis id for the sections, but that
+  // requires further API calls.
+  const sections = canvas_data.sections.map(s => s.name);
+
+  const nameRegex = /^([A-ZÅÄÖ0-9]{5,7}) (\w+) \[([0-9-]{10})\]/i;
+  const sectionRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+ -/i;
+
+  const matchName = canvas_data.name.match(nameRegex);
+  if (!matchName) {
+    // This is not an exam room AFAIK
+    return undefined;
+  }
+
+  const courseCode = matchName[1];
+  const examDate = matchName[3];
+
+  course_codes.add(courseCode);
+  link_meta_data.examDate = examDate;
+
+  for (const section of sections) {
+    const match = section.match(sectionRegex);
+    if (match) {
+      const courseCode = match[1];
+      // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
+      course_codes.add(courseCode);
+    }
+  }
+
+  return { course_codes, link_meta_data };
 }
 
 function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
