@@ -35,10 +35,16 @@ api.get("/user/:user", async (req, res) => {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET
   })
+
+  const perf1 = Date.now();
   // const { data, json, statusCode } = await ugClient.get(`users/${userName}`);
-  
   // const { data, json, statusCode } = await ugClient.get(`groups?$filter=members in ('${userName}')`);
+  // const { data, json, statusCode } = await ugClient.get(`groups/${userName}`);
+  // NOTE: The following combined filter is VERY slow
+  // const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
+  // const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}')`);
   const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}')`);
+  console.log(`Exec time: ${Date.now() - perf1}ms`)
 
   res.status(statusCode || 200).send(json || data);
 });
