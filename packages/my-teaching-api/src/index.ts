@@ -14,6 +14,10 @@ api.get("/", (req, res) => {
   res.send({ msg: "Hello World!!!" });
 });
 
+api.get("/_monitor", (_req, res) => {
+  res.send("APPLICATION_STATUS: OK");
+});
+
 api.get("/mine", (req, res) => {
   res.send({ msg: "Not implemented yet." });
 });
