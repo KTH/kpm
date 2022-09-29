@@ -1,7 +1,7 @@
 # This Dockerfile uses multi-stage builds as recommended in
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md
 #
-FROM node:16-alpine AS frontend
+FROM node:16-bullseye AS frontend
 WORKDIR /usr/src/app/kpm-frontend
 
 COPY ["kpm-frontend/package.json", "package.json"]

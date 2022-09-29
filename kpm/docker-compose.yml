@@ -7,4 +7,4 @@ services:
       dockerfile: Dockerfile_test
     tty: false
     command: >
-      sh -c "(cd kpm-backend && npm ci --development && npm test) && (cd kpm-frontend && npm ci --development && npm test)"
+      sh -c "(cd kpm-frontend && npm ci --development && npm test) && (cd kpm-backend && npm ci --development && npm test)"
