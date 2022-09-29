@@ -17,7 +17,8 @@ jobs:
         workspaces:
           - apis/my-teaching-api
           - apis/my-canvas-rooms-api
-          - kpm # we combine both frontend and backend in a single image
+          # TODO: activate when app is available
+          # - kpm # we combine both frontend and backend in a single image
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Run Evolene CI for ${{matrix.workspaces}}
