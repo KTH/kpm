@@ -8,7 +8,7 @@ COPY ["kpm-frontend/package.json", "package.json"]
 COPY ["kpm-frontend/package-lock.json", "package-lock.json"]
 
 # See: https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
-RUN npm ci --omit=dev
+RUN npm ci --development
 COPY kpm-frontend .
 RUN npm run build
 
