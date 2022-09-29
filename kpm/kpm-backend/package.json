@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "start": "ts-node src/index.ts"
   },
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",
