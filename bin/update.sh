@@ -8,7 +8,7 @@ mv package.json package.json.tmp
 # Generate package-lock.json files
 for d in $workspaces
 do
-    (cd packages/$d && npm i --package-lock-only)
+    (cd $d && npm i --package-lock-only)
 done
 
 # Reveal package.json to NPM
