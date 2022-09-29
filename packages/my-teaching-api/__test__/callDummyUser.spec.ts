@@ -1,5 +1,6 @@
 import { describe, expect, jest, test } from '@jest/globals';
 import { UGRestClient } from "../src/ugRestClient";
+import { TUgUser } from "../src/index";
 import { addMockResponse } from "../__mocks__/openid-client"
 
 jest.mock("openid-client");
@@ -25,7 +26,7 @@ describe('Dummy UG REST API response', () => {
       clientId: "CLIENT_ID",
       clientSecret: "CLIENT_SECRET"
     })
-    const resp = await ugClient.get(`users/dummy`);
+    const resp = await ugClient.get<TUgUser>(`users/dummy`);
     const { json } = resp;
 
     expect(json?.affiliations.find(e => "employee")).toBe("employee");

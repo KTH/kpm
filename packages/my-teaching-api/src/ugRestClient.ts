@@ -10,17 +10,6 @@ type TUGRestClient = {
   clientSecret: string;
 }
 
-// Expected values from UG
-type TUgRestApiResponse = {
-  // affiliations: string[],
-  // givenName: string,
-  // kthid: string,
-  // memberOf: string,
-  // primaryAffiliation: string,
-  // surname: string,
-  // username: string,
-}
-
 export type TUGRestClientResponse<T> = {
   headers: IncomingHttpHeaders;
   method?: string | undefined;

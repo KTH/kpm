@@ -27,7 +27,7 @@ api.get("/mine", (req, res) => {
 });
 
 // Expected values from UG
-type TUgUser = {
+export type TUgUser = {
   affiliations: string[],
   givenName: string,
   kthid: string,
@@ -37,7 +37,7 @@ type TUgUser = {
   username: string,
 }
 
-type TUgGroup = {
+export type TUgGroup = {
   description: {
     sv: string,
     en: string
