@@ -1,7 +1,7 @@
 {
   "name": "kpm-backend",
   "version": "0.1.0",
-  "description": "API for canvas rooms I can access, per course code, KPM.",
+  "description": "This is the KPM backend server.",
   "main": "src/index.ts",
   "scripts": {
     "test": "jest",
