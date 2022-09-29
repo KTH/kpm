@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        package:
+        api:
           - my-teaching-api
           - my-canvas-rooms-api
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Run Evolene CI for ${{matrix.package}}
+      - name: Run Evolene CI for ${{matrix.api}}
         shell: bash
         env:
           # You can put here NON-SECRET environmental variables here alongside
@@ -36,7 +36,7 @@ jobs:
           # BRANCHES_TAG_AS_MAIN: "True"                    # Do not add branch names to build artifacts
           SLACK_CHANNELS: "#team-e-larande-build" # List of Slack channels for user information
           # SKIP_DRY_RUN: True                              # Skip "dry run" step
-          MONOREPO_SUBPATH: packages/${{matrix.package}}
+          MONOREPO_SUBPATH: apis/${{matrix.api}}
 
         run: |
           ${{ secrets.EVOLENE_LATEST_RUN_COMMAND }}
