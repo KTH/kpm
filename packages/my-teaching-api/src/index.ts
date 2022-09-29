@@ -26,6 +26,26 @@ api.get("/mine", (req, res) => {
   res.send({ msg: "Not implemented yet." });
 });
 
+// Expected values from UG
+type TUgUser = {
+  affiliations: string[],
+  givenName: string,
+  kthid: string,
+  memberOf: string,
+  primaryAffiliation: string,
+  surname: string,
+  username: string,
+}
+
+type TUgGroup = {
+  description: {
+    sv: string,
+    en: string
+  },
+  kthid: string,
+  name: string,
+}
+
 api.get("/user/:user", async (req, res) => {
   const userName = req.params.user;
 
@@ -37,13 +57,13 @@ api.get("/user/:user", async (req, res) => {
   })
 
   const perf1 = Date.now();
-  // const { data, json, statusCode } = await ugClient.get(`users/${userName}`);
-  // const { data, json, statusCode } = await ugClient.get(`groups?$filter=members in ('${userName}')`);
-  // const { data, json, statusCode } = await ugClient.get(`groups/${userName}`);
+  // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
+  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
+  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups/${userName}`);
   // NOTE: The following combined filter is VERY slow
-  // const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
-  // const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}')`);
-  const { data, json, statusCode } = await ugClient.get(`groups?$filter=contains(members, '${userName}')`);
+  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
+  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
+  const { data, json, statusCode } = await ugClient.get<TUgGroup>(`groups?$filter=contains(members, '${userName}')`);
   console.log(`Exec time: ${Date.now() - perf1}ms`)
 
   res.status(statusCode || 200).send(json || data);

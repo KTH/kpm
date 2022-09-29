@@ -12,23 +12,23 @@ type TUGRestClient = {
 
 // Expected values from UG
 type TUgRestApiResponse = {
-  affiliations: string[],
-  givenName: string,
-  kthid: string,
-  memberOf: string,
-  primaryAffiliation: string,
-  surname: string,
-  username: string,
+  // affiliations: string[],
+  // givenName: string,
+  // kthid: string,
+  // memberOf: string,
+  // primaryAffiliation: string,
+  // surname: string,
+  // username: string,
 }
 
-export type TUGRestClientResponse = {
+export type TUGRestClientResponse<T> = {
   headers: IncomingHttpHeaders;
   method?: string | undefined;
   url?: string | undefined;
   statusCode?: number | undefined;
   statusMessage?: string | undefined;
   data?: string | undefined;
-  json?: TUgRestApiResponse | undefined;
+  json?: T;
 }
 
 export class UGRestClient {
@@ -84,7 +84,7 @@ export class UGRestClient {
     return this._accessTokenSet.access_token!;
   }
 
-  public async get(path: string): Promise<TUGRestClientResponse> {
+  public async get<T>(path: string): Promise<TUGRestClientResponse<T>> {
     const client = await this.getClient();
     const accessToken = await this.getAccessToken();
     const { headers, method, statusCode, statusMessage, url, body } = await client.requestResource(`${this._resourceBaseURI}/${path}`, accessToken);
