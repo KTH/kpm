@@ -63,11 +63,12 @@ type TGetRoomsReturnValue = {
 }
 
 /*
-  DONE: Add
+  STARTED: Add
   - DONE: "typ": är denna länk kopplad med kursrum? tentarum? rapp? intern kurs?...
   - DONE: Termin/år (gäller endast kursrum)
   - DONE: Examinationsdatum, (gäller tentarum) (We currently don't parse exam rooms)
   - LATER: ~~Short name ("prosam18")~~
+  - TODO: Add canvas favourite property
 */
 
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
