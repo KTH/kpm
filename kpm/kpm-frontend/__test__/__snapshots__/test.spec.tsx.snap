@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> Can be rendered 1`] = `
+<h1>
+  We are all KPM!
+</h1>
+`;
