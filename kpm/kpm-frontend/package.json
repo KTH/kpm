@@ -5,10 +5,12 @@
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "test": "jest",
     "dev": "parcel",
     "build": "parcel build --no-cache --dist-dir distProd --public-url ./",
-    "update-tests": "jest --updateSnapshot"
+    "test": "npm run test:type-checking && npm run test:regression",
+    "test:type-checking": "tsc --noEmit",
+    "test:regression": "jest",
+    "test:update-snapshots": "jest --updateSnapshot"
   },
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",
