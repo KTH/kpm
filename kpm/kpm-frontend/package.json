@@ -7,7 +7,8 @@
   "scripts": {
     "test": "jest",
     "dev": "parcel",
-    "build": "parcel build --no-cache --dist-dir distProd --public-url ./"
+    "build": "parcel build --no-cache --dist-dir distProd --public-url ./",
+    "update-tests": "jest --updateSnapshot"
   },
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",
