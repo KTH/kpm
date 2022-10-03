@@ -13,6 +13,7 @@ export interface CanvasRoom {
   sections: CanvasSection[];
   course_code: string; // NOT a course code but a short room name
   sis_course_id?: string;
+  is_favorite: boolean;
 }
 
 export interface CanvasSection {
@@ -46,7 +47,7 @@ export default class CanvasClient {
 
   getRooms(user: string) {
     return this.client.listItems<CanvasRoom>(`users/${user}/courses`, {
-      include: ["sections"],
+      include: ["sections", "favorites"],
       per_page: 96,
     });
   }

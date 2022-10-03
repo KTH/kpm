@@ -8,7 +8,8 @@
     "start": "ts-node --transpileOnly src/index.ts",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
-    "test:regression": "jest"
+    "test:regression": "jest",
+    "test:update-snapshots": "jest --updateSnapshot"
   },
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",

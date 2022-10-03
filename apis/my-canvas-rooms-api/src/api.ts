@@ -46,7 +46,8 @@ type Link = {
   text?: string,
   type: "course" | "exam" | "rapp" | undefined,
   startTerm?: string, // YYYYn (n = 1 | 2)
-  examDate?: string // YYYY-mm-dd
+  examDate?: string, // YYYY-mm-dd
+  favorite: boolean,
 };
 
 type TLinkMetaData = {
@@ -78,6 +79,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     'state': canvas_data.workflow_state,
     'name': canvas_data.name,
     'type': undefined,
+    'favorite': canvas_data.is_favorite
   }
 
   const { course_codes, link_meta_data } =
