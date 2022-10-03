@@ -14,7 +14,7 @@ assert(typeof CLIENT_SECRET === "string" && CLIENT_SECRET, "Missing CLIENT_SECRE
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000");
-const prefix = process.env.PREFIX || "/kpm/teaching";
+const prefix = process.env.PROXY_PATH_PREFIX || "/kpm/teaching";
 
 const api = express.Router();
 

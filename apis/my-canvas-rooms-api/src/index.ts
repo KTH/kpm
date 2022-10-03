@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import { api } from "./api";
 
 const port = parseInt(process.env.PORT || "3000");
-const prefix = process.env.PREFIX || "/kpm/canvas-rooms";
+const prefix = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
 
 export const app = express();
 

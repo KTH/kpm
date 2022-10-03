@@ -2,7 +2,7 @@ import "./config";
 import express, { Request, Response } from "express";
 
 const port = parseInt(process.env.PORT || "3000");
-const prefix = process.env.PREFIX || "/kpm";
+const prefix = process.env.PROXY_PATH_PREFIX || "/kpm";
 
 export const app = express();
 
