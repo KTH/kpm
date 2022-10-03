@@ -5,4 +5,4 @@ RUN node -v
 RUN npm ci --omit=dev
 
 EXPOSE 3000
-CMD ["npx", "ts-node", "src/index.ts"]
+CMD ["npm", "start"]
