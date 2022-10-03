@@ -3,6 +3,7 @@ import "./config";
 import assert from 'node:assert/strict';
 import express from "express";
 import { UGRestClient } from "./ugRestClient";
+import { loggingHandler, errorHandler, uncaughtExceptionCallback } from "kpm-api-common";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -52,7 +53,7 @@ export type TUgGroup = {
   name: string,
 }
 
-api.get("/user/:user", async (req, res) => {
+api.get("/user/:user", async (req, res, next) => {
   const userName = req.params.user;
 
   const ugClient = new UGRestClient({
@@ -61,6 +62,8 @@ api.get("/user/:user", async (req, res) => {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET
   })
+
+  throw new Error("Test");
 
   const perf1 = Date.now();
   
@@ -106,11 +109,10 @@ api.get("/user/:user", async (req, res) => {
   res.status(statusCode || 200).send(result)
 });
 
-app.use((req, res, next) => {
-  next();
-  console.log(`${req.path} => ${res.statusCode}`);
-});
+process.on('uncaughtException', uncaughtExceptionCallback);
+app.use(loggingHandler);
 app.use(prefix, api);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
