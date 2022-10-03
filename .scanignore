@@ -1,2 +1,6 @@
-/packages/my-teaching-api/package-lock.json
-/packages/my-canvas-rooms-api/package-lock.json
+/.github/workflows/evolene-ci.yml
+/apis/my-canvas-rooms-api/package-lock.json
+/apis/my-teaching-api/package-lock.json
+/kpm/kpm-backend/package-lock.json
+/kpm/kpm-frontend/package-lock.json
+/package-lock.json
