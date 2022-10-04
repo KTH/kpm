@@ -3,11 +3,22 @@ import path from "node:path";
 import assert from "node:assert/strict";
 import glob from "glob";
 
+async function pathExists(pathTo: string) : Promise<boolean> {
+  let exists = false;
+  try {
+    exists = !!await fs.stat(pathTo);
+  } catch (err) {
+    //
+  }
+  return exists;
+}
+
 async function getWorkspaceGlobs(pathToPackageJson: string): Promise<string[]> {
   assert(pathToPackageJson.split(path.sep).pop() === "package.json",
     `The provided path ${pathToPackageJson} doesn't point to a package.json file.`);
 
-  assert(await fs.stat(pathToPackageJson),
+  // This will blow up if file doesn't exist 
+  assert(await pathExists(pathToPackageJson),
     `No file could be found at ${pathToPackageJson}`);
 
   const packageJsonFile = await fs.readFile(pathToPackageJson);
@@ -105,8 +116,9 @@ for (const pkgPath of packageDirectories) {
   // 2. copy folders to workspace
   if (matchingPackages.length > 0) {
     const evoleneDirPath = path.join(pkgPath, "evolene_local_packages");
-    if (!await fs.stat(evoleneDirPath)) {
-      console.log(`Create directory: ${evoleneDirPath}`)
+    
+    console.log(`Evolene local package directory: ${evoleneDirPath}`)
+    if (!await pathExists(evoleneDirPath)) {
       await fs.mkdir(evoleneDirPath);
     }
     for (const { path: srcPath } of matchingPackages) {
