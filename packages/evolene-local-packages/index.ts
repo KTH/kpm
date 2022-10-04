@@ -60,12 +60,12 @@ const packageDirectories = await getPackageDirectoriesFromGlobs(workspaceGlobs);
 console.log(packageDirectories);
 
 // Create package lookup dict
-const packageLookup: { [index: string]: { path: string }} = {}
+const packageLookup: { [index: string]: { path: string, name: string }} = {}
 for (const pkgPath of packageDirectories) {
   const pathToPackageJson = path.join(pkgPath, "package.json");
   const packageJsonFile = await fs.readFile(pathToPackageJson);
   const json = JSON.parse(await new TextDecoder().decode(packageJsonFile));
-  packageLookup[json.name] = { path: pkgPath };
+  packageLookup[json.name] = { path: pkgPath, name: json.name };
 }
 
 // For each package, check if it depends on a local workspace package
@@ -85,11 +85,13 @@ for (const pkgPath of packageDirectories) {
   for (const pkgName of allDeps) {
     const pkg = packageLookup[pkgName];
     if (pkg) {
-      matchingPackages.push({ name: pkgName, ...pkg });
+      matchingPackages.push(pkg);
     }
   }
 
-  // add workspaces to package.json
+  // If we have matchingPackages we depend on local packages so...
+
+  // 1. add workspaces to package.json
   if (matchingPackages.length > 0) {
     // Create backup of package.json
     console.log(`Backup file: ${pathToPackageJson}`)
@@ -100,7 +102,7 @@ for (const pkgPath of packageDirectories) {
     await fs.writeFile(pathToPackageJson, tmp);
   }
 
-  // copy folders to workspace
+  // 2. copy folders to workspace
   if (matchingPackages.length > 0) {
     const evoleneDirPath = path.join(pkgPath, "evolene_local_packages");
     if (!await fs.stat(evoleneDirPath)) {
@@ -120,5 +122,9 @@ for (const pkgPath of packageDirectories) {
 
 
 /*
+  Usage:
   npx ts-node --esm packages/evolene-local-packages/index.ts
+
+  TODO: Should move shell script code to this package
+  TODO: Break main code into more functions
 */
