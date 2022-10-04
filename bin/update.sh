@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Send a list of workspace folder names as arguments
 workspaces="$@"
 
@@ -13,8 +13,12 @@ mv package.json package.json.tmp
 for d in $workspaces
 do
     (cd $d && npm i --package-lock-only)
-    (cd $d && rm -rf "$d/evolene_local_packages")
-    (cd $d && mv "$d/package.json.bak" "$d/package.json")
+    if [ -d "$d/evolene_local_packages" ]; then
+        (rm -rf "$d/evolene_local_packages")
+    fi
+    if [ -f "$d/package.json.bak" ]; then
+        (mv "$d/package.json.bak" "$d/package.json")
+    fi
 done
 
 # Reveal package.json to NPM
