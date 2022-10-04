@@ -3,6 +3,7 @@
 workspaces="$@"
 
 # Inject local packages
+echo "Inject local packages"
 npx ts-node --esm packages/evolene-local-packages/index.ts
 
 # Hide package.json from NPM

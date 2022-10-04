@@ -110,7 +110,10 @@ for (const pkgPath of packageDirectories) {
     for (const { path: srcPath } of matchingPackages) {
       const srcName = srcPath.split(path.sep).pop() as string;
       console.log(`Copy folder ${path.join(cwd, srcPath)} to ${path.join(pkgPath, "evolene_local_packages", srcName)}`);
-      await fs.cp(path.join(cwd, srcPath), path.join(pkgPath, "evolene_local_packages", srcName));
+      await fs.cp(
+        path.join(cwd, srcPath),
+        path.join(pkgPath, "evolene_local_packages", srcName),
+        { recursive: true });
     }
   }
 }
