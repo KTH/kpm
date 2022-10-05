@@ -132,7 +132,7 @@ for (const pkgPath of packageDirectories) {
   }
 
   // 3. Add/remove package-local.json
-  const pathToPackageLocalJson = path.join(pkgPath, "package-local.json");
+  const pathToEvoleneLocalPackagesJson = path.join(pkgPath, "evolene-local-packages.json");
   if (matchingPackages.length > 0) {
     const json: { [index: string ]: { path: string }} = {};
     
@@ -141,11 +141,11 @@ for (const pkgPath of packageDirectories) {
     }
 
     const jsonAsString = await new TextEncoder().encode(JSON.stringify(json));
-    await fs.writeFile(pathToPackageLocalJson, jsonAsString);
+    await fs.writeFile(pathToEvoleneLocalPackagesJson, jsonAsString);
   } else {
     // Remove package-local.json
-    if (await pathExists(pathToPackageLocalJson)) {
-      await fs.rm(pathToPackageLocalJson);
+    if (await pathExists(pathToEvoleneLocalPackagesJson)) {
+      await fs.rm(pathToEvoleneLocalPackagesJson);
     }
   }
 }
