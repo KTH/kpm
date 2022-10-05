@@ -14,6 +14,7 @@ import glob from "glob";
   TODO: Should move shell script code to this package
   TODO: Break main code into more functions
   TODO: Check how we provide this as a npm bin/ executable
+  TODO: Move helper functions to utils.ts
 */
 
 const cwd = process.cwd();
@@ -55,7 +56,7 @@ for (const pkgPath of packageDirectories) {
     }
   }
 
-  // If we have matchingPackages we depend on local packages so...
+  // If we have matchingPackages then we depend on local packages so...
 
   // 1. add workspaces to package.json
   if (matchingPackages.length > 0) {
@@ -86,7 +87,7 @@ for (const pkgPath of packageDirectories) {
     }
   }
 
-  // 3. Add/remove package-local.json
+  // 3. Add/remove evolene-local-packages.json
   const pathToEvoleneLocalPackagesJson = path.join(pkgPath, "evolene-local-packages.json");
   if (matchingPackages.length > 0) {
     const json: { [index: string ]: { path: string }} = {};
@@ -98,12 +99,16 @@ for (const pkgPath of packageDirectories) {
     const jsonAsString = await new TextEncoder().encode(JSON.stringify(json));
     await fs.writeFile(pathToEvoleneLocalPackagesJson, jsonAsString);
   } else {
-    // Remove package-local.json
+    // Remove evolene-local-packages.json
     if (await pathExists(pathToEvoleneLocalPackagesJson)) {
       await fs.rm(pathToEvoleneLocalPackagesJson);
     }
   }
 }
+
+/**
+ * Helper functions below
+ */
 
 async function pathExists(pathTo: string) : Promise<boolean> {
   let exists = false;
