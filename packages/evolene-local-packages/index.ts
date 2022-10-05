@@ -108,9 +108,9 @@ for (const pkgPath of packageDirectories) {
     console.log(`Backup file: ${pathToPackageJson}`)
     await fs.cp(pathToPackageJson, `${pathToPackageJson}.bak`);
     json["workspaces"] = matchingPackages.map(t => `evolene_local_packages/${t.name}`);
-    const tmp = await new TextEncoder().encode(JSON.stringify(json));
+    const jsonAsString = await new TextEncoder().encode(JSON.stringify(json));
     // console.log(pathToPackageJson, JSON.stringify(json));
-    await fs.writeFile(pathToPackageJson, tmp);
+    await fs.writeFile(pathToPackageJson, jsonAsString);
   }
 
   // 2. copy folders to workspace
@@ -128,6 +128,24 @@ for (const pkgPath of packageDirectories) {
         path.join(cwd, srcPath),
         path.join(pkgPath, "evolene_local_packages", srcName),
         { recursive: true });
+    }
+  }
+
+  // 3. Add/remove package-local.json
+  const pathToPackageLocalJson = path.join(pkgPath, "package-local.json");
+  if (matchingPackages.length > 0) {
+    const json: { [index: string ]: { path: string }} = {};
+    
+    for (const { name, path } of matchingPackages) {
+      json[name] = { path };
+    }
+
+    const jsonAsString = await new TextEncoder().encode(JSON.stringify(json));
+    await fs.writeFile(pathToPackageLocalJson, jsonAsString);
+  } else {
+    // Remove package-local.json
+    if (await pathExists(pathToPackageLocalJson)) {
+      await fs.rm(pathToPackageLocalJson);
     }
   }
 }

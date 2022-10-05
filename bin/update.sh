@@ -17,6 +17,7 @@ do
         (rm -rf "$d/evolene_local_packages")
     fi
     if [ -f "$d/package.json.bak" ]; then
+        echo "Restoring: $d/package.json (from backup)"
         (mv "$d/package.json.bak" "$d/package.json")
     fi
 done
