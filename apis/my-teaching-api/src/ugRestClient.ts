@@ -74,6 +74,7 @@ export class UGRestClient {
   }
 
   public async get<T>(path: string): Promise<TUGRestClientResponse<T>> {
+    // TODO: Add error handling
     const client = await this.getClient();
     const accessToken = await this.getAccessToken();
     const { headers, method, statusCode, statusMessage, url, body } = await client.requestResource(`${this._resourceBaseURI}/${path}`, accessToken);
