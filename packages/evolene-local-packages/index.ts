@@ -3,63 +3,18 @@ import path from "node:path";
 import assert from "node:assert/strict";
 import glob from "glob";
 
-async function pathExists(pathTo: string) : Promise<boolean> {
-  let exists = false;
-  try {
-    exists = !!await fs.stat(pathTo);
-  } catch (err) {
-    //
-  }
-  return exists;
-}
+/*************************
+ * Main Entry Point Here *
+ *************************/
 
-async function getWorkspaceGlobs(pathToPackageJson: string): Promise<string[]> {
-  assert(pathToPackageJson.split(path.sep).pop() === "package.json",
-    `The provided path ${pathToPackageJson} doesn't point to a package.json file.`);
+/*
+  Usage:
+  npx ts-node --esm packages/evolene-local-packages/index.ts
 
-  // This will blow up if file doesn't exist 
-  assert(await pathExists(pathToPackageJson),
-    `No file could be found at ${pathToPackageJson}`);
-
-  const packageJsonFile = await fs.readFile(pathToPackageJson);
-  const json = JSON.parse(await new TextDecoder().decode(packageJsonFile));
-
-  assert(Array.isArray(json.workspaces),
-    `The package.json file found at ${pathToPackageJson} did not contain an array "workspaces"`);
-
-  const workspaceGlobs = json.workspaces;
-  return workspaceGlobs;
-}
-
-async function getPackageDirectoriesFromGlobs(workspaceGlobs: string[]): Promise<string[]> {
-  let workspacesOut: string[] = [];
-  // Get all possible matches
-  for (const wsGlob of workspaceGlobs) {
-    if (!wsGlob) continue;
-
-    const entries = await new Promise<string[]>((resolve, reject) => {
-      try {
-        glob(wsGlob, (err, matches) => err ? reject(err) : resolve(matches));
-      } catch (err) {
-        reject(err);
-      }
-    });
-    workspacesOut = [
-      ...workspacesOut,
-      ...entries
-    ];
-  }
-
-  // Filter out directories containing a package.json
-  const tmpOut = await Promise.all(workspacesOut.map(async (wsPath) => {
-    const tmp = await fs.stat(wsPath);
-    if (tmp.isDirectory() && await fs.stat(path.join(wsPath, "package.json"))) {
-      return wsPath;
-    };
-  }));
-  workspacesOut = tmpOut.filter(t => t) as string[];
-  return workspacesOut
-}
+  TODO: Should move shell script code to this package
+  TODO: Break main code into more functions
+  TODO: Check how we provide this as a npm bin/ executable
+*/
 
 const cwd = process.cwd();
 console.log(cwd);
@@ -150,11 +105,60 @@ for (const pkgPath of packageDirectories) {
   }
 }
 
+async function pathExists(pathTo: string) : Promise<boolean> {
+  let exists = false;
+  try {
+    exists = !!await fs.stat(pathTo);
+  } catch (err) {
+    //
+  }
+  return exists;
+}
 
-/*
-  Usage:
-  npx ts-node --esm packages/evolene-local-packages/index.ts
+async function getWorkspaceGlobs(pathToPackageJson: string): Promise<string[]> {
+  assert(pathToPackageJson.split(path.sep).pop() === "package.json",
+    `The provided path ${pathToPackageJson} doesn't point to a package.json file.`);
 
-  TODO: Should move shell script code to this package
-  TODO: Break main code into more functions
-*/
+  // This will blow up if file doesn't exist 
+  assert(await pathExists(pathToPackageJson),
+    `No file could be found at ${pathToPackageJson}`);
+
+  const packageJsonFile = await fs.readFile(pathToPackageJson);
+  const json = JSON.parse(await new TextDecoder().decode(packageJsonFile));
+
+  assert(Array.isArray(json.workspaces),
+    `The package.json file found at ${pathToPackageJson} did not contain an array "workspaces"`);
+
+  const workspaceGlobs = json.workspaces;
+  return workspaceGlobs;
+}
+
+async function getPackageDirectoriesFromGlobs(workspaceGlobs: string[]): Promise<string[]> {
+  let workspacesOut: string[] = [];
+  // Get all possible matches
+  for (const wsGlob of workspaceGlobs) {
+    if (!wsGlob) continue;
+
+    const entries = await new Promise<string[]>((resolve, reject) => {
+      try {
+        glob(wsGlob, (err, matches) => err ? reject(err) : resolve(matches));
+      } catch (err) {
+        reject(err);
+      }
+    });
+    workspacesOut = [
+      ...workspacesOut,
+      ...entries
+    ];
+  }
+
+  // Filter out directories containing a package.json
+  const tmpOut = await Promise.all(workspacesOut.map(async (wsPath) => {
+    const tmp = await fs.stat(wsPath);
+    if (tmp.isDirectory() && await fs.stat(path.join(wsPath, "package.json"))) {
+      return wsPath;
+    };
+  }));
+  workspacesOut = tmpOut.filter(t => t) as string[];
+  return workspacesOut
+}
