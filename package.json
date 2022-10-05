@@ -3,6 +3,11 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:my-canvas-rooms-api": "PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
+    "dev:my-teaching-api": "PORT=3002 npm run dev --workspace=my-teaching-api",
+    "dev:kpm-backend": "PORT=3000 npm run dev --workspace=kpm-backend",
+    "dev:kpm-frontend": "npm run dev --workspace=kpm-frontend",
     "postinstall": "source bin/update.sh apis/my-canvas-rooms-api apis/my-teaching-api kpm/kpm-backend kpm/kpm-frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +21,9 @@
     "url": "https://github.com/KTH/kpm/issues"
   },
   "homepage": "https://github.com/KTH/kpm#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  },
   "workspaces": [
     "apis/*",
     "kpm/*"
