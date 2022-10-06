@@ -3,3 +3,4 @@ node_modules
 .parcel-cache
 kpm/kpm-frontend/dist
 packages/evolene-local-packages/package-lock.json
+*.DS_Store
