@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import {
   createHashRouter,
   createRoutesFromElements,
@@ -8,18 +8,85 @@ import {
   NavLink,
   Outlet,
   useLoaderData,
+  useLocation,
   useOutlet,
+  useRoutes,
 } from "react-router-dom";
+
+
+const routes = [
+  {
+    path: "/profile",
+    element: <Profile />,
+    loader: async ({ request }: any) => {
+      const res = await fetch("/kpm/api", {
+        signal: request.signal,
+      });
+      const json = await res.json();
+      return json;
+    },
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/schedule",
+    element: <Todo title="Schedule" />,
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/studies",
+    element: <Studies />,
+    loader: async ({ request }: any) => {
+      const res = await fetch("/kpm/api", {
+        signal: request.signal,
+      });
+      const json = await res.json();
+      return json;
+    },
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/teaching",
+    element: <Teaching />,
+    loader: async ({ request }: any) => {
+      const res = await fetch("/kpm/api", {
+        signal: request.signal,
+      });
+      const json = await res.json();
+      return json;
+    },
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/programme",
+    element: <Todo title="Programme" />,
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/groups",
+    element: <Todo title="Groups" />,
+    nodeRef: React.createRef(),
+  },
+  {
+    path: "/services",
+    element: <Todo title="Services" />,
+    nodeRef: React.createRef(),
+  },
+]
 
 function Spacer() {
   return <div className="spacer" />
 }
 
-function _linkClassName({ isActive } : any) {
+function _linkClassName({ isActive }: any) {
   return isActive ? "active" : "";
 }
 
 function Menu() {
+  const location = useLocation()
+  const currentOutlet = useOutlet()
+  const { nodeRef } : any =
+    routes.find((route) => route.path === location.pathname) ?? {}
+
   return (<React.Fragment>
     <nav className="kpm-menu">
       <ol>
@@ -36,22 +103,35 @@ function Menu() {
         <li>N</li>
       </ol>
     </nav>
-    <Outlet />
+    <SwitchTransition>
+          <CSSTransition
+            key={location.pathname}
+            nodeRef={nodeRef}
+            timeout={300}
+            classNames="AnimateMenuModal"
+            unmountOnExit>
+            {(state) => (
+              <div ref={nodeRef} className="menu-modal-wrapper">
+                {currentOutlet}
+              </div>
+            )}
+          </CSSTransition>
+        </SwitchTransition>
   </React.Fragment>);
 }
 
-function MenuPane({ children } : any) {
+function MenuPane({ children }: any) {
   // <CSSTransition classNames="AnimateMenuModal" timeout={500} unmountOnExit>
   // </CSSTransition>
   return (
-      <dialog className="modal">
-        <div className="modal-content">{children}</div>
-      </dialog>
+    <dialog className="modal">
+      <div className="modal-content">{children}</div>
+    </dialog>
   )
 }
 
 function Profile() {
-  const { msg } = useLoaderData() as { msg: string};
+  const { msg } = useLoaderData() as { msg: string } || {};
   return (
     <MenuPane>
       <h2>Profile {msg}</h2>
@@ -60,7 +140,7 @@ function Profile() {
 }
 
 function Studies() {
-  const { msg } = useLoaderData() as { msg: string};
+  const { msg } = useLoaderData() as { msg: string } || {};
   return (
     <MenuPane>
       <h2>Studies {msg}</h2>
@@ -69,7 +149,7 @@ function Studies() {
 }
 
 function Teaching() {
-  const { msg } = useLoaderData() as { msg: string};
+  const { msg } = useLoaderData() as { msg: string } || {};
   return (
     <MenuPane>
       <h2>Teaching {msg}</h2>
@@ -92,62 +172,21 @@ type TCreateRouterProps = {
 }
 
 function createRouter({ hasStudies, hasTeaching }: TCreateRouterProps) {
-  return createHashRouter(
-    createRoutesFromElements(
-  
-      <Route path="/" element={<Menu />}>
-          <Route
-            path="/profile"
-            element={<Profile />}
-            loader={async ({ request }) => {
-              const res = await fetch("/kpm/api", {
-                signal: request.signal,
-              });
-              const json = await res.json();
-              return json;
-            }} />
-          <Route
-            path="/schedule"
-            element={<Todo title="Schedule" />} />
-          {hasStudies && <Route
-            path="/studies"
-            element={<Studies />}
-            loader={async ({ request }) => {
-              const res = await fetch("/kpm/api", {
-                signal: request.signal,
-              });
-              const json = await res.json();
-              return json;
-            }} />}
-          {hasTeaching && <Route
-            path="/teaching"
-            element={<Teaching />}
-            loader={async ({ request }) => {
-              const res = await fetch("/kpm/api", {
-                signal: request.signal,
-              });
-              const json = await res.json();
-              return json;
-            }} />}
-          <Route
-            path="/programme"
-            element={<Todo title="Programme" />} />
-          <Route
-            path="/groups"
-            element={<Todo title="Groups" />} />
-          <Route
-            path="/services"
-            element={<Todo title="Services" />} />
-      </Route>
-    )
-  );
+  return createHashRouter([
+    {
+      path: '/',
+      element: <Menu />,
+      children: routes.map((route) => ({
+        index: route.path === '/',
+        path: route.path === '/' ? undefined : route.path,
+        element: route.element,
+        loader: route.loader
+      })),
+    },
+  ]);
 }
 
 
 export function App() {
-  return (
-    <TransitionGroup>
-      <RouterProvider router={createRouter({ hasStudies: true, hasTeaching: true })} />
-    </TransitionGroup>
-  )
+  return <RouterProvider router={createRouter({ hasStudies: true, hasTeaching: true })} />
 }
