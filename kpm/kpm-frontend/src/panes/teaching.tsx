@@ -13,9 +13,7 @@ export async function loaderTeaching({ request }: any) {
 }
 
 export function Teaching() {
-  // See Menu.tsx for note on why we maintain state here
-  const { msg: msgIn } = useLoaderData() as { msg: string } || {};
-  const [msg] = React.useState(msgIn);
+  const { msg } = useLoaderData() as { msg: string };
   return (
     <MenuPane>
       <h2>Teaching {msg}</h2>

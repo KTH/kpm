@@ -13,9 +13,7 @@ export async function loaderProfile({ request }: any) {
 }
 
 export function Profile() {
-  // See Menu.tsx for note on why we maintain state here
-  const { msg: msgIn } = useLoaderData() as { msg: string } || {};
-  const [msg] = React.useState(msgIn);
+  const { msg } = useLoaderData() as { msg: string };
   return (
     <MenuPane>
       <h2>Profile {msg}</h2>
