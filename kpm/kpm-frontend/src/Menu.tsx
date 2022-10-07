@@ -50,7 +50,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
         <CSSTransition
           key={location.pathname}
           nodeRef={nodeRef}
-          timeout={300}
+          timeout={200}
           classNames="AnimateMenuModal"
           unmountOnExit>
           {(state) => (
