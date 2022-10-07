@@ -84,7 +84,7 @@ function _linkClassName({ isActive }: any) {
 function Menu() {
   const location = useLocation()
   const currentOutlet = useOutlet()
-  const { nodeRef } : any =
+  const { nodeRef }: any =
     routes.find((route) => route.path === location.pathname) ?? {}
 
   return (<React.Fragment>
@@ -104,34 +104,31 @@ function Menu() {
       </ol>
     </nav>
     <SwitchTransition>
-          <CSSTransition
-            key={location.pathname}
-            nodeRef={nodeRef}
-            timeout={300}
-            classNames="AnimateMenuModal"
-            unmountOnExit>
-            {(state) => (
-              <div ref={nodeRef} className="menu-modal-wrapper">
-                {currentOutlet}
-              </div>
-            )}
-          </CSSTransition>
-        </SwitchTransition>
+      <CSSTransition
+        key={location.pathname}
+        nodeRef={nodeRef}
+        timeout={300}
+        classNames="AnimateMenuModal"
+        unmountOnExit>
+        {(state) => (
+          <dialog ref={nodeRef} className="modal">
+            {currentOutlet}
+          </dialog>
+        )}
+      </CSSTransition>
+    </SwitchTransition>
   </React.Fragment>);
 }
 
 function MenuPane({ children }: any) {
-  // <CSSTransition classNames="AnimateMenuModal" timeout={500} unmountOnExit>
-  // </CSSTransition>
   return (
-    <dialog className="modal">
-      <div className="modal-content">{children}</div>
-    </dialog>
+    <div className="modal-content">{children}</div>
   )
 }
 
 function Profile() {
-  const { msg } = useLoaderData() as { msg: string } || {};
+  const { msg: msgIn } = useLoaderData() as { msg: string } || {};
+  const [msg] = React.useState(msgIn);
   return (
     <MenuPane>
       <h2>Profile {msg}</h2>
@@ -140,7 +137,8 @@ function Profile() {
 }
 
 function Studies() {
-  const { msg } = useLoaderData() as { msg: string } || {};
+  const { msg: msgIn } = useLoaderData() as { msg: string } || {};
+  const [msg] = React.useState(msgIn);
   return (
     <MenuPane>
       <h2>Studies {msg}</h2>
@@ -149,7 +147,8 @@ function Studies() {
 }
 
 function Teaching() {
-  const { msg } = useLoaderData() as { msg: string } || {};
+  const { msg: msgIn } = useLoaderData() as { msg: string } || {};
+  const [msg] = React.useState(msgIn);
   return (
     <MenuPane>
       <h2>Teaching {msg}</h2>
