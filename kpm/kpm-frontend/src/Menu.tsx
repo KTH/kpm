@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SwitchTransition, CSSTransition } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import {
   NavLink,
   useLocation,
@@ -46,7 +46,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
           <li>N</li>
         </ol>
       </nav>
-      <SwitchTransition>
+      <TransitionGroup>
         <CSSTransition
           key={location.pathname}
           nodeRef={nodeRef}
@@ -59,7 +59,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
             </MenuPaneWrapper>
           )}
         </CSSTransition>
-      </SwitchTransition>
+      </TransitionGroup>
     </React.Fragment>);
   }
   
