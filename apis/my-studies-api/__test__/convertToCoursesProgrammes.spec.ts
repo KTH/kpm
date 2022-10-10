@@ -1,5 +1,5 @@
 import { describe, expect, jest, test } from '@jest/globals';
-import { convertToCourses, convertToProgrammes } from "../src";
+import { convertToCourseObjects, convertToProgrammeObjects } from "../src";
 
 // ladok2.kurser.SE.1020
 // ladok2.kurser.ME.2053.antagna_20222
@@ -89,7 +89,7 @@ const programmeTestCases: {[index: string]: any }  = {
 describe("UG REST API response should detect courses", () => {
   for (const testCase of Object.keys(courseTestCases)) {
     test(testCase, () => {
-      const tmp = convertToCourses([testCase]);
+      const tmp = convertToCourseObjects([testCase]);
       const res = JSON.parse(JSON.stringify(tmp[0]));
       expect(res).toStrictEqual(courseTestCases[testCase]);
     })
@@ -99,7 +99,7 @@ describe("UG REST API response should detect courses", () => {
 describe("UG REST API response should detect programmes", () => {
   for (const testCase of Object.keys(programmeTestCases)) {
     test(testCase, () => {
-      const tmp = convertToProgrammes([testCase]);
+      const tmp = convertToProgrammeObjects([testCase]);
       const res = JSON.parse(JSON.stringify(tmp[0]));
       expect(res).toStrictEqual(programmeTestCases[testCase]);
     })
