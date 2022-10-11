@@ -1,11 +1,8 @@
 {
-  "name": "kpm",
-  "version": "0.1.0",
-  "description": "Frontend and backend for KPM application",
-  "author": "KTH Royal Institute of Technology",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KTH/kpm.git"
+    "name": "kpm",
+    "version": "0.1.0",
+    "description": "Frontend and backend for KPM application",
+    "author": "KTH Royal Institute of Technology",
+    "license": "MIT"
   }
-}
+  

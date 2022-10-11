@@ -2,10 +2,6 @@
   "name": "my-canvas-rooms-api",
   "version": "0.1.0",
   "description": "API for canvas rooms I can access, per course code, KPM.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KTH/kpm.git"
-  },
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
