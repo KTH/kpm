@@ -2,6 +2,10 @@
   "name": "my-teaching-api",
   "version": "0.1.0",
   "description": "API for which courses/programs I teach, KPM.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KTH/kpm.git"
+  },
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
