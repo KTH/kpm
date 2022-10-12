@@ -9,6 +9,7 @@
     "type": "module",
     "author": "KTH Royal Institute of Technology",
     "license": "MIT",
+    "bin": "./index.ts",
     "scripts": {
         "start": "ts-node --esm index.ts"
     },
