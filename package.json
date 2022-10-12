@@ -8,7 +8,7 @@
     "dev:my-teaching-api": "PORT=3002 npm run dev --workspace=my-teaching-api",
     "dev:kpm-backend": "PORT=3000 npm run dev --workspace=kpm-backend",
     "dev:kpm-frontend": "npm run dev --workspace=kpm-frontend",
-    "postinstall": "source bin/update.sh apis/my-canvas-rooms-api apis/my-teaching-api kpm/kpm-backend kpm/kpm-frontend packages/kpm-api-common",
+    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

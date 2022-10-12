@@ -18,7 +18,7 @@ export function errorHandler(err: any, req: any, res: any, next: any) {
     });
   }
 
-  res.status(statusCode).send(`${statusCode} Oops! Something went sour.`);
+  res.status(statusCode).send(message);
 }
 
 // Give us a useful error log message
