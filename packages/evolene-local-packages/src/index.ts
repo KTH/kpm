@@ -133,7 +133,7 @@ try {
     }
     // Clean up evolene_local_packages/ and restore package.json.bak
     await fs.rm(path.join(pkgPath, "evolene_local_packages"), { recursive: true, force: true });
-    await renameFileIfExist(path.join(pkgPath, "package.json.bak"), path.join(cwd, "package.json"));
+    await renameFileIfExist(path.join(pkgPath, "package.json.bak"), path.join(pkgPath, "package.json"));
   }
 } catch (err) {
   //
