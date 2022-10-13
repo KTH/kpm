@@ -4,3 +4,4 @@
 /kpm/kpm-backend/package-lock.json
 /kpm/kpm-frontend/package-lock.json
 /package-lock.json
+/packages/kpm-api-common/package-lock.json

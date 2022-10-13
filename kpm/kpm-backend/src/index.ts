@@ -1,44 +1,19 @@
 import "./config";
-import express, { Request, Response } from "express";
-import got from "got";
+import express from "express";
+import { loggingHandler, errorHandler, uncaughtExceptionCallback } from "kpm-api-common";
+import { name as APP_NAME } from "../package.json";
+import { api } from "./api";
 
-const port = parseInt(process.env.PORT || "3000");
-const prefix = process.env.PROXY_PATH_PREFIX || "/kpm/api";
-const MY_CANVAS_ROOMS_API_URI = process.env.MY_CANVAS_ROOMS_API_URI || "http://localhost:3001/kpm/canvas-rooms";
-const MY_TEACHING_API_URI = process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
+const PORT = parseInt(process.env.PORT || "3000");
+const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 
 export const app = express();
 
-// TODO: Add session handling
+process.on('uncaughtException', uncaughtExceptionCallback);
+app.use(loggingHandler);
+app.use(PREFIX, api);
+app.use(errorHandler);
 
-app.use((req, res, next) => {
-  next();
-  console.log(`${req.path} => ${res.statusCode}`);
-});
-
-const api = express.Router();
-api.get("/", (req, res) => {
-  return res.send({
-    msg: "ok"
-  })
-})
-api.get("/teaching", async (req, res) => {
-  const resTeaching = await got.get(`${MY_TEACHING_API_URI}/user/u1famwov`, {
-    responseType: "json"
-  }).then((r) => r.body);
-  
-  res.send({
-    teaching: resTeaching,
-  });
-})
-
-app.use(prefix, api);
-
-app.use((err: Error, req: Request, res: Response, next: any) => {
-  res.status(500).send();
-  console.log(`${req.path} => ${err}`);
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`${APP_NAME} listening on port ${PORT}`);
 });

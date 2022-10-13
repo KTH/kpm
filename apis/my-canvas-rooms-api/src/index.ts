@@ -1,22 +1,19 @@
 import "./config";
-import express, { Request, Response } from "express";
+import express from "express";
+import { loggingHandler, errorHandler, uncaughtExceptionCallback } from "kpm-api-common";
+import { name as APP_NAME } from "../package.json";
 import { api } from "./api";
 
-const port = parseInt(process.env.PORT || "3000");
-const prefix = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
+const PORT = parseInt(process.env.PORT || "3000");
+const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
 
-export const app = express();
+const app = express();
 
-app.use((req, res, next) => {
-  next();
-  console.log(`${req.path} => ${res.statusCode}`);
-});
-app.use(prefix, api);
-app.use((err: Error, req: Request, res: Response, next: any) => {
-  res.status(500).send();
-  console.log(`${req.path} => ${err}`);
-});
+process.on('uncaughtException', uncaughtExceptionCallback);
+app.use(loggingHandler);
+app.use(PREFIX, api);
+app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`${APP_NAME} listening on port ${PORT}`);
 });

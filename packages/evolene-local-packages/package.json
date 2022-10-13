@@ -1,0 +1,25 @@
+{
+    "name": "evolene-local-packages",
+    "version": "0.1.0",
+    "engines": {
+        "node": ">=16.7.0"
+    },
+    "description": "Prepare an application with local workspace packages for Evolene.",
+    "main": "index.ts",
+    "type": "module",
+    "author": "KTH Royal Institute of Technology",
+    "license": "MIT",
+    "bin": "./index.ts",
+    "scripts": {
+        "start": "ts-node --esm index.ts"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.0.0",
+        "prettier": "^2.7.1",
+        "typescript": "^4.8.3"
+    },
+    "dependencies": {
+        "ts-node": "^10.9.1",
+        "glob": "^8.0.3"
+    }
+}
