@@ -3,7 +3,7 @@ import express from "express";
 import { loggingHandler, errorHandler, uncaughtExceptionCallback } from "kpm-api-common";
 import { name as APP_NAME } from "../package.json";
 import { api } from "./api";
-import { authRouter } from "./otherHandlers/authRouter";
+import { auth } from "./auth";
 import { sessionMiddleware } from "./session";
 
 const PORT = parseInt(process.env.PORT || "3000");
@@ -16,8 +16,7 @@ process.on('uncaughtException', uncaughtExceptionCallback);
 app.use(sessionMiddleware);
 app.use(loggingHandler);
 app.use(PREFIX, api);
-app.use("/kpm/auth", authRouter);
-
+app.use(PREFIX, auth);
 app.use(errorHandler);
 
 app.listen(PORT, () => {

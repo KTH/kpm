@@ -2,6 +2,8 @@ import { Router } from "express";
 import { Issuer, BaseClient, generators } from "openid-client";
 import assert from "node:assert/strict";
 
+const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
+
 /**
  * Extends "express-session" by declaring the data stored in session object
  */
@@ -11,11 +13,11 @@ declare module "express-session" {
   }
 }
 
-const redirectBaseUrl = new URL("/kpm/auth/callback", process.env.PROXY_HOST);
+const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, process.env.PROXY_HOST);
 /**
  * Router containing all /auth related endpoints
  */
-export const authRouter = Router();
+export const auth = Router();
 
 let client: BaseClient;
 
@@ -34,7 +36,7 @@ async function getOpenIdClient() {
 }
 
 // Example: /kpm/auth/login?nextUrl=https://kth.se&prompt=none
-authRouter.get("/login", async function checkHandler(req, res) {
+auth.get("/auth/login", async function checkHandler(req, res) {
   const nextUrl = req.query.nextUrl;
   assert(typeof nextUrl === "string", "nextUrl should be a string");
 
@@ -59,7 +61,7 @@ authRouter.get("/login", async function checkHandler(req, res) {
   res.redirect(url);
 });
 
-authRouter.post("/callback", async function callbackHandler(req, res) {
+auth.post("/auth/callback", async function callbackHandler(req, res) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
   // breakpoint
