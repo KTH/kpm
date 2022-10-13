@@ -56,7 +56,7 @@ api.get("/user/:user", async (req, res, next) => {
     clientSecret: CLIENT_SECRET
   })
 
-  throw new Error("Test");
+  // throw new Error("Test");
 
   const perf1 = Date.now();
   
