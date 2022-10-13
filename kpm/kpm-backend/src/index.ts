@@ -15,8 +15,8 @@ process.on('uncaughtException', uncaughtExceptionCallback);
 
 app.use(sessionMiddleware);
 app.use(loggingHandler);
-app.use(PREFIX, api);
 app.use(PREFIX, auth);
+app.use(PREFIX, api);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
