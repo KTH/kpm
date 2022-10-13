@@ -2,8 +2,6 @@ import { Router } from "express";
 import { Issuer, BaseClient, generators } from "openid-client";
 import assert from "node:assert/strict";
 
-const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
-
 /**
  * Extends "express-session" by declaring the data stored in session object
  */
@@ -13,7 +11,11 @@ declare module "express-session" {
   }
 }
 
-const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, process.env.PROXY_HOST);
+const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
+const PORT = process.env.PORT || 3000;
+const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
+
+const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, PROXY_HOST);
 /**
  * Router containing all /auth related endpoints
  */

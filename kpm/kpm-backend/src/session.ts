@@ -1,7 +1,8 @@
 import expressSessio from "express-session";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "";
-const PROXY_HOST = process.env.PROXY_HOST || "";
+const PORT = process.env.PORT || 3000;
+const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 
 export const sessionMiddleware = expressSessio({
     name: "kpm.sid",
