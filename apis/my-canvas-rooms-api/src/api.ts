@@ -1,4 +1,3 @@
-/* Top-level source file for my-canvas-rooms-api */
 import express, { Request, Response } from "express";
 import CanvasClient, { CanvasRoom } from "./canvasApi";
 
