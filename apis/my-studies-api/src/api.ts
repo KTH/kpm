@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import express from "express";
-import { UGRestClient } from "./ugRestClient";
+import { UGRestClient } from "kpm-ug-rest-client";
 import { convertToCourseObjects, convertToProgrammeObjects, getListOfCourseProgrammeNames } from './apiUtils';
 
 const IS_DEV = process.env.NODE_ENV !== "production";

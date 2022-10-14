@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
+    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages",
+    "test": "npm test --workspaces --if-present",
+    "/* ----------- */": "",
     "dev:my-canvas-rooms-api": "PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
     "dev:my-teaching-api": "PORT=3002 npm run dev --workspace=my-teaching-api",
+    "dev:my-studies-api": "PORT=3003 npm run dev --workspace=my-studies-api",
     "dev:kpm-backend": "PORT=3000 npm run dev --workspace=kpm-backend",
-    "dev:kpm-frontend": "npm run dev --workspace=kpm-frontend",
-    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:kpm-frontend": "npm run dev --workspace=kpm-frontend"
   },
   "repository": {
     "type": "git",

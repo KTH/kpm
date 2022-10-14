@@ -1,10 +1,9 @@
 import { describe, expect, jest, test } from '@jest/globals';
-import { UGRestClient } from "../src/ugRestClient";
+import { UGRestClient } from "kpm-ug-rest-client";
 import { TUgUser } from "../src/api";
 import { addMockResponse } from "../__mocks__/openid-client"
 
 jest.mock("openid-client");
-
 
 addMockResponse(
   "UG_REST_BASE_URI/users/dummy",

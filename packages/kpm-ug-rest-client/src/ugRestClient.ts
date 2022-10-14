@@ -3,7 +3,7 @@ import { IncomingHttpHeaders } from "node:http";
 import { Client, Issuer, TokenSet } from "openid-client";
 
 
-type TUGRestClient = {
+export type TUGRestClient = {
   authServerDiscoveryURI: string;
   resourceBaseURI: string;
   clientId: string;
