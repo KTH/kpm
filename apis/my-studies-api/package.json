@@ -1,7 +1,7 @@
 {
-  "name": "my-teaching-api",
+  "name": "my-studies-api",
   "version": "0.1.0",
-  "description": "API for which courses/programs I teach, KPM.",
+  "description": "API for which courses I am studying, KPM.",
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
