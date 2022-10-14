@@ -2,9 +2,7 @@ import * as React from 'react';
 
 export function MenuPane({ children }: any) {
   return (
-    <MenuPaneWrapper>
-      <div className="modal-content">{children}</div>
-    </MenuPaneWrapper>
+    <div className="modal-content">{children}</div>
   )
 }
 

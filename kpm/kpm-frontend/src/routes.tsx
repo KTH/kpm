@@ -19,33 +19,40 @@ export function getRoutes({ hasTeaching, hasStudies } = getRoutesDefaults): Rout
     {
       path: "/profile",
       element: <Profile />,
-      loader: loaderProfile
+      loader: loaderProfile,
+      nodeRef: React.createRef(),
     },
     hasTeaching && {
       path: "/schedule",
-      element: <Schedule />
+      element: <Schedule />,
+      nodeRef: React.createRef(),
     },
     hasStudies && {
       path: "/studies",
       element: <Studies />,
-      loader: loaderStudies
+      loader: loaderStudies,
+      nodeRef: React.createRef(),
     },
     {
       path: "/teaching",
       element: <Teaching />,
-      loader: loaderTeaching
+      loader: loaderTeaching,
+      nodeRef: React.createRef(),
     },
     {
       path: "/programme",
-      element: <Programme />
+      element: <Programme />,
+      nodeRef: React.createRef(),
     },
     {
       path: "/groups",
-      element: <Groups />
+      element: <Groups />,
+      nodeRef: React.createRef(),
     },
     {
       path: "/services",
-      element: <Services />
+      element: <Services />,
+      nodeRef: React.createRef(),
     },
   ];
 
