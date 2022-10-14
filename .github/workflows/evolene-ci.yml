@@ -20,7 +20,7 @@ jobs:
           - apis/my-studies-api
           - kpm # we combine both frontend and backend in a single image
     steps:
-      - uses: actions/checkout@v2.5.0
+      - uses: actions/checkout@v3.1.0
       - name: Run Evolene CI for ${{matrix.workspaces}}
         shell: bash
         env:
