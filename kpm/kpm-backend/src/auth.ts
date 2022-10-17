@@ -66,19 +66,17 @@ auth.get("/auth/login", async function checkHandler(req, res) {
 auth.post("/auth/callback", async function callbackHandler(req, res) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
-  // breakpoint
+  const nextUrl = req.query.nextUrl;
+  assert(typeof nextUrl === "string", "nextUrl should be a string");
 
-  const redirectUrl = ""; // TODO: take this param from req
-
-  // TODO: get nonce from session
-  // TODO: Check if error
+  const redirectUrl = new URL(redirectBaseUrl);
+  redirectUrl.searchParams.set("nextUrl", nextUrl);
 
   const claims = await client
-    .callback("...", params, {
-      // nonce
+    .callback(redirectUrl.toString(), params, {
+      nonce: req.session.tmpNonce,
     })
     .then((tokenSet) => tokenSet.claims());
 
-  // TODO: save tokens (contained in claims) in session
-  res.redirect(redirectUrl);
+  res.redirect(nextUrl);
 });
