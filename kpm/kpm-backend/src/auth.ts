@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Issuer, BaseClient, generators } from "openid-client";
+import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
 
 /**
@@ -63,7 +63,7 @@ auth.get("/auth/login", async function checkHandler(req, res) {
   res.redirect(url);
 });
 
-auth.post("/auth/callback", async function callbackHandler(req, res) {
+auth.post("/auth/callback", async function callbackHandler(req, res, next) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
   const nextUrl = req.query.nextUrl;
@@ -72,11 +72,23 @@ auth.post("/auth/callback", async function callbackHandler(req, res) {
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", nextUrl);
 
-  const claims = await client
-    .callback(redirectUrl.toString(), params, {
-      nonce: req.session.tmpNonce,
-    })
-    .then((tokenSet) => tokenSet.claims());
+  try {
+    const claims = await client
+      .callback(redirectUrl.toString(), params, {
+        nonce: req.session.tmpNonce,
+      })
+      .then((tokenSet) => tokenSet.claims());
 
-  res.redirect(nextUrl);
+    // TODO: do something with `claims` (includes user ID, etc)
+    res.redirect(nextUrl);
+  } catch (err) {
+    if (err instanceof errors.OPError) {
+      if (err.error === "login_required") {
+        // user is logged out
+        res.redirect(`${nextUrl}?login_success=false`);
+        return;
+      }
+    }
+    next(err);
+  }
 });
