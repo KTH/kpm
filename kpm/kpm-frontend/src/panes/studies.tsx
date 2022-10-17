@@ -21,7 +21,8 @@ export function Studies() {
       <ul className="kpm-studies">
         {courses?.map(course => {
           const { code, status, year } = course ?? {};
-          return <Course courseCode={code} year={year} status={status} />
+          const key = `${code}-${year}`;
+          return <Course key={key} courseCode={code} year={year} status={status} />
         })}
       </ul>
     </MenuPane>

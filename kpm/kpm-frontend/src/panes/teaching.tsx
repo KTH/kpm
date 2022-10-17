@@ -21,8 +21,9 @@ export function Teaching() {
       <h2>Teaching</h2>
       <ul className="kpm-teaching">
         {courses?.map(course => {
-          const { course_code, year, role } = course ?? {};
-          return <Course courseCode={course_code} year={year} role={role} />
+          const { course_code, year, role, term, round_id } = course ?? {};
+          const key = `${course_code}-${year}-${term}-${round_id}-${role}`;
+          return <Course key={key} courseCode={course_code} year={year} role={role} />
         })}
       </ul>
     </MenuPane>
