@@ -5,7 +5,7 @@ import {
 import { MenuPane } from "../components/menu";
 
 export async function loaderStudies({ request }: any) {
-  const res = await fetch("/kpm/api", {
+  const res = await fetch("/kpm/api/studies", {
     signal: request.signal,
   });
   const json = await res.json();
