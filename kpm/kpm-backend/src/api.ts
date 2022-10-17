@@ -1,9 +1,14 @@
 import express from "express";
 import got from "got";
+import {
+  APIStudies,
+  APITeaching,
+  APICanvasRooms
+} from "./types";
 
 const MY_CANVAS_ROOMS_API_URI = process.env.MY_CANVAS_ROOMS_API_URI || "http://localhost:3001/kpm/canvas-rooms";
 const MY_TEACHING_API_URI = process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
-const MY_STUDIES_API_URI = process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/teaching";
+const MY_STUDIES_API_URI = process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
 
 export const api = express.Router();
 
@@ -16,31 +21,32 @@ api.get("/", (req, res) => {
 })
 
 api.get("/canvas-rooms", async (req, res) => {
-  const resTeaching = await got.get(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
+  const { rooms } = await got.get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
     responseType: "json"
   }).then((r) => r.body);
-  
+
   res.send({
-    teaching: resTeaching,
-  });
+    rooms
+  } as APICanvasRooms);
 })
 
 api.get("/teaching", async (req, res) => {
-  const resTeaching = await got.get(`${MY_TEACHING_API_URI}/user/u1famwov`, {
+  const courses = await got.get<any>(`${MY_TEACHING_API_URI}/user/u1famwov`, {
     responseType: "json"
   }).then((r) => r.body);
-  
+
   res.send({
-    teaching: resTeaching,
-  });
+    courses
+  } as APITeaching);
 })
 
 api.get("/studies", async (req, res) => {
-  const resTeaching = await got.get(`${MY_STUDIES_API_URI}/user/u1famwov`, {
+  const { courses, programmes } = await got.get<any>(`${MY_STUDIES_API_URI}/user/u1famwov`, {
     responseType: "json"
   }).then((r) => r.body);
-  
+
   res.send({
-    teaching: resTeaching,
-  });
+    courses,
+    programmes
+  } as APIStudies);
 })
