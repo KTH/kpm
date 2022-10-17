@@ -5,7 +5,7 @@ import { name as APP_NAME } from "../package.json";
 import { api } from "./api";
 
 const PORT = parseInt(process.env.PORT || "3000");
-const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
+const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/api";
 
 export const app = express();
 
