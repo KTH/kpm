@@ -2,9 +2,10 @@ import * as React from 'react';
 import {
   useLoaderData,
 } from "react-router-dom";
+import { APITeaching } from 'kpm-backend-interface';
 import { MenuPane } from "../components/menu";
 
-export async function loaderTeaching({ request }: any) {
+export async function loaderTeaching({ request }: any) : Promise<APITeaching> {
   const res = await fetch("/kpm/api/teaching", {
     signal: request.signal,
   });
@@ -14,12 +15,12 @@ export async function loaderTeaching({ request }: any) {
 
 // TODO: Get types from backend?
 export function Teaching() {
-  const { teaching } = useLoaderData() as { teaching: { course_code: string, year: string, role: string }[] };
+  const { courses } = useLoaderData() as APITeaching;
   return (
     <MenuPane>
       <h2>Teaching</h2>
       <ul className="kpm-teaching">
-        {teaching?.map(course => {
+        {courses?.map(course => {
           const { course_code, year, role } = course ?? {};
           return <Course courseCode={course_code} year={year} role={role} />
         })}

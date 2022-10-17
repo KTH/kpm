@@ -4,7 +4,7 @@ import {
   APIStudies,
   APITeaching,
   APICanvasRooms
-} from "./types";
+} from "kpm-backend-interface";
 
 const MY_CANVAS_ROOMS_API_URI = process.env.MY_CANVAS_ROOMS_API_URI || "http://localhost:3001/kpm/canvas-rooms";
 const MY_TEACHING_API_URI = process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
