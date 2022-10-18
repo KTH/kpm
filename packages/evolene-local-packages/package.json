@@ -5,11 +5,11 @@
         "node": ">=16.7.0"
     },
     "description": "Prepare an application with local workspace packages for Evolene.",
-    "main": "index.ts",
+    "main": "./src/index.ts",
     "type": "module",
     "author": "KTH Royal Institute of Technology",
     "license": "MIT",
-    "bin": "./index.ts",
+    "bin": "./src/index.ts",
     "scripts": {
         "start": "ts-node --esm index.ts"
     },
