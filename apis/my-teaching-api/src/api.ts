@@ -37,11 +37,6 @@ export type TUgUser = {
 };
 
 export type TUgGroup = {
-  description: {
-    sv: string;
-    en: string;
-  };
-  kthid: string;
   name: string;
 };
 
@@ -75,9 +70,26 @@ api.get("/user/:user", async (req, res, next) => {
   if (json === undefined || statusCode !== 200) {
     if (IS_DEV) {
       return res.status(statusCode || 500).send(data);
+    } else {
+      return res.status(statusCode || 500).send("error");
     }
+  } else {
+    const result = teachingResult(json);
+    res.status(statusCode || 200).send(result);
   }
+});
 
+export type Role = {
+  role: string;
+  year: string;
+  term: string;
+  round_id: string;
+};
+
+// Separate function for testability
+export function teachingResult(data: TUgGroup[]): {
+  [index: string]: Array<Role>;
+} {
   /* nameRegex regex test matches:
       Match: edu.courses.5B.5B1219.examiner
       No match: edu.courses.5B.5B1219.examiner.sdf
@@ -91,8 +103,8 @@ api.get("/user/:user", async (req, res, next) => {
   */
   const nameRegex =
     /^edu\.courses\.[^.]+\.(?<course_code>[^.]+)\.((?<role>examiner)|(?<year>[0-9]{4})(?<term>[0-9])\.(?<round_id>[^.]+)\.(?<role_alt>teachers|courseresponsible|assistants))$/i;
-  const result = json
-    ?.map((o) => o.name.match(nameRegex)?.groups)
+  const result = data
+    .map((o) => o.name.match(nameRegex)?.groups)
     .filter((o) => o)
     .map((o: any) => {
       const { role, role_alt, ...other } = o;
@@ -101,6 +113,14 @@ api.get("/user/:user", async (req, res, next) => {
         role: role || role_alt,
       };
     });
-
-  res.status(statusCode || 200).send(result);
-});
+  let courses: { [index: string]: Array<Role> } = {};
+  for (const { course_code, ...role } of result) {
+    console.log(`Got course ${course_code} with roles ${role}`);
+    if (courses[course_code]) {
+      courses[course_code].push(role);
+    } else {
+      courses[course_code] = [role];
+    }
+  }
+  return courses;
+}

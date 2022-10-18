@@ -1,6 +1,6 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { UGRestClient } from "kpm-ug-rest-client";
-import { TUgUser } from "../src/api";
+import { TUgUser, teachingResult } from "../src/api";
 import { addMockResponse } from "../__mocks__/openid-client";
 
 jest.mock("openid-client");
@@ -28,5 +28,65 @@ describe("Dummy UG REST API response", () => {
     const { json } = resp;
 
     expect(json?.affiliations.find((e) => "employee")).toBe("employee");
+  });
+});
+
+describe("Convert UG grops to course roles", () => {
+  test("Basic examples", async () => {
+    const groups = [
+      { name: "edu.courses.5B.5B1219.examiner" },
+      { name: "edu.courses.5B.5B1219.examiner.sdf", comment: "No match" },
+      { name: "edu.courses.åäö.ÅÄ1219.examiner" },
+      { name: "edu.courses.€d.5B1219.teachers", comment: "No match" },
+      { name: "edu.courses.BB.BB2165.20212.1.teachers" },
+      { name: "edu.courses.BB.BB2165.20212.1.courseresponsible" },
+      { name: "edu.courses.BB.BB2165.20212.1.assistants" },
+      { name: "edu.courses.BB.BB2165.20212.hjkfds23 - hjk - 234.assistants" },
+      { name: "edu.courses.BB.BB2165.20212..assistants", comment: "No match" },
+    ];
+    expect(teachingResult(groups)).toStrictEqual({
+      "5B1219": [
+        {
+          role: "examiner",
+          round_id: undefined,
+          term: undefined,
+          year: undefined,
+        },
+      ],
+      ÅÄ1219: [
+        {
+          role: "examiner",
+          round_id: undefined,
+          term: undefined,
+          year: undefined,
+        },
+      ],
+      BB2165: [
+        {
+          role: "teachers",
+          round_id: "1",
+          term: "2",
+          year: "2021",
+        },
+        {
+          role: "courseresponsible",
+          round_id: "1",
+          term: "2",
+          year: "2021",
+        },
+        {
+          role: "assistants",
+          round_id: "1",
+          term: "2",
+          year: "2021",
+        },
+        {
+          role: "assistants",
+          round_id: "hjkfds23 - hjk - 234",
+          term: "2",
+          year: "2021",
+        },
+      ],
+    });
   });
 });
