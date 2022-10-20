@@ -6,7 +6,7 @@ WORKDIR /usr/src/app/kpm-frontend
 
 COPY ["kpm-frontend/package.json", "package.json"]
 COPY ["kpm-frontend/package-lock.json", "package-lock.json"]
-COPY ["kpm-frontend/evolene-local-packages", "evolene-local-packages"]
+COPY ["kpm-frontend/evolene_local_packages", "evolene_local_packages"]
 
 # See: https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
 RUN npm ci --development
@@ -18,7 +18,7 @@ WORKDIR /usr/src/app/kpm-backend
 
 COPY ["kpm-backend/package.json", "package.json"]
 COPY ["kpm-backend/package-lock.json", "package-lock.json"]
-COPY ["kpm-backend/evolene-local-packages", "evolene-local-packages"]
+COPY ["kpm-backend/evolene_local_packages", "evolene_local_packages"]
 
 RUN npm ci --omit=dev
 
