@@ -6,8 +6,8 @@ import {
   getPackageDirectoriesFromGlobs,
   createLockFile,
   loadPackageJson,
-  renameFileIfExist
-// @ts-ignore
+  renameFileIfExist,
+  // @ts-ignore
 } from "./utils.ts";
 
 /*************************
@@ -36,7 +36,7 @@ console.log("Workspace directories found:");
 console.log(packageDirectories.map((o: string) => `- ${o}`).join("\n"));
 
 // Create package lookup dict
-const packageLookup: { [index: string]: { path: string, name: string } } = {}
+const packageLookup: { [index: string]: { path: string; name: string } } = {};
 for (const pkgPath of packageDirectories) {
   const pathToPackageJson = path.join(pkgPath, "package.json");
   const packageJsonFile = await fs.readFile(pathToPackageJson);
@@ -48,7 +48,7 @@ for (const pkgPath of packageDirectories) {
 for (const pkgPath of packageDirectories) {
   const json = await loadPackageJson(pkgPath);
 
-  const matchingPackages: { path: string, name: string }[] = [];
+  const matchingPackages: { path: string; name: string }[] = [];
   let allDeps: string[] = [];
   if (typeof json.dependencies === "object") {
     allDeps = Object.keys(json.dependencies);
@@ -65,7 +65,9 @@ for (const pkgPath of packageDirectories) {
 
   // If we have matchingPackages then we depend on local packages so...
   if (matchingPackages.length > 0) {
-    console.log(`Workspace ${json.name} has local packages, preparing evolene_local_packages/`);
+    console.log(
+      `Workspace ${json.name} has local packages, preparing evolene_local_packages/`
+    );
   }
 
   // 1. add workspaces to package.json
@@ -74,7 +76,9 @@ for (const pkgPath of packageDirectories) {
     const pathToPackageJson = path.join(pkgPath, "package.json");
     // console.log(`Backup file: ${pathToPackageJson}`)
     await fs.cp(pathToPackageJson, `${pathToPackageJson}.bak`);
-    json["workspaces"] = matchingPackages.map(t => `evolene_local_packages/${t.name}`);
+    json["workspaces"] = matchingPackages.map(
+      (t) => `evolene_local_packages/${t.name}`
+    );
     const jsonAsString = await new TextEncoder().encode(JSON.stringify(json));
     // console.log(pathToPackageJson, JSON.stringify(json));
     await fs.writeFile(pathToPackageJson, jsonAsString);
@@ -85,7 +89,7 @@ for (const pkgPath of packageDirectories) {
     const evoleneDirPath = path.join(pkgPath, "evolene_local_packages");
 
     // console.log(`Evolene local package directory: ${evoleneDirPath}`)
-    if (!await pathExists(evoleneDirPath)) {
+    if (!(await pathExists(evoleneDirPath))) {
       await fs.mkdir(evoleneDirPath);
     }
     for (const { path: srcPath, name: srcName } of matchingPackages) {
@@ -93,12 +97,16 @@ for (const pkgPath of packageDirectories) {
       await fs.cp(
         path.join(cwd, srcPath),
         path.join(pkgPath, "evolene_local_packages", srcName),
-        { recursive: true });
+        { recursive: true }
+      );
     }
   }
 
   // 3. Add/remove evolene-local-packages.json
-  const pathToEvoleneLocalPackagesJson = path.join(pkgPath, "evolene-local-packages.json");
+  const pathToEvoleneLocalPackagesJson = path.join(
+    pkgPath,
+    "evolene-local-packages.json"
+  );
   if (matchingPackages.length > 0) {
     const json: { [index: string]: { path: string } } = {};
 
@@ -117,7 +125,10 @@ for (const pkgPath of packageDirectories) {
 }
 
 // Hide package.json from NPM (revealed at end)
-await fs.rename(path.join(cwd, "package.json"), path.join(cwd, "package.json.tmp"))
+await fs.rename(
+  path.join(cwd, "package.json"),
+  path.join(cwd, "package.json.tmp")
+);
 
 try {
   // Generate package-lock.json files and clean up
@@ -132,8 +143,14 @@ try {
       // console.info(stdout);
     }
     // Clean up evolene_local_packages/ and restore package.json.bak
-    await fs.rm(path.join(pkgPath, "evolene_local_packages"), { recursive: true, force: true });
-    await renameFileIfExist(path.join(pkgPath, "package.json.bak"), path.join(pkgPath, "package.json"));
+    await fs.rm(path.join(pkgPath, "evolene_local_packages"), {
+      recursive: true,
+      force: true,
+    });
+    await renameFileIfExist(
+      path.join(pkgPath, "package.json.bak"),
+      path.join(pkgPath, "package.json")
+    );
   }
 } catch (err) {
   //
@@ -141,4 +158,7 @@ try {
 }
 
 // Reveal package.json to NPM
-await renameFileIfExist(path.join(cwd, "package.json.tmp"), path.join(cwd, "package.json"));
+await renameFileIfExist(
+  path.join(cwd, "package.json.tmp"),
+  path.join(cwd, "package.json")
+);

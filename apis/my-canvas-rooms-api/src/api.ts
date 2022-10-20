@@ -15,7 +15,6 @@ api.get("/mine", (req, res) => {
 });
 
 api.get("/user/:user", async (req, res, next) => {
-
   try {
     const canvas = new CanvasClient(req);
     const rooms = canvas.getRooms(`sis_user_id:${req.params.user}`);
@@ -39,28 +38,28 @@ api.get("/user/:user", async (req, res, next) => {
 });
 
 type Link = {
-  url: URL,
-  name: string,
-  state: "unpublished" | "available" | "completed" | "deleted",
-  text?: string,
-  type: "course" | "exam" | "rapp" | undefined,
-  startTerm?: string, // YYYYn (n = 1 | 2)
-  examDate?: string, // YYYY-mm-dd
-  favorite: boolean,
+  url: URL;
+  name: string;
+  state: "unpublished" | "available" | "completed" | "deleted";
+  text?: string;
+  type: "course" | "exam" | "rapp" | undefined;
+  startTerm?: string; // YYYYn (n = 1 | 2)
+  examDate?: string; // YYYY-mm-dd
+  favorite: boolean;
 };
 
 type TLinkMetaData = {
-  type: Link["type"],
-  name?: Link["name"],
-  text?: Link["text"],
-  startTerm?: Link["startTerm"],
-  examDate?: Link["examDate"],
-}
+  type: Link["type"];
+  name?: Link["name"];
+  text?: Link["text"];
+  startTerm?: Link["startTerm"];
+  examDate?: Link["examDate"];
+};
 
 type TGetRoomsReturnValue = {
-  course_codes: Set<string>,
-  link_meta_data: TLinkMetaData
-}
+  course_codes: Set<string>;
+  link_meta_data: TLinkMetaData;
+};
 
 /*
   STARTED: Add
@@ -74,29 +73,31 @@ type TGetRoomsReturnValue = {
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
   const room_id = canvas_data.id;
   const link: Link = {
-    'url': new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
-    'state': canvas_data.workflow_state,
-    'name': canvas_data.name,
-    'type': undefined,
-    'favorite': canvas_data.is_favorite
-  }
+    url: new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
+    state: canvas_data.workflow_state,
+    name: canvas_data.name,
+    type: undefined,
+    favorite: canvas_data.is_favorite,
+  };
 
   const { course_codes, link_meta_data } =
-    getRoomsByRapp(canvas_data)
-    || getRoomsByNewFormat(canvas_data)
-    || getRoomsByOldFormat(canvas_data)
-    || getExamRoomByNewFormat(canvas_data)
-    || getRoomsFallback(canvas_data);
+    getRoomsByRapp(canvas_data) ||
+    getRoomsByNewFormat(canvas_data) ||
+    getRoomsByOldFormat(canvas_data) ||
+    getExamRoomByNewFormat(canvas_data) ||
+    getRoomsFallback(canvas_data);
   return {
     course_codes,
     link: {
       ...link,
-      ...link_meta_data
-    }
+      ...link_meta_data,
+    },
   };
 }
 
-function getRoomsByRapp(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
+function getRoomsByRapp(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
 
   // Rapp courses may not be the most common or important, but we can
@@ -106,21 +107,23 @@ function getRoomsByRapp(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefin
     course_codes.add(rapp[1]);
 
     const link_meta_data: TLinkMetaData = {
-      type: "rapp"
+      type: "rapp",
     };
     return { course_codes, link_meta_data };
   }
 }
 
-function getRoomsByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
+function getRoomsByNewFormat(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
   const link_meta_data: TLinkMetaData = {
-    type: "course"
+    type: "course",
   };
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
-  const sections = canvas_data.sections.map(s => s.name);
+  const sections = canvas_data.sections.map((s) => s.name);
 
   const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(\d+\)/i;
 
@@ -144,15 +147,15 @@ function getRoomsByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | un
   }
 }
 
-function convertStartTerm(inp: string) : Link["startTerm"] {
+function convertStartTerm(inp: string): Link["startTerm"] {
   let suffix = "";
   if (inp.startsWith("VT")) suffix = "1";
   if (inp.startsWith("HT")) suffix = "2";
-  
+
   if (!suffix) {
     throw new Error('Unsupported term format "${inp}"');
   }
-  
+
   let outp;
   const tmp = inp.slice(2);
   const tmpInt = parseInt(tmp);
@@ -167,19 +170,19 @@ function convertStartTerm(inp: string) : Link["startTerm"] {
   return `${outp}${suffix}`;
 }
 
-
-function getRoomsByOldFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
+function getRoomsByOldFormat(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
-  
+
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
-  const sections = canvas_data.sections.map(s => s.name);
-
+  const sections = canvas_data.sections.map((s) => s.name);
 
   // Old SIS_COURSE_ID format for fallback handling
   const sis_course_id_format = /^(.*)([VH]T[0-9][0-9])([0-9A-Z])$/i;
 
-  const sis_course_id = canvas_data.sis_course_id || '';
+  const sis_course_id = canvas_data.sis_course_id || "";
   //logger.info("Fallback for room %s %s (%s: %s).  Sections: %s",
   //  room_id, sis_course_id, canvas_data.get('course_code'),
   //  canvas_data.get('name'), sections)
@@ -187,30 +190,32 @@ function getRoomsByOldFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | un
   const match = sis_course_id.match(sis_course_id_format);
   // Note; The sections returned from the Canvas API are limited to those
   // where the current user is enrolled.
-  if (match && sections.find((section) => section.includes(match[1]))) {  
+  if (match && sections.find((section) => section.includes(match[1]))) {
     const course_code = match[1];
     const link_meta_data: TLinkMetaData = {
       name: `${match[2]}-${match[3]}`,
       text: canvas_data.name,
-      type: "course" // Always course for this function
+      type: "course", // Always course for this function
     };
     // For now this function only return one (1) course code.
     // Could be improved by looking at the sections
     course_codes.add(course_code);
-  
-    return { course_codes, link_meta_data }
+
+    return { course_codes, link_meta_data };
   }
 }
 
-function getExamRoomByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue | undefined {
+function getExamRoomByNewFormat(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
   const course_codes = new Set<string>();
   const link_meta_data: TLinkMetaData = {
-    type: "exam"
+    type: "exam",
   };
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
-  const sections = canvas_data.sections.map(s => s.name);
+  const sections = canvas_data.sections.map((s) => s.name);
 
   const nameRegex = /^([A-ZÅÄÖ0-9]{5,7}) (\w+) \[([0-9-]{10})\]/i;
   const sectionRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+ -/i;
@@ -240,20 +245,20 @@ function getExamRoomByNewFormat(canvas_data: CanvasRoom): TGetRoomsReturnValue |
 }
 
 function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
-  const course_codes = new Set<string>(['-']); // The fallback can't determine course code
+  const course_codes = new Set<string>(["-"]); // The fallback can't determine course code
 
   // Note; It would be nice if we got the sis id for the sections, but that
   // requires further API calls.
-  const sections = canvas_data.sections.map(s => s.name);
+  const sections = canvas_data.sections.map((s) => s.name);
 
   // Not a "correct" sis id or high likelihood of xlisting;
   // get some data to search for course codes.
   // logger.debug("Full canvas data: %r", canvas_data)
   const link_meta_data: TLinkMetaData = {
     name: canvas_data.name,
-    text: `${canvas_data.course_code} ${sections.join(' ')}`,
-    type: undefined // We don't know what the type is at this poin,
+    text: `${canvas_data.course_code} ${sections.join(" ")}`,
+    type: undefined, // We don't know what the type is at this poin,
   };
 
-  return { course_codes, link_meta_data }
+  return { course_codes, link_meta_data };
 }
