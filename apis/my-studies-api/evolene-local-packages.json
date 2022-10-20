@@ -1,4 +1,5 @@
 {
   "kpm-api-common": { "path": "packages/kpm-api-common" },
-  "kpm-ug-rest-client": { "path": "packages/kpm-ug-rest-client" }
+  "kpm-ug-rest-client": { "path": "packages/kpm-ug-rest-client" },
+  "@types/kth__reqvars": { "path": "packages/@types-kth__reqvars" }
 }
