@@ -81,5 +81,8 @@ exports[`<App /> Can be rendered 1`] = `
       N
     </li>
   </ol>
+  <div
+    className="kpm-loading-indicator"
+  />
 </nav>
 `;

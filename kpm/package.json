@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "description": "Frontend and backend for KPM application",
     "author": "KTH Royal Institute of Technology",
-    "license": "MIT"
+    "license": "MIT",
+    "private": true
   }
   
