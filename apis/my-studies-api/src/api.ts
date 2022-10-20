@@ -8,21 +8,12 @@ import {
 } from "./apiUtils";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in
+const CLIENT_SECRET = process.env.CLIENT_SECRET!; // Required in .env.in
 const OAUTH_SERVER_BASE_URI =
   process.env.OAUTH_SERVER_BASE_URI || "https://login.ref.ug.kth.se/adfs";
 const UG_REST_BASE_URI =
   process.env.UG_REST_BASE_URI || "https://integral-api.sys.kth.se/test/ug";
-
-assert(
-  typeof CLIENT_ID === "string" && CLIENT_ID,
-  "Missing CLIENT_ID for OpenID auth"
-);
-assert(
-  typeof CLIENT_SECRET === "string" && CLIENT_SECRET,
-  "Missing CLIENT_SECRET for OpenID auth"
-);
 
 export const api = express.Router();
 
