@@ -5,6 +5,7 @@ import { addMockResponse } from "../__mocks__/openid-client"
 
 jest.mock("openid-client");
 
+
 addMockResponse(
   "UG_REST_BASE_URI/users/dummy",
   {

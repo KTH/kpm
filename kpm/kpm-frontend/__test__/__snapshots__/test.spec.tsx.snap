@@ -1,7 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<App /> Can be rendered 1`] = `
-<h1>
-  We are all KPM!
-</h1>
+<nav
+  className="kpm-menu"
+>
+  <ol>
+    <li>
+      <a
+        className=""
+        href="/profile"
+        onClick={[Function]}
+      >
+        Profile
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/schedule"
+        onClick={[Function]}
+      >
+        Schedule
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/studies"
+        onClick={[Function]}
+      >
+        Studies
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/teaching"
+        onClick={[Function]}
+      >
+        Teaching
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/programme"
+        onClick={[Function]}
+      >
+        Programme
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/groups"
+        onClick={[Function]}
+      >
+        Groups
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/services"
+        onClick={[Function]}
+      >
+        Services
+      </a>
+    </li>
+    <div
+      className="menu-spacer"
+    />
+    <li>
+      M
+    </li>
+    <li>
+      D
+    </li>
+    <li>
+      N
+    </li>
+  </ol>
+</nav>
 `;
