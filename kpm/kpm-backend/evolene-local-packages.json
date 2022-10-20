@@ -1,1 +1,4 @@
-{"kpm-api-common":{"path":"packages/kpm-api-common"},"kpm-backend-interface":{"path":"kpm/kpm-backend-interface"}}
+{
+  "kpm-api-common": { "path": "packages/kpm-api-common" },
+  "kpm-backend-interface": { "path": "kpm/kpm-backend-interface" }
+}

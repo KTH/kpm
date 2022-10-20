@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {
-  useLoaderData,
-} from "react-router-dom";
+import * as React from "react";
+import { useLoaderData } from "react-router-dom";
 import { MenuPane } from "../components/menu";
 
 export async function loaderProfile({ request }: any) {
@@ -18,5 +16,5 @@ export function Profile() {
     <MenuPane>
       <h2>Profile {msg}</h2>
     </MenuPane>
-  )
+  );
 }

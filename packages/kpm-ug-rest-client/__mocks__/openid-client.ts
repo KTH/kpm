@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+import assert from "node:assert/strict";
 
 const _mockResponses: { [index: string]: any } = {};
 
@@ -8,18 +8,12 @@ class Client {
   _grant_type?: string;
   _scope?: string;
 
-  constructor({
-    client_id,
-    client_secret
-  }: any) {
+  constructor({ client_id, client_secret }: any) {
     this._client_id = client_id;
     this._client_secret = client_secret;
   }
 
-  async grant({
-    grant_type,
-    scope
-  }: any) {
+  async grant({ grant_type, scope }: any) {
     this._grant_type = grant_type;
     this._scope = scope;
 
@@ -30,7 +24,10 @@ class Client {
   }
 
   async requestResource(path: string, token: string) {
-    assert(_mockResponses[path] !== undefined, `The requested path ${path} hasn't been mocked, check spelling.`);
+    assert(
+      _mockResponses[path] !== undefined,
+      `The requested path ${path} hasn't been mocked, check spelling.`
+    );
     return _mockResponses[path];
   }
 }
@@ -40,9 +37,8 @@ export class Issuer {
     return {
       Client,
       metadata: {
-        grant_types_supported: ["client_credentials"]
-      }
-
+        grant_types_supported: ["client_credentials"],
+      },
     };
   }
 }

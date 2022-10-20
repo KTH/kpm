@@ -1,13 +1,14 @@
 .kpm-studies-course,
 .kpm-teaching-course {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 0.5em;
 
-    h2, h3 {
-        font-size: 1em;
-        margin: 0;
-        padding: 0;
-    }
+  h2,
+  h3 {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+  }
 }

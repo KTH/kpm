@@ -1,6 +1,10 @@
 import "./config";
 import express from "express";
-import { loggingHandler, errorHandler, uncaughtExceptionCallback } from "kpm-api-common";
+import {
+  loggingHandler,
+  errorHandler,
+  uncaughtExceptionCallback,
+} from "kpm-api-common";
 import { name as APP_NAME } from "../package.json";
 import { api } from "./api";
 
@@ -9,7 +13,7 @@ const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
 
 const app = express();
 
-process.on('uncaughtException', uncaughtExceptionCallback);
+process.on("uncaughtException", uncaughtExceptionCallback);
 app.use(loggingHandler);
 app.use(PREFIX, api);
 app.use(errorHandler);
