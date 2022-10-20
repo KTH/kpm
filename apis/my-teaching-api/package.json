@@ -15,6 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/kth__reqvars": "^0.1.0",
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.1",
     "ts-node-dev": "^2.0.0",
