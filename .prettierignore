@@ -1,1 +1,10 @@
 package-lock.json
+
+# From here, everything is a copy of `.gitignore`
+
+.env
+node_modules
+.parcel-cache
+kpm/kpm-frontend/dist
+packages/evolene-local-packages/package-lock.json
+*.DS_Store
