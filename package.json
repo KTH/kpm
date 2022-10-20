@@ -3,8 +3,8 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all --parallel dev:*",
-    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages",
+    "dev": "npm-run-all -l --parallel dev:*",
+    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
     "/* ----------- */": "",
     "dev:my-canvas-rooms-api": "PORT=3001 npm run dev --workspace=my-canvas-rooms-api",

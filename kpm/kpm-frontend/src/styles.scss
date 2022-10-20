@@ -1,3 +1,5 @@
+@use "./panes/index.scss";
+
 body {
   padding: 0;
   margin: 0;
@@ -88,5 +90,31 @@ body {
   li {
     list-style: none;
     margin-bottom: 0.5em;
+  }
+}
+
+@keyframes kpmMenuLoadingAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.kpm-loading-indicator {
+  width: 100%;
+  height: 0.5rem;
+  background: blue;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+  position: absolute;
+
+  &.loading {
+    opacity: 1;
+    background: linear-gradient(-45deg, transparent, #eee, #4285f4, #eee);
+    background-size: 500% 300%;
+    animation: kpmMenuLoadingAnim 1.8s infinite alternate-reverse;
   }
 }

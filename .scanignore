@@ -3,6 +3,7 @@
 /apis/my-studies-api/package-lock.json
 /apis/my-teaching-api/package-lock.json
 /kpm/kpm-backend/package-lock.json
+/kpm/kpm-backend-interface/package-lock.json
 /kpm/kpm-frontend/package-lock.json
 /package-lock.json
 /packages/evolene-local-packages/package-lock.json

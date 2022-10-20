@@ -16,10 +16,13 @@ const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/api";
 export const app = express();
 
 process.on("uncaughtException", uncaughtExceptionCallback);
+<<<<<<< HEAD
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(sessionMiddleware);
+=======
+>>>>>>> main
 app.use(loggingHandler);
 app.use(PREFIX, auth);
 app.use(PREFIX, api);

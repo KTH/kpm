@@ -1,14 +1,13 @@
-import assert from 'node:assert/strict';
+import assert from "node:assert/strict";
 import { IncomingHttpHeaders } from "node:http";
 import { Client, Issuer, TokenSet } from "openid-client";
-
 
 export type TUGRestClient = {
   authServerDiscoveryURI: string;
   resourceBaseURI: string;
   clientId: string;
   clientSecret: string;
-}
+};
 
 export type TUGRestClientResponse<T> = {
   headers: IncomingHttpHeaders;
@@ -18,7 +17,7 @@ export type TUGRestClientResponse<T> = {
   statusMessage?: string | undefined;
   data?: string | undefined;
   json?: T;
-}
+};
 
 export class UGRestClient {
   private _authServerDiscoveryURI: string;
@@ -29,7 +28,12 @@ export class UGRestClient {
   private _client?: Client;
   private _accessTokenSet?: TokenSet;
 
-  constructor({ authServerDiscoveryURI, resourceBaseURI, clientId, clientSecret }: TUGRestClient) {
+  constructor({
+    authServerDiscoveryURI,
+    resourceBaseURI,
+    clientId,
+    clientSecret,
+  }: TUGRestClient) {
     this._authServerDiscoveryURI = authServerDiscoveryURI;
     this._resourceBaseURI = resourceBaseURI;
     this._clientId = clientId;
@@ -45,12 +49,15 @@ export class UGRestClient {
     const issuer = await Issuer.discover(this._authServerDiscoveryURI);
 
     const grantTypes = issuer.metadata.grant_types_supported as string[];
-    assert(grantTypes.find(v => v === "client_credentials"), "Auth server doesn't support client_credential grants");
+    assert(
+      grantTypes.find((v) => v === "client_credentials"),
+      "Auth server doesn't support client_credential grants"
+    );
 
     const { Client } = issuer;
     this._client = new Client({
       client_id: this._clientId,
-      client_secret: this._clientSecret
+      client_secret: this._clientSecret,
     });
 
     return this._client;
@@ -58,16 +65,23 @@ export class UGRestClient {
 
   private async getAccessToken(): Promise<string> {
     // Use cached value if available
-    if (this._accessTokenSet && (this._accessTokenSet.expires_at === undefined || this._accessTokenSet.expires_at > (Date.now() + 1000))) {
+    if (
+      this._accessTokenSet &&
+      (this._accessTokenSet.expires_at === undefined ||
+        this._accessTokenSet.expires_at > Date.now() + 1000)
+    ) {
       return this._accessTokenSet.access_token!;
     }
 
     const client = await this.getClient();
     const accessToken = await client.grant({
       grant_type: "client_credentials",
-      scope: "openid"
+      scope: "openid",
     });
-    assert(typeof accessToken.access_token === "string", "No access token provided by auth server");
+    assert(
+      typeof accessToken.access_token === "string",
+      "No access token provided by auth server"
+    );
     this._accessTokenSet = accessToken;
 
     return this._accessTokenSet.access_token!;
@@ -77,7 +91,11 @@ export class UGRestClient {
     // TODO: Add error handling
     const client = await this.getClient();
     const accessToken = await this.getAccessToken();
-    const { headers, method, statusCode, statusMessage, url, body } = await client.requestResource(`${this._resourceBaseURI}/${path}`, accessToken);
+    const { headers, method, statusCode, statusMessage, url, body } =
+      await client.requestResource(
+        `${this._resourceBaseURI}/${path}`,
+        accessToken
+      );
     const textBody = await new TextDecoder().decode(body);
 
     const outp = {
@@ -87,7 +105,7 @@ export class UGRestClient {
       statusMessage,
       url,
       data: textBody,
-    }
+    };
 
     try {
       const jsonBody = JSON.parse(textBody);
