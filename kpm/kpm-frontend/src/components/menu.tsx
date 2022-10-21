@@ -1,4 +1,19 @@
 import * as React from "react";
+import { CSSTransition } from "react-transition-group";
+
+export function MenuPaneBackdrop({ visible }: any) {
+  const nodeRef = React.useRef(null);
+  return (
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={visible}
+      timeout={500}
+      unmountOnExit
+      classNames="ModalBackdropAnim">
+      <div ref={nodeRef} className="modal-backdrop" />
+    </CSSTransition>
+  )
+}
 
 export function MenuPane({ children }: any) {
   return (

@@ -1,5 +1,6 @@
-.kpm-studies-course,
-.kpm-teaching-course {
+@use "./teaching.scss";
+
+.kpm-studies-course {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
