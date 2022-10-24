@@ -3,7 +3,7 @@
 @use "./panes";
 @use "./components";
 
-#app {
+#kpm-6cf53 {
   position: fixed;
   top: 0;
   left: 0;
@@ -16,7 +16,7 @@
   align-items: center;
 }
 
-.kpm-menu {
+#kpm-6cf53 .kpm-menu {
   background-color: var(--kpmMenuBg);
   color: var(--kpmMenuText);
   width: 100%;
@@ -55,7 +55,7 @@
 }
 
 // Typography in menu panes
-.modal-content {
+#kpm-6cf53 .modal-content {
   padding: calc(2 * var(--kpmPad));
 
   h1 {

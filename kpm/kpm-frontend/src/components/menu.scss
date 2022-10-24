@@ -1,9 +1,9 @@
-.menu-spacer {
+#kpm-6cf53 .menu-spacer {
   flex-shrink: 1;
   width: 100%;
 }
 
-.modal-backdrop {
+#kpm-6cf53 .modal-backdrop {
   position: absolute;
   z-index: -1;
   top: 0;
@@ -13,7 +13,7 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-.ModalBackdropAnim {
+#kpm-6cf53 .ModalBackdropAnim {
   &-enter {
     opacity: 0;
   }
@@ -33,7 +33,7 @@
   }
 }
 
-.modal {
+#kpm-6cf53 .modal {
   z-index: -1;
   display: block;
   position: relative;
@@ -53,6 +53,6 @@
   border-bottom-left-radius: 3px;
 }
 
-.modal-content {
+#kpm-6cf53 .modal-content {
   padding: calc(2 * var(--kpmPad));
 }
