@@ -1,9 +1,10 @@
 import * as React from "react";
-import { NavLink, Outlet, useLocation, useNavigation } from "react-router-dom";
+import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import { linkClassName } from "./components/utils";
 import { MenuPaneBackdrop, MenuSpacer } from "./components/menu";
 import { getRoutes } from './routes';
 import { LoadingIndicator } from "./components/loading";
+import { ToggleNavLink } from "./components/links";
 
 
 export function Menu({ hasStudies, hasTeaching }: any) {
@@ -19,43 +20,43 @@ export function Menu({ hasStudies, hasTeaching }: any) {
       <nav className="kpm-menu">
         <ol>
           <li>
-            <NavLink to="profile" className={linkClassName}>
+            <ToggleNavLink to="profile" className={linkClassName}>
               Profile
-            </NavLink>
+            </ToggleNavLink>
           </li>
           <li>
-            <NavLink to="schedule" className={linkClassName}>
+            <ToggleNavLink to="schedule" className={linkClassName}>
               Schedule
-            </NavLink>
+            </ToggleNavLink>
           </li>
           {hasStudies && (
             <li>
-              <NavLink to="studies" className={linkClassName}>
+              <ToggleNavLink to="studies" className={linkClassName}>
                 Studies
-              </NavLink>
+              </ToggleNavLink>
             </li>
           )}
           {hasTeaching && (
             <li>
-              <NavLink to="teaching" className={linkClassName}>
+              <ToggleNavLink to="teaching" className={linkClassName}>
                 Teaching
-              </NavLink>
+              </ToggleNavLink>
             </li>
           )}
           <li>
-            <NavLink to="programme" className={linkClassName}>
+            <ToggleNavLink to="programme" className={linkClassName}>
               Programme
-            </NavLink>
+            </ToggleNavLink>
           </li>
           <li>
-            <NavLink to="groups" className={linkClassName}>
+            <ToggleNavLink to="groups" className={linkClassName}>
               Groups
-            </NavLink>
+            </ToggleNavLink>
           </li>
           <li>
-            <NavLink to="services" className={linkClassName}>
+            <ToggleNavLink to="services" className={linkClassName}>
               Services
-            </NavLink>
+            </ToggleNavLink>
           </li>
           <MenuSpacer />
           <li>M</li>
@@ -68,3 +69,4 @@ export function Menu({ hasStudies, hasTeaching }: any) {
     </React.Fragment>
   );
 }
+
