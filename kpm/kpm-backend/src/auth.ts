@@ -38,7 +38,7 @@ async function getOpenIdClient() {
 }
 
 // Example: /kpm/auth/login?nextUrl=https://kth.se&prompt=none
-auth.get("/auth/login", async function checkHandler(req, res) {
+auth.get("/login", async function checkHandler(req, res) {
   const nextUrl = req.query.nextUrl;
   assert(typeof nextUrl === "string", "nextUrl should be a string");
 
@@ -63,7 +63,7 @@ auth.get("/auth/login", async function checkHandler(req, res) {
   res.redirect(url);
 });
 
-auth.post("/auth/callback", async function callbackHandler(req, res, next) {
+auth.post("/callback", async function callbackHandler(req, res, next) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
   const nextUrl = req.query.nextUrl;
