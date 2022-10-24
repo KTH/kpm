@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Outlet, useLocation, useNavigation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import { linkClassName } from "./components/utils";
 import { MenuPaneBackdrop, MenuSpacer } from "./components/menu";
 import { getRoutes } from './routes';
@@ -9,14 +9,15 @@ import { ToggleNavLink } from "./components/links";
 
 export function Menu({ hasStudies, hasTeaching }: any) {
   const navigation = useNavigation();
-  const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const hasMatch: boolean =
     !!getRoutes().find((route) => route.path === location.pathname)
 
   return (
     <React.Fragment>
-      <MenuPaneBackdrop visible={hasMatch} />
+      <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
       <nav className="kpm-menu">
         <ol>
           <li>

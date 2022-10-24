@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CSSTransition } from "react-transition-group";
 
-export function MenuPaneBackdrop({ visible }: any) {
+export function MenuPaneBackdrop({ visible, onClose }: any) {
   const nodeRef = React.useRef(null);
   return (
     <CSSTransition
@@ -10,7 +10,12 @@ export function MenuPaneBackdrop({ visible }: any) {
       timeout={500}
       unmountOnExit
       classNames="ModalBackdropAnim">
-      <div ref={nodeRef} className="modal-backdrop" />
+      <div ref={nodeRef} className="modal-backdrop" onClick={((e) => {
+        if (onClose) {
+          e.preventDefault();
+          onClose();
+        }
+      })}/>
     </CSSTransition>
   )
 }
