@@ -11,6 +11,7 @@ declare module "express-session" {
   }
 }
 
+// Should these variables (PREFIX, PORT, PROXY_HOST) be defined in one place?
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
