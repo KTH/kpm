@@ -1,9 +1,8 @@
 import * as React from "react";
-import { NavLink, useNavigate, useLocation, useNavigation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 export function ToggleNavLink({ children, to, onClick, ...props } : any) {
     const navigate = useNavigate();
-    const navigation = useNavigation();
     const location = useLocation();
     const isOpen = `/${to}` === location.pathname;
   
@@ -15,4 +14,3 @@ export function ToggleNavLink({ children, to, onClick, ...props } : any) {
       }} {...props}>{children}</NavLink>
     )
   }
-  
