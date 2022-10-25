@@ -36,58 +36,95 @@ function Course({ courseCode, courseRounds }: any) {
 
   const courseName = "[course name missing]";
   const aboutCourseUrl = "[aboutCourseUrl missing]"
-  const currentCourseRounds = getMostImportantCourseRounds(courseRounds);
+  // TODO: These should be changed to course rooms, check backend
+  const { current, other } = filterCanvasRooms(courseRounds);
+  const currentTerm = "HT2022";
 
   return (
     <div className="kpm-teaching-course">
       <h2>{courseCode}: {courseName}</h2>
       <a href={aboutCourseUrl}>Om kursen</a>
       <hr />
-      <CourseRoundList courseRounds={currentCourseRounds} />
+      <CanvasRoomShortList rooms={current} />
+      <CanvasRoomExpandedList rooms={other} />
       <hr />
       <CollapsableGroup title="Administrera kurs">
-        <GroupItem>One</GroupItem>
-        <GroupItem>Two</GroupItem>
-        <GroupItem>Three</GroupItem>
+        <GroupItem><a href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}>Administrera assistenter</a></GroupItem>
+        <GroupItem><a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>Hantera Omgångar/grupper</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}>Kursdeltagare</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>Kursinformation i Kopps</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}>Redigera introduktion till kursen</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}>Skapa och publicera kurs-PM</a></GroupItem>
+        <GroupItem><a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>Kursvärdering</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}>Publicera ny kursanalys</a></GroupItem>
+        <GroupItem><a href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}>Se provresultat</a></GroupItem>
+        <GroupItem><a href={`https://www.kth.se/social/course/${courseCode}/students/`}>Studentgruppen / Prenumeranter</a></GroupItem>
+        <GroupItem><a href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}>Sök tentamen</a></GroupItem>
       </CollapsableGroup>
     </div>
   );
 }
 
-function CourseRoundList({ courseRounds }: any) {
+function CanvasRoomShortList({ rooms }: any) {
   return (
     <ul>
-      {courseRounds.map((course: any) => {
-        const { year, role, term, round_id } = course ?? {};
+      {rooms.map(({ year, role, term, round_id }: any) => {
         const key = `${year}-${term}-${round_id}-${role}`;
-        return (
-          <li key={key} className="kpm-teaching-course-round">
-            <a href={"#todo"}>{formatTerm(term)}{year} ({round_id})</a>
-          </li>
-        )
+        return <li><CanvasRoomItem key={key} url={"#TODO"} term={term} year={year} roundId={round_id} /></li>
       })}
     </ul>
   )
 }
 
-function getMostImportantCourseRounds(courseRounds: TTeachingCourse[]): TTeachingCourse[] {
+function CanvasRoomExpandedList({ rooms }: any) {
+  // Only show this if it has any items
+  if (rooms.length === 0) return null;
+
+  return (
+    <CollapsableGroup title="Äldre kursrum">
+      {rooms.map(({ year, role, term, round_id }: any) => {
+        const key = `${year}-${term}-${round_id}-${role}`;
+        return <GroupItem><CanvasRoomItem key={key} url={"#TODO"} term={term} year={year} roundId={round_id} /></GroupItem>
+      })}
+    </CollapsableGroup>
+  )
+}
+
+function CanvasRoomItem({ url, term, year, roundId }: any) {
+  // This is a Component to force consistency
+  return <a href={url}>{formatTerm(term)}{year} ({roundId})</a>;
+}
+
+function filterCanvasRooms(rooms: TTeachingCourse[]): { current: TTeachingCourse[], other: TTeachingCourse[] } {
   const now = new Date();
-  const outp = courseRounds.filter((c: any) => {
-    return (
-      c.year === now.getFullYear().toString()
-    );
+  const outp = [...rooms];
+
+  outp.sort((a: TTeachingCourse, b: TTeachingCourse) => {
+    try {
+      return (parseInt(a.year) - parseInt(b.year)) % 1;
+    } catch (e) {
+      return 0;
+    }
   });
 
-  if (outp.length > 4) {
-    return outp.slice(0, 4);
+  if (outp.length <= 4) {
+    return {
+      current: outp,
+      other: [],
+    };
   }
 
   if (outp.length === 0) {
-    const len = courseRounds.length;
-    return courseRounds.slice(0, (len > 4 ? 4 : len));
+    return {
+      current: [],
+      other: [],
+    };
   }
 
-  return courseRounds;
+  return {
+    current: outp.slice(0, 4),
+    other: outp.slice(4),
+  };
 }
 
 function formatTerm(term: string) {
