@@ -37,20 +37,27 @@
   z-index: -1;
   display: block;
   position: relative;
+
+  // Override some browser defaults
   border: unset;
-  width: calc(100% - 4 * var(--kpmMargin));
-  padding: 0;
-  background-color: var(--kpmPaneBg);
-  color: var(--kpmPaneText);
   left: unset;
   right: unset;
   margin: unset;
-  // flex-grow: 1;
   overflow-y: auto;
 
+  // Leave som space to the sides of modal on desktop
+  width: calc(100% - 4 * var(--kpmMargin));
+  max-width: 80rem;
+
+  // Styling
+  padding: 0;
+  background-color: var(--kpmPaneBg);
+  color: var(--kpmPaneText);
+  
   margin-bottom: var(--kpmMargin);
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
+
 }
 
 #kpm-6cf53 .modal-content {
