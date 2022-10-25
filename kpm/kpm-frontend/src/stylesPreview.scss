@@ -6,6 +6,11 @@ body {
 
   padding: 0;
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.2);
   height: 200em;
+
+  background: repeating-linear-gradient(45deg,
+      #606dbc22,
+      #606dbc22 10px,
+      #46529822 10px,
+      #46529822 20px);
 }
