@@ -7,11 +7,11 @@
     "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
     "/* ----------- */": "",
-    "dev:my-canvas-rooms-api": "PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
-    "dev:my-teaching-api": "PORT=3002 npm run dev --workspace=my-teaching-api",
-    "dev:my-studies-api": "PORT=3003 npm run dev --workspace=my-studies-api",
-    "dev:kpm-backend": "PORT=3000 npm run dev --workspace=kpm-backend",
-    "dev:kpm-frontend": "npm run dev --workspace=kpm-frontend"
+    "dev:my-canvas-rooms-api": "FORCE_COLOR=1 PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
+    "dev:my-teaching-api": "FORCE_COLOR=1 PORT=3002 npm run dev --workspace=my-teaching-api",
+    "dev:my-studies-api": "FORCE_COLOR=1 PORT=3003 npm run dev --workspace=my-studies-api",
+    "dev:kpm-backend": "FORCE_COLOR=1 PORT=3000 npm run dev --workspace=kpm-backend",
+    "dev:kpm-frontend": "FORCE_COLOR=1 npm run dev --workspace=kpm-frontend"
   },
   "repository": {
     "type": "git",
