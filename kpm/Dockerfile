@@ -22,7 +22,7 @@ COPY ["kpm-backend/evolene_local_packages", "evolene_local_packages"]
 
 RUN npm ci --omit=dev
 
-FROM node:14-alpine AS production
+FROM node:16-alpine AS production
 WORKDIR /usr/src/app
 COPY --from=frontend /usr/src/app/kpm-frontend/distProd kpm-frontend/distProd
 COPY --from=backend /usr/src/app/kpm-backend/node_modules kpm-backend/node_modules
