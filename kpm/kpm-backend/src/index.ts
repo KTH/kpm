@@ -1,6 +1,6 @@
 import "./config";
 import express from "express";
-import { loggingHandler, errorHandler } from "kpm-api-common";
+import { loggingHandler } from "kpm-api-common";
 import { api } from "./api";
 import { auth } from "./auth";
 import { sessionMiddleware } from "./session";
