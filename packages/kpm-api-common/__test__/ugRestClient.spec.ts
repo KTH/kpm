@@ -1,9 +1,5 @@
-import { describe, expect, jest, test } from "@jest/globals";
-import {
-  errorHandler,
-  loggingHandler,
-  uncaughtExceptionCallback,
-} from "../src";
+import { describe, expect, test } from "@jest/globals";
+import { errorHandler, loggingHandler } from "../src";
 
 describe("API", () => {
   test("errorHandler exists", async () => {
@@ -11,8 +7,5 @@ describe("API", () => {
   });
   test("loggingHandler exists", async () => {
     expect(loggingHandler).toBeDefined();
-  });
-  test("uncaughtExceptionCallback exists", async () => {
-    expect(uncaughtExceptionCallback).toBeDefined();
   });
 });
