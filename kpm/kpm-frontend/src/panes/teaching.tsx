@@ -61,19 +61,13 @@ function CourseRoundList({ courseRounds }: any) {
         const { year, role, term, round_id } = course ?? {};
         const key = `${year}-${term}-${round_id}-${role}`;
         return (
-          <CourseRound key={key} url={"#todo"} year={year} term={term} roundId={round_id} />
+          <li key={key} className="kpm-teaching-course-round">
+            <a href={"#todo"}>{formatTerm(term)}{year} ({round_id})</a>
+          </li>
         )
       })}
     </ul>
   )
-}
-
-function CourseRound({ url, year, term, roundId }: any) {
-  return (
-    <li className="kpm-teaching-course-round">
-      <a href={url}>{formatTerm(term)}{year} ({roundId})</a>
-    </li>
-  );
 }
 
 function getMostImportantCourseRounds(courseRounds: TTeachingCourse[]): TTeachingCourse[] {
@@ -92,7 +86,7 @@ function getMostImportantCourseRounds(courseRounds: TTeachingCourse[]): TTeachin
     const len = courseRounds.length;
     return courseRounds.slice(0, (len > 4 ? 4 : len));
   }
-  
+
   return courseRounds;
 }
 
