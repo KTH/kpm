@@ -38,7 +38,3 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
     </dialog>
   );
 }
-
-export function MenuSpacer() {
-  return <div className="menu-spacer" />;
-}
