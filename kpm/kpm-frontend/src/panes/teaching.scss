@@ -1,35 +1,27 @@
 #kpm-6cf53 .kpm-teaching {
-    display: flex;
-    flex-direction: row;
-    gap: var(--kpmMargin);
+  display: flex;
+  flex-flow: row wrap;
+  gap: var(--kpmMargin);
 
-    .kpm-col {
-        display: flex;
-        flex-grow: 0;
-        flex-direction: column;
-        width: calc(100% / 3);
-        gap: var(--kpmMargin);
+  .kpm-teaching-course {
+    width: calc(50% - var(--kpmMargin) / 2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: var(--kpmPad);
+    background-color: var(--kpmGroupBg);
+
+    h2 {
+      font-size: 1em;
+      margin: 0;
+      padding: 0;
     }
 
-    .kpm-teaching-course {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5em;
-        padding: var(--kpmPad);
-        background-color: var(--kpmGroupBg);
-      
-        h2 {
-          font-size: 1em;
-          margin: 0;
-          padding: 0;
-        }
-
-        hr {
-          height: 1px;
-          background: var(--kpmGroupFg);
-          width: calc(100% - 2 * var(--kpmPad));
-          border: 0;
-        }
-      }
-      
+    hr {
+      height: 1px;
+      background: var(--kpmGroupFg);
+      width: 100%;
+      border: 0;
+    }
+  }
 }

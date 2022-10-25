@@ -15,37 +15,18 @@ export async function loaderTeaching({ request }: any): Promise<APITeaching> {
 export function Teaching() {
   const { courses } = useLoaderData() as APITeaching;
 
-  // Create two columns of courses, left to right
-  const courseKeyCols: Array<Array<string>> = [
-    [], []
-  ];
-  Object.keys(courses).forEach((key, i) => { courseKeyCols[i % 2].push(key) });
-
   return (
     <MenuPane>
       <div className="kpm-teaching">
-        <div className="kpm-col">
-          {courseKeyCols[0].map((course_code: string) => {
-            return (
-              <Course
-                key={course_code}
-                courseCode={course_code}
-                courseRounds={courses[course_code]}
-              />
-            );
-          })}
-        </div>
-        <div className="kpm-col">
-          {courseKeyCols[1].map((course_code: string) => {
-            return (
-              <Course
-                key={course_code}
-                courseCode={course_code}
-                courseRounds={courses[course_code]}
-              />
-            );
-          })}
-        </div>
+        {Object.keys(courses).map((course_code: string) => {
+          return (
+            <Course
+              key={course_code}
+              courseCode={course_code}
+              courseRounds={courses[course_code]}
+            />
+          );
+        })}
       </div>
     </MenuPane>
   );
