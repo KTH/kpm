@@ -1,37 +1,7 @@
 #kpm-6cf53 .kpm-collapsable-group {
-
-  h2 {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .kpm-caret {
-    height: .6em;
-    margin-right: .5em;
-    transition: transform .2s ease-in;
-    &.open {
-      transform: rotate(90deg);
-    }
-  }
-
   .kpm-link-list {
     margin: 0;
     overflow-y: hidden;
-
-    // This allows us to animate the height of the list to
-    // avoid content shift
-    .kpm-anim {
-      opacity: 0;
-      margin-bottom: -100%;
-      transition: all .4s;
-
-      &.open {
-        opacity: 1;
-        margin-bottom: 0;
-      }
-    }
 
     li {
       margin: 0;
