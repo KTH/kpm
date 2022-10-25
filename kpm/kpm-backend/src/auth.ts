@@ -42,7 +42,7 @@ async function getOpenIdClient() {
 auth.get("/login", async function checkHandler(req, res) {
   const nextUrl = req.query.nextUrl;
 
-  if (nextUrl !== "string") {
+  if (typeof nextUrl !== "string") {
     // TODO: better error handling
     return res.status(400).send("nextUrl should be a string");
   }
