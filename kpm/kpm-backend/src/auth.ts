@@ -41,7 +41,11 @@ async function getOpenIdClient() {
 // Example: /kpm/auth/login?nextUrl=https://kth.se&prompt=none
 auth.get("/login", async function checkHandler(req, res) {
   const nextUrl = req.query.nextUrl;
-  assert(typeof nextUrl === "string", "nextUrl should be a string");
+
+  if (nextUrl !== "string") {
+    // TODO: better error handling
+    return res.status(400).send("nextUrl should be a string");
+  }
 
   // prompt should have value "none". Otherwise it is interpreted as `undefined`
   const prompt = req.query.prompt === "none" ? "none" : undefined;
