@@ -4,7 +4,7 @@
   "description": "API for which courses I am studying, KPM.",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/index.ts",
+    "dev": "ts-node-dev --respawn src/index.ts | pino-pretty -e options,response -o '{msg}' --ignore options,pid,hostname --singleLine --translateTime 'HH:MM:ss.l'",
     "start": "ts-node --transpileOnly src/index.ts",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/kth__reqvars": "^0.1.0",
+    "pino-pretty": "^9.1.1",
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.1",
     "ts-node-dev": "^2.0.0",
@@ -28,6 +29,7 @@
     "kpm-api-common": "^0.1.0",
     "kpm-ug-rest-client": "^0.1.0",
     "openid-client": "^5.1.9",
+    "skog": "^3.0.2",
     "ts-node": "^10.9.1"
   }
 }
