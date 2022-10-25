@@ -20,39 +20,51 @@ api.get("/", (req, res) => {
   });
 });
 
-api.get("/canvas-rooms", async (req, res) => {
-  const { rooms } = await got
-    .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
-      responseType: "json",
-    })
-    .then((r) => r.body);
+api.get("/canvas-rooms", async (req, res, next) => {
+  try {
+    const { rooms } = await got
+      .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
+        responseType: "json",
+      })
+      .then((r) => r.body);
 
-  res.send({
-    rooms,
-  } as APICanvasRooms);
+    res.send({
+      rooms,
+    } as APICanvasRooms);
+  } catch (err) {
+    next(err);
+  }
 });
 
-api.get("/teaching", async (req, res) => {
-  const courses = await got
-    .get<any>(`${MY_TEACHING_API_URI}/user/u1famwov`, {
-      responseType: "json",
-    })
-    .then((r) => r.body);
+api.get("/teaching", async (req, res, next) => {
+  try {
+    const courses = await got
+      .get<any>(`${MY_TEACHING_API_URI}/user/u1famwov`, {
+        responseType: "json",
+      })
+      .then((r) => r.body);
 
-  res.send({
-    courses,
-  } as APITeaching);
+    res.send({
+      courses,
+    } as APITeaching);
+  } catch (err) {
+    next(err);
+  }
 });
 
-api.get("/studies", async (req, res) => {
-  const { courses, programmes } = await got
-    .get<any>(`${MY_STUDIES_API_URI}/user/u1famwov`, {
-      responseType: "json",
-    })
-    .then((r) => r.body);
+api.get("/studies", async (req, res, next) => {
+  try {
+    const { courses, programmes } = await got
+      .get<any>(`${MY_STUDIES_API_URI}/user/u1famwov`, {
+        responseType: "json",
+      })
+      .then((r) => r.body);
 
-  res.send({
-    courses,
-    programmes,
-  } as APIStudies);
+    res.send({
+      courses,
+      programmes,
+    } as APIStudies);
+  } catch (err) {
+    next(err);
+  }
 });
