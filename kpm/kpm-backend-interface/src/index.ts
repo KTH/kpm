@@ -25,6 +25,7 @@ export type TCanvasRoom = {
 };
 
 export type TTeachingCourse = {
+  course_code: string;
   title: { sv: string; en: string };
   credits: number;
   creditUnitAbbr: string; // usually "hp", check other values!

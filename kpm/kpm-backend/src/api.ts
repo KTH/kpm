@@ -5,6 +5,7 @@ import {
   APITeaching,
   APICanvasRooms,
   TTeachingCourse,
+  TTeachingRole,
 } from "kpm-backend-interface";
 
 const MY_CANVAS_ROOMS_API_URI =
@@ -50,9 +51,12 @@ api.get("/teaching", async (req, res, next) => {
   const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
     const teaching = await got
-      .get<any>(`${MY_TEACHING_API_URI}/user/${user}`, {
-        responseType: "json",
-      })
+      .get<Record<string, TTeachingRole[]>>(
+        `${MY_TEACHING_API_URI}/user/${user}`,
+        {
+          responseType: "json",
+        }
+      )
       .then((r) => r.body);
 
     const { rooms } = await got
@@ -65,17 +69,16 @@ api.get("/teaching", async (req, res, next) => {
       .then((r) => r.body);
 
     let courses: Record<string, TTeachingCourse> = {};
-    for (let course_code in teaching) {
-      if (course_code != "-") {
-        const kopps = await getCourseInfo(course_code);
-        courses[course_code] = {
-          title: kopps.title,
-          credits: kopps.credits,
-          creditUnitAbbr: kopps.creditUnitAbbr,
-          roles: teaching[course_code],
-          rooms: rooms[course_code],
-        };
-      }
+    for (let [course_code, roles] of Object.entries(teaching)) {
+      const kopps = await getCourseInfo(course_code);
+      courses[course_code] = {
+        course_code: course_code,
+        title: kopps.title,
+        credits: kopps.credits,
+        creditUnitAbbr: kopps.creditUnitAbbr,
+        roles: roles,
+        rooms: rooms[course_code],
+      };
     }
 
     res.send({ courses });
