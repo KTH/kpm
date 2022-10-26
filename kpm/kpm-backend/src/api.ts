@@ -69,11 +69,18 @@ api.get("/teaching", async (req, res, next) => {
       .then((r) => r.body);
 
     const teaching = await teaching_fut;
+
+    const kopps_futs = Object.assign(
+      {},
+      ...Object.keys(teaching).map((course_code) => ({
+        [course_code]: getCourseInfo(course_code),
+      }))
+    );
     const { rooms } = await rooms_fut;
 
     let courses: Record<string, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching)) {
-      const kopps = await getCourseInfo(course_code);
+      const kopps = await kopps_futs[course_code];
       courses[course_code] = {
         course_code: course_code,
         title: kopps.title,
