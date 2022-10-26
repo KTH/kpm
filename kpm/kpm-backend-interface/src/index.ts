@@ -1,15 +1,18 @@
 export type APICanvasRooms = {
-  rooms: { [index: string]: TCanvasRoom };
+  rooms: { [index: TCourseCode]: TCanvasRoom };
 };
 
 export type APITeaching = {
-  courses: Record<string, TTeachingCourse>;
+  courses: Record<TCourseCode, TTeachingCourse>;
 };
 
 export type APIStudies = {
   courses: TStudiesCourse[];
   programmes: TStudiesProgramme[];
 };
+
+
+export type TCourseCode = string;
 
 // QUESTION: Should we import types from the API-packages? Should these types be moved to separate packages?
 // Same as type Link in my-canvas-rooms-api/src/api.ts
@@ -25,7 +28,7 @@ export type TCanvasRoom = {
 };
 
 export type TTeachingCourse = {
-  course_code: string;
+  course_code: TCourseCode;
   title: { sv: string; en: string };
   credits: number;
   creditUnitAbbr: string; // usually "hp", check other values!
