@@ -11,7 +11,6 @@ export type APIStudies = {
   programmes: TStudiesProgramme[];
 };
 
-
 export type TCourseCode = string;
 
 // QUESTION: Should we import types from the API-packages? Should these types be moved to separate packages?
