@@ -27,7 +27,8 @@
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
-    "evolene-local-packages": "^0.1.0"
+    "evolene-local-packages": "^0.1.0",
+    "lightningcss": "^1.16.0"
   },
   "workspaces": [
     "packages/*",
