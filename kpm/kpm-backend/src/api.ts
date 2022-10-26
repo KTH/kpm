@@ -50,7 +50,7 @@ api.get("/canvas-rooms", async (req, res, next) => {
 api.get("/teaching", async (req, res, next) => {
   const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
-    const teaching = await got
+    const teaching_fut = got
       .get<Record<string, TTeachingRole[]>>(
         `${MY_TEACHING_API_URI}/user/${user}`,
         {
@@ -59,7 +59,7 @@ api.get("/teaching", async (req, res, next) => {
       )
       .then((r) => r.body);
 
-    const { rooms } = await got
+    const rooms_fut = got
       .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
         responseType: "json",
         headers: {
@@ -67,6 +67,9 @@ api.get("/teaching", async (req, res, next) => {
         },
       })
       .then((r) => r.body);
+
+    const teaching = await teaching_fut;
+    const { rooms } = await rooms_fut;
 
     let courses: Record<string, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching)) {
