@@ -4,6 +4,8 @@ import { APITeaching, TTeachingCourse } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { CollapsableGroup, GroupItem } from "../components/groups";
 
+import "./teaching.scss";
+
 export async function loaderTeaching({ request }: any): Promise<APITeaching> {
   const res = await fetch("/kpm/api/teaching", {
     signal: request.signal,

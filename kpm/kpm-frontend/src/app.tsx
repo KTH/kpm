@@ -3,6 +3,8 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
 
+import "./app.scss";
+
 type TCreateRouterProps = {
   hasStudies: boolean;
   hasTeaching: boolean;

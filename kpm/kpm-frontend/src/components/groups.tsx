@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import "./groups.scss";
+
 export function CollapsableGroup({ title, children, defaultOpen = false }: any) {
   return (
     <details className="kpm-collapsable-group">
