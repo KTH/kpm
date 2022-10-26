@@ -8,7 +8,13 @@
 
   &.loading {
     opacity: 1;
-    background: linear-gradient(-45deg, transparent, #eee, var(--kpmLink), #eee);
+    background: linear-gradient(
+      -45deg,
+      transparent,
+      #eee,
+      var(--kpmLink),
+      #eee
+    );
     background-size: 500% 300%;
     animation: kpmMenuLoadingAnim 1.8s infinite alternate-reverse;
   }

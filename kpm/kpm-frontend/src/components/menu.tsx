@@ -11,15 +11,20 @@ export function MenuPaneBackdrop({ visible, onClose }: any) {
       in={visible}
       timeout={500}
       unmountOnExit
-      classNames="ModalBackdropAnim">
-      <div ref={nodeRef} className="modal-backdrop" onClick={((e) => {
-        if (onClose) {
-          e.preventDefault();
-          onClose();
-        }
-      })}/>
+      classNames="ModalBackdropAnim"
+    >
+      <div
+        ref={nodeRef}
+        className="modal-backdrop"
+        onClick={(e) => {
+          if (onClose) {
+            e.preventDefault();
+            onClose();
+          }
+        }}
+      />
     </CSSTransition>
-  )
+  );
 }
 
 export function MenuPane({ children }: any) {

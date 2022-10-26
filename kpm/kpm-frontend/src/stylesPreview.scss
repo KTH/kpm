@@ -8,9 +8,11 @@ body {
   margin: 0;
   height: 200em;
 
-  background: repeating-linear-gradient(45deg,
-      #606dbc22,
-      #606dbc22 10px,
-      #46529822 10px,
-      #46529822 20px);
+  background: repeating-linear-gradient(
+    45deg,
+    #606dbc22,
+    #606dbc22 10px,
+    #46529822 10px,
+    #46529822 20px
+  );
 }

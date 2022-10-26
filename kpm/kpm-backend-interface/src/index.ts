@@ -3,7 +3,7 @@ export type APICanvasRooms = {
 };
 
 export type APITeaching = {
-  courses: { [index: string] : TTeachingCourse[] };
+  courses: { [index: string]: TTeachingCourse[] };
 };
 
 export type APIStudies = {
