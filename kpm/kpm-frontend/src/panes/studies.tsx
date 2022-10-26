@@ -3,6 +3,8 @@ import { useLoaderData } from "react-router-dom";
 import { APIStudies } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 
+import "./studies.scss";
+
 export async function loaderStudies({ request }: any): Promise<APIStudies> {
   const res = await fetch("/kpm/api/studies", {
     signal: request.signal,

@@ -1,0 +1,68 @@
+#kpm-6cf53 .modal-backdrop {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45));
+}
+
+#kpm-6cf53 .ModalBackdropAnim {
+  &-enter {
+    opacity: 0;
+  }
+
+  &-enter-active {
+    opacity: 1;
+    transition: opacity 0.2s ease-out;
+  }
+
+  &-exit {
+    opacity: 1;
+  }
+
+  &-exit-active {
+    opacity: 0;
+    transition: opacity 0.15s ease-in;
+  }
+}
+
+#kpm-6cf53 .modal {
+  z-index: -1;
+  display: block;
+  position: relative;
+
+  // Override some browser defaults
+  border: unset;
+  left: unset;
+  right: unset;
+  margin: unset;
+  overflow-y: auto;
+
+  // Leave som space to the sides of modal on desktop
+  width: calc(100% - 4 * var(--kpmMargin));
+  max-width: 80rem;
+
+  // Styling
+  padding: 0;
+  background-color: var(--kpmPaneBg);
+  color: var(--kpmPaneText);
+
+  margin-bottom: var(--kpmMargin);
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+
+  a {
+    color: var(--kpmLink);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+#kpm-6cf53 .modal-content {
+  padding: calc(2 * var(--kpmPad));
+}

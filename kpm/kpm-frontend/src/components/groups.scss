@@ -1,0 +1,15 @@
+#kpm-6cf53 .kpm-collapsable-group {
+  .kpm-link-list {
+    margin: 0;
+    overflow-y: hidden;
+
+    li {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  summary {
+    cursor: pointer;
+  }
+}
