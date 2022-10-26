@@ -1,5 +1,6 @@
 import express from "express";
 import got from "got";
+import NodeCache from "node-cache";
 import {
   APIStudies,
   APITeaching,
@@ -115,7 +116,20 @@ api.get("/studies", async (req, res, next) => {
   }
 });
 
+// kopps_cache is a local cache of course_code -> kopps info object.
+// Note that we don't cache the entire (much larger) kopps response,
+// but only the fields we care about.
+// https://github.com/node-cache/node-cache
+// The standard ttl is given in seconds, I guess anything between 12
+// and 48 hours should be ok, maybe avoid purging stuff at the same
+// time every day by using 40 hours.
+const kopps_cache = new NodeCache({ stdTTL: 40 * 3600, useClones: false });
+
 async function getCourseInfo(course_code: TCourseCode) {
+  const result = kopps_cache.get(course_code);
+  if (result) {
+    return result;
+  }
   const { title, credits, creditUnitAbbr } = await got
     .get<{
       title: { sv: string; en: string };
@@ -125,5 +139,7 @@ async function getCourseInfo(course_code: TCourseCode) {
       responseType: "json",
     })
     .then((r) => r.body);
-  return { title, credits, creditUnitAbbr };
+  const info = { title, credits, creditUnitAbbr };
+  kopps_cache.set(course_code, info);
+  return info;
 }
