@@ -1,6 +1,7 @@
 import express from "express";
 import got from "got";
 import NodeCache from "node-cache";
+import log from "skog";
 import {
   APIStudies,
   APITeaching,
@@ -126,20 +127,28 @@ api.get("/studies", async (req, res, next) => {
 const kopps_cache = new NodeCache({ stdTTL: 40 * 3600, useClones: false });
 
 async function getCourseInfo(course_code: TCourseCode) {
-  const result = kopps_cache.get(course_code);
-  if (result) {
-    return result;
+  try {
+    const result = kopps_cache.get(course_code);
+    if (result) {
+      return result;
+    }
+    const { title, credits, creditUnitAbbr } = await got
+      .get<{
+        title: { sv: string; en: string };
+        credits: number;
+        creditUnitAbbr: string;
+      }>(`${KOPPS_API}/course/${course_code}`, {
+        responseType: "json",
+      })
+      .then((r) => r.body);
+    const info = { title, credits, creditUnitAbbr };
+    kopps_cache.set(course_code, info);
+    return info;
+  } catch (err) {
+    log.error(err, `Failed to get kopps data for ${course_code}`);
+    // Ugly but type-correct fallback, so things don't crash.
+    // This is not cached!  Or should we cache it for a few minutes to
+    // give kopps a chanse to start if it's broken?
+    return { title: { sv: "-", en: "-" }, credits: 0, creditUnitAbbr: "-" };
   }
-  const { title, credits, creditUnitAbbr } = await got
-    .get<{
-      title: { sv: string; en: string };
-      credits: number;
-      creditUnitAbbr: string;
-    }>(`${KOPPS_API}/course/${course_code}`, {
-      responseType: "json",
-    })
-    .then((r) => r.body);
-  const info = { title, credits, creditUnitAbbr };
-  kopps_cache.set(course_code, info);
-  return info;
 }
