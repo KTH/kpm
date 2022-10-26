@@ -3,7 +3,7 @@ export type APICanvasRooms = {
 };
 
 export type APITeaching = {
-  courses: { [index: string]: TTeachingCourse[] };
+  courses: Record<string, TTeachingCourse>;
 };
 
 export type APIStudies = {
@@ -25,6 +25,14 @@ export type TCanvasRoom = {
 };
 
 export type TTeachingCourse = {
+  title: { sv: string; en: string };
+  credits: number;
+  creditUnitAbbr: string; // usually "hp", check other values!
+  roles: TTeachingRole[];
+  rooms: TCanvasRoom[];
+};
+
+export type TTeachingRole = {
   role: "courseresponsible" | "teachers" | "assistants" | "examiner";
   round_id: string;
   term: "1" | "2";

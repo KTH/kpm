@@ -1,6 +1,11 @@
 import express from "express";
 import got from "got";
-import { APIStudies, APITeaching, APICanvasRooms } from "kpm-backend-interface";
+import {
+  APIStudies,
+  APITeaching,
+  APICanvasRooms,
+  TTeachingCourse,
+} from "kpm-backend-interface";
 
 const MY_CANVAS_ROOMS_API_URI =
   process.env.MY_CANVAS_ROOMS_API_URI ||
@@ -10,6 +15,7 @@ const MY_TEACHING_API_URI =
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
 const CANVAS_TOKEN = process.env.CANVAS_TOKEN;
+const KOPPS_API = "https://api.kth.se/api/kopps/v2";
 
 export const api = express.Router();
 
@@ -41,16 +47,38 @@ api.get("/canvas-rooms", async (req, res, next) => {
 });
 
 api.get("/teaching", async (req, res, next) => {
+  const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
-    const courses = await got
-      .get<any>(`${MY_TEACHING_API_URI}/user/u1famwov`, {
+    const teaching = await got
+      .get<any>(`${MY_TEACHING_API_URI}/user/${user}`, {
         responseType: "json",
       })
       .then((r) => r.body);
 
-    res.send({
-      courses,
-    } as APITeaching);
+    const { rooms } = await got
+      .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
+        responseType: "json",
+        headers: {
+          authorization: CANVAS_TOKEN,
+        },
+      })
+      .then((r) => r.body);
+
+    let courses: Record<string, TTeachingCourse> = {};
+    for (let course_code in teaching) {
+      if (course_code != "-") {
+        const kopps = await getCourseInfo(course_code);
+        courses[course_code] = {
+          title: kopps.title,
+          credits: kopps.credits,
+          creditUnitAbbr: kopps.creditUnitAbbr,
+          roles: teaching[course_code],
+          rooms: rooms[course_code],
+        };
+      }
+    }
+
+    res.send({ courses });
   } catch (err) {
     next(err);
   }
@@ -72,3 +100,16 @@ api.get("/studies", async (req, res, next) => {
     next(err);
   }
 });
+
+async function getCourseInfo(course_code: string) {
+  const { title, credits, creditUnitAbbr } = await got
+    .get<{
+      title: { sv: string; en: string };
+      credits: number;
+      creditUnitAbbr: string;
+    }>(`${KOPPS_API}/course/${course_code}`, {
+      responseType: "json",
+    })
+    .then((r) => r.body);
+  return { title, credits, creditUnitAbbr };
+}
