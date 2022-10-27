@@ -4,9 +4,18 @@
   "description": "This is the KPM frontend client.",
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "production": {
+      "source": "src/index.tsx",
+      "context": "browser",
+      "outputFormat": "global",
+      "includeNodeModules": true,
+      "sourceMap": true
+    }
+  },
   "scripts": {
     "dev": "parcel",
-    "build": "parcel build --no-cache --dist-dir distProd --public-url ./",
+    "build": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
     "test:regression": "jest",
