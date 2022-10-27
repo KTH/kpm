@@ -18,7 +18,7 @@ const MY_TEACHING_API_URI =
   process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
-const CANVAS_TOKEN = process.env.CANVAS_TOKEN;
+const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
 
 export const api = express.Router();
@@ -37,7 +37,7 @@ api.get("/canvas-rooms", async (req, res, next) => {
       .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
         responseType: "json",
         headers: {
-          authorization: CANVAS_TOKEN,
+          authorization: CANVAS_API_TOKEN,
         },
       })
       .then((r) => r.body);
@@ -66,7 +66,7 @@ api.get("/teaching", async (req, res, next) => {
       .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
         responseType: "json",
         headers: {
-          authorization: CANVAS_TOKEN,
+          authorization: `Bearer ${CANVAS_API_TOKEN}`,
         },
       })
       .then((r) => r.body);
@@ -144,7 +144,7 @@ async function getCourseInfo(course_code: TCourseCode) {
     const info = { title, credits, creditUnitAbbr };
     kopps_cache.set(course_code, info);
     return info;
-  } catch (err) {
+  } catch (err: any) {
     log.error(err, `Failed to get kopps data for ${course_code}`);
     // Ugly but type-correct fallback, so things don't crash.
     // This is not cached!  Or should we cache it for a few minutes to
