@@ -1,11 +1,11 @@
-import { Response, Request } from "express";
-import path from "node:path";
-import fs from "fs/promises";
+import { Response, Request, static as staticHandler } from "express";
+
+const IS_DEV = process.env.NODE_ENV !== "production";
 /**
  * Responds with the initial javascript file that holds the entire personal menu
  */
-export default async function widgetJsHandler(req: Request, res: Response) {
-  if (!req.cookies["use_kpm"]) {
+export async function widgetJsHandler(req: Request, res: Response) {
+  if (!req.cookies["use_kpm"] && !IS_DEV) {
     res.send("old personal menu widget.js");
     return;
   }
@@ -16,16 +16,47 @@ export default async function widgetJsHandler(req: Request, res: Response) {
     return;
   }
 
-  if (req.session) {
-    const content = await fs.readFile(
-      path.resolve(__dirname, "../../kpm-frontend/distProd/index.html"),
-      { encoding: "utf-8" }
-    );
-    console.log(content);
+  const assets = getLatestDistFileNames();
 
-    res.type(".js").send(`document.write('${content}');`);
+  const loggedIn = !!req.session;
+
+  if (loggedIn) {
+    res.type("text/javascript").send(`(function (js, css) {
+var cr = (t) => document.createElement(t),
+ap = (n) => document.head.appendChild(n);
+let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
+let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
+let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";document.body.prepend(n);
+})("assets/${assets['index.js']?.fileName}", "assets/${assets['index.css']?.fileName}");`);
+  } else {
+    res.type("text/javascript").send(`(function (js, css) {
+var cr = (t) => document.createElement(t);
+let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";
+n.innerHTML = "<a href='#'>Login</a>"; document.body.prepend(n);
+      })("assets/${assets['index.js']?.fileName}", "assets/${assets['index.css']?.fileName}");`);
   }
 
+
   // Need to check
-  res.redirect("/check");
+  // res.redirect("/check");
+}
+
+function getLatestDistFileNames() {
+  return {
+    "index.js": {
+      fileName: "index.js",
+    },
+    "index.css": {
+      fileName: "index.css",
+    },
+
+  }
+}
+
+// Mount paths appear to be relative to project root
+export const widgetJsAssets = IS_DEV ? staticHandler("../kpm-frontend/distProd") : staticHandler("./distProd");
+
+export function previewHandler(req: Request, res: Response) {
+  const { ext } = req.params;
+  res.sendFile(`index.${ext}`, { root: __dirname });
 }
