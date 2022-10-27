@@ -1,14 +1,14 @@
 #kpm-6cf53 .kpm-teaching {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--kpmMargin);
+  gap: calc(3 * var(--kpmGap));
 
   .kpm-teaching-course {
-    width: calc(50% - var(--kpmMargin) / 2);
+    width: calc(100% / 3);
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
-    padding: var(--kpmPad);
+    gap: var(--kpmGap);
+    padding: calc(2 * var(--kpmPad));
     background-color: var(--kpmGroupBg);
 
     h2 {
@@ -17,11 +17,16 @@
       padding: 0;
     }
 
+    li {
+      margin: calc(1.5 * var(--kpmMargin)) 0;
+    }
+
     hr {
       height: 1px;
       background: var(--kpmGroupFg);
       width: 100%;
       border: 0;
+      margin: 0;
     }
   }
 }

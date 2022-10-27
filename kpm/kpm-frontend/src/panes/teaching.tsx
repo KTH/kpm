@@ -1,8 +1,13 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import { APITeaching, TTeachingCourse } from "kpm-backend-interface";
+import {
+  APITeaching,
+  TCanvasRoom,
+  TTeachingCourse,
+} from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { CollapsableGroup, GroupItem } from "../components/groups";
+import { i18n } from "./i18n";
 
 import "./teaching.scss";
 
@@ -20,25 +25,19 @@ export function Teaching() {
   return (
     <MenuPane>
       <div className="kpm-teaching">
-        {Object.keys(courses).map((course_code: string) => {
-          return (
-            <Course
-              key={course_code}
-              courseCode={course_code}
-              courseRounds={courses[course_code]}
-            />
-          );
+        {Object.entries(courses).map(([code, course]) => {
+          return <Course key={[code]} courseCode={code} course={course} />;
         })}
       </div>
     </MenuPane>
   );
 }
 
-function Course({ courseCode, courseRounds }: any) {
-  const courseName = "[course name missing]";
-  const aboutCourseUrl = "[aboutCourseUrl missing]";
+function Course({ courseCode, course }: any) {
+  const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
+  const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
-  const { current, other } = filterCanvasRooms(courseRounds);
+  const { current, other } = filterCanvasRooms(course.rooms);
   const currentTerm = "HT2022";
 
   return (
@@ -129,16 +128,13 @@ function Course({ courseCode, courseRounds }: any) {
 function CanvasRoomShortList({ rooms }: any) {
   return (
     <ul>
-      {rooms.map(({ year, role, term, round_id }: any) => {
-        const key = `${year}-${term}-${round_id}-${role}`;
+      {rooms.map((room: TCanvasRoom) => {
         return (
-          <li>
+          <li key={room.startTerm}>
             <CanvasRoomItem
-              key={key}
-              url={"#TODO"}
-              term={term}
-              year={year}
-              roundId={round_id}
+              url={room.url.toString()}
+              code={room.text}
+              startTerm={room.startTerm!}
             />
           </li>
         );
@@ -153,16 +149,13 @@ function CanvasRoomExpandedList({ rooms }: any) {
 
   return (
     <CollapsableGroup title="Äldre kursrum">
-      {rooms.map(({ year, role, term, round_id }: any) => {
-        const key = `${year}-${term}-${round_id}-${role}`;
+      {rooms.map((room: TCanvasRoom) => {
         return (
-          <GroupItem>
+          <GroupItem key={room.startTerm}>
             <CanvasRoomItem
-              key={key}
-              url={"#TODO"}
-              term={term}
-              year={year}
-              roundId={round_id}
+              url={room.url.toString()}
+              code={room.text}
+              startTerm={room.startTerm!}
             />
           </GroupItem>
         );
@@ -171,29 +164,33 @@ function CanvasRoomExpandedList({ rooms }: any) {
   );
 }
 
-function CanvasRoomItem({ url, term, year, roundId }: any) {
+type TCanvasRoomItemProps = {
+  url: string;
+  code?: string;
+  startTerm: string;
+};
+
+function CanvasRoomItem({ url, code, startTerm }: TCanvasRoomItemProps) {
   // This is a Component to force consistency
   return (
     <a href={url}>
-      {formatTerm(term)}
-      {year} ({roundId})
+      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || "-- ? --"})`}
     </a>
   );
 }
 
-function filterCanvasRooms(rooms: TTeachingCourse[]): {
-  current: TTeachingCourse[];
-  other: TTeachingCourse[];
+function filterCanvasRooms(rooms: TCanvasRoom[]): {
+  current: TCanvasRoom[];
+  other: TCanvasRoom[];
 } {
-  const now = new Date();
   const outp = [...rooms];
 
-  outp.sort((a: TTeachingCourse, b: TTeachingCourse) => {
-    try {
-      return (parseInt(a.year) - parseInt(b.year)) % 1;
-    } catch (e) {
-      return 0;
-    }
+  outp.sort((a: TCanvasRoom, b: TCanvasRoom) => {
+    const aVal = parseInt(a.startTerm || "0");
+    const bVal = parseInt(b.startTerm || "0");
+    if (aVal === bVal) return 0;
+    if (aVal > bVal) return -1;
+    return 1;
   });
 
   if (outp.length <= 4) {
@@ -216,13 +213,9 @@ function filterCanvasRooms(rooms: TTeachingCourse[]): {
   };
 }
 
-function formatTerm(term: string) {
-  switch (term) {
-    case "1":
-      return "VT";
-    case "2":
-      return "HT";
-    default:
-      return "??";
-  }
+function formatTerm(startTerm: string) {
+  const shortYear = startTerm.slice(2, 4);
+  const termNr = startTerm.slice(4, 5);
+  const termStr = { 1: "VT", 2: "HT" }[termNr];
+  return `${termStr}${shortYear}`;
 }
