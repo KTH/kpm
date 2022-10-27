@@ -5,6 +5,7 @@ import { api } from "./api";
 import { auth } from "./auth";
 import { sessionMiddleware } from "./session";
 import log from "skog";
+import widgetJsHandler from "./widget.js";
 
 const PORT = parseInt(process.env.PORT || "3000");
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
@@ -17,6 +18,7 @@ app.use(sessionMiddleware);
 app.use(loggingHandler);
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, api);
+app.use(`${PREFIX}/widget.js`, widgetJsHandler);
 
 app.listen(PORT, () => {
   log.info(`Listening on port ${PORT}`);
