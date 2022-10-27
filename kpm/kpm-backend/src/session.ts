@@ -1,4 +1,5 @@
 import expressSession from "express-session";
+import cookieParser from "cookie-parser";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
@@ -24,3 +25,7 @@ export const sessionMiddleware = expressSession({
   saveUninitialized: false,
   secret: SESSION_SECRET,
 });
+
+// Using cookie-parser may result in issues if the secret is not the same between this module and cookie-parser.
+// https://expressjs.com/en/resources/middleware/session.html
+export const cookieParserMiddleware = cookieParser(SESSION_SECRET);

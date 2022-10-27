@@ -1,0 +1,26 @@
+body {
+  height: 200em;
+  background: repeating-linear-gradient(
+    45deg,
+    #606d3322,
+    #606d3322 10px,
+    #46523322 10px 20px
+  );
+  margin: 0;
+  padding: 0;
+  font-family: Open Sans, Arial, Helvetica Neue, helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+body:after {
+  content: "Injected by widget.js";
+  position: absolute;
+  font-size: 5em;
+  font-weight: 800;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  opacity: 0.2;
+}
