@@ -27,15 +27,14 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";document.body.prepend(n);
-})("assets/${assets['index.js']?.fileName}", "assets/${assets['index.css']?.fileName}");`);
+})("assets/${assets["index.js"]?.fileName}", "assets/${assets["index.css"]?.fileName}");`);
   } else {
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";
 n.innerHTML = "<a href='#'>Login</a>"; document.body.prepend(n);
-      })("assets/${assets['index.js']?.fileName}", "assets/${assets['index.css']?.fileName}");`);
+      })("assets/${assets["index.js"]?.fileName}", "assets/${assets["index.css"]?.fileName}");`);
   }
-
 
   // Need to check
   // res.redirect("/check");
@@ -49,12 +48,13 @@ function getLatestDistFileNames() {
     "index.css": {
       fileName: "index.css",
     },
-
-  }
+  };
 }
 
 // Mount paths appear to be relative to project root
-export const widgetJsAssets = IS_DEV ? staticHandler("../kpm-frontend/distProd") : staticHandler("./distProd");
+export const widgetJsAssets = IS_DEV
+  ? staticHandler("../kpm-frontend/distProd")
+  : staticHandler("./distProd");
 
 export function previewHandler(req: Request, res: Response) {
   const { ext } = req.params;
