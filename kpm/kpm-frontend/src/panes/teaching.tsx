@@ -1,6 +1,10 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import { APITeaching, TCanvasRoom, TTeachingCourse } from "kpm-backend-interface";
+import {
+  APITeaching,
+  TCanvasRoom,
+  TTeachingCourse,
+} from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { CollapsableGroup, GroupItem } from "../components/groups";
 import { i18n } from "./i18n";
@@ -22,13 +26,7 @@ export function Teaching() {
     <MenuPane>
       <div className="kpm-teaching">
         {Object.entries(courses).map(([code, course]) => {
-          return (
-            <Course
-              key={[code]}
-              courseCode={code}
-              course={course}
-            />
-          );
+          return <Course key={[code]} courseCode={code} course={course} />;
         })}
       </div>
     </MenuPane>
@@ -166,12 +164,11 @@ function CanvasRoomExpandedList({ rooms }: any) {
   );
 }
 
-
 type TCanvasRoomItemProps = {
-  url: string,
-  code?: string,
-  startTerm: string,
-}
+  url: string;
+  code?: string;
+  startTerm: string;
+};
 
 function CanvasRoomItem({ url, code, startTerm }: TCanvasRoomItemProps) {
   // This is a Component to force consistency
@@ -219,6 +216,6 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
 function formatTerm(startTerm: string) {
   const shortYear = startTerm.slice(2, 4);
   const termNr = startTerm.slice(4, 5);
-  const termStr = { 1: "VT", 2: "HT"}[termNr];
+  const termStr = { 1: "VT", 2: "HT" }[termNr];
   return `${termStr}${shortYear}`;
 }
