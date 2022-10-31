@@ -53,7 +53,7 @@ function getLatestDistFileNames() {
 
 // Mount paths appear to be relative to project root
 export const widgetJsAssets = IS_DEV
-  ? staticHandler("../kpm-frontend/distProd")
+  ? staticHandler("../kpm-frontend/distProd/production")
   : staticHandler("./distProd");
 
 export function previewHandler(req: Request, res: Response) {
