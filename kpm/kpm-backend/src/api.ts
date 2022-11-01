@@ -33,14 +33,8 @@ api.get("/", (req, res) => {
 
 api.get("/canvas-rooms", async (req, res, next) => {
   try {
-    const { rooms } = await got
-      .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/u1famwov`, {
-        responseType: "json",
-        headers: {
-          authorization: CANVAS_API_TOKEN,
-        },
-      })
-      .then((r) => r.body);
+    const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
+    const { rooms } = await get_canvas_rooms(user);
 
     res.send({
       rooms,
@@ -62,14 +56,7 @@ api.get("/teaching", async (req, res, next) => {
       )
       .then((r) => r.body);
 
-    const rooms_fut = got
-      .get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
-        responseType: "json",
-        headers: {
-          authorization: `Bearer ${CANVAS_API_TOKEN}`,
-        },
-      })
-      .then((r) => r.body);
+    const rooms_fut = get_canvas_rooms(user);
 
     const teaching = await teaching_fut;
 
@@ -151,4 +138,14 @@ async function getCourseInfo(course_code: TCourseCode) {
     // give kopps a chanse to start if it's broken?
     return { title: { sv: "-", en: "-" }, credits: 0, creditUnitAbbr: "-" };
   }
+}
+
+async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
+  const r = await got.get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
+    responseType: "json",
+    headers: {
+      authorization: `Bearer ${CANVAS_API_TOKEN}`,
+    },
+  });
+  return r.body;
 }
