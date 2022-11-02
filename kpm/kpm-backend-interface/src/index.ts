@@ -1,5 +1,5 @@
 export type APICanvasRooms = {
-  rooms: { [index: TCourseCode]: TCanvasRoom };
+  rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };
 
 export type APITeaching = {
