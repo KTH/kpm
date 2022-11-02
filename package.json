@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm-run-all -l --parallel dev:*",
-    "dev:prod": "npm run build --workspace=kpm-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend",
+    "dev-prod": "npm run build --workspace=kpm-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend",
     "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
     "/* ----------- */": "",
