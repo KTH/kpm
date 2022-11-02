@@ -22,7 +22,7 @@ app.use(cookieParserMiddleware);
 app.use(loggingHandler);
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, api);
-app.use(`${PREFIX}/widget.js`, widgetJsHandler);
+app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
 app.use(`${PREFIX}/assets`, widgetJsAssets);
 
 if (IS_DEV || IS_STAGE) {
