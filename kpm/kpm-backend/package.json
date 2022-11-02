@@ -4,7 +4,9 @@
   "description": "This is the KPM backend server.",
   "main": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "npm run test:type-checking && npm run test:regression",
+    "test:regression": "jest",
+    "test:type-checking": "tsc --noEmit",
     "dev": "ts-node-dev --respawn src/index.ts | pino-pretty -e options,response -o '{msg}' --ignore options,pid,hostname --singleLine --translateTime 'HH:MM:ss.l'",
     "start": "ts-node --transpileOnly src/index.ts"
   },

@@ -4,7 +4,9 @@
   "description": "KPM helper package",
   "main": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "npm run test:type-checking && npm run test:regression",
+    "test:type-checking": "tsc --noEmit",
+    "test:regression": "jest",
     "release": ""
   },
   "author": "KTH Royal Institute of Technology",
