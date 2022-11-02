@@ -125,7 +125,12 @@ function Course({ courseCode, course }: any) {
   );
 }
 
-function CanvasRoomShortList({ rooms }: any) {
+
+type TArgsCanvasRoomXXXList = {
+  rooms: TCanvasRoom[];
+}
+
+function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
   return (
     <ul>
       {rooms.map((room: TCanvasRoom) => {
@@ -133,7 +138,8 @@ function CanvasRoomShortList({ rooms }: any) {
           <li key={room.startTerm}>
             <CanvasRoomItem
               url={room.url.toString()}
-              code={room.text}
+              type={room.type}
+              code={room.registrationCode}
               startTerm={room.startTerm!}
             />
           </li>
@@ -143,7 +149,7 @@ function CanvasRoomShortList({ rooms }: any) {
   );
 }
 
-function CanvasRoomExpandedList({ rooms }: any) {
+function CanvasRoomExpandedList({ rooms }: TArgsCanvasRoomXXXList) {
   // Only show this if it has any items
   if (rooms.length === 0) return null;
 
@@ -154,7 +160,8 @@ function CanvasRoomExpandedList({ rooms }: any) {
           <GroupItem key={room.startTerm}>
             <CanvasRoomItem
               url={room.url.toString()}
-              code={room.text}
+              type={room.type}
+              code={room.registrationCode}
               startTerm={room.startTerm!}
             />
           </GroupItem>
@@ -166,15 +173,16 @@ function CanvasRoomExpandedList({ rooms }: any) {
 
 type TCanvasRoomItemProps = {
   url: string;
+  type: string | undefined;
   code?: string;
   startTerm: string;
 };
 
-function CanvasRoomItem({ url, code, startTerm }: TCanvasRoomItemProps) {
+function CanvasRoomItem({ url, type, code, startTerm }: TCanvasRoomItemProps) {
   // This is a Component to force consistency
   return (
     <a href={url}>
-      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || "-- ? --"})`}
+      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || type || '?'})`}
     </a>
   );
 }
