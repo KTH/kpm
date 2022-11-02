@@ -125,10 +125,9 @@ function Course({ courseCode, course }: any) {
   );
 }
 
-
 type TArgsCanvasRoomXXXList = {
   rooms: TCanvasRoom[];
-}
+};
 
 function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
   return (
@@ -182,7 +181,7 @@ function CanvasRoomItem({ url, type, code, startTerm }: TCanvasRoomItemProps) {
   // This is a Component to force consistency
   return (
     <a href={url}>
-      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || type || '?'})`}
+      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
 }
