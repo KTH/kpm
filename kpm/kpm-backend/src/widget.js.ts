@@ -7,11 +7,6 @@ const IS_STAGE = process.env.DEPLOYMENT === "stage";
  * Responds with the initial javascript file that holds the entire personal menu
  */
 export async function widgetJsHandler(req: Request, res: Response) {
-  if (!req.cookies["use_kpm"] && !IS_DEV && !IS_STAGE) {
-    res.send("old personal menu widget.js");
-    return;
-  }
-
   // Check "login_success = false" to avoid infinite loops
   if (req.params.login_success === "false") {
     res.send("personal menu for logged out users");
