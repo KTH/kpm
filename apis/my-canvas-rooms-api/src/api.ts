@@ -45,6 +45,7 @@ type Link = {
   type: "course" | "exam" | "rapp" | undefined;
   startTerm?: string; // YYYYn (n = 1 | 2)
   examDate?: string; // YYYY-mm-dd
+  registrationCode?: string; // Often a five-digit number, but may vary.
   favorite: boolean;
 };
 
@@ -54,6 +55,7 @@ type TLinkMetaData = {
   text?: Link["text"];
   startTerm?: Link["startTerm"];
   examDate?: Link["examDate"];
+  registrationCode?: Link["registrationCode"];
 };
 
 type TGetRoomsReturnValue = {
@@ -125,18 +127,19 @@ function getRoomsByNewFormat(
   // requires further API calls.
   const sections = canvas_data.sections.map((s) => s.name);
 
-  const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(\d+\)/i;
+  const section_name_format = /([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \((\d+)\)/i;
 
   for (const section of sections) {
     const match = section.match(section_name_format);
     if (match) {
-      const courseCode = match[1];
-      const startTerm = match[2];
+      const [_, courseCode, startTerm, registrationCode] = match;
+
       // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
       course_codes.add(courseCode);
 
       // INVESTIGATE: Which section determines startTerm? Right now last wins
       link_meta_data.startTerm = convertStartTerm(startTerm);
+      link_meta_data.registrationCode = registrationCode;
     } else {
       // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }

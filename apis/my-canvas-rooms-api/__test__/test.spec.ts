@@ -20,6 +20,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "favorite": undefined,
           "name": "SF1691 VT20 (60321) Komplex analys",
+          "registrationCode": "60321",
           "startTerm": "20201",
           "state": "available",
           "type": "course",
@@ -95,6 +96,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "favorite": false,
           "name": "DD1320/DD1325 HT21-1 Tillämpad datalogi",
+          "registrationCode": "50104",
           "startTerm": "20212",
           "state": "available",
           "type": "course",
@@ -121,6 +123,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "favorite": false,
           "name": "KH0022/KH0025 HT21/VT22 Fysik för basår I",
+          "registrationCode": "61340",
           "startTerm": "20221",
           "state": "available",
           "type": "course",
