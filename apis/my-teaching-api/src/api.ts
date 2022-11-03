@@ -53,7 +53,6 @@ api.get("/user/:user", async (req, res, next) => {
   // throw new Error("Test");
 
   const perf1 = Date.now();
-
   // TODO: Remove these, they are only part of our though process:
   // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
   // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
@@ -65,7 +64,7 @@ api.get("/user/:user", async (req, res, next) => {
   const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(
     `groups?$filter=contains(members, '${userName}')`
   );
-  console.log(`Exec time: ${Date.now() - perf1}ms`);
+  console.log(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
 
   if (json === undefined || statusCode !== 200) {
     if (IS_DEV) {

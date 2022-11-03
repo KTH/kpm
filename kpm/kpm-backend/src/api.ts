@@ -47,6 +47,7 @@ api.get("/canvas-rooms", async (req, res, next) => {
 api.get("/teaching", async (req, res, next) => {
   const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
+    const perf1 = Date.now();
     const teaching_fut = got
       .get<Record<TCourseCode, TTeachingRole[]>>(
         `${MY_TEACHING_API_URI}/user/${user}`,
@@ -57,8 +58,10 @@ api.get("/teaching", async (req, res, next) => {
       .then((r) => r.body);
 
     const rooms_fut = get_canvas_rooms(user);
+    console.log(`Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`);
 
     const teaching = await teaching_fut;
+    console.log(`Time to resolved my-teaching-api: ${Date.now() - perf1}ms`);
 
     const kopps_futs = Object.assign(
       {},
@@ -67,10 +70,13 @@ api.get("/teaching", async (req, res, next) => {
       }))
     );
     const { rooms } = await rooms_fut;
+    console.log(`Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`);
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching)) {
       const kopps = await kopps_futs[course_code];
+      console.log(`Time to resolved kopps: ${Date.now() - perf1}ms`);
+
       courses[course_code] = {
         course_code: course_code,
         title: kopps.title,

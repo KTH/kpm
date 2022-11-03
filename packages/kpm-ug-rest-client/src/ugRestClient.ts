@@ -44,6 +44,7 @@ export class UGRestClient {
     // Use cached value if available
     if (this._client) return this._client;
 
+    const perf1 = Date.now();
     // We use OAuth flow "Client Credentials" to receive an access token
     // This token is then passed to UG REST API using client.requestResource.
     const issuer = await Issuer.discover(this._authServerDiscoveryURI);
@@ -59,6 +60,7 @@ export class UGRestClient {
       client_id: this._clientId,
       client_secret: this._clientSecret,
     });
+    console.log(`Time to create UGRestClient: ${Date.now() - perf1}ms`);
 
     return this._client;
   }
