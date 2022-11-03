@@ -1,8 +1,8 @@
-my-teaching-api/teaching total time will be whichever is slowest of the following two paths:
+kpm-backend/teaching total time will be whichever is slowest of the following two paths:
 
-       ⎧ Canvas API        ⎫
-IN --- ⎨                   ⎬ --- OUT
-       ⎩ UGRestAPI ⪢ KOPPS ⎭
+       ⎧ my-canvas-rooms-api     ⎫
+IN --- ⎨                         ⎬ --- OUT
+       ⎩ my-teaching-api ⪢ KOPPS ⎭
 
 ```s
 % traceroute app-r.referens.sys.kth.se
