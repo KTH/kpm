@@ -151,11 +151,14 @@ async function getCourseInfo(course_code: TCourseCode) {
 }
 
 async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
-  const r = await got.get<any>(`${MY_CANVAS_ROOMS_API_URI}/user/${user}`, {
-    responseType: "json",
-    headers: {
-      authorization: `Bearer ${CANVAS_API_TOKEN}`,
-    },
-  });
+  const r = await got.get<APICanvasRooms>(
+    `${MY_CANVAS_ROOMS_API_URI}/user/${user}`,
+    {
+      responseType: "json",
+      headers: {
+        authorization: `Bearer ${CANVAS_API_TOKEN}`,
+      },
+    }
+  );
   return r.body;
 }
