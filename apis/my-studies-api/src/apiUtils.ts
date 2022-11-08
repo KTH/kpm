@@ -41,8 +41,6 @@ export type TCourseCode = string;
 export type TUserCourse = {
   type: string;
   code: TCourseCode;
-  code_pt1: string;
-  code_pt2: string;
   status?: "antagna" | "godkand" | "registrerade";
   year?: number;
   term?: "1" | "2";
@@ -60,8 +58,6 @@ export function convertToCourseObjects(inp: string[]): TUserCourse[] {
     return {
       type,
       code: `${code_pt1}${code_pt2}`,
-      code_pt1,
-      code_pt2,
       status: cstatus,
       year: parseInt(cyear) || undefined,
       term: cterm,

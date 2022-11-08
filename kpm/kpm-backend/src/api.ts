@@ -102,8 +102,6 @@ api.get("/teaching", async (req, res, next) => {
 export type TApiUserCourse = {
   type: "kurser";
   code: TCourseCode;
-  code_pt1: string;
-  code_pt2: string;
   status?: "antagna" | "godkand" | "registrerade";
   year?: number;
   term?: "1" | "2";
