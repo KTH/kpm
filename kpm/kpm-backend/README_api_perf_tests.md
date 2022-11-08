@@ -1,9 +1,10 @@
 kpm-backend/teaching total time will be whichever is slowest of the following two paths:
 
+```
        ⎧ my-canvas-rooms-api     ⎫
 IN --- ⎨                         ⎬ --- OUT
        ⎩ my-teaching-api ⪢ KOPPS ⎭
-
+```
 ```s
 % traceroute app-r.referens.sys.kth.se
 traceroute: Warning: app-r.referens.sys.kth.se has multiple addresses; using 13.107.213.53
