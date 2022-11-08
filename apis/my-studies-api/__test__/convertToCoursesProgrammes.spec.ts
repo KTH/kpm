@@ -2,6 +2,7 @@ import { describe, expect, jest, test } from "@jest/globals";
 import {
   convertToCourseObjects,
   convertToProgrammeObjects,
+  TUserCourse,
 } from "../src/apiUtils";
 
 // ladok2.kurser.SE.1020
@@ -14,7 +15,7 @@ import {
 // ladok2.kurser.ÅF.2102.godkand
 // ladok2.kurser.ÅF.210v.godkand
 
-const courseTestCases: { [index: string]: any } = {
+const courseTestCases: { [index: string]: TUserCourse } = {
   "ladok2.kurser.SE.1020": {
     type: "kurser",
     code: "SE1020",
@@ -27,7 +28,7 @@ const courseTestCases: { [index: string]: any } = {
     code_pt1: "ME",
     code_pt2: "2053",
     status: "antagna",
-    year: "2022",
+    year: 2022,
     term: "2",
   },
   "ladok2.kurser.MF.2102.godkand": {
@@ -49,7 +50,7 @@ const courseTestCases: { [index: string]: any } = {
     code_pt1: "MF",
     code_pt2: "2032",
     status: "registrerade",
-    year: "2022",
+    year: 2022,
     term: "1",
     round: "1",
   },
@@ -59,7 +60,7 @@ const courseTestCases: { [index: string]: any } = {
     code_pt1: "MF",
     code_pt2: "2039",
     status: "registrerade",
-    year: "2021",
+    year: 2021,
     term: "2",
     round: "1",
   },

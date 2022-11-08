@@ -7,7 +7,7 @@ export type APITeaching = {
 };
 
 export type APIStudies = {
-  courses: TStudiesCourse[];
+  courses: Record<TCourseCode, TStudiesCourse>;
   programmes: TStudiesProgramme[];
 };
 
@@ -44,14 +44,18 @@ export type TTeachingRole = {
 };
 
 export type TStudiesCourse = {
-  type: "kurser";
-  code: string;
-  code_pt1: string;
-  code_pt2: string;
+  course_code: TCourseCode;
+  title: { sv: string; en: string };
+  credits: number;
+  creditUnitAbbr: string; // usually "hp", check other values!
+  roles: TStuidesCourseInner[];
+  rooms: TCanvasRoom[];
+};
+export type TStuidesCourseInner = {
   status?: "antagna" | "godkand" | "registrerade";
-  year: string;
-  term: "1" | "2" | "3" | "4";
-  round: "1" | "2";
+  year?: number;
+  term?: "1" | "2";
+  round?: string;
 };
 
 export type TStudiesProgramme = {

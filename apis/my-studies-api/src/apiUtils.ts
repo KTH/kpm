@@ -37,7 +37,19 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
   };
 }
 
-export function convertToCourseObjects(inp: string[]) {
+export type TCourseCode = string;
+export type TUserCourse = {
+  type: string;
+  code: TCourseCode;
+  code_pt1: string;
+  code_pt2: string;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+  round?: string;
+};
+
+export function convertToCourseObjects(inp: string[]): TUserCourse[] {
   const courseRegex =
     /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
   const tmpJson = inp
@@ -51,7 +63,7 @@ export function convertToCourseObjects(inp: string[]) {
       code_pt1,
       code_pt2,
       status: cstatus,
-      year: cyear,
+      year: parseInt(cyear) || undefined,
       term: cterm,
       round: cterm_pt2, // QUESTION: Is this really round id or perhaps section or something similar? Matches the last number of "registrerade_20221.1"
     };

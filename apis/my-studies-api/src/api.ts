@@ -5,6 +5,8 @@ import {
   convertToCourseObjects,
   convertToProgrammeObjects,
   getListOfCourseProgrammeNames,
+  TCourseCode,
+  TUserCourse,
 } from "./apiUtils";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -48,7 +50,12 @@ export type TUgGroup = {
   name: string;
 };
 
-api.get("/user/:user", async (req, res) => {
+export type TUserStudies = {
+  courses: Record<TCourseCode, TUserCourse[]>;
+  programmes: any[]; // FIXME
+};
+
+api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
   const userName = req.params.user;
 
   const ugClient = new UGRestClient({
@@ -67,7 +74,7 @@ api.get("/user/:user", async (req, res) => {
 
   if (json === undefined || statusCode !== 200) {
     if (IS_DEV) {
-      return res.status(statusCode || 500).send(data);
+      return res.status(statusCode || 500).send(data as any);
     }
   }
 
@@ -75,8 +82,18 @@ api.get("/user/:user", async (req, res) => {
     json!.map((o) => o.name)
   );
 
+  let courses: { [index: TCourseCode]: TUserCourse[] } = {};
+  for (const obj of convertToCourseObjects(courseNames)) {
+    let course_code = obj.code;
+    if (courses[course_code]) {
+      courses[course_code].push(obj);
+    } else {
+      courses[course_code] = [obj];
+    }
+  }
+
   res.status(statusCode || 200).send({
-    courses: convertToCourseObjects(courseNames),
+    courses,
     programmes: convertToProgrammeObjects(programmeNames),
   });
 });
