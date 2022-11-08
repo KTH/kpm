@@ -58,7 +58,9 @@ api.get("/teaching", async (req, res, next) => {
       .then((r) => r.body);
 
     const rooms_fut = get_canvas_rooms(user);
-    console.log(`Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`);
+    console.log(
+      `Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`
+    );
 
     const teaching = await teaching_fut;
     console.log(`Time to resolved my-teaching-api: ${Date.now() - perf1}ms`);
@@ -70,7 +72,9 @@ api.get("/teaching", async (req, res, next) => {
       }))
     );
     const { rooms } = await rooms_fut;
-    console.log(`Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`);
+    console.log(
+      `Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`
+    );
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching)) {

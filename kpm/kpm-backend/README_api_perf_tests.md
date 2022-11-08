@@ -5,6 +5,7 @@ kpm-backend/teaching total time will be whichever is slowest of the following tw
 IN --- ⎨                         ⎬ --- OUT
        ⎩ my-teaching-api ⪢ KOPPS ⎭
 ```
+
 ```s
 % traceroute app-r.referens.sys.kth.se
 traceroute: Warning: app-r.referens.sys.kth.se has multiple addresses; using 13.107.213.53
@@ -35,13 +36,17 @@ round-trip min/avg/max/stddev = 3.600/6.153/9.179/1.705 ms
 ```
 
 Analysis of `kpm/kpm/kpm-backend/src/api.ts`:
+
 ```ts
 const perf1 = Date.now();
-const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
+const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(
+  `groups?$filter=contains(members, '${userName}')`
+);
 console.log(`Exec time: ${Date.now() - perf1}ms`);
 ```
 
 NOTE: For these calls we also create UGRestClient. This should be cached in production:
+
 ```s
 # Total time per call to UG REST API:
 [dev:my-teaching-api    ] Exec time: 1736ms
@@ -49,7 +54,7 @@ NOTE: For these calls we also create UGRestClient. This should be cached in prod
 [dev:my-teaching-api    ] Exec time: 1374ms
 [dev:my-teaching-api    ] Exec time: 1411ms
 [dev:my-teaching-api    ] Exec time: 1346ms
-# Where time to create client is: 
+# Where time to create client is:
 [dev:my-teaching-api    ] Time to create UGRestClient: 87ms
 
 # Single kpm-backend call and timing of calls to API:s from backend:
@@ -63,11 +68,13 @@ NOTE: For these calls we also create UGRestClient. This should be cached in prod
 ```
 
 ## Isolated timing for call to Canvas (ref)
+
 ```ts
-    const perf1 = Date.now();
-    const rooms_fut = await get_canvas_rooms(user);
-    console.log(`TEST only my-canvas-rooms-api: ${Date.now() - perf1}ms`);
+const perf1 = Date.now();
+const rooms_fut = await get_canvas_rooms(user);
+console.log(`TEST only my-canvas-rooms-api: ${Date.now() - perf1}ms`);
 ```
+
 ```s
 [dev:kpm-backend        ] TEST only my-canvas-rooms-api: 1442ms
 [dev:kpm-backend        ] TEST only my-canvas-rooms-api: 1553ms
@@ -75,10 +82,12 @@ NOTE: For these calls we also create UGRestClient. This should be cached in prod
 ```
 
 ## Isolated timing for call to KOPPS
+
 ```ts
-// Implemented similar to above by moving promise initiator 
+// Implemented similar to above by moving promise initiator
 // to right before the for-loop
 ```
+
 ```s
 [dev:kpm-backend        ] Time to resolved kopps: 191ms
 [dev:kpm-backend        ] Time to resolved kopps: 296ms
@@ -90,7 +99,8 @@ NOTE: For these calls we also create UGRestClient. This should be cached in prod
 ```
 
 From frontend:
+
 - Total TTLB: 1540ms
-    - Time to create UGRestClient: 68ms
-    - Time to call UGRestClient(get): 1435ms
-    - Time to call Canvas API: 1500ms
+  - Time to create UGRestClient: 68ms
+  - Time to call UGRestClient(get): 1435ms
+  - Time to call Canvas API: 1500ms
