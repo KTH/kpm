@@ -74,7 +74,7 @@ type TCourseAdminDropdownProps = {
 
 function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownProps) {
   return (
-    <DropdownMenuGroup title="Administrera kurs" alignRight>
+    <DropdownMenuGroup title="Administrera kurs">
       <GroupItem>
         <a
           href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}

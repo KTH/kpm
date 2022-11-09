@@ -36,18 +36,12 @@
     left: 0;
     max-width: 95%;
     min-height: 200px; // Use a constant value, otherwise we have problems
-    //padding: var(--kpmPad);
     background-color: var(--kpmPaneBg);
     overflow-y: auto;
     box-shadow: 4px 4px 10px rgb(0 0 0 / 20%);
     visibility: hidden;
     opacity: 0;
     transition: opacity .1s ease-in;
-
-    &.right {
-      right: 0;
-      left: unset;
-    }
 
     ul {
       padding: var(--kpmPad);
