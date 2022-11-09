@@ -6,7 +6,11 @@ import {
   TTeachingCourse,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { CollapsableGroup, DropdownMenuGroup, GroupItem } from "../components/groups";
+import {
+  CollapsableGroup,
+  DropdownMenuGroup,
+  GroupItem,
+} from "../components/groups";
 import { i18n } from "./i18n";
 
 import "./teaching.scss";
@@ -48,7 +52,10 @@ function Course({ courseCode, course }: any) {
       <div className="kpm-row">
         <h3>Canvas:</h3>
         <CanvasRoomShortList rooms={current} />
-        <CanvasRoomExpandedList rooms={[...current, ...other]} title="Alla kursrum" />
+        <CanvasRoomExpandedList
+          rooms={[...current, ...other]}
+          title="Alla kursrum"
+        />
       </div>
     </div>
   );
@@ -82,7 +89,10 @@ type TCanvasRoomExpandedListProps = {
   rooms: TCanvasRoom[];
   title: string;
 };
-function CanvasRoomExpandedList({ rooms, title }: TCanvasRoomExpandedListProps) {
+function CanvasRoomExpandedList({
+  rooms,
+  title,
+}: TCanvasRoomExpandedListProps) {
   // Only show this if it has any items
   if (rooms.length === 0) return null;
 
@@ -90,14 +100,16 @@ function CanvasRoomExpandedList({ rooms, title }: TCanvasRoomExpandedListProps) 
   const groups: Record<string, any> = {};
   for (const room of rooms) {
     if (room.startTerm === undefined) {
-      if (groups['other'] === undefined) groups['other'] = { vt: [], ht: [], other: [] };
-      groups['other']['other'].push(room);
+      if (groups["other"] === undefined)
+        groups["other"] = { vt: [], ht: [], other: [] };
+      groups["other"]["other"].push(room);
       continue;
     }
 
     const year = room.startTerm!.slice(0, 4);
     const term = room.startTerm!.slice(4, 5);
-    if (groups[year] === undefined) groups[year] = { vt: [], ht: [], other: [] };
+    if (groups[year] === undefined)
+      groups[year] = { vt: [], ht: [], other: [] };
     switch (term) {
       case "1":
         groups[year]["vt"].push(room);
@@ -119,31 +131,50 @@ function CanvasRoomExpandedList({ rooms, title }: TCanvasRoomExpandedListProps) 
           <div className="kpm-teaching-course-rooms-dd-item">
             <h3>{year}</h3>
             <div className="kpm-col">
-              {groups[year]?.["vt"].map(
-                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
-              {groups[year]?.["other"].map(
-                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
+              {groups[year]?.["vt"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url.toString()}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
+              {groups[year]?.["other"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url.toString()}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
             </div>
             <div className="kpm-col">
-              {groups[year]?.["ht"].map(
-                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
+              {groups[year]?.["ht"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url.toString()}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
             </div>
           </div>
-
         );
       })}
     </DropdownMenuGroup>
   );
 }
 
-{/* <GroupItem key={room.startTerm}>
+{
+  /* <GroupItem key={room.startTerm}>
 <CanvasRoomLink
   url={room.url.toString()}
   type={room.type}
   code={room.registrationCode}
   startTerm={room.startTerm!}
 />
-</GroupItem> */}
+</GroupItem> */
+}
 
 type TCanvasRoomLinkProps = {
   url: string;
@@ -202,13 +233,15 @@ function formatTerm(startTerm: string) {
   return `${termStr}${shortYear}`;
 }
 
-
 type TCourseAdminDropdownProps = {
   courseCode: string;
   currentTerm: string;
-}
+};
 
-function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownProps) {
+function CourseAdminDropdown({
+  courseCode,
+  currentTerm,
+}: TCourseAdminDropdownProps) {
   return (
     <DropdownMenuGroup title="Administrera kurs">
       <GroupItem>
@@ -243,9 +276,7 @@ function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownPr
         </a>
       </GroupItem>
       <GroupItem>
-        <a
-          href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}
-        >
+        <a href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}>
           Skapa och publicera kurs-PM
         </a>
       </GroupItem>
@@ -281,5 +312,5 @@ function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownPr
         </a>
       </GroupItem>
     </DropdownMenuGroup>
-  )
+  );
 }

@@ -41,7 +41,7 @@
     box-shadow: 4px 4px 10px rgb(0 0 0 / 20%);
     visibility: hidden;
     opacity: 0;
-    transition: opacity .1s ease-in;
+    transition: opacity 0.1s ease-in;
 
     ul {
       padding: var(--kpmPad);
@@ -50,7 +50,7 @@
     li.item {
       margin: 0;
       padding: 0;
-      padding-right:  calc(2 * var(--kpmPad));
+      padding-right: calc(2 * var(--kpmPad));
     }
   }
 

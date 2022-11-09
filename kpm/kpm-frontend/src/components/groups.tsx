@@ -24,7 +24,7 @@ type TDropdownMenuGroupProps = {
   alignRight?: boolean;
   defaultOpen?: boolean;
   modal?: boolean; // Will not allow other interactions until closed
-}
+};
 
 export function DropdownMenuGroup({
   title,
@@ -34,27 +34,45 @@ export function DropdownMenuGroup({
   defaultOpen = false,
   modal = true,
 }: TDropdownMenuGroupProps) {
-
   const [open, setOpen] = useState(defaultOpen);
-  const [dropdownStyle, setDropdownStyle]: [TStyle, Function] = useState(undefined);
+  const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
+    useState(undefined);
 
   const detailsRef = useRef(null);
   const summaryRef = useRef(null);
   const dropdownRef = useRef(null);
-  usePositionDropdown(detailsRef, summaryRef, dropdownRef, revealUp, alignRight, (newStyle: TStyle) => {
-    if (newStyle === undefined || !isEqual(dropdownStyle, newStyle)) setDropdownStyle(newStyle);
-  })
+  usePositionDropdown(
+    detailsRef,
+    summaryRef,
+    dropdownRef,
+    revealUp,
+    alignRight,
+    (newStyle: TStyle) => {
+      if (newStyle === undefined || !isEqual(dropdownStyle, newStyle))
+        setDropdownStyle(newStyle);
+    }
+  );
 
   return (
-    <details ref={detailsRef} className="kpm-dropdownmenu-group" open={open} onClick={(e) => {
-      e.preventDefault();
-      setOpen(!open);
-    }}>
+    <details
+      ref={detailsRef}
+      className="kpm-dropdownmenu-group"
+      open={open}
+      onClick={(e) => {
+        e.preventDefault();
+        setOpen(!open);
+      }}
+    >
       <summary ref={summaryRef}>{title}</summary>
-      {modal && <div className="kpm-dropdownmeny-backdrop" onClick={(e) => {
-        //e.preventDefault();
-        setOpen(false);
-      }}></div>}
+      {modal && (
+        <div
+          className="kpm-dropdownmeny-backdrop"
+          onClick={(e) => {
+            //e.preventDefault();
+            setOpen(false);
+          }}
+        ></div>
+      )}
       <div style={dropdownStyle} className="kpm-link-list">
         <ul ref={dropdownRef}>{children}</ul>
       </div>
@@ -63,8 +81,8 @@ export function DropdownMenuGroup({
 }
 
 function isEqual(a: TStyle, b: TStyle): boolean {
-  if ((a === undefined || b === undefined)) return a === b;
-  const keys = { ...a, ...b }
+  if (a === undefined || b === undefined) return a === b;
+  const keys = { ...a, ...b };
 
   for (const key of Object.keys(keys)) {
     if (a[key] !== b[key]) {
@@ -75,9 +93,8 @@ function isEqual(a: TStyle, b: TStyle): boolean {
   return true;
 }
 
-
 export function GroupItem({ className, children }: any) {
-  let cls = 'item';
+  let cls = "item";
   if (className !== undefined) {
     cls += ` ${className}`;
   }
@@ -101,24 +118,27 @@ function usePositionDropdown(
   detailsRef: MutableRefObject<HTMLElement | null>,
   summaryRef: MutableRefObject<HTMLElement | null>,
   dropdownRef: MutableRefObject<HTMLElement | null>,
-  toTop: boolean = false, toRight: boolean = false,
-  callback: Function) {
+  toTop: boolean = false,
+  toRight: boolean = false,
+  callback: Function
+) {
   const requestRef = useRef(0);
 
   const calculate = () => {
     // Stop if unmounted
-    const isOpen = (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
-    const outer = summaryRef.current
+    const isOpen =
+      (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
+    const outer = summaryRef.current;
     const dropdown = dropdownRef.current;
     if (!isOpen || dropdown === null || outer === null) {
       callback(undefined);
-      return requestRef.current = requestAnimationFrame(calculate);
+      return (requestRef.current = requestAnimationFrame(calculate));
     }
 
     // 1. get viewport limits
     const viewport = window.visualViewport;
     const pageWidth = Math.round(viewport!.width);
-    const pageHeight = Math.round(viewport!.height)
+    const pageHeight = Math.round(viewport!.height);
     // 2. get position and size of dropdown
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     const rect = outer.getBoundingClientRect();
@@ -131,13 +151,13 @@ function usePositionDropdown(
 
     const dropdownWidth = dropdown.scrollWidth;
     const dropdownHeight = dropdown.scrollHeight;
-  
+
     // 3. Adjust placement and size depending on available space
     const spaceTop = elTop;
     const spaceBottom = pageHeight - elBottom;
 
     const cs = window.getComputedStyle(dropdown);
-    const minHeight = parseFloat(cs.getPropertyValue('min-height')) || 200;
+    const minHeight = parseFloat(cs.getPropertyValue("min-height")) || 200;
 
     // Should the dropdown open up or down? Depends on setting but also available space
     let placeTop;
@@ -187,7 +207,7 @@ function usePositionDropdown(
         deltaX = elRight >= 0 ? 0 : elRight; // perhaps we shouldn't let nudge so far
       } else if (deltaX + dropdownWidth > pageWidth) {
         deltaX = pageWidth - dropdownWidth;
-        if ((deltaX + dropdownWidth) < elLeft) {
+        if (deltaX + dropdownWidth < elLeft) {
           deltaX = elLeft - dropdownWidth; // perhaps we shouldn't let nudge so far
         }
       }
@@ -208,7 +228,7 @@ function usePositionDropdown(
     let newTransform: any = {
       transform: `translate(${deltaX}px, ${deltaY}px)`,
       visibility: "visible",
-      opacity: "1"
+      opacity: "1",
     };
     if (width !== undefined) {
       newTransform["width"] = `${width}px`;
@@ -216,9 +236,9 @@ function usePositionDropdown(
     if (height !== undefined) {
       newTransform["height"] = `${height}px`;
     }
-    callback(newTransform)
+    callback(newTransform);
     requestRef.current = requestAnimationFrame(calculate);
-  }
+  };
 
   // Continue polling until unmounted
   useEffect(() => {
