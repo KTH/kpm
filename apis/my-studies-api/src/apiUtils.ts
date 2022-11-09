@@ -40,7 +40,7 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
 export type TCourseCode = string;
 export type TUserCourse = {
   type: string;
-  code: TCourseCode;
+  course_code: TCourseCode;
   status?: "antagna" | "godkand" | "registrerade";
   year?: number;
   term?: "1" | "2";
@@ -57,7 +57,7 @@ export function convertToCourseObjects(inp: string[]): TUserCourse[] {
     const { type, code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = o;
     return {
       type,
-      code: `${code_pt1}${code_pt2}`,
+      course_code: `${code_pt1}${code_pt2}`,
       status: cstatus,
       year: parseInt(cyear) || undefined,
       term: cterm,
@@ -69,7 +69,7 @@ export function convertToCourseObjects(inp: string[]): TUserCourse[] {
 export type TProgramCode = string;
 export type TUserProgram = {
   type: "program";
-  code: TProgramCode;
+  program_code: TProgramCode;
   status?: "antagna" | "godkand" | "registrerade";
   year?: number;
   term?: "1" | "2";
@@ -77,15 +77,15 @@ export type TUserProgram = {
 
 export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
   const progrRegex =
-    /^ladok2\.(?<type>program)\.(?<code_pt1>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+    /^ladok2\.(?<type>program)\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
   const tmpJson = inp
     ?.map((o) => o.match(progrRegex)?.groups)
     .filter((o) => o && o.type === "program");
   return tmpJson?.map((o: any) => {
-    const { type, code_pt1, pstatus, pyear, pterm } = o;
+    const { type, code, pstatus, pyear, pterm } = o;
     return {
       type,
-      code: code_pt1,
+      program_code: code,
       status: pstatus,
       year: parseInt(pyear) || undefined,
       term: pterm,

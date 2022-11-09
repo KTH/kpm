@@ -19,27 +19,27 @@ import {
 const courseTestCases: { [index: string]: TUserCourse } = {
   "ladok2.kurser.SE.1020": {
     type: "kurser",
-    code: "SE1020",
+    course_code: "SE1020",
   },
   "ladok2.kurser.ME.2053.antagna_20222": {
     type: "kurser",
-    code: "ME2053",
+    course_code: "ME2053",
     status: "antagna",
     year: 2022,
     term: "2",
   },
   "ladok2.kurser.MF.2102.godkand": {
     type: "kurser",
-    code: "MF2102",
+    course_code: "MF2102",
     status: "godkand",
   },
   "ladok2.kurser.MF.2114": {
     type: "kurser",
-    code: "MF2114",
+    course_code: "MF2114",
   },
   "ladok2.kurser.MF.2032.registrerade_20221.1": {
     type: "kurser",
-    code: "MF2032",
+    course_code: "MF2032",
     status: "registrerade",
     year: 2022,
     term: "1",
@@ -47,7 +47,7 @@ const courseTestCases: { [index: string]: TUserCourse } = {
   },
   "ladok2.kurser.MF.2039.registrerade_20212.1": {
     type: "kurser",
-    code: "MF2039",
+    course_code: "MF2039",
     status: "registrerade",
     year: 2021,
     term: "2",
@@ -55,12 +55,12 @@ const courseTestCases: { [index: string]: TUserCourse } = {
   },
   "ladok2.kurser.ÅF.2102.godkand": {
     type: "kurser",
-    code: "ÅF2102",
+    course_code: "ÅF2102",
     status: "godkand",
   },
   "ladok2.kurser.ÅF.210v.godkand": {
     type: "kurser",
-    code: "ÅF210v",
+    course_code: "ÅF210v",
     status: "godkand",
   },
 };
@@ -68,7 +68,7 @@ const courseTestCases: { [index: string]: TUserCourse } = {
 const programmeTestCases: { [index: string]: TUserProgram } = {
   "ladok2.program.TIPDM.registrerade_20221": {
     type: "program",
-    code: "TIPDM",
+    program_code: "TIPDM",
     status: "registrerade",
     year: 2022,
     term: "1",

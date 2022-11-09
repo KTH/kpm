@@ -86,7 +86,7 @@ api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
 
   let courses: { [index: TCourseCode]: TUserCourse[] } = {};
   for (const obj of convertToCourseObjects(courseNames)) {
-    let course_code = obj.code;
+    let course_code = obj.course_code;
     if (courses[course_code]) {
       courses[course_code].push(obj);
     } else {
@@ -95,7 +95,7 @@ api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
   }
   let programmes: { [index: TProgramCode]: TUserProgram[] } = {};
   for (const obj of convertToProgrammeObjects(programmeNames)) {
-    let program_code = obj.code;
+    let program_code = obj.program_code;
     if (programmes[program_code]) {
       programmes[program_code].push(obj);
     } else {
