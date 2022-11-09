@@ -6,7 +6,7 @@ import {
   TTeachingCourse,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { CollapsableGroup, GroupItem } from "../components/groups";
+import { CollapsableGroup, DropdownMenuGroup, GroupItem } from "../components/groups";
 import { i18n } from "./i18n";
 
 import "./teaching.scss";
@@ -26,6 +26,18 @@ export function Teaching() {
     <MenuPane>
       <div className="kpm-teaching">
         {Object.entries(courses).map(([code, course]) => {
+          return <Course key={[code]} courseCode={code} course={course} />;
+        })}
+                {Object.entries(courses).map(([code, course]) => {
+          return <Course key={[code]} courseCode={code} course={course} />;
+        })}
+                {Object.entries(courses).map(([code, course]) => {
+          return <Course key={[code]} courseCode={code} course={course} />;
+        })}
+                {Object.entries(courses).map(([code, course]) => {
+          return <Course key={[code]} courseCode={code} course={course} />;
+        })}
+                {Object.entries(courses).map(([code, course]) => {
           return <Course key={[code]} courseCode={code} course={course} />;
         })}
       </div>
@@ -50,79 +62,90 @@ function Course({ courseCode, course }: any) {
       <CanvasRoomShortList rooms={current} />
       <CanvasRoomExpandedList rooms={other} />
       <hr />
-      <CollapsableGroup title="Administrera kurs">
-        <GroupItem>
-          <a
-            href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
-          >
-            Administrera assistenter
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
-            Hantera Omgångar/grupper
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
-          >
-            Kursdeltagare
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
-            Kursinformation i Kopps
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
-          >
-            Redigera introduktion till kursen
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}
-          >
-            Skapa och publicera kurs-PM
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
-            Kursvärdering
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
-          >
-            Publicera ny kursanalys
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}
-          >
-            Se provresultat
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
-            Studentgruppen / Prenumeranter
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
-          >
-            Sök tentamen
-          </a>
-        </GroupItem>
-      </CollapsableGroup>
+      <CourseAdminDropdown courseCode={courseCode} currentTerm={currentTerm} />
     </div>
   );
+}
+
+type TCourseAdminDropdownProps = {
+  courseCode: string;
+  currentTerm: string;
+}
+
+function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownProps) {
+  return (
+    <DropdownMenuGroup title="Administrera kurs" alignRight>
+      <GroupItem>
+        <a
+          href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
+        >
+          Administrera assistenter
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
+          Hantera Omgångar/grupper
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
+        >
+          Kursdeltagare
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
+          Kursinformation i Kopps
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
+        >
+          Redigera introduktion till kursen
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}
+        >
+          Skapa och publicera kurs-PM
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
+          Kursvärdering
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
+        >
+          Publicera ny kursanalys
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}
+        >
+          Se provresultat
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
+          Studentgruppen / Prenumeranter
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
+        >
+          Sök tentamen
+        </a>
+      </GroupItem>
+    </DropdownMenuGroup>
+  )
 }
 
 type TArgsCanvasRoomXXXList = {
@@ -135,7 +158,7 @@ export function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
       {rooms.map((room: TCanvasRoom) => {
         return (
           <li key={room.startTerm}>
-            <CanvasRoomItem
+            <CanvasRoomLink
               url={room.url.toString()}
               type={room.type}
               code={room.registrationCode}
@@ -157,7 +180,7 @@ function CanvasRoomExpandedList({ rooms }: TArgsCanvasRoomXXXList) {
       {rooms.map((room: TCanvasRoom) => {
         return (
           <GroupItem key={room.startTerm}>
-            <CanvasRoomItem
+            <CanvasRoomLink
               url={room.url.toString()}
               type={room.type}
               code={room.registrationCode}
@@ -170,18 +193,18 @@ function CanvasRoomExpandedList({ rooms }: TArgsCanvasRoomXXXList) {
   );
 }
 
-type TCanvasRoomItemProps = {
+type TCanvasRoomLinkProps = {
   url: string;
   type: string | undefined;
   code?: string;
   startTerm: string;
 };
 
-function CanvasRoomItem({ url, type, code, startTerm }: TCanvasRoomItemProps) {
+function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
     <a href={url}>
-      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
+      {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
 }
@@ -215,8 +238,8 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
   }
 
   return {
-    current: outp.slice(0, 4),
-    other: outp.slice(4),
+    current: outp.slice(0, 3),
+    other: outp.slice(3),
   };
 }
 

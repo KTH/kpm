@@ -83,11 +83,10 @@ html #kpm-6cf53 {
     color: black;
   }
 
-  // Use more inuitive box model
-  box-sizing: border-box;
   *,
   *:before,
   *:after {
-    box-sizing: inherit;
+    // Use more inuitive box model
+    box-sizing: border-box;
   }
 }

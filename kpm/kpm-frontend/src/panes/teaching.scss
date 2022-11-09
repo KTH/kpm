@@ -4,7 +4,7 @@
   gap: calc(3 * var(--kpmGap));
 
   .kpm-teaching-course {
-    width: calc(100% / 3);
+    width: calc(100% / 2 - 10px);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
