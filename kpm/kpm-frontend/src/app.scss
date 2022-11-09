@@ -69,6 +69,23 @@
   }
 }
 
+// Global styling
+#kpm-6cf53 .modal {
+  max-width: 1200px;
+}
+
+#kpm-6cf53 .kpm-row {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+#kpm-6cf53 .kpm-col {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+
 // Typography in menu panes
 #kpm-6cf53 .modal-content {
   padding: calc(2 * var(--kpmPad));

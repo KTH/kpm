@@ -28,18 +28,6 @@ export function Teaching() {
         {Object.entries(courses).map(([code, course]) => {
           return <Course key={[code]} courseCode={code} course={course} />;
         })}
-                {Object.entries(courses).map(([code, course]) => {
-          return <Course key={[code]} courseCode={code} course={course} />;
-        })}
-                {Object.entries(courses).map(([code, course]) => {
-          return <Course key={[code]} courseCode={code} course={course} />;
-        })}
-                {Object.entries(courses).map(([code, course]) => {
-          return <Course key={[code]} courseCode={code} course={course} />;
-        })}
-                {Object.entries(courses).map(([code, course]) => {
-          return <Course key={[code]} courseCode={code} course={course} />;
-        })}
       </div>
     </MenuPane>
   );
@@ -54,18 +42,166 @@ function Course({ courseCode, course }: any) {
 
   return (
     <div className="kpm-teaching-course">
-      <h2>
-        {courseCode}: {courseName}
-      </h2>
-      <a href={aboutCourseUrl}>Om kursen</a>
-      <hr />
-      <CanvasRoomShortList rooms={current} />
-      <CanvasRoomExpandedList rooms={other} />
-      <hr />
+      <h2>{courseName}</h2>
+      <a href={aboutCourseUrl}>Om kursen (kurs-PM m.m.)</a>
       <CourseAdminDropdown courseCode={courseCode} currentTerm={currentTerm} />
+      <div className="kpm-row">
+        <h3>Canvas:</h3>
+        <CanvasRoomShortList rooms={current} />
+        <CanvasRoomExpandedList rooms={[...current, ...other]} title="Alla kursrum" />
+      </div>
     </div>
   );
 }
+// <CanvasRoomExpandedList rooms={other} />
+
+type TCanvasRoomShortListProps = {
+  rooms: TCanvasRoom[];
+};
+
+function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
+  return (
+    <ul className="kpm-teaching-course-rooms">
+      {rooms.map((room: TCanvasRoom) => {
+        return (
+          <li key={room.startTerm}>
+            <CanvasRoomLink
+              url={room.url.toString()}
+              type={room.type}
+              code={room.registrationCode}
+              startTerm={room.startTerm!}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+type TCanvasRoomExpandedListProps = {
+  rooms: TCanvasRoom[];
+  title: string;
+};
+function CanvasRoomExpandedList({ rooms, title }: TCanvasRoomExpandedListProps) {
+  // Only show this if it has any items
+  if (rooms.length === 0) return null;
+
+  // Group by startTerm
+  const groups: Record<string, any> = {};
+  for (const room of rooms) {
+    if (room.startTerm === undefined) {
+      if (groups['other'] === undefined) groups['other'] = { vt: [], ht: [], other: [] };
+      groups['other']['other'].push(room);
+      continue;
+    }
+
+    const year = room.startTerm!.slice(0, 4);
+    const term = room.startTerm!.slice(4, 5);
+    if (groups[year] === undefined) groups[year] = { vt: [], ht: [], other: [] };
+    switch (term) {
+      case "1":
+        groups[year]["vt"].push(room);
+        break;
+      case "2":
+        groups[year]["ht"].push(room);
+        break;
+      default:
+        groups[year]["other"].push(room);
+    }
+  }
+
+  const groupKeys = Object.keys(groups);
+  groupKeys.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
+  return (
+    <DropdownMenuGroup title={title}>
+      {groupKeys.map((year: string) => {
+        return (
+          <div className="kpm-teaching-course-rooms-dd-item">
+            <h3>{year}</h3>
+            <div className="kpm-col">
+              {groups[year]?.["vt"].map(
+                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
+              {groups[year]?.["other"].map(
+                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
+            </div>
+            <div className="kpm-col">
+              {groups[year]?.["ht"].map(
+                (room: TCanvasRoom) => <CanvasRoomLink url={room.url.toString()} type={room.type} code={room.registrationCode} startTerm={room.startTerm!} />)}
+            </div>
+          </div>
+
+        );
+      })}
+    </DropdownMenuGroup>
+  );
+}
+
+{/* <GroupItem key={room.startTerm}>
+<CanvasRoomLink
+  url={room.url.toString()}
+  type={room.type}
+  code={room.registrationCode}
+  startTerm={room.startTerm!}
+/>
+</GroupItem> */}
+
+type TCanvasRoomLinkProps = {
+  url: string;
+  type: string | undefined;
+  code?: string;
+  startTerm: string;
+};
+
+function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
+  // This is a Component to force consistency
+  return (
+    <a href={url}>
+      {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
+    </a>
+  );
+}
+
+function filterCanvasRooms(rooms: TCanvasRoom[]): {
+  current: TCanvasRoom[];
+  other: TCanvasRoom[];
+} {
+  const outp = [...rooms];
+
+  outp.sort((a: TCanvasRoom, b: TCanvasRoom) => {
+    const aVal = parseInt(a.startTerm || "0");
+    const bVal = parseInt(b.startTerm || "0");
+    if (aVal === bVal) return 0;
+    if (aVal > bVal) return -1;
+    return 1;
+  });
+
+  if (outp.length <= 4) {
+    return {
+      current: outp,
+      other: [],
+    };
+  }
+
+  if (outp.length === 0) {
+    return {
+      current: [],
+      other: [],
+    };
+  }
+
+  return {
+    current: outp.slice(0, 3),
+    other: outp.slice(3),
+  };
+}
+
+function formatTerm(startTerm: string) {
+  const shortYear = startTerm.slice(2, 4);
+  const termNr = startTerm.slice(4, 5);
+  const termStr = { 1: "VT", 2: "HT" }[termNr];
+  return `${termStr}${shortYear}`;
+}
+
 
 type TCourseAdminDropdownProps = {
   courseCode: string;
@@ -146,106 +282,4 @@ function CourseAdminDropdown({ courseCode, currentTerm }: TCourseAdminDropdownPr
       </GroupItem>
     </DropdownMenuGroup>
   )
-}
-
-type TArgsCanvasRoomXXXList = {
-  rooms: TCanvasRoom[];
-};
-// TODO: Move to components?  Or should the rooms in studies really be different?
-export function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
-  return (
-    <ul>
-      {rooms.map((room: TCanvasRoom) => {
-        return (
-          <li key={room.startTerm}>
-            <CanvasRoomLink
-              url={room.url.toString()}
-              type={room.type}
-              code={room.registrationCode}
-              startTerm={room.startTerm!}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-function CanvasRoomExpandedList({ rooms }: TArgsCanvasRoomXXXList) {
-  // Only show this if it has any items
-  if (rooms.length === 0) return null;
-
-  return (
-    <CollapsableGroup title="Äldre kursrum">
-      {rooms.map((room: TCanvasRoom) => {
-        return (
-          <GroupItem key={room.startTerm}>
-            <CanvasRoomLink
-              url={room.url.toString()}
-              type={room.type}
-              code={room.registrationCode}
-              startTerm={room.startTerm!}
-            />
-          </GroupItem>
-        );
-      })}
-    </CollapsableGroup>
-  );
-}
-
-type TCanvasRoomLinkProps = {
-  url: string;
-  type: string | undefined;
-  code?: string;
-  startTerm: string;
-};
-
-function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
-  // This is a Component to force consistency
-  return (
-    <a href={url}>
-      {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
-    </a>
-  );
-}
-
-function filterCanvasRooms(rooms: TCanvasRoom[]): {
-  current: TCanvasRoom[];
-  other: TCanvasRoom[];
-} {
-  const outp = [...rooms];
-
-  outp.sort((a: TCanvasRoom, b: TCanvasRoom) => {
-    const aVal = parseInt(a.startTerm || "0");
-    const bVal = parseInt(b.startTerm || "0");
-    if (aVal === bVal) return 0;
-    if (aVal > bVal) return -1;
-    return 1;
-  });
-
-  if (outp.length <= 4) {
-    return {
-      current: outp,
-      other: [],
-    };
-  }
-
-  if (outp.length === 0) {
-    return {
-      current: [],
-      other: [],
-    };
-  }
-
-  return {
-    current: outp.slice(0, 3),
-    other: outp.slice(3),
-  };
-}
-
-function formatTerm(startTerm: string) {
-  const shortYear = startTerm.slice(2, 4);
-  const termNr = startTerm.slice(4, 5);
-  const termStr = { 1: "VT", 2: "HT" }[termNr];
-  return `${termStr}${shortYear}`;
 }
