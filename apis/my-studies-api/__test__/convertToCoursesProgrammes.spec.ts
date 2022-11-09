@@ -3,6 +3,7 @@ import {
   convertToCourseObjects,
   convertToProgrammeObjects,
   TUserCourse,
+  TUserProgram,
 } from "../src/apiUtils";
 
 // ladok2.kurser.SE.1020
@@ -64,12 +65,12 @@ const courseTestCases: { [index: string]: TUserCourse } = {
   },
 };
 
-const programmeTestCases: { [index: string]: any } = {
+const programmeTestCases: { [index: string]: TUserProgram } = {
   "ladok2.program.TIPDM.registrerade_20221": {
     type: "program",
     code: "TIPDM",
     status: "registrerade",
-    year: "2022",
+    year: 2022,
     term: "1",
   },
 };

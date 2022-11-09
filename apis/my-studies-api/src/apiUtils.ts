@@ -66,7 +66,16 @@ export function convertToCourseObjects(inp: string[]): TUserCourse[] {
   });
 }
 
-export function convertToProgrammeObjects(inp: string[]) {
+export type TProgramCode = string;
+export type TUserProgram = {
+  type: "program";
+  code: TProgramCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+};
+
+export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
   const progrRegex =
     /^ladok2\.(?<type>program)\.(?<code_pt1>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
   const tmpJson = inp
@@ -78,7 +87,7 @@ export function convertToProgrammeObjects(inp: string[]) {
       type,
       code: code_pt1,
       status: pstatus,
-      year: pyear,
+      year: parseInt(pyear) || undefined,
       term: pterm,
     };
   });

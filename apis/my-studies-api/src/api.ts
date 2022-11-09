@@ -6,7 +6,9 @@ import {
   convertToProgrammeObjects,
   getListOfCourseProgrammeNames,
   TCourseCode,
+  TProgramCode,
   TUserCourse,
+  TUserProgram,
 } from "./apiUtils";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -52,7 +54,7 @@ export type TUgGroup = {
 
 export type TUserStudies = {
   courses: Record<TCourseCode, TUserCourse[]>;
-  programmes: any[]; // FIXME
+  programmes: Record<TProgramCode, TUserProgram[]>;
 };
 
 api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
@@ -91,9 +93,18 @@ api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
       courses[course_code] = [obj];
     }
   }
+  let programmes: { [index: TProgramCode]: TUserProgram[] } = {};
+  for (const obj of convertToProgrammeObjects(programmeNames)) {
+    let program_code = obj.code;
+    if (programmes[program_code]) {
+      programmes[program_code].push(obj);
+    } else {
+      programmes[program_code] = [obj];
+    }
+  }
 
   res.status(statusCode || 200).send({
     courses,
-    programmes: convertToProgrammeObjects(programmeNames),
+    programmes,
   });
 });

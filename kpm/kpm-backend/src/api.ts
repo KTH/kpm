@@ -10,6 +10,7 @@ import {
   TTeachingRole,
   TCourseCode,
   TStudiesCourse,
+  TProgrammeCode,
 } from "kpm-backend-interface";
 
 const MY_CANVAS_ROOMS_API_URI =
@@ -98,7 +99,7 @@ api.get("/teaching", async (req, res, next) => {
   }
 });
 
-// Types copied from my-studies-api:
+// Copied from my-studies-api:
 export type TApiUserCourse = {
   type: "kurser";
   code: TCourseCode;
@@ -107,9 +108,18 @@ export type TApiUserCourse = {
   term?: "1" | "2";
   round?: string;
 };
+// Copied from my-studies-api:
+export type TUserProgramme = {
+  type: "program";
+  code: TProgrammeCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+};
+// Copied from my-studies-api:
 export type TApiUserStudies = {
   courses: Record<TCourseCode, TApiUserCourse[]>;
-  programmes: any[]; // FIXME
+  programmes: Record<TProgrammeCode, TUserProgramme[]>;
 };
 
 api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
