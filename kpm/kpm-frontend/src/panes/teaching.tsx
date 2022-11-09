@@ -128,8 +128,8 @@ function Course({ courseCode, course }: any) {
 type TArgsCanvasRoomXXXList = {
   rooms: TCanvasRoom[];
 };
-
-function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
+// TODO: Move to components?  Or should the rooms in studies really be different?
+export function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
   return (
     <ul>
       {rooms.map((room: TCanvasRoom) => {

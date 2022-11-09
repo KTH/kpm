@@ -9,6 +9,8 @@ import {
   TTeachingCourse,
   TTeachingRole,
   TCourseCode,
+  TStudiesCourse,
+  TProgramCode,
 } from "kpm-backend-interface";
 
 const MY_CANVAS_ROOMS_API_URI =
@@ -97,18 +99,65 @@ api.get("/teaching", async (req, res, next) => {
   }
 });
 
-api.get("/studies", async (req, res, next) => {
+// Copied from my-studies-api:
+export type TApiUserCourse = {
+  type: "kurser";
+  course_code: TCourseCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+  round?: string;
+};
+// Copied from my-studies-api:
+export type TUserProgramme = {
+  type: "program";
+  program_code: TProgramCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+};
+// Copied from my-studies-api:
+export type TApiUserStudies = {
+  courses: Record<TCourseCode, TApiUserCourse[]>;
+  programmes: Record<TProgramCode, TUserProgramme[]>;
+};
+
+api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
+  const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
-    const { courses, programmes } = await got
-      .get<any>(`${MY_STUDIES_API_URI}/user/u1famwov`, {
+    const studies_fut = got
+      .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user}`, {
         responseType: "json",
       })
       .then((r) => r.body);
+    const rooms_fut = get_canvas_rooms(user);
 
+    const studies = await studies_fut;
+    const kopps_futs = Object.assign(
+      {},
+      ...Object.keys(studies.courses).map((course_code) => ({
+        [course_code]: getCourseInfo(course_code),
+      }))
+    );
+    const { rooms } = await rooms_fut;
+
+    let courses: Record<TCourseCode, TStudiesCourse> = {};
+    for (let [course_code, roles] of Object.entries(studies.courses)) {
+      const kopps = await kopps_futs[course_code];
+
+      courses[course_code] = {
+        course_code: course_code,
+        title: kopps.title,
+        credits: kopps.credits,
+        creditUnitAbbr: kopps.creditUnitAbbr,
+        roles: roles,
+        rooms: rooms[course_code],
+      };
+    }
     res.send({
       courses,
-      programmes,
-    } as APIStudies);
+      programmes: studies.programmes,
+    });
   } catch (err) {
     next(err);
   }

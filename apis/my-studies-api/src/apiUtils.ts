@@ -37,7 +37,17 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
   };
 }
 
-export function convertToCourseObjects(inp: string[]) {
+export type TCourseCode = string;
+export type TUserCourse = {
+  type: string;
+  course_code: TCourseCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+  round?: string;
+};
+
+export function convertToCourseObjects(inp: string[]): TUserCourse[] {
   const courseRegex =
     /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
   const tmpJson = inp
@@ -47,30 +57,37 @@ export function convertToCourseObjects(inp: string[]) {
     const { type, code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = o;
     return {
       type,
-      code: `${code_pt1}${code_pt2}`,
-      code_pt1,
-      code_pt2,
+      course_code: `${code_pt1}${code_pt2}`,
       status: cstatus,
-      year: cyear,
+      year: parseInt(cyear) || undefined,
       term: cterm,
       round: cterm_pt2, // QUESTION: Is this really round id or perhaps section or something similar? Matches the last number of "registrerade_20221.1"
     };
   });
 }
 
-export function convertToProgrammeObjects(inp: string[]) {
+export type TProgramCode = string;
+export type TUserProgram = {
+  type: "program";
+  program_code: TProgramCode;
+  status?: "antagna" | "godkand" | "registrerade";
+  year?: number;
+  term?: "1" | "2";
+};
+
+export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
   const progrRegex =
-    /^ladok2\.(?<type>program)\.(?<code_pt1>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+    /^ladok2\.(?<type>program)\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
   const tmpJson = inp
     ?.map((o) => o.match(progrRegex)?.groups)
     .filter((o) => o && o.type === "program");
   return tmpJson?.map((o: any) => {
-    const { type, code_pt1, pstatus, pyear, pterm } = o;
+    const { type, code, pstatus, pyear, pterm } = o;
     return {
       type,
-      code: code_pt1,
+      program_code: code,
       status: pstatus,
-      year: pyear,
+      year: parseInt(pyear) || undefined,
       term: pterm,
     };
   });
