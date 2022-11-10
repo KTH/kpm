@@ -6,7 +6,11 @@ import {
   TTeachingCourse,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { CollapsableGroup, GroupItem } from "../components/groups";
+import {
+  CollapsableGroup,
+  DropdownMenuGroup,
+  GroupItem,
+} from "../components/groups";
 import { i18n } from "./i18n";
 
 import "./teaching.scss";
@@ -42,101 +46,40 @@ function Course({ courseCode, course }: any) {
 
   return (
     <div className="kpm-teaching-course">
-      <h2>
-        {courseCode}: {courseName}
-      </h2>
-      <a href={aboutCourseUrl}>Om kursen</a>
-      <hr />
-      <CanvasRoomShortList rooms={current} />
-      <CanvasRoomExpandedList rooms={other} />
-      <hr />
-      <CollapsableGroup title="Administrera kurs">
-        <GroupItem>
-          <a
-            href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
-          >
-            Administrera assistenter
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
-            Hantera Omgångar/grupper
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
-          >
-            Kursdeltagare
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
-            Kursinformation i Kopps
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
-          >
-            Redigera introduktion till kursen
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}
-          >
-            Skapa och publicera kurs-PM
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
-            Kursvärdering
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
-          >
-            Publicera ny kursanalys
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}
-          >
-            Se provresultat
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
-            Studentgruppen / Prenumeranter
-          </a>
-        </GroupItem>
-        <GroupItem>
-          <a
-            href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
-          >
-            Sök tentamen
-          </a>
-        </GroupItem>
-      </CollapsableGroup>
+      <h2>{courseCode}</h2>
+      <div className="kpm-row">
+        <p>{courseName}</p>
+        <a href={aboutCourseUrl}>Om kursen (kurs-PM m.m.)</a>
+        <CourseAdminDropdown
+          courseCode={courseCode}
+          currentTerm={currentTerm}
+        />
+        <div className="kpm-row">
+          <h3>Canvas:</h3>
+          <CanvasRoomShortList rooms={current} />
+          <CanvasRoomExpandedList
+            rooms={[...current, ...other]}
+            title="Alla kursrum"
+          />
+        </div>
+      </div>
     </div>
   );
 }
+// <CanvasRoomExpandedList rooms={other} />
 
-type TArgsCanvasRoomXXXList = {
+type TCanvasRoomShortListProps = {
   rooms: TCanvasRoom[];
 };
-// TODO: Move to components?  Or should the rooms in studies really be different?
-export function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
+
+function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
   return (
-    <ul>
+    <ul className="kpm-teaching-course-rooms">
       {rooms.map((room: TCanvasRoom) => {
         return (
           <li key={room.startTerm}>
-            <CanvasRoomItem
-              url={room.url.toString()}
+            <CanvasRoomLink
+              url={room.url}
               type={room.type}
               code={room.registrationCode}
               startTerm={room.startTerm!}
@@ -148,40 +91,114 @@ export function CanvasRoomShortList({ rooms }: TArgsCanvasRoomXXXList) {
   );
 }
 
-function CanvasRoomExpandedList({ rooms }: TArgsCanvasRoomXXXList) {
+type TCanvasRoomExpandedListProps = {
+  rooms: TCanvasRoom[];
+  title: string;
+};
+function CanvasRoomExpandedList({
+  rooms,
+  title,
+}: TCanvasRoomExpandedListProps) {
   // Only show this if it has any items
   if (rooms.length === 0) return null;
 
+  // Group by startTerm
+  const groups: Record<string, any> = {};
+  for (const room of rooms) {
+    if (room.startTerm === undefined) {
+      if (groups["other"] === undefined)
+        groups["other"] = { vt: [], ht: [], other: [] };
+      groups["other"]["other"].push(room);
+      continue;
+    }
+
+    const year = room.startTerm!.slice(0, 4);
+    const term = room.startTerm!.slice(4, 5);
+    if (groups[year] === undefined)
+      groups[year] = { vt: [], ht: [], other: [] };
+    switch (term) {
+      case "1":
+        groups[year]["vt"].push(room);
+        break;
+      case "2":
+        groups[year]["ht"].push(room);
+        break;
+      default:
+        groups[year]["other"].push(room);
+    }
+  }
+
+  const groupKeys = Object.keys(groups);
+  groupKeys.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
   return (
-    <CollapsableGroup title="Äldre kursrum">
-      {rooms.map((room: TCanvasRoom) => {
+    <DropdownMenuGroup title={title}>
+      {groupKeys.map((year: string) => {
         return (
-          <GroupItem key={room.startTerm}>
-            <CanvasRoomItem
-              url={room.url.toString()}
-              type={room.type}
-              code={room.registrationCode}
-              startTerm={room.startTerm!}
-            />
-          </GroupItem>
+          <div className="kpm-teaching-course-rooms-dd-item">
+            <h3>{year}</h3>
+            <div className="kpm-col">
+              {groups[year]?.["vt"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
+              {groups[year]?.["other"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
+            </div>
+            <div className="kpm-col">
+              {groups[year]?.["ht"].map((room: TCanvasRoom) => (
+                <CanvasRoomLink
+                  url={room.url}
+                  type={room.type}
+                  code={room.registrationCode}
+                  startTerm={room.startTerm!}
+                />
+              ))}
+            </div>
+          </div>
         );
       })}
-    </CollapsableGroup>
+    </DropdownMenuGroup>
   );
 }
 
-type TCanvasRoomItemProps = {
-  url: string;
+{
+  /* <GroupItem key={room.startTerm}>
+<CanvasRoomLink
+  url={room.url.toString()}
+  type={room.type}
+  code={room.registrationCode}
+  startTerm={room.startTerm!}
+/>
+</GroupItem> */
+}
+
+type TCanvasRoomLinkProps = {
+  url: URL;
   type: string | undefined;
   code?: string;
-  startTerm: string;
+  startTerm?: string;
 };
 
-function CanvasRoomItem({ url, type, code, startTerm }: TCanvasRoomItemProps) {
+export function CanvasRoomLink({
+  url,
+  type,
+  code,
+  startTerm,
+}: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
-    <a href={url}>
-      Kursrum {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
+    <a href={url.href}>
+      {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
 }
@@ -215,8 +232,8 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
   }
 
   return {
-    current: outp.slice(0, 4),
-    other: outp.slice(4),
+    current: outp.slice(0, 3),
+    other: outp.slice(3),
   };
 }
 
@@ -225,4 +242,90 @@ function formatTerm(startTerm: string) {
   const termNr = startTerm.slice(4, 5);
   const termStr = { 1: "VT", 2: "HT" }[termNr];
   return `${termStr}${shortYear}`;
+}
+
+type TCourseAdminDropdownProps = {
+  courseCode: string;
+  currentTerm: string;
+};
+
+function CourseAdminDropdown({
+  courseCode,
+  currentTerm,
+}: TCourseAdminDropdownProps) {
+  return (
+    <DropdownMenuGroup
+      title="Administrera kurs"
+      className="kpm-teaching-course-admin-dropdown"
+      alignRight
+    >
+      <GroupItem>
+        <a
+          href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
+        >
+          Administrera assistenter
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
+          Hantera Omgångar/grupper
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
+        >
+          Kursdeltagare
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
+          Kursinformation i Kopps
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
+        >
+          Redigera introduktion till kursen
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}>
+          Skapa och publicera kurs-PM
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
+          Kursvärdering
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
+        >
+          Publicera ny kursanalys
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}
+        >
+          Se provresultat
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
+          Studentgruppen / Prenumeranter
+        </a>
+      </GroupItem>
+      <GroupItem>
+        <a
+          href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
+        >
+          Sök tentamen
+        </a>
+      </GroupItem>
+    </DropdownMenuGroup>
+  );
 }

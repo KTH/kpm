@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import { APIStudies } from "kpm-backend-interface";
+import { APIStudies, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { CanvasRoomShortList } from "./teaching";
+import { CanvasRoomLink } from "./teaching";
+import { i18n } from "./i18n";
 
 import "./studies.scss";
 
@@ -20,7 +21,7 @@ export function Studies() {
     <MenuPane>
       <h2>Studies</h2>
       <ul className="kpm-studies">
-        {Object.entries(courses)?.map((course_code, course) => {
+        {Object.entries(courses)?.map(([course_code, course]) => {
           return <Course courseCode={course_code} course={course} />;
         })}
       </ul>
@@ -32,9 +33,12 @@ function Course({ courseCode, course }: any) {
   return (
     <li className="kpm-studies-course">
       <h2>
-        {courseCode} {course.title.sv} {course.credits} {course.creditUnitAbbr}
+        {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
+        {course.creditUnitAbbr}
       </h2>
-      <CanvasRoomShortList rooms={course.rooms} />
+      {course.rooms?.map((room: TCanvasRoom) => (
+        <CanvasRoomLink {...room} />
+      ))}
     </li>
   );
 }

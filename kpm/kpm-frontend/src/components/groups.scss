@@ -13,3 +13,48 @@
     cursor: pointer;
   }
 }
+
+#kpm-6cf53 .kpm-dropdownmenu-group {
+  position: relative;
+
+  .kpm-dropdownmeny-backdrop {
+    position: fixed;
+    cursor: pointer;
+    z-index: 998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .kpm-link-list {
+    // NOTE: Currently this popup menu is layered on top of the menubar
+    // read comment for usePositionDropdown() for more info.
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    max-width: 95%;
+    min-height: 200px; // Use a constant value, otherwise we have problems
+    background-color: var(--kpmPaneBg);
+    overflow-y: auto;
+    box-shadow: 4px 4px 10px rgb(0 0 0 / 20%);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.1s ease-in;
+
+    ul {
+      padding: var(--kpmPad);
+    }
+
+    li.item {
+      margin: 0;
+      padding: 0;
+      padding-right: calc(2 * var(--kpmPad));
+    }
+  }
+
+  summary {
+    cursor: context-menu;
+  }
+}
