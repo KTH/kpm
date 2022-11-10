@@ -257,7 +257,6 @@ function CourseAdminDropdown({
     <DropdownMenuGroup
       title="Administrera kurs"
       className="kpm-teaching-course-admin-dropdown"
-      alignRight
     >
       <GroupItem>
         <a

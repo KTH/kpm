@@ -32,6 +32,11 @@
       gap: $rowColGap;
     }
 
+
+    .kpm-teaching-course-admin-dropdown {
+      margin-left: auto; // Right align on wrap, but no effect when no-wrap because flex-grow has presedence
+    }
+
     ul.kpm-teaching-course-rooms {
       display: flex;
       flex-flow: row wrap;
@@ -42,7 +47,7 @@
     }
     .kpm-link-list {
       min-height: 50px;
-      min-width: 200px;
+      min-width: 30ch;
 
       ul {
         display: flex;
@@ -56,12 +61,6 @@
       flex-flow: row wrap;
       gap: 20px;
       align-items: flex-start;
-    }
-
-    .kpm-teaching-course-admin-dropdown summary {
-      // TODO: Update dropdown so we set specific width to override size of summary
-      text-align: right;
-      min-width: 30ch;
     }
   }
 }

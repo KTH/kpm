@@ -162,9 +162,12 @@ function usePositionDropdown(
     // 3. Adjust placement and size depending on available space
     const spaceTop = elTop;
     const spaceBottom = pageHeight - elBottom;
+    const spaceLeft = elRight;
+    const spaceRight = pageWidth - elLeft;
 
     const cs = window.getComputedStyle(dropdown);
-    const minHeight = parseFloat(cs.getPropertyValue("min-height")) || 200;
+    const minHeight = getLargestCssValue(cs, ["min-height", "height"]) || 200;
+    const minWidth = getLargestCssValue(cs, ["min-width", "width"]) || elWidth;
 
     // Should the dropdown open up or down? Depends on setting but also available space
     let placeTop;
@@ -207,8 +210,25 @@ function usePositionDropdown(
     }
 
     // Nudge placement on X axis depending on available space
-    let deltaX = toRight ? elRight - dropdownWidth : elLeft;
-    let width = elWidth;
+    let placeRight;
+    if (toRight) {
+      if (spaceLeft < minWidth + PADDING && spaceRight > minWidth + PADDING) {
+        // Flip to left aligned because more space
+        placeRight = false;
+      } else {
+        placeRight = true;
+      }
+    } else {
+      if (spaceRight < minWidth + PADDING && spaceLeft > minWidth + PADDING) {
+        // Flip to right aligned because more space
+        placeRight = true;
+      } else {
+        placeRight = false;
+      }
+    }
+
+    let deltaX = placeRight ? elRight - dropdownWidth : elLeft;
+    let width = minWidth;
     if (toRight) {
       if (deltaX < 0) {
         deltaX = elRight >= 0 ? 0 : elRight; // perhaps we shouldn't let nudge so far
@@ -252,4 +272,14 @@ function usePositionDropdown(
     requestRef.current = requestAnimationFrame(calculate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []);
+}
+
+// Utils
+function getLargestCssValue(cs: CSSStyleDeclaration, props: string[]) {
+  let outp = 0;
+  for (const p of props) {
+    const tmp = parseFloat(cs.getPropertyValue(p)) || 0;
+    outp = tmp > outp ? tmp : outp;
+  }
+  return outp;
 }
