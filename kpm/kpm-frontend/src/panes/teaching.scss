@@ -51,5 +51,11 @@
       gap: 20px;
       align-items: flex-start;
     }
+
+    .kpm-teaching-course-admin-dropdown summary {
+      // TODO: Update dropdown so we set specific width to override size of summary
+      text-align: right;
+      min-width: 30ch;
+    }
   }
 }

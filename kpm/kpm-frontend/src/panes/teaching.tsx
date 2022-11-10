@@ -73,7 +73,7 @@ function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
         return (
           <li key={room.startTerm}>
             <CanvasRoomLink
-              url={room.url.toString()}
+              url={room.url}
               type={room.type}
               code={room.registrationCode}
               startTerm={room.startTerm!}
@@ -133,7 +133,7 @@ function CanvasRoomExpandedList({
             <div className="kpm-col">
               {groups[year]?.["vt"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
-                  url={room.url.toString()}
+                  url={room.url}
                   type={room.type}
                   code={room.registrationCode}
                   startTerm={room.startTerm!}
@@ -141,7 +141,7 @@ function CanvasRoomExpandedList({
               ))}
               {groups[year]?.["other"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
-                  url={room.url.toString()}
+                  url={room.url}
                   type={room.type}
                   code={room.registrationCode}
                   startTerm={room.startTerm!}
@@ -151,7 +151,7 @@ function CanvasRoomExpandedList({
             <div className="kpm-col">
               {groups[year]?.["ht"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
-                  url={room.url.toString()}
+                  url={room.url}
                   type={room.type}
                   code={room.registrationCode}
                   startTerm={room.startTerm!}
@@ -177,16 +177,16 @@ function CanvasRoomExpandedList({
 }
 
 type TCanvasRoomLinkProps = {
-  url: string;
+  url: URL;
   type: string | undefined;
   code?: string;
-  startTerm: string;
+  startTerm?: string;
 };
 
-function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
+export function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
-    <a href={url}>
+    <a href={url.href}>
       {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
@@ -243,7 +243,7 @@ function CourseAdminDropdown({
   currentTerm,
 }: TCourseAdminDropdownProps) {
   return (
-    <DropdownMenuGroup title="Administrera kurs">
+    <DropdownMenuGroup title="Administrera kurs" className="kpm-teaching-course-admin-dropdown" alignRight>
       <GroupItem>
         <a
           href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}

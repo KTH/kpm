@@ -19,6 +19,7 @@ type TStyle = Record<string, string | undefined> | undefined;
 
 type TDropdownMenuGroupProps = {
   title: string;
+  className?: string;
   children: any;
   revealUp?: boolean;
   alignRight?: boolean;
@@ -28,6 +29,7 @@ type TDropdownMenuGroupProps = {
 
 export function DropdownMenuGroup({
   title,
+  className,
   children,
   revealUp = false,
   alignRight = false,
@@ -53,10 +55,15 @@ export function DropdownMenuGroup({
     }
   );
 
+  let cls = "kpm-dropdownmenu-group";
+  if (className !== undefined) {
+    cls += ` ${className}`;
+  }
+
   return (
     <details
       ref={detailsRef}
-      className="kpm-dropdownmenu-group"
+      className={cls}
       open={open}
       onClick={(e) => {
         e.preventDefault();
