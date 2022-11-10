@@ -8,19 +8,18 @@ import assert from "node:assert/strict";
 declare module "express-session" {
   interface SessionData {
     tmpNonce?: string;
-    user?: TSessionUser
+    user?: TSessionUser;
   }
 }
 
-
 export type TSessionUser = {
-  kthid: string,
-  display_name: string,
-  email?: string,
-  username?: string,
-  exp: number,
-  nbf: number
-}
+  kthid: string;
+  display_name: string;
+  email?: string;
+  username?: string;
+  exp: number;
+  nbf: number;
+};
 
 // Should these variables (PREFIX, PORT, PROXY_HOST) be defined in one place?
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
@@ -101,7 +100,7 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       req.session.user = user;
     } else {
       //
-      console.log("Invalid TSessionUser object.")
+      console.log("Invalid TSessionUser object.");
     }
     res.redirect(nextUrl);
   } catch (err) {
@@ -116,22 +115,25 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
   }
 });
 
-export function requiresValidSessionUser(req: Express.Request, res: Express.Response, next: Function) {
+export function requiresValidSessionUser(
+  req: Express.Request,
+  res: Express.Response,
+  next: Function
+) {
   if (!isValidSession(req.session.user)) {
     throw new Error("Not a valid TSessionUser");
   }
-  
+
   next();
 }
 
-
 export function isValidSession(user?: TSessionUser) {
-  if (user === undefined) return false
+  if (user === undefined) return false;
 
   // TODO: Clear session if not valid
   const { exp, nbf } = user;
   const now = Date.now() / 1000;
-  return (exp > now && nbf < now);
+  return exp > now && nbf < now;
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
@@ -142,8 +144,6 @@ function createValidSesisonUser(claim: any): TSessionUser {
     email: claim.email,
     username: claim.username,
     exp: claim.exp,
-    nbf: claim.nbf
+    nbf: claim.nbf,
   };
 }
-
-
