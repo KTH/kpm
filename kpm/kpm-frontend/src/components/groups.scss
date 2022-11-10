@@ -35,7 +35,7 @@
     top: 0;
     left: 0;
     max-width: 95%;
-    min-height: 200px; // Use a constant value, otherwise we have problems
+    min-height: 200px; // Use a constant value in pixels, otherwise we have problems
     background-color: var(--kpmPaneBg);
     overflow-y: auto;
     box-shadow: 4px 4px 10px rgb(0 0 0 / 20%);
