@@ -12,6 +12,7 @@ import {
   TStudiesCourse,
   TProgramCode,
 } from "kpm-backend-interface";
+import { TSessionUser } from "./auth";
 
 const MY_CANVAS_ROOMS_API_URI =
   process.env.MY_CANVAS_ROOMS_API_URI ||
@@ -47,19 +48,19 @@ api.get("/canvas-rooms", async (req, res, next) => {
 });
 
 api.get("/teaching", async (req, res: express.Response<APITeaching>, next) => {
-  const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
+  const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
     const perf1 = Date.now();
     const teaching_fut = got
       .get<Record<TCourseCode, TTeachingRole[]>>(
-        `${MY_TEACHING_API_URI}/user/${user}`,
+        `${MY_TEACHING_API_URI}/user/${user.kthid}`,
         {
           responseType: "json",
         }
       )
       .then((r) => r.body);
 
-    const rooms_fut = get_canvas_rooms(user);
+    const rooms_fut = get_canvas_rooms(user.kthid);
     console.log(
       `Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`
     );
@@ -123,14 +124,14 @@ export type TApiUserStudies = {
 };
 
 api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
-  const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
+  const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
     const studies_fut = got
-      .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user}`, {
+      .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",
       })
       .then((r) => r.body);
-    const rooms_fut = get_canvas_rooms(user);
+    const rooms_fut = get_canvas_rooms(user.kthid);
 
     const studies = await studies_fut;
     const kopps_futs: Record<TCourseCode, TKoppsCourseInfo> = Object.assign(

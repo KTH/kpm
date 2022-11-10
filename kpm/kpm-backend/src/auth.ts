@@ -7,8 +7,19 @@ import assert from "node:assert/strict";
  */
 declare module "express-session" {
   interface SessionData {
-    tmpNonce: string;
+    tmpNonce?: string;
+    user?: TSessionUser
   }
+}
+
+
+export type TSessionUser = {
+  kthid: string,
+  display_name: string,
+  email?: string,
+  username?: string,
+  exp: number,
+  nbf: number
 }
 
 // Should these variables (PREFIX, PORT, PROXY_HOST) be defined in one place?
@@ -85,6 +96,13 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       .then((tokenSet) => tokenSet.claims());
 
     // TODO: do something with `claims` (includes user ID, etc)
+    const user = createValidSesisonUser(claims);
+    if (isValidSession(user)) {
+      req.session.user = user;
+    } else {
+      //
+      console.log("Invalid TSessionUser object.")
+    }
     res.redirect(nextUrl);
   } catch (err) {
     if (err instanceof errors.OPError) {
@@ -97,3 +115,35 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
     next(err);
   }
 });
+
+export function requiresValidSessionUser(req: Express.Request, res: Express.Response, next: Function) {
+  if (!isValidSession(req.session.user)) {
+    throw new Error("Not a valid TSessionUser");
+  }
+  
+  next();
+}
+
+
+export function isValidSession(user?: TSessionUser) {
+  if (user === undefined) return false
+
+  // TODO: Clear session if not valid
+  const { exp, nbf } = user;
+  const now = Date.now() / 1000;
+  return (exp > now && nbf < now);
+}
+
+function createValidSesisonUser(claim: any): TSessionUser {
+  // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
+  return {
+    kthid: claim.kthid,
+    display_name: claim.unique_name[0],
+    email: claim.email,
+    username: claim.username,
+    exp: claim.exp,
+    nbf: claim.nbf
+  };
+}
+
+
