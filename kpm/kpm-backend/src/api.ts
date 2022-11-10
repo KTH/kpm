@@ -46,7 +46,7 @@ api.get("/canvas-rooms", async (req, res, next) => {
   }
 });
 
-api.get("/teaching", async (req, res, next) => {
+api.get("/teaching", async (req, res: express.Response<APITeaching>, next) => {
   const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
   try {
     const perf1 = Date.now();
@@ -89,7 +89,7 @@ api.get("/teaching", async (req, res, next) => {
         credits: kopps.credits,
         creditUnitAbbr: kopps.creditUnitAbbr,
         roles: roles,
-        rooms: rooms[course_code],
+        rooms: rooms[course_code] || [],
       };
     }
 
