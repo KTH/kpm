@@ -1,21 +1,27 @@
 #kpm-6cf53 .kpm-teaching {
   display: flex;
   flex-flow: column nowrap;
-
+  $rowColGap: calc(2 * var(--kpmGap)) calc(5 * var(--kpmGap));
   .kpm-teaching-course {
     display: flex;
     flex-flow: row wrap;
-    gap: calc(2 * var(--kpmGap));
+    gap: $rowColGap;
 
     align-items: flex-start;
     padding: calc(2 * var(--kpmPad)) 0;
     border-bottom: 1px solid var(--kpmPaneSepatorFg);
 
     h2 {
-      flex-grow: 1;
+      flex: auto 0 0;
       font-size: 1em;
       margin: 0;
       padding: 0;
+    }
+    > .kpm-row {
+      flex: 15em 1 1;
+      > p {
+        flex: auto 1 1;
+      }
     }
 
     & > a {
@@ -23,13 +29,13 @@
     }
 
     .kpm-row {
-      gap: calc(5 * var(--kpmGap));
+      gap: $rowColGap;
     }
 
     ul.kpm-teaching-course-rooms {
       display: flex;
       flex-flow: row wrap;
-      gap: calc(5 * var(--kpmGap));
+      gap: $rowColGap;
       li {
         margin: 0;
       }

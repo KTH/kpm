@@ -46,16 +46,22 @@ function Course({ courseCode, course }: any) {
 
   return (
     <div className="kpm-teaching-course">
-      <h2>{courseName}</h2>
-      <a href={aboutCourseUrl}>Om kursen (kurs-PM m.m.)</a>
-      <CourseAdminDropdown courseCode={courseCode} currentTerm={currentTerm} />
+      <h2>{courseCode}</h2>
       <div className="kpm-row">
-        <h3>Canvas:</h3>
-        <CanvasRoomShortList rooms={current} />
-        <CanvasRoomExpandedList
-          rooms={[...current, ...other]}
-          title="Alla kursrum"
+        <p>{courseName}</p>
+        <a href={aboutCourseUrl}>Om kursen (kurs-PM m.m.)</a>
+        <CourseAdminDropdown
+          courseCode={courseCode}
+          currentTerm={currentTerm}
         />
+        <div className="kpm-row">
+          <h3>Canvas:</h3>
+          <CanvasRoomShortList rooms={current} />
+          <CanvasRoomExpandedList
+            rooms={[...current, ...other]}
+            title="Alla kursrum"
+          />
+        </div>
       </div>
     </div>
   );
@@ -183,7 +189,12 @@ type TCanvasRoomLinkProps = {
   startTerm?: string;
 };
 
-export function CanvasRoomLink({ url, type, code, startTerm }: TCanvasRoomLinkProps) {
+export function CanvasRoomLink({
+  url,
+  type,
+  code,
+  startTerm,
+}: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
     <a href={url.href}>
@@ -243,7 +254,11 @@ function CourseAdminDropdown({
   currentTerm,
 }: TCourseAdminDropdownProps) {
   return (
-    <DropdownMenuGroup title="Administrera kurs" className="kpm-teaching-course-admin-dropdown" alignRight>
+    <DropdownMenuGroup
+      title="Administrera kurs"
+      className="kpm-teaching-course-admin-dropdown"
+      alignRight
+    >
       <GroupItem>
         <a
           href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}

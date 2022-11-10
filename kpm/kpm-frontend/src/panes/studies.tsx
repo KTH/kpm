@@ -33,9 +33,12 @@ function Course({ courseCode, course }: any) {
   return (
     <li className="kpm-studies-course">
       <h2>
-      {courseCode.toString()} {i18n(course.title)} {course.credits} {course.creditUnitAbbr}
+        {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
+        {course.creditUnitAbbr}
       </h2>
-      {course.rooms?.map((room: TCanvasRoom) => <CanvasRoomLink {...room} />)}
+      {course.rooms?.map((room: TCanvasRoom) => (
+        <CanvasRoomLink {...room} />
+      ))}
     </li>
   );
 }
