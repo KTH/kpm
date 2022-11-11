@@ -133,7 +133,7 @@ api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
     const rooms_fut = get_canvas_rooms(user);
 
     const studies = await studies_fut;
-    const kopps_futs = Object.assign(
+    const kopps_futs: Record<TCourseCode, TKoppsCourseInfo> = Object.assign(
       {},
       ...Object.keys(studies.courses).map((course_code) => ({
         [course_code]: getCourseInfo(course_code),
@@ -172,18 +172,22 @@ api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
 // time every day by using 40 hours.
 const kopps_cache = new NodeCache({ stdTTL: 40 * 3600, useClones: false });
 
-async function getCourseInfo(course_code: TCourseCode) {
+type TKoppsCourseInfo = {
+  title: { sv: string; en: string };
+  credits: number;
+  creditUnitAbbr: string; // usually "hp", check other values!
+};
+
+async function getCourseInfo(
+  course_code: TCourseCode
+): Promise<TKoppsCourseInfo> {
   try {
-    const result = kopps_cache.get(course_code);
+    const result = kopps_cache.get<TKoppsCourseInfo>(course_code);
     if (result) {
       return result;
     }
     const { title, credits, creditUnitAbbr } = await got
-      .get<{
-        title: { sv: string; en: string };
-        credits: number;
-        creditUnitAbbr: string;
-      }>(`${KOPPS_API}/course/${course_code}`, {
+      .get<TKoppsCourseInfo>(`${KOPPS_API}/course/${course_code}`, {
         responseType: "json",
       })
       .then((r) => r.body);
