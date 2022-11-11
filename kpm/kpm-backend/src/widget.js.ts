@@ -5,7 +5,7 @@ const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const PORT = parseInt(process.env.PORT || "3000");
 const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
-const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`
+const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
 
 /**
  * Responds with the initial javascript file that holds the entire personal menu
