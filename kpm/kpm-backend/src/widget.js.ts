@@ -2,6 +2,10 @@ import { Response, Request, static as staticHandler } from "express";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
+const PORT = parseInt(process.env.PORT || "3000");
+const PROXY_HOST = process.env.PROXY_HOST || "//localhost:${PORT}";
+const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
+const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`
 
 /**
  * Responds with the initial javascript file that holds the entire personal menu
@@ -24,13 +28,13 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";document.body.prepend(n);
-})("assets/${assets["index.js"]?.fileName}", "assets/${assets["index.css"]?.fileName}");`);
+})("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   } else {
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";
 n.innerHTML = "<a href='#'>Login</a>"; document.body.prepend(n);
-      })("assets/${assets["index.js"]?.fileName}", "assets/${assets["index.css"]?.fileName}");`);
+      })("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   }
 
   // Need to check
