@@ -23,9 +23,11 @@ app.use(loggingHandler);
 
 if (IS_STAGE) {
   // We currently only need CORS in STAGE due to ref web on different domain as api
-  app.use(cors({
-    origin: 'https://www-r.referens.sys.kth.se/',
-  }))
+  app.use(
+    cors({
+      origin: "https://www-r.referens.sys.kth.se/",
+    })
+  );
 }
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, api);
