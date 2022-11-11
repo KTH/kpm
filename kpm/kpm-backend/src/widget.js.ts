@@ -33,7 +33,9 @@ ${
   // QUESTION: So we don't have to proxy in STAGE, how about prod?
   // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
 }
-})("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
+})("${publicUriBase}/assets/${
+      assets["index.js"]?.fileName
+    }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   } else {
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);
