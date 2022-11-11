@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
 import { MenuPane } from "../components/menu";
+import { createApiUri } from "./utils";
 
 export async function loaderProfile({ request }: any) {
   const res = await fetch("/kpm/api", {
@@ -15,6 +16,9 @@ export function Profile() {
   return (
     <MenuPane>
       <h2>Profile {msg}</h2>
+      <p>
+        <a href={createApiUri("/auth/logout")}>Logout</a>
+      </p>
     </MenuPane>
   );
 }

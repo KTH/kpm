@@ -20,7 +20,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
 
   const assets = getLatestDistFileNames();
 
-  const loggedIn = isValidSession(req.session.user); // !!req.session;
+  const loggedIn = isValidSession(req.session.user);
   const LOGIN_URL = "/kpm/auth/login?nextUrl=/kpm/index.html"; // TODO: Read nextUrl from browser, and full URI instead of rel path
 
   if (loggedIn) {
@@ -30,12 +30,14 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";document.body.prepend(n);
-${IS_STAGE ? 'window.__kpmPublicUriBase__ = "' + publicUriBase + '";' : ""
-      // QUESTION: So we don't have to proxy in STAGE, how about prod?
-      // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
-      }
-})("${publicUriBase}/assets/${assets["index.js"]?.fileName
-      }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
+${
+  IS_STAGE ? 'window.__kpmPublicUriBase__ = "' + publicUriBase + '";' : ""
+  // QUESTION: So we don't have to proxy in STAGE, how about prod?
+  // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
+}
+})("${publicUriBase}/assets/${
+      assets["index.js"]?.fileName
+    }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   } else {
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);

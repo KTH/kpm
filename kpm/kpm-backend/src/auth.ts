@@ -78,6 +78,15 @@ auth.get("/login", async function checkHandler(req, res) {
   res.redirect(url);
 });
 
+auth.get("/logout", async function logoutHandler(req, res) {
+  const nextUrl = req.query.nextUrl || "https://www.kth.se";
+  req.session.user = undefined;
+  const url = client.endSessionUrl({
+    redirect_uri: nextUrl,
+  });
+  res.redirect(url);
+});
+
 auth.post("/callback", async function callbackHandler(req, res, next) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
@@ -94,7 +103,6 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       })
       .then((tokenSet) => tokenSet.claims());
 
-    // TODO: do something with `claims` (includes user ID, etc)
     const user = createValidSesisonUser(claims);
     if (isValidSession(user)) {
       req.session.user = user;
