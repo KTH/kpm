@@ -3,12 +3,13 @@ import { useLoaderData } from "react-router-dom";
 import { APIStudies, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { CanvasRoomLink } from "./teaching";
+import { createApiUri } from "./utils";
 import { i18n } from "./i18n";
 
 import "./studies.scss";
 
 export async function loaderStudies({ request }: any): Promise<APIStudies> {
-  const res = await fetch("/kpm/api/studies", {
+  const res = await fetch(createApiUri("/api/studies"), {
     signal: request.signal,
   });
   const json = await res.json();

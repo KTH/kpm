@@ -11,12 +11,13 @@ import {
   DropdownMenuGroup,
   GroupItem,
 } from "../components/groups";
+import { createApiUri } from "./utils";
 import { i18n } from "./i18n";
 
 import "./teaching.scss";
 
 export async function loaderTeaching({ request }: any): Promise<APITeaching> {
-  const res = await fetch("/kpm/api/teaching", {
+  const res = await fetch(createApiUri("/api/teaching"), {
     signal: request.signal,
   });
   const json = await res.json();
