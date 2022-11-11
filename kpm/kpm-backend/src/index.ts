@@ -25,7 +25,7 @@ if (IS_STAGE) {
   // We currently only need CORS in STAGE due to ref web on different domain as api
   app.use(
     cors({
-      origin: "https://www-r.referens.sys.kth.se/",
+      origin: "https://www-r.referens.sys.kth.se",
     })
   );
 }
