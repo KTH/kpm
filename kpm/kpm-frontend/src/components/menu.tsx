@@ -17,7 +17,8 @@ export function MenuPaneBackdrop({ visible, onClose }: any) {
       <Backdrop
         nodeRef={nodeRef}
         className="modal-backdrop"
-        onClose={() => onClose && onClose()} />
+        onClose={() => onClose && onClose()}
+      />
     </CSSTransition>
   );
 }
@@ -35,27 +36,33 @@ function getScrollBarWidth() {
 
 type TBackdropProps = {
   nodeRef: React.RefObject<HTMLElement>;
-  className?: string | undefined,
-  onClose?: Function 
-}
-function Backdrop({ nodeRef, className, onClose }: TBackdropProps): JSX.Element {
+  className?: string | undefined;
+  onClose?: Function;
+};
+function Backdrop({
+  nodeRef,
+  className,
+  onClose,
+}: TBackdropProps): JSX.Element {
   useEffect(() => {
     // Store parentNode so we can use it for cleanup
     let parentNode = nodeRef?.current?.parentNode;
-    let oldOverflow: string = '';
-    let oldPaddingRight: string = '';
+    let oldOverflow: string = "";
+    let oldPaddingRight: string = "";
 
     const scrollBarWidth = getScrollBarWidth();
     const body = document.body;
     const style = body.style;
     oldOverflow = style.overflow;
-    style.overflow = 'hidden';
+    style.overflow = "hidden";
     // If has scrollbar, set padding to avoid jumping
     if (body.scrollHeight > (window.visualViewport?.height || 0)) {
       oldPaddingRight = style.paddingRight;
       style.paddingRight = `${getScrollBarWidth()}px`;
       if (parentNode) {
-        (parentNode as HTMLElement).style.marginRight = `${getScrollBarWidth()}px`;
+        (
+          parentNode as HTMLElement
+        ).style.marginRight = `${getScrollBarWidth()}px`;
       }
     }
 
@@ -64,17 +71,24 @@ function Backdrop({ nodeRef, className, onClose }: TBackdropProps): JSX.Element 
       style.overflow = oldOverflow;
       style.paddingRight = oldPaddingRight;
       if (parentNode) {
-        (parentNode as HTMLElement).style.marginRight = '';
+        (parentNode as HTMLElement).style.marginRight = "";
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return <div ref={nodeRef as any} className={className} tabIndex={-1} onClick={(e) => {
-    if (onClose) {
-        e.preventDefault();
-        onClose();
-      }
-    }} />
+  return (
+    <div
+      ref={nodeRef as any}
+      className={className}
+      tabIndex={-1}
+      onClick={(e) => {
+        if (onClose) {
+          e.preventDefault();
+          onClose();
+        }
+      }}
+    />
+  );
 }
 
 export function MenuPane({ children }: any) {

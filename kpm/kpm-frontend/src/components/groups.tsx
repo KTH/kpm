@@ -1,4 +1,10 @@
-import React, { RefObject, useState, useEffect, useRef, MouseEvent } from "react";
+import React, {
+  RefObject,
+  useState,
+  useEffect,
+  useRef,
+  MouseEvent,
+} from "react";
 
 import "./groups.scss";
 
@@ -73,30 +79,36 @@ export function DropdownMenuGroup({
 
   const doOpenOnFocus = () => {
     // onFocus can be fired before onClick so we make sure we don't close again if they are close
-    toogleBlockerRef.current = setTimeout(() => toogleBlockerRef.current = null, 300);
+    toogleBlockerRef.current = setTimeout(
+      () => (toogleBlockerRef.current = null),
+      300
+    );
     // Open on focus
     if (!open) {
       setOpen(true);
     }
-  }
+  };
 
   const doCloseOnBlur = (event: any) => {
     // Got type error when assigning (e: FocusEvent) => void to onBlur so using any for arg
     const e = event as FocusEvent;
-    if (open && !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)) {
+    if (
+      open &&
+      !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
+    ) {
       setOpen(false);
     }
-  }
+  };
 
   const doCloseOnBackropClick = () => {
     setOpen(false);
-  }
+  };
 
   const _inner = (
-<div style={dropdownStyle} className="kpm-link-list">
-          <ul ref={dropdownRef}>{children}</ul>
-        </div>
-  )
+    <div style={dropdownStyle} className="kpm-link-list">
+      <ul ref={dropdownRef}>{children}</ul>
+    </div>
+  );
 
   return (
     <details
@@ -106,15 +118,21 @@ export function DropdownMenuGroup({
       onBlur={doCloseOnBlur}
       onClick={doToggleOnClick}
     >
-      <summary ref={summaryRef} onFocus={doOpenOnFocus}>{title}</summary>
-      {modal ? <ModalBackdrop onClose={doCloseOnBackropClick}>{_inner}</ModalBackdrop> : _inner}
+      <summary ref={summaryRef} onFocus={doOpenOnFocus}>
+        {title}
+      </summary>
+      {modal ? (
+        <ModalBackdrop onClose={doCloseOnBackropClick}>{_inner}</ModalBackdrop>
+      ) : (
+        _inner
+      )}
     </details>
   );
 }
 
 function elementDescendentOf(el: Node | null, parent: Node) {
   let tmpEl = el?.parentNode;
-  while (tmpEl && (tmpEl as Element).tagName !== 'body') {
+  while (tmpEl && (tmpEl as Element).tagName !== "body") {
     if (tmpEl === parent) return true;
     tmpEl = tmpEl.parentNode || null;
   }
@@ -124,23 +142,29 @@ function elementDescendentOf(el: Node | null, parent: Node) {
 type TModalBackdropProps = {
   children?: JSX.Element;
   onClose?: () => void;
-}
+};
 function ModalBackdrop({ children, onClose }: TModalBackdropProps) {
-  const [oldOverflow, setOldOverflow] = useState('');
+  const [oldOverflow, setOldOverflow] = useState("");
 
   useEffect(() => {
     setOldOverflow(document.body.style.overflow);
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = oldOverflow;
-    }
-  }, [])
+    };
+  }, []);
 
-  return <div className="kpm-dropdown-backdrop"
-    tabIndex={-1}
-    onClick={() => {
-      onClose && onClose();
-    }}>{children}</div>
+  return (
+    <div
+      className="kpm-dropdown-backdrop"
+      tabIndex={-1}
+      onClick={() => {
+        onClose && onClose();
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 function isEqual(a: TStyle, b: TStyle): boolean {

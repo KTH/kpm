@@ -1,14 +1,8 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import {
-  APITeaching,
-  TCanvasRoom,
-} from "kpm-backend-interface";
+import { APITeaching, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import {
-  DropdownMenuGroup,
-  GroupItem,
-} from "../components/groups";
+import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { createApiUri } from "./utils";
 import { i18n } from "./i18n";
 
