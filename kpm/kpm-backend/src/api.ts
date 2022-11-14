@@ -34,14 +34,11 @@ api.get("/", (req, res) => {
   });
 });
 
-api.get("/canvas-rooms", async (req, res, next) => {
+api.get("/canvas-rooms", async (req, res: express.Response<APICanvasRooms>, next) => {
   try {
-    const user = "u1i6bme8"; // FIXME: Get kthid of logged in user!
-    const { rooms } = await get_canvas_rooms(user);
-
-    res.send({
-      rooms,
-    } as APICanvasRooms);
+    const user = req.session.user!;
+    const { rooms } = await get_canvas_rooms(user.kthid);
+    res.send({ rooms });
   } catch (err) {
     next(err);
   }
