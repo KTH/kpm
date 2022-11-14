@@ -3,7 +3,10 @@
  * Functions do not contain any logic
  */
 import assert from "assert";
-import CanvasAPI, { minimalErrorHandler } from "@kth/canvas-api";
+import CanvasAPI, {
+  ExtendedGenerator,
+  minimalErrorHandler,
+} from "@kth/canvas-api";
 import { Request } from "express";
 
 export interface CanvasRoom {
@@ -45,7 +48,7 @@ export default class CanvasClient {
     this.client.errorHandler = minimalErrorHandler;
   }
 
-  getRooms(user: string) {
+  getRooms(user: string): ExtendedGenerator<CanvasRoom> {
     return this.client.listItems<CanvasRoom>(`users/${user}/courses`, {
       include: ["sections", "favorites"],
       per_page: 96,

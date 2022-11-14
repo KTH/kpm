@@ -10,32 +10,45 @@ api.get("/_monitor", (_req, res) => {
   res.send("APPLICATION_STATUS: OK");
 });
 
-api.get("/mine", (req, res) => {
-  res.send({ msg: "Not implemented yet." });
-});
-
-api.get("/user/:user", async (req, res, next) => {
+api.get("/mine", async (req, res, next) => {
   try {
-    const canvas = new CanvasClient(req);
-    const rooms = canvas.getRooms(`sis_user_id:${req.params.user}`);
-    let result: { [index: string]: Array<Link> } = {};
-    for await (let room of rooms) {
-      // Each canvas room may belong to multiple courses, and each
-      // course usually has many canvas rooms.
-      let { course_codes, link } = get_rooms_courses_and_link(room);
-      for (let code of course_codes) {
-        if (result[code]) {
-          result[code].push(link);
-        } else {
-          result[code] = [link];
-        }
-      }
-    }
+    const result = await do_getRooms(req, "self");
     res.send({ rooms: result });
   } catch (err) {
     next(err);
   }
 });
+
+api.get("/user/:user", async (req, res, next) => {
+  try {
+    const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
+    res.send({ rooms: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
+async function do_getRooms(
+  req: Request,
+  user: string
+): Promise<Record<string, Link[]>> {
+  const canvas = new CanvasClient(req);
+  const rooms = canvas.getRooms(user);
+  let result: Record<string, Link[]> = {};
+  for await (let room of rooms) {
+    // Each canvas room may belong to multiple courses, and each
+    // course usually has many canvas rooms.
+    let { course_codes, link } = get_rooms_courses_and_link(room);
+    for (let code of course_codes) {
+      if (result[code]) {
+        result[code].push(link);
+      } else {
+        result[code] = [link];
+      }
+    }
+  }
+  return result;
+}
 
 type Link = {
   url: URL;
