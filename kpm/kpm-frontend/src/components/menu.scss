@@ -1,4 +1,4 @@
-#kpm-6cf53 .modal-backdrop {
+#kpm-6cf53 .kpm-modal-backdrop {
   position: absolute;
   z-index: -1;
   top: 0;
@@ -8,7 +8,7 @@
   background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45));
 }
 
-#kpm-6cf53 .ModalBackdropAnim {
+#kpm-6cf53 .KpmModalBackdropAnim {
   &-enter {
     opacity: 0;
   }
@@ -28,7 +28,7 @@
   }
 }
 
-#kpm-6cf53 .modal {
+#kpm-6cf53 .kpm-modal {
   // z-index: -1;
   display: block;
   position: relative;
@@ -63,6 +63,6 @@
   }
 }
 
-#kpm-6cf53 .modal-content {
+#kpm-6cf53 .kpm-modal-content {
   padding: calc(2 * var(--kpmPad));
 }

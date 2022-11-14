@@ -12,11 +12,11 @@ export function MenuPaneBackdrop({ visible, onClose }: any) {
       in={visible}
       timeout={500}
       unmountOnExit
-      classNames="ModalBackdropAnim"
+      classNames="KpmModalBackdropAnim"
     >
       <Backdrop
         nodeRef={nodeRef}
-        className="modal-backdrop"
+        className="kpm-modal-backdrop"
         onClose={() => onClose && onClose()}
       />
     </CSSTransition>
@@ -94,13 +94,13 @@ function Backdrop({
 export function MenuPane({ children }: any) {
   return (
     <MenuPaneWrapper>
-      <div className="modal-content">{children}</div>
+      <div className="kpm-modal-content">{children}</div>
     </MenuPaneWrapper>
   );
 }
 
 export function MenuPaneWrapper({ nodeRef, className, children }: any) {
-  let cls = "modal";
+  let cls = "kpm-modal";
   if (className) cls += " " + className;
 
   return (
