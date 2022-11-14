@@ -3,11 +3,9 @@ import { useLoaderData } from "react-router-dom";
 import {
   APITeaching,
   TCanvasRoom,
-  TTeachingCourse,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import {
-  CollapsableGroup,
   DropdownMenuGroup,
   GroupItem,
 } from "../components/groups";
@@ -77,8 +75,9 @@ function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
   return (
     <ul className="kpm-teaching-course-rooms">
       {rooms.map((room: TCanvasRoom) => {
+        const key = `${room.registrationCode}-${room.startTerm}`;
         return (
-          <li key={room.startTerm}>
+          <li key={key}>
             <CanvasRoomLink
               url={room.url}
               type={room.type}
@@ -184,7 +183,7 @@ function CanvasRoomExpandedList({
 }
 
 type TCanvasRoomLinkProps = {
-  url: URL;
+  url: URL | string;
   type: string | undefined;
   code?: string;
   startTerm?: string;
@@ -198,7 +197,7 @@ export function CanvasRoomLink({
 }: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
-    <a href={url.href}>
+    <a href={typeof url === "string" ? url : url.href}>
       {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
