@@ -1,4 +1,10 @@
-import React, { MutableRefObject, useState, useEffect, useRef } from "react";
+import React, {
+  RefObject,
+  useState,
+  useEffect,
+  useRef,
+  MouseEvent,
+} from "react";
 
 import "./groups.scss";
 
@@ -34,11 +40,13 @@ export function DropdownMenuGroup({
   revealUp = false,
   alignRight = false,
   defaultOpen = false,
-  modal = true,
+  modal = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
     useState(undefined);
+
+  const toogleBlockerRef = useRef<NodeJS.Timeout | null>(null);
 
   const detailsRef = useRef(null);
   const summaryRef = useRef(null);
@@ -55,35 +63,107 @@ export function DropdownMenuGroup({
     }
   );
 
+  // TODO: Listen to onBlur and onFocus on summary element
+
   let cls = "kpm-dropdownmenu-group";
   if (className !== undefined) {
     cls += ` ${className}`;
   }
+
+  const doToggleOnClick = (e: MouseEvent) => {
+    e.preventDefault();
+    if (toogleBlockerRef.current === null) {
+      setOpen(!open);
+    }
+  };
+
+  const doOpenOnFocus = () => {
+    // onFocus can be fired before onClick so we make sure we don't close again if they are close
+    toogleBlockerRef.current = setTimeout(
+      () => (toogleBlockerRef.current = null),
+      300
+    );
+    // Open on focus
+    if (!open) {
+      setOpen(true);
+    }
+  };
+
+  const doCloseOnBlur = (event: any) => {
+    // Got type error when assigning (e: FocusEvent) => void to onBlur so using any for arg
+    const e = event as FocusEvent;
+    if (
+      open &&
+      !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
+    ) {
+      setOpen(false);
+    }
+  };
+
+  const doCloseOnBackropClick = () => {
+    setOpen(false);
+  };
+
+  const _inner = (
+    <div style={dropdownStyle} className="kpm-link-list">
+      <ul ref={dropdownRef}>{children}</ul>
+    </div>
+  );
 
   return (
     <details
       ref={detailsRef}
       className={cls}
       open={open}
-      onClick={(e) => {
-        e.preventDefault();
-        setOpen(!open);
+      onBlur={doCloseOnBlur}
+      onClick={doToggleOnClick}
+    >
+      <summary ref={summaryRef} onFocus={doOpenOnFocus}>
+        {title}
+      </summary>
+      {modal ? (
+        <ModalBackdrop onClose={doCloseOnBackropClick}>{_inner}</ModalBackdrop>
+      ) : (
+        _inner
+      )}
+    </details>
+  );
+}
+
+function elementDescendentOf(el: Node | null, parent: Node) {
+  let tmpEl = el?.parentNode;
+  while (tmpEl && (tmpEl as Element).tagName !== "body") {
+    if (tmpEl === parent) return true;
+    tmpEl = tmpEl.parentNode || null;
+  }
+  return false;
+}
+
+type TModalBackdropProps = {
+  children?: JSX.Element;
+  onClose?: () => void;
+};
+function ModalBackdrop({ children, onClose }: TModalBackdropProps) {
+  const [oldOverflow, setOldOverflow] = useState("");
+
+  useEffect(() => {
+    setOldOverflow(document.body.style.overflow);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = oldOverflow;
+    };
+  }, []);
+
+  return (
+    <div
+      className="kpm-dropdown-backdrop"
+      tabIndex={-1}
+      onClick={() => {
+        onClose && onClose();
       }}
     >
-      <summary ref={summaryRef}>{title}</summary>
-      {modal && (
-        <div
-          className="kpm-dropdownmeny-backdrop"
-          onClick={(e) => {
-            //e.preventDefault();
-            setOpen(false);
-          }}
-        ></div>
-      )}
-      <div style={dropdownStyle} className="kpm-link-list">
-        <ul ref={dropdownRef}>{children}</ul>
-      </div>
-    </details>
+      {children}
+    </div>
   );
 }
 
@@ -122,9 +202,9 @@ const PADDING = 10;
   (default) but not worth pursuing a fix for now.
  */
 function usePositionDropdown(
-  detailsRef: MutableRefObject<HTMLElement | null>,
-  summaryRef: MutableRefObject<HTMLElement | null>,
-  dropdownRef: MutableRefObject<HTMLElement | null>,
+  detailsRef: RefObject<HTMLElement | null>,
+  summaryRef: RefObject<HTMLElement | null>,
+  dropdownRef: RefObject<HTMLElement | null>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
