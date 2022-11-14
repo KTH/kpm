@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response } from "express";
 import got from "got";
 import NodeCache from "node-cache";
 import log from "skog";
@@ -34,20 +34,17 @@ api.get("/", (req, res) => {
   });
 });
 
-api.get(
-  "/canvas-rooms",
-  async (req, res: express.Response<APICanvasRooms>, next) => {
-    try {
-      const user = req.session.user!;
-      const { rooms } = await get_canvas_rooms(user.kthid);
-      res.send({ rooms });
-    } catch (err) {
-      next(err);
-    }
+api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
+  try {
+    const user = req.session.user!;
+    const { rooms } = await get_canvas_rooms(user.kthid);
+    res.send({ rooms });
+  } catch (err) {
+    next(err);
   }
-);
+});
 
-api.get("/teaching", async (req, res: express.Response<APITeaching>, next) => {
+api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
   const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
     const perf1 = Date.now();
@@ -123,7 +120,7 @@ export type TApiUserStudies = {
   programmes: Record<TProgramCode, TUserProgramme[]>;
 };
 
-api.get("/studies", async (req, res: express.Response<APIStudies>, next) => {
+api.get("/studies", async (req, res: Response<APIStudies>, next) => {
   const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
     const studies_fut = got
