@@ -48,6 +48,7 @@ api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
   const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
     const perf1 = Date.now();
+    const elapsed_ms = () => Date.now() - perf1;
     const teaching_fut = got
       .get<Record<TCourseCode, TTeachingRole[]>>(
         `${MY_TEACHING_API_URI}/user/${user.kthid}`,
@@ -58,12 +59,10 @@ api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
       .then((r) => r.body);
 
     const rooms_fut = get_canvas_rooms(user.kthid);
-    console.log(
-      `Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`
-    );
+    log.info({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
     const teaching = await teaching_fut;
-    console.log(`Time to resolved my-teaching-api: ${Date.now() - perf1}ms`);
+    log.info({ elapsed_ms: elapsed_ms() }, "Resolved my-teaching-api");
 
     const kopps_futs = Object.assign(
       {},
@@ -72,14 +71,15 @@ api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
       }))
     );
     const { rooms } = await rooms_fut;
-    console.log(
-      `Time to resolved my-canvas-rooms-api: ${Date.now() - perf1}ms`
-    );
+    log.info({ elapsed_ms: elapsed_ms() }, "Resolved my-canvas-rooms-api");
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching)) {
       const kopps = await kopps_futs[course_code];
-      console.log(`Time to resolved kopps: ${Date.now() - perf1}ms`);
+      log.info(
+        { elapsed_ms: elapsed_ms() },
+        `Resolved kopps for ${course_code}`
+      );
 
       courses[course_code] = {
         course_code: course_code,
@@ -93,6 +93,7 @@ api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
 
     res.send({ courses });
   } catch (err) {
+    log.error({ err }, "Error in /teaching");
     next(err);
   }
 });
