@@ -34,15 +34,18 @@ api.get("/", (req, res) => {
   });
 });
 
-api.get("/canvas-rooms", async (req, res: express.Response<APICanvasRooms>, next) => {
-  try {
-    const user = req.session.user!;
-    const { rooms } = await get_canvas_rooms(user.kthid);
-    res.send({ rooms });
-  } catch (err) {
-    next(err);
+api.get(
+  "/canvas-rooms",
+  async (req, res: express.Response<APICanvasRooms>, next) => {
+    try {
+      const user = req.session.user!;
+      const { rooms } = await get_canvas_rooms(user.kthid);
+      res.send({ rooms });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 api.get("/teaching", async (req, res: express.Response<APITeaching>, next) => {
   const user: TSessionUser = req.session.user!; // "u1i6bme8"
