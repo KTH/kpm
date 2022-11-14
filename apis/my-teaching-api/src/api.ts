@@ -62,7 +62,7 @@ api.get("/user/:user", async (req, res, next) => {
   // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
 
   const { data, json, statusCode } = await ugClient.get<
-    { memberof: TUgGroup[] }[]
+    { memberOf: TUgGroup[] }[]
   >(`users?$filter=kthid eq '${userName}'&$expand=memberOf`);
   console.log(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
 
@@ -73,7 +73,7 @@ api.get("/user/:user", async (req, res, next) => {
       return res.status(statusCode || 500).send("error");
     }
   } else {
-    const result = teachingResult(json[0].memberof);
+    const result = teachingResult(json[0].memberOf);
     res.status(statusCode || 200).send(result);
   }
 });
