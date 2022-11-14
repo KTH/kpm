@@ -14,18 +14,18 @@
   }
 }
 
+#kpm-6cf53 .kpm-dropdown-backdrop {
+  position: fixed;
+  cursor: pointer;
+  z-index: 998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 #kpm-6cf53 .kpm-dropdownmenu-group {
   position: relative;
-
-  .kpm-dropdownmeny-backdrop {
-    position: fixed;
-    cursor: pointer;
-    z-index: 998;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
 
   .kpm-link-list {
     // NOTE: Currently this popup menu is layered on top of the menubar
