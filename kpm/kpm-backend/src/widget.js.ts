@@ -21,7 +21,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
   const assets = getLatestDistFileNames();
 
   const loggedIn = isValidSession(req.session.user);
-  const LOGIN_URL = "/kpm/auth/login?nextUrl=/kpm/index.html"; // TODO: Read nextUrl from browser, and full URI instead of rel path
+  const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=/kpm/index.html`; // TODO: Read nextUrl from browser, and full URI instead of rel path
 
   if (loggedIn) {
     res.type("text/javascript").send(`(function (js, css) {
