@@ -34,7 +34,7 @@ export function DropdownMenuGroup({
   revealUp = false,
   alignRight = false,
   defaultOpen = false,
-  modal = true,
+  modal = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
