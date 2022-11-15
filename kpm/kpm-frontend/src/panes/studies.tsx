@@ -4,7 +4,7 @@ import { APIStudies, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { CanvasRoomLink } from "./teaching";
 import { createApiUri, useDataFecther } from "./utils";
-import { i18n } from "./i18n";
+import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
 import { ErrorMessage, LoadingPlaceholder } from "../components/common";
@@ -27,7 +27,7 @@ export function Studies() {
     <MenuPane>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
-      {courses && <h2>Studies</h2>}
+      {courses && <h2>{i18n("Studies")}</h2>}
       {courses && (
         <ul className="kpm-studies">
           {Object.entries(courses)?.map(([course_code, course]) => {
