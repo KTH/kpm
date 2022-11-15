@@ -20,7 +20,7 @@ export function getRoutes({
     {
       path: "/profile",
       element: <Profile />,
-      loader: loaderProfile,
+      // loader: loaderProfile,
     },
     hasTeaching && {
       path: "/schedule",
@@ -29,12 +29,12 @@ export function getRoutes({
     hasStudies && {
       path: "/studies",
       element: <Studies />,
-      loader: loaderStudies,
+      // loader: loaderStudies,
     },
     {
       path: "/teaching",
       element: <Teaching />,
-      loader: loaderTeaching,
+      // loader: loaderTeaching,
     },
     {
       path: "/programme",

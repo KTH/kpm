@@ -1,31 +1,37 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { APITeaching, TCanvasRoom } from "kpm-backend-interface";
+import { APITeaching, TCanvasRoom, TTeachingCourse } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
-import { createApiUri } from "./utils";
+import { createApiUri, useDataFecther } from "./utils";
 import { i18n } from "./i18n";
+import { ErrorMessage, LoadingPlaceholder } from "../components/common";
 
 import "./teaching.scss";
 
-export async function loaderTeaching({ request }: any): Promise<APITeaching> {
+export async function loaderTeaching({ request }: any = {}): Promise<APITeaching> {
   const res = await fetch(createApiUri("/api/teaching"), {
-    signal: request.signal,
+    signal: request?.signal,
   });
   const json = await res.json();
   return json;
 }
 
+
 export function Teaching() {
-  const { courses } = useLoaderData() as APITeaching;
+  const { res, loading, error } = useDataFecther<APITeaching>(loaderTeaching);
+  const { courses } = res || {};
+  // const { courses } = useLoaderData() as APITeaching;
 
   return (
     <MenuPane>
-      <div className="kpm-teaching">
+      {loading && <LoadingPlaceholder />}
+      {error && <ErrorMessage error={error} />}
+      {courses && <div className="kpm-teaching">
         {Object.entries(courses).map(([code, course]) => {
           return <Course key={[code]} courseCode={code} course={course} />;
         })}
-      </div>
+      </div>}
     </MenuPane>
   );
 }
