@@ -15,7 +15,11 @@ export function createApiUri(path: string) {
   }
 }
 
-export function useDataFecther<T>(loaderFunc: () => any): {res: T | undefined, loading: boolean, error: Error | undefined}  {
+export function useDataFecther<T>(loaderFunc: () => any): {
+  res: T | undefined;
+  loading: boolean;
+  error: Error | undefined;
+} {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
   const [res, setRes] = useState<T>();
@@ -32,5 +36,5 @@ export function useDataFecther<T>(loaderFunc: () => any): {res: T | undefined, l
     }
   }, []);
 
-  return {res, loading, error};
+  return { res, loading, error };
 }

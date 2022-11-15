@@ -39,7 +39,10 @@ api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
   try {
     const user = req.session.user || getFakeUserForDevelopment();
     assert(user !== undefined, "Mising user object");
-    assert(user?.kthid !== undefined, "User object missing required property kthid");
+    assert(
+      user?.kthid !== undefined,
+      "User object missing required property kthid"
+    );
 
     const { rooms } = await get_canvas_rooms(user.kthid);
     res.send({ rooms });
@@ -48,11 +51,14 @@ api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
   }
 });
 
-api.get("/teaching", async (req, res: Response<APITeaching>, next) => {  
+api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
   try {
     const user: TSessionUser = req.session.user! || getFakeUserForDevelopment();
     assert(user !== undefined, "Mising user object");
-    assert(user?.kthid !== undefined, "User object missing required property kthid");
+    assert(
+      user?.kthid !== undefined,
+      "User object missing required property kthid"
+    );
 
     const perf1 = Date.now();
     const elapsed_ms = () => Date.now() - perf1;
@@ -129,10 +135,13 @@ export type TApiUserStudies = {
 
 api.get("/studies", async (req, res: Response<APIStudies>, next) => {
   try {
-    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment()
+    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment();
     assert(user !== undefined, "Mising user object");
-    assert(user?.kthid !== undefined, "User object missing required property kthid");
-      
+    assert(
+      user?.kthid !== undefined,
+      "User object missing required property kthid"
+    );
+
     const studies_fut = got
       .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",

@@ -9,7 +9,9 @@ import { i18n } from "./i18n";
 import "./studies.scss";
 import { ErrorMessage, LoadingPlaceholder } from "../components/common";
 
-export async function loaderStudies({ request }: any = {}): Promise<APIStudies> {
+export async function loaderStudies({
+  request,
+}: any = {}): Promise<APIStudies> {
   const res = await fetch(createApiUri("/api/studies"), {
     signal: request?.signal,
   });
@@ -26,11 +28,13 @@ export function Studies() {
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {courses && <h2>Studies</h2>}
-      {courses && <ul className="kpm-studies">
-        {Object.entries(courses)?.map(([course_code, course]) => {
-          return <Course courseCode={course_code} course={course} />;
-        })}
-      </ul>}
+      {courses && (
+        <ul className="kpm-studies">
+          {Object.entries(courses)?.map(([course_code, course]) => {
+            return <Course courseCode={course_code} course={course} />;
+          })}
+        </ul>
+      )}
     </MenuPane>
   );
 }

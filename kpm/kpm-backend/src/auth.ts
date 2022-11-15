@@ -126,14 +126,15 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
 });
 
 export function getFakeUserForDevelopment(): TSessionUser | undefined {
-  if (SKIP_LOGIN && IS_DEV) return {
-    kthid: "u1i6bme8",
-    display_name: "Test Userson",
-    email: "test@email.com",
-    username: "testuser",
-    exp: (Date.now() / 1000) + 3600,
-    nbf: (Date.now() / 1000),
-  };
+  if (SKIP_LOGIN && IS_DEV)
+    return {
+      kthid: "u1i6bme8",
+      display_name: "Test Userson",
+      email: "test@email.com",
+      username: "testuser",
+      exp: Date.now() / 1000 + 3600,
+      nbf: Date.now() / 1000,
+    };
 }
 
 export function requiresValidSessionUser(

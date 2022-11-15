@@ -13,7 +13,9 @@ export async function loaderProfile({ request }: any = {}) {
 }
 
 export function Profile() {
-  const { res, loading, error } = useDataFecther<{msg: string}>(loaderProfile);
+  const { res, loading, error } = useDataFecther<{ msg: string }>(
+    loaderProfile
+  );
   const { msg } = res || {};
   // const { msg } = useLoaderData() as { msg: string };
   return (
@@ -21,9 +23,11 @@ export function Profile() {
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {msg && <h2>Profile {msg}</h2>}
-      {msg && <p>
-        <a href={createApiUri("/auth/logout")}>Logout</a>
-      </p>}
+      {msg && (
+        <p>
+          <a href={createApiUri("/auth/logout")}>Logout</a>
+        </p>
+      )}
     </MenuPane>
   );
 }

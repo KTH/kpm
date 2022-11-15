@@ -1,4 +1,3 @@
-
 @keyframes kpmRotation {
   0% {
     transform: rotate(0deg);
@@ -6,8 +5,8 @@
   100% {
     transform: rotate(360deg);
   }
-} 
-    
+}
+
 @keyframes kpmRotationBack {
   0% {
     transform: rotate(0deg);
@@ -22,7 +21,7 @@
   min-height: 10rem;
   justify-content: center;
   align-items: center;
-  
+
   .kpm-loader {
     width: 48px;
     height: 48px;
@@ -34,7 +33,7 @@
     animation: kpmRotation 1s linear infinite;
   }
   .kpm-loader::after {
-    content: '';  
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -48,7 +47,7 @@
     border-radius: 50%;
     animation: kpmRotationBack 0.5s linear infinite;
     transform-origin: center center;
-  }  
+  }
 }
 
 #kpm-6cf53 .kpm-error-message {
