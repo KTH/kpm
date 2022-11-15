@@ -1,4 +1,5 @@
 import express, { Response } from "express";
+import assert from "node:assert";
 import got from "got";
 import NodeCache from "node-cache";
 import log from "skog";
@@ -12,7 +13,7 @@ import {
   TStudiesCourse,
   TProgramCode,
 } from "kpm-backend-interface";
-import { TSessionUser } from "./auth";
+import { TSessionUser, getFakeUserForDevelopment } from "./auth";
 
 const MY_CANVAS_ROOMS_API_URI =
   process.env.MY_CANVAS_ROOMS_API_URI ||
@@ -36,7 +37,10 @@ api.get("/", (req, res) => {
 
 api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
   try {
-    const user = req.session.user!;
+    const user = req.session.user || getFakeUserForDevelopment();
+    assert(user !== undefined, "Mising user object");
+    assert(user?.kthid !== undefined, "User object missing required property kthid");
+
     const { rooms } = await get_canvas_rooms(user.kthid);
     res.send({ rooms });
   } catch (err) {
@@ -44,9 +48,12 @@ api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
   }
 });
 
-api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
-  const user: TSessionUser = req.session.user!; // "u1i6bme8"
+api.get("/teaching", async (req, res: Response<APITeaching>, next) => {  
   try {
+    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment();
+    assert(user !== undefined, "Mising user object");
+    assert(user?.kthid !== undefined, "User object missing required property kthid");
+
     const perf1 = Date.now();
     const elapsed_ms = () => Date.now() - perf1;
     const teaching_fut = got
@@ -93,7 +100,6 @@ api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
 
     res.send({ courses });
   } catch (err) {
-    log.error({ err }, "Error in /teaching");
     next(err);
   }
 });
@@ -122,8 +128,11 @@ export type TApiUserStudies = {
 };
 
 api.get("/studies", async (req, res: Response<APIStudies>, next) => {
-  const user: TSessionUser = req.session.user!; // "u1i6bme8"
   try {
+    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment()
+    assert(user !== undefined, "Mising user object");
+    assert(user?.kthid !== undefined, "User object missing required property kthid");
+      
     const studies_fut = got
       .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",
