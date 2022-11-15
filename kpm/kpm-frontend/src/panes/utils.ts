@@ -15,7 +15,7 @@ export function createApiUri(path: string) {
   }
 }
 
-export function useDataFecther<T>(loaderFunc: () => any): {
+export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
   res: T | undefined;
   loading: boolean;
   error: Error | undefined;
