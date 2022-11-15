@@ -23,7 +23,11 @@ export function Profile() {
     <MenuPane>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
-      {msg && <h2>{i18n("Profile")} {msg}</h2>}
+      {msg && (
+        <h2>
+          {i18n("Profile")} {msg}
+        </h2>
+      )}
       {msg && (
         <p>
           <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>

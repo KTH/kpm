@@ -1,5 +1,5 @@
-import {en} from "./en";
-import {sv} from "./sv";
+import { en } from "./en";
+import { sv } from "./sv";
 
 export type TLang = "sv" | "en";
 
@@ -15,10 +15,10 @@ export function i18n(
   switch (lang) {
     case "sv":
       if (sv.hasOwnProperty(strObj)) return sv[strObj]!;
-      break
+      break;
     case "en":
       if (en.hasOwnProperty(strObj)) return en[strObj]!;
-      break
+      break;
   }
 
   return strObj;
