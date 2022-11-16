@@ -11,7 +11,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/profile"
         onClick={[Function]}
       >
-        Profile
+        Profil
       </a>
     </li>
     <li>
@@ -20,7 +20,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/schedule"
         onClick={[Function]}
       >
-        Schedule
+        Schema
       </a>
     </li>
     <li>
@@ -29,7 +29,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/studies"
         onClick={[Function]}
       >
-        Studies
+        Studier
       </a>
     </li>
     <li>
@@ -47,7 +47,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/programme"
         onClick={[Function]}
       >
-        Programme
+        Program
       </a>
     </li>
     <li>
@@ -56,7 +56,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/groups"
         onClick={[Function]}
       >
-        Groups
+        Grupper
       </a>
     </li>
     <li>
@@ -65,7 +65,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/services"
         onClick={[Function]}
       >
-        Services
+        Tjänster
       </a>
     </li>
     <div

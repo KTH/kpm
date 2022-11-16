@@ -8,8 +8,8 @@ import {
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { createApiUri, useDataFecther } from "./utils";
-import { i18n } from "./i18n";
 import { ErrorMessage, LoadingPlaceholder } from "../components/common";
+import { i18n } from "../i18n/i18n";
 
 import "./teaching.scss";
 
@@ -55,17 +55,17 @@ function Course({ courseCode, course }: any) {
       <h2>{courseCode}</h2>
       <div className="kpm-row">
         <p>{courseName}</p>
-        <a href={aboutCourseUrl}>Om kursen (kurs-PM m.m.)</a>
+        <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}
           currentTerm={currentTerm}
         />
         <div className="kpm-row">
-          <h3>Canvas:</h3>
+          <h3>{i18n("Canvas:")}</h3>
           <CanvasRoomShortList rooms={current} />
           <CanvasRoomExpandedList
             rooms={[...current, ...other]}
-            title="Alla kursrum"
+            title={i18n("Alla kursrum")}
           />
         </div>
       </div>
@@ -248,7 +248,7 @@ function formatTerm(startTerm: string) {
   const shortYear = startTerm.slice(2, 4);
   const termNr = startTerm.slice(4, 5);
   const termStr = { 1: "VT", 2: "HT" }[termNr];
-  return `${termStr}${shortYear}`;
+  return `${termStr && i18n(termStr)}${shortYear}`;
 }
 
 type TCourseAdminDropdownProps = {
@@ -262,74 +262,74 @@ function CourseAdminDropdown({
 }: TCourseAdminDropdownProps) {
   return (
     <DropdownMenuGroup
-      title="Administrera kurs"
+      title={i18n("Administrera kurs")}
       className="kpm-teaching-course-admin-dropdown"
     >
       <GroupItem>
         <a
           href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
         >
-          Administrera assistenter
+          {i18n("Administrera assistenter")}
         </a>
       </GroupItem>
       <GroupItem>
         <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
-          Hantera Omgångar/grupper
+          {i18n("Hantera Omgångar/grupper")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
           href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
         >
-          Kursdeltagare
+          {i18n("Kursdeltagare")}
         </a>
       </GroupItem>
       <GroupItem>
         <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
-          Kursinformation i Kopps
+          {i18n("Kursinformation i Kopps")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
           href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
         >
-          Redigera introduktion till kursen
+          {i18n("Redigera introduktion till kursen")}
         </a>
       </GroupItem>
       <GroupItem>
         <a href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}>
-          Skapa och publicera kurs-PM
+          {i18n("Skapa och publicera kurs-PM")}
         </a>
       </GroupItem>
       <GroupItem>
         <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
-          Kursvärdering
+          {i18n("Kursvärdering")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
           href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
         >
-          Publicera ny kursanalys
+          {i18n("Publicera ny kursanalys")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
           href={`https://www.start.ladok.se/Shibboleth.sso/Login?entityID=https%3A%2F%2Fsaml.sys.kth.se%2Fidp%2Fshibboleth&target=https%3A%2F%2Fwww.start.ladok.se%2Fgui%2Fshiblogin%23%2Fsok%2Fkurstillfalle%3Fkurskod%3D${courseCode}`}
         >
-          Se provresultat
+          {i18n("Se provresultat")}
         </a>
       </GroupItem>
       <GroupItem>
         <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
-          Studentgruppen / Prenumeranter
+          {i18n("Studentgruppen / Prenumeranter")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
           href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
         >
-          Sök tentamen
+          {i18n("Sök tentamen")}
         </a>
       </GroupItem>
     </DropdownMenuGroup>
