@@ -3,9 +3,7 @@ import { sv } from "./sv";
 
 export type TLang = "sv" | "en";
 
-export function i18n(
-  strObj: Record<TLang, string> | string
-): string {
+export function i18n(strObj: Record<TLang, string> | string): string {
   // TODO: Figure out how we want to get/set language for the entire menu
   const lang: TLang = "sv" as TLang;
   if (typeof strObj === "object") {
