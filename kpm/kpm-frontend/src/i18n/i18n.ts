@@ -11,7 +11,6 @@ export function i18n(
     return strObj[lang];
   }
 
-  // TODO: Create language dict for static string lookup
   switch (lang) {
     case "sv":
       if (sv.hasOwnProperty(strObj)) return sv[strObj]!;
