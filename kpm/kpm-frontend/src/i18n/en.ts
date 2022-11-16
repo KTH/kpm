@@ -21,4 +21,5 @@ export const en: Record<string, string> = {
   "Se provresultat": "See Results",
   "Studentgruppen / Prenumeranter": "Student Group/Subscribers",
   "Sök tentamen": "Search Exam",
+  "hp": "credits", // Högskolepoäng
 };

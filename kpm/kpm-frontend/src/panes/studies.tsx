@@ -44,7 +44,7 @@ function Course({ courseCode, course }: any) {
     <li className="kpm-studies-course">
       <h2>
         {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
-        {course.creditUnitAbbr}
+        {i18n(course.creditUnitAbbr)}
       </h2>
       {course.rooms?.map((room: TCanvasRoom) => (
         <CanvasRoomLink {...room} />

@@ -21,4 +21,5 @@ export const sv: Record<string, string> = {
   "Se provresultat": "Se provresultat",
   "Studentgruppen / Prenumeranter": "Studentgruppen / Prenumeranter",
   "Sök tentamen": "Sök tentamen",
+  "hp": "hp", // Högskolepoäng
 };
