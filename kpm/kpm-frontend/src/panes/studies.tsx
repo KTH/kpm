@@ -1,9 +1,7 @@
 import * as React from "react";
-import { useLoaderData } from "react-router-dom";
-import { APIStudies, TCanvasRoom } from "kpm-backend-interface";
+import { APIStudies, TStudiesCourse, TStudiesCourseInner } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { CanvasRoomLink } from "./teaching";
-import { createApiUri, useDataFecther } from "./utils";
+import { createApiUri, formatTerm, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
@@ -27,7 +25,6 @@ export function Studies() {
     <MenuPane>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
-      {courses && <h2>{i18n("Studies")}</h2>}
       {courses && (
         <ul className="kpm-studies">
           {Object.entries(courses)?.map(([course_code, course]) => {
@@ -39,16 +36,64 @@ export function Studies() {
   );
 }
 
-function Course({ courseCode, course }: any) {
+type TCourseProps = {
+  courseCode: string
+  course: TStudiesCourse  
+}
+
+function Course({ courseCode, course }: TCourseProps) {
+  const roleToShow = course.roles[0];
+  const roomToShow = course.rooms?.[0] || undefined;
   return (
-    <li className="kpm-studies-course">
+    <div className={`kpm-studies-course kpm-${roleToShow.status}`}>
+      <CourseStatus status={roleToShow.status} />
       <h2>
         {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
         {i18n(course.creditUnitAbbr)}
       </h2>
-      {course.rooms?.map((room: TCanvasRoom) => (
-        <CanvasRoomLink {...room} />
-      ))}
-    </li>
+      <ul>
+        <li><a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a></li>
+        <li><a href={getCourseInfoUrl(courseCode)}>{i18n("Kurs-PM")} {roomToShow?.startTerm && formatTerm(roomToShow.startTerm)}</a></li>
+        <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
+      </ul>
+      {/* TODO: Show examinationsrum */}
+    </div>
+  );
+}
+
+function getRegisterUrl(code: string) {
+  return `#${code}`;
+}
+
+function getCourseInfoUrl(code: string) {
+  return `#${code}`;
+}
+
+type TCourseStatusProps = {
+  status: TStudiesCourseInner["status"]
+}
+
+function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {
+  if (status === undefined) return null;
+
+  return (
+    <div className={`kpm-studies-course-status kpm-${status}`}>{i18n(status)}</div>
+  )
+}
+
+type TCanvasRoomLinkProps = {
+  url: URL | string;
+  startTerm?: string;
+};
+
+export function CanvasRoomLink({
+  url,
+  startTerm,
+}: TCanvasRoomLinkProps) {
+  // This is a Component to force consistency
+  return (
+    <a href={typeof url === "string" ? url : url.href}>
+      {i18n("Kursen")} {startTerm && formatTerm(startTerm)} {i18n("i Canvas")}
+    </a>
   );
 }

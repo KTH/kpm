@@ -22,4 +22,7 @@ export const sv: Record<string, string> = {
   "Studentgruppen / Prenumeranter": "Studentgruppen / Prenumeranter",
   "Sök tentamen": "Sök tentamen",
   hp: "hp", // Högskolepoäng
+  antagna: "Antagen",
+  registrerade: "Registrerad",
+  godkand: "Avklarad"
 };
