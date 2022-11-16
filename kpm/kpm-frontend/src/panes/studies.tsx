@@ -1,5 +1,9 @@
 import * as React from "react";
-import { APIStudies, TStudiesCourse, TStudiesCourseInner } from "kpm-backend-interface";
+import {
+  APIStudies,
+  TStudiesCourse,
+  TStudiesCourseInner,
+} from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
@@ -37,9 +41,9 @@ export function Studies() {
 }
 
 type TCourseProps = {
-  courseCode: string
-  course: TStudiesCourse  
-}
+  courseCode: string;
+  course: TStudiesCourse;
+};
 
 function Course({ courseCode, course }: TCourseProps) {
   const roleToShow = course.roles[0];
@@ -52,8 +56,15 @@ function Course({ courseCode, course }: TCourseProps) {
         {i18n(course.creditUnitAbbr)}
       </h2>
       <ul>
-        <li><a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a></li>
-        <li><a href={getCourseInfoUrl(courseCode)}>{i18n("Kurs-PM")} {roomToShow?.startTerm && formatTerm(roomToShow.startTerm)}</a></li>
+        <li>
+          <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
+        </li>
+        <li>
+          <a href={getCourseInfoUrl(courseCode)}>
+            {i18n("Kurs-PM")}{" "}
+            {roomToShow?.startTerm && formatTerm(roomToShow.startTerm)}
+          </a>
+        </li>
         <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
       </ul>
       {/* TODO: Show examinationsrum */}
@@ -70,15 +81,17 @@ function getCourseInfoUrl(code: string) {
 }
 
 type TCourseStatusProps = {
-  status: TStudiesCourseInner["status"]
-}
+  status: TStudiesCourseInner["status"];
+};
 
 function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {
   if (status === undefined) return null;
 
   return (
-    <div className={`kpm-studies-course-status kpm-${status}`}>{i18n(status)}</div>
-  )
+    <div className={`kpm-studies-course-status kpm-${status}`}>
+      {i18n(status)}
+    </div>
+  );
 }
 
 type TCanvasRoomLinkProps = {
@@ -86,10 +99,7 @@ type TCanvasRoomLinkProps = {
   startTerm?: string;
 };
 
-export function CanvasRoomLink({
-  url,
-  startTerm,
-}: TCanvasRoomLinkProps) {
+export function CanvasRoomLink({ url, startTerm }: TCanvasRoomLinkProps) {
   // This is a Component to force consistency
   return (
     <a href={typeof url === "string" ? url : url.href}>

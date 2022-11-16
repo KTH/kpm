@@ -24,5 +24,5 @@ export const sv: Record<string, string> = {
   hp: "hp", // Högskolepoäng
   antagna: "Antagen",
   registrerade: "Registrerad",
-  godkand: "Avklarad"
+  godkand: "Avklarad",
 };

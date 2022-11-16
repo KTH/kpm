@@ -24,5 +24,5 @@ export const en: Record<string, string> = {
   hp: "credits", // Högskolepoäng
   antagna: "Admitted",
   registrerade: "Registered",
-  godkand: "Completed"
+  godkand: "Completed",
 };

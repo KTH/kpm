@@ -16,17 +16,16 @@
   width: calc(100% / 4 - 2 * var(--kpmGap));
   padding: var(--kpmPad);
 
-
   border: var(--border);
 
   &.kpm-antagen {
-    --border: 1px solid #915B17;
+    --border: 1px solid #915b17;
   }
   &.kpm-registrerad {
-    --border: 1px solid #D4D4D4;
+    --border: 1px solid #d4d4d4;
   }
   &.kpm-godkand {
-    --border: 2px solid #D4D4D4;
+    --border: 2px solid #d4d4d4;
   }
 
   h2 {
@@ -49,12 +48,11 @@
     background-color: var(--bg);
     color: var(--text);
     font-size: 0.75em;
-   
+
     &.kpm-antagen {
       --text: black;
-      --bg: #FCF8E3;
+      --bg: #fcf8e3;
       --borderFg: black;
-
     }
     &.kpm-registrerad {
       --text: black;
@@ -63,8 +61,8 @@
     }
     &.kpm-godkand {
       --text: white;
-      --bg: #62922E;
-      --borderFg: #62922E;
+      --bg: #62922e;
+      --borderFg: #62922e;
     }
   }
 }
