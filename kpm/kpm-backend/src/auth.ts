@@ -25,6 +25,8 @@ export type TSessionUser = {
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
+const USE_FAKE_USER = process.env.USE_FAKE_USER;
+const IS_DEV = process.env.NODE_ENV !== "production";
 
 const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, PROXY_HOST);
 /**
@@ -123,11 +125,26 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
   }
 });
 
+export function getFakeUserForDevelopment(): TSessionUser | undefined {
+  if (IS_DEV && USE_FAKE_USER)
+    return {
+      kthid: USE_FAKE_USER,
+      display_name: "Test Userson",
+      email: "test@email.com",
+      username: "testuser",
+      exp: Date.now() / 1000 + 3600,
+      nbf: Date.now() / 1000,
+    };
+}
+
 export function requiresValidSessionUser(
   req: Express.Request,
   res: Express.Response,
   next: Function
 ) {
+  // Allow running locally without login
+  if (IS_DEV && USE_FAKE_USER) return next();
+
   if (!isValidSession(req.session.user)) {
     throw new Error("Not a valid TSessionUser");
   }

@@ -1,0 +1,58 @@
+@keyframes kpmRotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kpmRotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+#kpm-6cf53 .kpm-loading-placeholder {
+  display: flex;
+  min-height: 10rem;
+  justify-content: center;
+  align-items: center;
+
+  .kpm-loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    border: 3px solid;
+    border-color: var(--kpmPaneFg) var(--kpmPaneFg) transparent;
+    animation: kpmRotation 1s linear infinite;
+  }
+  .kpm-loader::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid;
+    border-color: transparent var(--kpmPaneFg) var(--kpmPaneFg);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    animation: kpmRotationBack 0.5s linear infinite;
+    transform-origin: center center;
+  }
+}
+
+#kpm-6cf53 .kpm-error-message {
+  display: flex;
+  min-height: 20rem;
+  justify-content: center;
+  align-items: center;
+}
