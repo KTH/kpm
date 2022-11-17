@@ -13,11 +13,32 @@ import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 
+const IS_DEV = process.env.NODE_ENV !== "production";
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
   "https://www.kth.se/social/home/subscriptions/";
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/home/personal-menu/notifications/";
+
+type TCurrentUser = {
+  kthid: string,
+  display_name: string,
+  email: string,
+  username: string,
+  exp: number,
+}
+
+declare global {
+  interface Window {
+    __kpmCurrentUser__: TCurrentUser;
+  }
+}
+
+const currentUser: TCurrentUser = window.__kpmCurrentUser__ || (IS_DEV && { kthid: 'u19t0qf2', display_name: 'Sebastian Ware', email: 'jhsware@kth.se', username: 'jhsware', exp: 1668683814 })
+
+function formatDisplayName(name: string) {
+  return name.split(" ")[0];
+}
 
 export function Menu({ hasStudies, hasTeaching }: any) {
   const navigation = useNavigation();
@@ -33,9 +54,10 @@ export function Menu({ hasStudies, hasTeaching }: any) {
       <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
       <nav className="kpm-menu">
         <ul>
-          <li>
+          <li className="kpm-profile-item">
             <ToggleNavLink to="profile" className={linkClassName}>
-              {i18n("Profile")}
+              <img src={`https://www.kth.se/files/thumbnail/${currentUser.username}`} alt="Profile Image" className="kpm-profile-image" />
+              {formatDisplayName(currentUser.display_name)}
             </ToggleNavLink>
           </li>
           <li>

@@ -49,6 +49,17 @@
     }
   }
 
+  .kpm-profile-item a {
+    display: flex;
+    align-items: center;
+    gap: calc(2 * var(--kpmGap));
+    padding: 0 calc(2 * var(--kpmPad)) 0 0;
+  
+    .kpm-profile-image {
+      height: calc(1.5em + 2 * var(--kpmPad));
+    }
+  }
+
   .kpm-menu-shotcuts {
     margin-left: auto;
     display: flex;

@@ -23,7 +23,9 @@ export async function widgetJsHandler(req: Request, res: Response) {
   const loggedIn = isValidSession(req.session.user);
   const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=/kpm/index.html`; // TODO: Read nextUrl from browser, and full URI instead of rel path
 
-  if (loggedIn) {
+if (loggedIn) {
+    const { display_name, email, kthid, exp, username } = req.session.user as TSessionUser;
+    const userToFrontend = { display_name, email, kthid, exp, username };
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
@@ -35,6 +37,10 @@ ${
   // QUESTION: So we don't have to proxy in STAGE, how about prod?
   // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
 }
+window.__kpmCurrentUser__ = ${
+  // Inject some user data to allow rendering the menu properly
+  JSON.stringify(userToFrontend)
+};
 })("${publicUriBase}/assets/${
       assets["index.js"]?.fileName
     }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
