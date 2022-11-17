@@ -17,4 +17,12 @@ html {
   --kpmPad: 0.5rem;
   --kpmMargin: 0.75rem;
   --kpmGap: 0.35em;
+  
+  --kpmButtonBg: var(--kpmPaneBg);
+  --kpmButtonFg: var(--kpmPaneSepatorFg);
+  --kpmButtonText: var(--kpmPaneText);
+  --kpmButtonHoverBg: var(--kpmPaneFg);
+  --kpmButtonHoverFg: var(--kpmButtonBg);
+  --kpmButtonHoverText: var(--kpmButtonBg);
+  --kpmButtonRadius: 0.25em;
 }

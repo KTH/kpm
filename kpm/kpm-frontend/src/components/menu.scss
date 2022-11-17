@@ -67,3 +67,20 @@
   padding: calc(2 * var(--kpmPad));
   accent-color: var(--kpmPaneFg);
 }
+
+#kpm-6cf53 .kpm-modal-content-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: var(--kpmMargin);
+
+  h2 {
+    flex-grow: 1;
+    font-size: 1.42em;
+    font-weight: bold;
+  }
+
+  .kpm-modal-content-header-actions {
+    flex-grow: 0;
+  }
+}

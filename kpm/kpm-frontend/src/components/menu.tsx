@@ -109,3 +109,17 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
     </dialog>
   );
 }
+
+type TMenuPaneHeaderProps = {
+  title: string,
+  children?: JSX.Element,
+}
+
+export function MenuPaneHeader({ title, children = undefined}: TMenuPaneHeaderProps): JSX.Element {
+  return (
+    <header className="kpm-modal-content-header">
+      <h2>{title}</h2>
+      {children && <div className="kpm-modal-content-header-actions">{children}</div>}
+    </header>
+  )
+}

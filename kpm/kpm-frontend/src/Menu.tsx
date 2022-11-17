@@ -5,40 +5,21 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
-import { linkClassName } from "./components/utils";
+import { formatDisplayName, linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
 import { getRoutes } from "./routes";
 import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
+import { currentUser } from "./app";
 
-const IS_DEV = process.env.NODE_ENV !== "production";
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
   "https://www.kth.se/social/home/subscriptions/";
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/home/personal-menu/notifications/";
 
-type TCurrentUser = {
-  kthid: string,
-  display_name: string,
-  email: string,
-  username: string,
-  exp: number,
-}
-
-declare global {
-  interface Window {
-    __kpmCurrentUser__: TCurrentUser;
-  }
-}
-
-const currentUser: TCurrentUser = window.__kpmCurrentUser__ || (IS_DEV && { kthid: 'u19t0qf2', display_name: 'Sebastian Ware', email: 'jhsware@kth.se', username: 'jhsware', exp: 1668683814 })
-
-function formatDisplayName(name: string) {
-  return name.split(" ")[0];
-}
 
 export function Menu({ hasStudies, hasTeaching }: any) {
   const navigation = useNavigation();

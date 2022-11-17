@@ -97,6 +97,24 @@
   justify-content: flex-start;
 }
 
+#kpm-6cf53 button.kpm-button,
+#kpm-6cf53 a.kpm-button {
+  display: flex;
+  padding: calc(var(--kpmPad)) calc(3 * var(--kpmPad));
+  border-radius: var(--kpmButtonRadius);
+  color: var(--kpmButtonText);
+  background-color: var(--kpmButtonBg);
+  border: 2px solid var(--kpmButtonFg);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--kpmButtonHoverText);
+    background-color: var(--kpmButtonHoverBg);
+    border-color: var(--kpmButtonHoverFg);
+    text-decoration: none;
+  }
+}
+
 // Typography in menu panes
 #kpm-6cf53 .kpm-modal-content {
   padding: calc(2 * var(--kpmPad));
