@@ -66,3 +66,13 @@ export type TStudiesProgramme = {
   year?: number;
   term?: "1" | "2";
 };
+
+export type APIGroups = {
+  groups: TGroup[];
+  group_search_url: string;
+};
+export type TGroup = {
+  name: string;
+  url: string;
+  stared: boolean;
+};
