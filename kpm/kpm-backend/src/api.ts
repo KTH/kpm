@@ -12,6 +12,7 @@ import {
   TCourseCode,
   TStudiesCourse,
   TProgramCode,
+  APIGroups,
 } from "kpm-backend-interface";
 import { TSessionUser, getFakeUserForDevelopment } from "./auth";
 
@@ -24,6 +25,8 @@ const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
+const SOCIAL_USER_API = process.env.SOCIAL_USER_URI;
+const SOCIAL_KEY = process.env.SOCIAL_KEY;
 
 export const api = express.Router();
 
@@ -232,3 +235,25 @@ async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
   );
   return r.body;
 }
+
+api.get("/groups", async (req, res: Response<APIGroups>, next) => {
+  try {
+    const user = req.session.user || getFakeUserForDevelopment();
+    assert(user !== undefined, "Mising user object");
+    assert(
+      user?.kthid !== undefined,
+      "User object missing required property kthid"
+    );
+    const data = await got
+      .get<APIGroups>(`${SOCIAL_USER_API}/${user.kthid}/groups.json`, {
+        headers: {
+          authorization: SOCIAL_KEY,
+        },
+        responseType: "json",
+      })
+      .then((r) => r.body);
+    res.send(data);
+  } catch (err) {
+    next(err);
+  }
+});
