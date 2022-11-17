@@ -13,6 +13,8 @@ import {
   TStudiesCourse,
   TProgramCode,
   APIGroups,
+  APIProgrammes,
+  APIServices,
 } from "kpm-backend-interface";
 import { TSessionUser, getFakeUserForDevelopment } from "./auth";
 import { SessionData } from "express-session";
@@ -224,19 +226,43 @@ async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
 api.get("/groups", async (req, res: Response<APIGroups>, next) => {
   try {
     const user = sessionUser(req.session);
-    const data = await got
-      .get<APIGroups>(`${SOCIAL_USER_API}/${user.kthid}/groups.json`, {
-        headers: {
-          authorization: SOCIAL_KEY,
-        },
-        responseType: "json",
-      })
-      .then((r) => r.body);
+    const data = await getSocial<APIGroups>(user, "groups");
     res.send(data);
   } catch (err) {
     next(err);
   }
 });
+
+api.get("/programmes", async (req, res: Response<APIProgrammes>, next) => {
+  try {
+    const user = sessionUser(req.session);
+    const data = await getSocial<APIProgrammes>(user, "programmes");
+    res.send(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+api.get("/services", async (req, res: Response<APIServices>, next) => {
+  try {
+    const user = sessionUser(req.session);
+    const data = await getSocial<APIServices>(user, "services");
+    res.send(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+async function getSocial<T>(user: TSessionUser, endpoint: string): Promise<T> {
+  return await got
+    .get<T>(`${SOCIAL_USER_API}/${user.kthid}/${endpoint}.json`, {
+      headers: {
+        authorization: SOCIAL_KEY,
+      },
+      responseType: "json",
+    })
+    .then((r) => r.body);
+}
 
 function optSessionUser(session: SessionData): TSessionUser | undefined {
   return session.user || getFakeUserForDevelopment();

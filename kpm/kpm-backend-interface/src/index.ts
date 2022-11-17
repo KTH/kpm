@@ -28,9 +28,14 @@ export type TCanvasRoom = {
   favorite: boolean;
 };
 
+export type TLocalizedString = {
+  sv: string;
+  en: string;
+};
+
 export type TTeachingCourse = {
   course_code: TCourseCode;
-  title: { sv: string; en: string };
+  title: TLocalizedString;
   credits: number;
   creditUnitAbbr: string; // usually "hp", check other values!
   roles: TTeachingRole[];
@@ -46,7 +51,7 @@ export type TTeachingRole = {
 
 export type TStudiesCourse = {
   course_code: TCourseCode;
-  title: { sv: string; en: string };
+  title: TLocalizedString;
   credits: number;
   creditUnitAbbr: string; // usually "hp", check other values!
   roles: TStudiesCourseInner[];
@@ -75,4 +80,23 @@ export type TGroup = {
   name: string;
   url: string;
   stared: boolean;
+};
+
+export type APIProgrammes = {
+  programmes: TProgram[];
+};
+export type TProgram = {
+  name: TLocalizedString;
+  url: string;
+  slug: string;
+  stared: boolean;
+};
+
+export type APIServices = {
+  servicelinks: TService[];
+  studentlinks: TService[];
+};
+export type TService = {
+  name: string;
+  url: string;
 };
