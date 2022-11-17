@@ -1,0 +1,10 @@
+#kpm-6cf53 .kpm-profile-link {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: calc(4 * var(--kpmGap));
+  align-items: center;
+
+  img {
+    height: 3em;
+  }
+}

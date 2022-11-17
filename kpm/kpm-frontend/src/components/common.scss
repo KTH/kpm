@@ -19,6 +19,7 @@
 #kpm-6cf53 .kpm-loading-placeholder {
   display: flex;
   min-height: 10rem;
+  width: 100%;
   justify-content: center;
   align-items: center;
 
@@ -53,6 +54,7 @@
 #kpm-6cf53 .kpm-error-message {
   display: flex;
   min-height: 20rem;
+  width: 100%;
   justify-content: center;
   align-items: center;
 }

@@ -119,7 +119,7 @@ export function MenuPaneHeader({ title, children = undefined}: TMenuPaneHeaderPr
   return (
     <header className="kpm-modal-content-header">
       <h2>{title}</h2>
-      {children && <div className="kpm-modal-content-header-actions">{children}</div>}
+      {children && <aside className="kpm-modal-content-header-actions">{children}</aside>}
     </header>
   )
 }

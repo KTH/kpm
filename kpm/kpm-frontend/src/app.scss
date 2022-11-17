@@ -95,6 +95,14 @@
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
+  flex-grow: 1;
+
+  .kpm-col-header {
+    font-size: 1.17em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--kpmPaneSepatorFg);
+    margin-bottom: var(--kpmMargin);
+  }
 }
 
 #kpm-6cf53 button.kpm-button,
