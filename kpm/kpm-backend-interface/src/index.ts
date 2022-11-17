@@ -79,7 +79,7 @@ export type APIGroups = {
 export type TGroup = {
   name: string;
   url: string;
-  stared: boolean;
+  starred: boolean;
 };
 
 export type APIProgrammes = {
@@ -89,7 +89,7 @@ export type TProgram = {
   name: TLocalizedString;
   url: string;
   slug: string;
-  stared: boolean;
+  starred: boolean;
 };
 
 export type APIServices = {
