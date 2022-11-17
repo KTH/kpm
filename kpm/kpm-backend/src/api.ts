@@ -15,6 +15,7 @@ import {
   APIGroups,
 } from "kpm-backend-interface";
 import { TSessionUser, getFakeUserForDevelopment } from "./auth";
+import { SessionData } from "express-session";
 
 const MY_CANVAS_ROOMS_API_URI =
   process.env.MY_CANVAS_ROOMS_API_URI ||
@@ -40,13 +41,7 @@ api.get("/", (req, res) => {
 
 api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
   try {
-    const user = req.session.user || getFakeUserForDevelopment();
-    assert(user !== undefined, "Mising user object");
-    assert(
-      user?.kthid !== undefined,
-      "User object missing required property kthid"
-    );
-
+    const user = sessionUser(req.session);
     const { rooms } = await get_canvas_rooms(user.kthid);
     res.send({ rooms });
   } catch (err) {
@@ -56,12 +51,7 @@ api.get("/canvas-rooms", async (req, res: Response<APICanvasRooms>, next) => {
 
 api.get("/teaching", async (req, res: Response<APITeaching>, next) => {
   try {
-    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment();
-    assert(user !== undefined, "Mising user object");
-    assert(
-      user?.kthid !== undefined,
-      "User object missing required property kthid"
-    );
+    const user = sessionUser(req.session);
 
     const perf1 = Date.now();
     const elapsed_ms = () => Date.now() - perf1;
@@ -138,12 +128,7 @@ export type TApiUserStudies = {
 
 api.get("/studies", async (req, res: Response<APIStudies>, next) => {
   try {
-    const user: TSessionUser = req.session.user! || getFakeUserForDevelopment();
-    assert(user !== undefined, "Mising user object");
-    assert(
-      user?.kthid !== undefined,
-      "User object missing required property kthid"
-    );
+    const user = sessionUser(req.session);
 
     const studies_fut = got
       .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
@@ -238,12 +223,7 @@ async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
 
 api.get("/groups", async (req, res: Response<APIGroups>, next) => {
   try {
-    const user = req.session.user || getFakeUserForDevelopment();
-    assert(user !== undefined, "Mising user object");
-    assert(
-      user?.kthid !== undefined,
-      "User object missing required property kthid"
-    );
+    const user = sessionUser(req.session);
     const data = await got
       .get<APIGroups>(`${SOCIAL_USER_API}/${user.kthid}/groups.json`, {
         headers: {
@@ -257,3 +237,17 @@ api.get("/groups", async (req, res: Response<APIGroups>, next) => {
     next(err);
   }
 });
+
+function optSessionUser(session: SessionData): TSessionUser | undefined {
+  return session.user || getFakeUserForDevelopment();
+}
+
+function sessionUser(session: SessionData): TSessionUser {
+  const user = optSessionUser(session);
+  assert(user !== undefined, "Mising user object");
+  assert(
+    user?.kthid !== undefined,
+    "User object missing required property kthid"
+  );
+  return user;
+}
