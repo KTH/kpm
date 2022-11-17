@@ -54,7 +54,7 @@
     align-items: center;
     gap: calc(2 * var(--kpmGap));
     padding: 0 calc(2 * var(--kpmPad)) 0 0;
-  
+
     .kpm-profile-image {
       height: calc(1.5em + 2 * var(--kpmPad));
     }
@@ -144,6 +144,7 @@
   a.icon {
     color: var(--kpmLink);
     text-decoration: none;
+    line-height: 1em;
 
     &:hover {
       color: var(--kpmLinkHover);

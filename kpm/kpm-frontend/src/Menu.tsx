@@ -20,7 +20,6 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/home/personal-menu/notifications/";
 
-
 export function Menu({ hasStudies, hasTeaching }: any) {
   const navigation = useNavigation();
   const location = useLocation();
@@ -37,7 +36,11 @@ export function Menu({ hasStudies, hasTeaching }: any) {
         <ul>
           <li className="kpm-profile-item">
             <ToggleNavLink to="profile" className={linkClassName}>
-              <img src={`https://www.kth.se/files/thumbnail/${currentUser.username}`} alt="Profile Image" className="kpm-profile-image" />
+              <img
+                src={`https://www.kth.se/files/thumbnail/${currentUser.username}`}
+                alt="Profile Image"
+                className="kpm-profile-image"
+              />
               {formatDisplayName(currentUser.display_name)}
             </ToggleNavLink>
           </li>

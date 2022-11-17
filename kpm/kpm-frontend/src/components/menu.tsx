@@ -111,15 +111,20 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
 }
 
 type TMenuPaneHeaderProps = {
-  title: string,
-  children?: JSX.Element,
-}
+  title: string;
+  children?: any;
+};
 
-export function MenuPaneHeader({ title, children = undefined}: TMenuPaneHeaderProps): JSX.Element {
+export function MenuPaneHeader({
+  title,
+  children = undefined,
+}: TMenuPaneHeaderProps): JSX.Element {
   return (
     <header className="kpm-modal-content-header">
       <h2>{title}</h2>
-      {children && <aside className="kpm-modal-content-header-actions">{children}</aside>}
+      {children && (
+        <aside className="kpm-modal-content-header-actions">{children}</aside>
+      )}
     </header>
-  )
+  );
 }

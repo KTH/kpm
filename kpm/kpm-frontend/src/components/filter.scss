@@ -1,0 +1,23 @@
+#kpm-6cf53 .kpm-tab-filter {
+  // font-size: 1.17em;
+  // font-weight: bold;
+  border-bottom: 1px solid var(--kpmPaneSepatorFg);
+  margin-bottom: var(--kpmMargin);
+  width: 100%;
+
+  & > ul {
+    display: flex;
+    flex-flow: row wrap;
+    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+  }
+
+  & > ul > li {
+    margin-bottom: var(--kpmGap);
+
+    &.active {
+      font-weight: bold;
+      border-bottom: 4px solid var(--kpmLink);
+      margin-bottom: calc(var(--kpmGap) - 4px);
+    }
+  }
+}

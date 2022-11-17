@@ -1,7 +1,22 @@
 import React from "react";
 import { i18n } from "../i18n/i18n";
 
-export function IconMail({ href, target }: any) {
+type TLinkIconProps = {
+  href: string;
+  target?: string | undefined;
+  title?: string | undefined;
+};
+
+type TIconProps = {
+  title?: string | undefined;
+  className?: string | undefined;
+};
+
+export function IconMail({
+  href,
+  target = undefined,
+  title = undefined,
+}: TLinkIconProps) {
   return (
     <a href={href} target={target}>
       <svg
@@ -21,7 +36,11 @@ export function IconMail({ href, target }: any) {
   );
 }
 
-export function IconNewsfeed({ href, target = null }: any) {
+export function IconNewsfeed({
+  href,
+  target = undefined,
+  title = undefined,
+}: TLinkIconProps) {
   return (
     <a href={href} target={target}>
       <svg
@@ -42,7 +61,11 @@ export function IconNewsfeed({ href, target = null }: any) {
   );
 }
 
-export function IconNotifications({ href, target }: any) {
+export function IconNotifications({
+  href,
+  target = undefined,
+  title = undefined,
+}: TLinkIconProps) {
   return (
     <a className="icon" href={href} target={target}>
       <svg
@@ -59,5 +82,52 @@ export function IconNotifications({ href, target }: any) {
         ></path>
       </svg>
     </a>
+  );
+}
+
+export function IconSettings({
+  href,
+  target = undefined,
+  title = undefined,
+}: TLinkIconProps) {
+  return (
+    <a className="icon" href={href} target={target}>
+      <svg
+        viewBox="0 0 86 86"
+        xmlns="http://www.w3.org/2000/svg"
+        width="1.2em"
+        height="1.2em"
+      >
+        <title>
+          Select how you are notified, how the schedule is displayed, or remove
+          subscriptions.
+        </title>
+        <path
+          d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z"
+          fill="currentColor"
+          fill-rule="evenodd"
+        ></path>
+      </svg>
+    </a>
+  );
+}
+
+export function IconStar({ title, className = "" }: TIconProps) {
+  return (
+    <svg
+      className={className ? `icon ${className}` : "icon"}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 880 880"
+      width="1em"
+      height="1em"
+    >
+      <title>{title}</title>
+      <path
+        d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+        fill="currentColor"
+        strokeWidth="10"
+        stroke="#7d5c0c"
+      ></path>
+    </svg>
   );
 }

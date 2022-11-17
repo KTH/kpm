@@ -85,5 +85,9 @@
 
   .kpm-modal-content-header-actions {
     flex-grow: 0;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
   }
 }

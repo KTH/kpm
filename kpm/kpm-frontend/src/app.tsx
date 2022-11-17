@@ -8,12 +8,12 @@ import "./app.scss";
 const IS_DEV = process.env.NODE_ENV !== "production";
 
 export type TCurrentUser = {
-  kthid: string,
-  display_name: string,
-  email: string,
-  username: string,
-  exp: number,
-}
+  kthid: string;
+  display_name: string;
+  email: string;
+  username: string;
+  exp: number;
+};
 
 declare global {
   interface Window {
@@ -21,7 +21,15 @@ declare global {
   }
 }
 
-export const currentUser: TCurrentUser = window.__kpmCurrentUser__ || (IS_DEV && { kthid: 'u19t0qf2', display_name: 'Sebastian Ware', email: 'jhsware@kth.se', username: 'jhsware', exp: 1668683814 })
+export const currentUser: TCurrentUser =
+  window.__kpmCurrentUser__ ||
+  (IS_DEV && {
+    kthid: "u19t0qf2",
+    display_name: "Dr.LocalDev Server",
+    email: "test@email.com",
+    username: "jhsware",
+    exp: 1668683814,
+  });
 
 type TCreateRouterProps = {
   hasStudies: boolean;
