@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { i18n } from "../i18n/i18n";
 
 declare global {
   interface Window {
@@ -37,4 +38,11 @@ export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
   }, []);
 
   return { res, loading, error };
+}
+
+export function formatTerm(startTerm: string) {
+  const shortYear = startTerm.slice(2, 4);
+  const termNr = startTerm.slice(4, 5);
+  const termStr = { 1: "VT", 2: "HT" }[termNr];
+  return `${termStr && i18n(termStr)}${shortYear}`;
 }

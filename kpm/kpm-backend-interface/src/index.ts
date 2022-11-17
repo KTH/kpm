@@ -49,10 +49,10 @@ export type TStudiesCourse = {
   title: { sv: string; en: string };
   credits: number;
   creditUnitAbbr: string; // usually "hp", check other values!
-  roles: TStuidesCourseInner[];
+  roles: TStudiesCourseInner[];
   rooms: TCanvasRoom[];
 };
-export type TStuidesCourseInner = {
+export type TStudiesCourseInner = {
   status?: "antagna" | "godkand" | "registrerade";
   year?: number;
   term?: "1" | "2";

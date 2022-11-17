@@ -1,13 +1,68 @@
-#kpm-6cf53 .kpm-studies-course {
+#kpm-6cf53 .kpm-studies {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  gap: 0.5em;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: calc(2 * var(--kpmGap));
 
-  h2,
-  h3 {
+  --borderFg: var(--kpmPaneSepatorFg);
+}
+
+#kpm-6cf53 .kpm-studies-course {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(2 * var(--kpmGap));
+  width: calc(100% / 4 - 2 * var(--kpmGap));
+  padding: var(--kpmPad);
+
+  border: var(--border);
+
+  &.kpm-antagen {
+    --border: 1px solid #915b17;
+  }
+  &.kpm-registrerad {
+    --border: 1px solid #d4d4d4;
+  }
+  &.kpm-godkand {
+    --border: 2px solid #d4d4d4;
+  }
+
+  h2 {
     font-size: 1em;
     margin: 0;
     padding: 0;
+    height: calc(3 * 1.2em);
+    line-height: 1.2em;
+    overflow: hidden;
+  }
+
+  ul {
+    height: calc(3 * (1.5em + var(--kpmMargin)));
+  }
+
+  .kpm-studies-course-status {
+    padding: calc(var(--kpmPad) / 8) var(--kpmPad);
+    border: 1px solid var(--borderFg);
+    border-radius: var(--kpmPad);
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 0.75em;
+
+    &.kpm-antagen {
+      --text: black;
+      --bg: #fcf8e3;
+      --borderFg: black;
+    }
+    &.kpm-registrerad {
+      --text: black;
+      --bg: #fff;
+      --borderFg: black;
+    }
+    &.kpm-godkand {
+      --text: white;
+      --bg: #62922e;
+      --borderFg: #62922e;
+    }
   }
 }

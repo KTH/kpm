@@ -7,7 +7,7 @@ import {
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
-import { createApiUri, useDataFecther } from "./utils";
+import { createApiUri, formatTerm, useDataFecther } from "./utils";
 import { ErrorMessage, LoadingPlaceholder } from "../components/common";
 import { i18n } from "../i18n/i18n";
 
@@ -242,13 +242,6 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
     current: outp.slice(0, 3),
     other: outp.slice(3),
   };
-}
-
-function formatTerm(startTerm: string) {
-  const shortYear = startTerm.slice(2, 4);
-  const termNr = startTerm.slice(4, 5);
-  const termStr = { 1: "VT", 2: "HT" }[termNr];
-  return `${termStr && i18n(termStr)}${shortYear}`;
 }
 
 type TCourseAdminDropdownProps = {
