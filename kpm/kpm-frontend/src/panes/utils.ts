@@ -21,11 +21,10 @@ export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
   loading: boolean;
   error: Error | undefined;
 } {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
   const [res, setRes] = useState<T>();
   useEffect(() => {
-    setLoading(true);
     try {
       loaderFunc().then((res: T) => {
         setRes(res);

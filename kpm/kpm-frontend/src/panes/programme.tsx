@@ -36,7 +36,7 @@ export function Programme() {
   const isEmpty = !loading && !error && filteredProgrammes?.length === 0;
 
   return (
-    <MenuPane>
+    <MenuPane className="kpm-programmes">
       <MenuPaneHeader title={i18n("My Programmes")}>
         <a
           title="Help / feedback for the personal menu in connection with the transition to new Ladok"
@@ -63,7 +63,7 @@ export function Programme() {
           : i18n("You don't belong to any programme.")}
       </EmptyPlaceholder>}
       {!isEmpty && (
-        <ul className="kpm-programmes">
+        <ul>
           {filteredProgrammes?.map((programme) => (
             <li>
               <IconStar className={programme.stared ? "star active" : "star"} />

@@ -36,7 +36,7 @@ export function Groups() {
   const isEmpty = !loading && !error && filteredGroups?.length === 0;
 
   return (
-    <MenuPane>
+    <MenuPane className="kpm-groups">
       <MenuPaneHeader title={i18n("My Groups")}>
         <a
           title="Search for interesting groups to follow"
@@ -69,7 +69,7 @@ export function Groups() {
           : i18n("You don't belong to any groups.")}
       </EmptyPlaceholder>}
       {!isEmpty && (
-        <ul className="kpm-groups">
+        <ul>
           {filteredGroups?.map((group) => (
             <li>
               <IconStar className={group.stared ? "star active" : "star"} />
