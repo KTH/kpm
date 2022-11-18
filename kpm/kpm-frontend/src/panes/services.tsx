@@ -40,7 +40,7 @@ export function Services() {
         >
           Help / feedback
         </a>
-        <IconSettings href="https://www.kth.se/social/home/settings/servicelinks" />
+        <IconSettings href="https://www.kth.se/social/servicelinks" />
       </MenuPaneHeader>
       <Fragment>
         <div className="kpm-col">
