@@ -14,8 +14,8 @@
     flex-grow: 0;
   }
 
-  .kpm-services-links {
-    flex-grow: 2;
+  .kpm-col.kpm-services-links {
+    width: calc(2 * $colWidth);
 
     & > ul {
       display: flex;
