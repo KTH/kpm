@@ -40,4 +40,7 @@ if (IS_DEV || IS_STAGE) {
 
 app.listen(PORT, () => {
   log.info(`Listening on port ${PORT}`);
+  if (process.env.DEPLOYMENT) {
+    log.info(`process.env.DEPLOYMENT = ${process.env.DEPLOYMENT}`);
+  }
 });
