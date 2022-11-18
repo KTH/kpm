@@ -78,7 +78,9 @@ export function Programme() {
         <ul>
           {filteredProgrammes?.map((programme) => (
             <li>
-              <IconStar className={programme.starred ? "star active" : "star"} />
+              <IconStar
+                className={programme.starred ? "star active" : "star"}
+              />
               <a href={programme.url}>{i18n(programme.name)}</a>
             </li>
           ))}
