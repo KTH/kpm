@@ -1,4 +1,7 @@
 #kpm-6cf53 .kpm-tab-filter {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+
   // font-size: 1.17em;
   // font-weight: bold;
   border-bottom: 1px solid var(--kpmPaneSepatorFg);
@@ -8,7 +11,7 @@
   & > ul {
     display: flex;
     flex-flow: row wrap;
-    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+    gap: $rowGap $colGap;
   }
 
   & > ul > li {

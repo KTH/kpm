@@ -1,31 +1,17 @@
 #kpm-6cf53 div.kpm-services {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+  $colCount: 3;
+  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+
   display: flex;
   flex-flow: row wrap;
   align-items: flex-start;
-  gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+  gap: $rowGap $colGap;
 
   .kpm-col {
-    width: calc((100% - 4 * var(--kpmGap)) / 3);
+    width: $colWidth;
     flex-grow: 0;
-  }
-
-  & > li {
-    display: flex;
-    align-items: center;
-    width: calc(50% - 2 * var(--kpmGap));
-    margin-bottom: 0;
-    padding: var(--kpmPad);
-    gap: calc(2 * var(--kpmGap));
-
-    .icon.star {
-      color: var(--kpmIconStarBg);
-      // Fix alignment error
-      margin-bottom: 2px;
-
-      &.active {
-        color: var(--kpmIconStarActiveBg);
-      }
-    }
   }
 
   .kpm-services-links {
@@ -35,10 +21,11 @@
       display: flex;
       flex-flow: row wrap;
       align-items: flex-start;
-      gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+      gap: $rowGap $colGap;
 
       & > li {
-        width: calc(50% - 2 * var(--kpmGap));
+        $colCount: 2;
+        width: calc((100% - $colGap) / $colCount);
         margin-bottom: 0;
       }
     }

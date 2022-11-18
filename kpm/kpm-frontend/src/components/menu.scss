@@ -29,6 +29,9 @@
 }
 
 #kpm-6cf53 .kpm-modal {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+
   // z-index: -1;
   display: block;
   position: relative;
@@ -61,17 +64,17 @@
       text-decoration: underline;
     }
   }
-}
 
-#kpm-6cf53 .kpm-modal-content {
+
+.kpm-modal-content {
   padding: calc(2 * var(--kpmPad));
   accent-color: var(--kpmPaneFg);
   display: flex;
   flex-flow: row wrap;
-  gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+  gap: $rowGap $colGap;
 }
 
-#kpm-6cf53 .kpm-modal-content-header {
+.kpm-modal-content-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -88,6 +91,7 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+    gap: $rowGap $colGap;
   }
+}
 }

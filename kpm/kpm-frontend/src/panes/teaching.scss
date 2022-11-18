@@ -1,11 +1,16 @@
 #kpm-6cf53 .kpm-teaching {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(5 * var(--kpmGap));
+  $colCount: 3;
+  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+  
   display: flex;
   flex-flow: column nowrap;
-  $rowColGap: calc(2 * var(--kpmGap)) calc(5 * var(--kpmGap));
+
   .kpm-teaching-course {
     display: flex;
     flex-flow: row wrap;
-    gap: $rowColGap;
+    gap: $rowGap $colGap;
 
     align-items: flex-start;
     padding: calc(2 * var(--kpmPad)) 0;
@@ -29,7 +34,7 @@
     }
 
     .kpm-row {
-      gap: $rowColGap;
+      gap: $rowGap $colGap;
     }
 
     .kpm-teaching-course-admin-dropdown {
@@ -39,7 +44,7 @@
     ul.kpm-teaching-course-rooms {
       display: flex;
       flex-flow: row wrap;
-      gap: $rowColGap;
+      gap: $rowGap $colGap;
       li {
         margin: 0;
       }
@@ -49,16 +54,20 @@
       min-width: 30ch;
 
       ul {
+        $rowGap: calc(3 * var(--kpmGap));
+        $colGap: $rowGap;
         display: flex;
         flex-direction: column;
-        gap: calc(3 * var(--kpmGap));
+        gap: $rowGap $colGap;
       }
     }
 
     .kpm-teaching-course-rooms-dd-item {
+      $rowGap: 20px;
+      $colGap: $rowGap;
       display: flex;
       flex-flow: row wrap;
-      gap: 20px;
+      gap: $rowGap $colGap;
       align-items: flex-start;
     }
   }

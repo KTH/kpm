@@ -1,17 +1,22 @@
 #kpm-6cf53 .kpm-programmes {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+  $colCount: 2;
+  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+
   & > ul {
     display: flex;
     flex-flow: row wrap;
-    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+    gap: $rowGap $colGap;
     align-items: center;
 
     & > li {
       display: flex;
       align-items: center;
-      width: calc(50% - 2 * var(--kpmGap));
+      width: $colWidth;
       margin-bottom: 0;
       padding: var(--kpmPad);
-      gap: calc(2 * var(--kpmGap));
+      gap: $rowGap $colGap;
 
       .icon.star {
         color: var(--kpmIconStarBg);

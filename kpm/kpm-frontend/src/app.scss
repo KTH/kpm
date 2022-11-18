@@ -53,9 +53,12 @@
   $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
 
   .kpm-profile-item a {
+    $rowGap: calc(2 * var(--kpmGap));
+    $colGap: $rowGap;
+
     display: flex;
     align-items: center;
-    gap: calc(2 * var(--kpmGap));
+    gap: $rowGap $colGap;
     padding: 0 calc(2 * var(--kpmPad)) 0 0;
 
     .kpm-profile-image {
