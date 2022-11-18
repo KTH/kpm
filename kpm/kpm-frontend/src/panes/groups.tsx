@@ -31,7 +31,7 @@ export function Groups() {
   const filteredGroups = groups?.filter((group) => {
     switch (filter) {
       case "favs":
-        return group.stared;
+        return group.starred;
       case "all":
         return true;
     }
@@ -78,7 +78,7 @@ export function Groups() {
         <ul>
           {filteredGroups?.map((group) => (
             <li>
-              <IconStar className={group.stared ? "star active" : "star"} />
+              <IconStar className={group.starred ? "star active" : "star"} />
               <a href={group.url}>{group.name}</a>
             </li>
           ))}

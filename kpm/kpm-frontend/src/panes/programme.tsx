@@ -34,7 +34,7 @@ export function Programme() {
   const filteredProgrammes = programmes?.filter((programme) => {
     switch (filter) {
       case "favs":
-        return programme.stared;
+        return programme.starred;
       case "all":
         return true;
     }
@@ -78,7 +78,7 @@ export function Programme() {
         <ul>
           {filteredProgrammes?.map((programme) => (
             <li>
-              <IconStar className={programme.stared ? "star active" : "star"} />
+              <IconStar className={programme.starred ? "star active" : "star"} />
               <a href={programme.url}>{i18n(programme.name)}</a>
             </li>
           ))}
