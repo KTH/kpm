@@ -1,8 +1,8 @@
 import * as React from "react";
 import { RouteObject } from "react-router-dom";
-import { loaderProfile, Profile } from "./panes/profile";
-import { loaderStudies, Studies } from "./panes/studies";
-import { loaderTeaching, Teaching } from "./panes/teaching";
+import { Profile } from "./panes/profile";
+import { Studies } from "./panes/studies";
+import { Teaching } from "./panes/teaching";
 import { Programme } from "./panes/programme";
 import { Schedule } from "./panes/schedule";
 import { Services } from "./panes/services";

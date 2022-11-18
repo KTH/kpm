@@ -1,0 +1,14 @@
+#kpm-6cf53 .kpm-profile-link {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: $rowGap;
+
+  display: flex;
+  flex-flow: row nowrap;
+  gap: $rowGap $colGap;
+  align-items: center;
+
+  img {
+    height: 3em;
+    width: 3em;
+  }
+}

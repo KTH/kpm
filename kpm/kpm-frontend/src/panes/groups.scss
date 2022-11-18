@@ -1,0 +1,32 @@
+#kpm-6cf53 .kpm-groups {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+  $colCount: 3;
+  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+
+  & > ul {
+    display: flex;
+    flex-flow: row wrap;
+    gap: $rowGap $colGap;
+    align-items: center;
+
+    & > li {
+      display: flex;
+      align-items: center;
+      width: $colWidth;
+      margin-bottom: 0;
+      padding: var(--kpmPad);
+      gap: $rowGap $colGap;
+
+      .icon.star {
+        color: var(--kpmIconStarBg);
+        // Fix alignment error
+        margin-bottom: 2px;
+
+        &.active {
+          color: var(--kpmIconStarActiveBg);
+        }
+      }
+    }
+  }
+}

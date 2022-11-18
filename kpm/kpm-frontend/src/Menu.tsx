@@ -5,13 +5,14 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
-import { linkClassName } from "./components/utils";
+import { formatDisplayName, linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
 import { getRoutes } from "./routes";
 import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
+import { currentUser } from "./app";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -33,9 +34,14 @@ export function Menu({ hasStudies, hasTeaching }: any) {
       <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
       <nav className="kpm-menu">
         <ul>
-          <li>
+          <li className="kpm-profile-item">
             <ToggleNavLink to="profile" className={linkClassName}>
-              {i18n("Profile")}
+              <img
+                src={`https://www.kth.se/files/thumbnail/${currentUser.username}`}
+                alt="Profile Image"
+                className="kpm-profile-image"
+              />
+              {formatDisplayName(currentUser.display_name)}
             </ToggleNavLink>
           </li>
           <li>

@@ -49,15 +49,34 @@
     }
   }
 
+  // Use for profile image and icons
+  $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
+
+  .kpm-profile-item a {
+    $rowGap: calc(2 * var(--kpmGap));
+    $colGap: $rowGap;
+
+    display: flex;
+    align-items: center;
+    gap: $rowGap $colGap;
+    padding: 0 calc(2 * var(--kpmPad)) 0 0;
+
+    .kpm-profile-image {
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
+    }
+  }
+
   .kpm-menu-shotcuts {
     margin-left: auto;
     display: flex;
     flex-direction: row;
 
     a {
-      display: inline-block;
+      display: block;
       flex-grow: 1;
-      height: 100%;
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
       padding: calc(var(--kpmPad));
     }
 
@@ -84,6 +103,32 @@
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
+  flex-grow: 1;
+
+  .kpm-col-header {
+    font-size: 1.17em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--kpmPaneSepatorFg);
+    margin-bottom: var(--kpmMargin);
+  }
+}
+
+#kpm-6cf53 button.kpm-button,
+#kpm-6cf53 a.kpm-button {
+  display: flex;
+  padding: calc(var(--kpmPad)) calc(3 * var(--kpmPad));
+  border-radius: var(--kpmButtonRadius);
+  color: var(--kpmButtonText);
+  background-color: var(--kpmButtonBg);
+  border: 2px solid var(--kpmButtonFg);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--kpmButtonHoverText);
+    background-color: var(--kpmButtonHoverBg);
+    border-color: var(--kpmButtonHoverFg);
+    text-decoration: none;
+  }
 }
 
 // Typography in menu panes
@@ -107,6 +152,7 @@
   a.icon {
     color: var(--kpmLink);
     text-decoration: none;
+    line-height: 1em;
 
     &:hover {
       color: var(--kpmLinkHover);

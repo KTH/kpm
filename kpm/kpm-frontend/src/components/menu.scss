@@ -29,6 +29,9 @@
 }
 
 #kpm-6cf53 .kpm-modal {
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(4 * var(--kpmGap));
+
   // z-index: -1;
   display: block;
   position: relative;
@@ -61,9 +64,33 @@
       text-decoration: underline;
     }
   }
-}
 
-#kpm-6cf53 .kpm-modal-content {
-  padding: calc(2 * var(--kpmPad));
-  accent-color: var(--kpmPaneFg);
+  .kpm-modal-content {
+    padding: calc(2 * var(--kpmPad));
+    accent-color: var(--kpmPaneFg);
+    display: flex;
+    flex-flow: row wrap;
+    gap: $rowGap $colGap;
+  }
+
+  .kpm-modal-content-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+
+    h2 {
+      flex-grow: 1;
+      font-size: 1.42em;
+      font-weight: bold;
+    }
+
+    .kpm-modal-content-header-actions {
+      flex-grow: 0;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      gap: $rowGap $colGap;
+    }
+  }
 }

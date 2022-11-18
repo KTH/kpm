@@ -91,10 +91,19 @@ function Backdrop({
   );
 }
 
-export function MenuPane({ children }: any) {
+type TMenuPaneProps = {
+  className?: string | undefined | null;
+  children: any;
+};
+
+export function MenuPane({ className = undefined, children }: any) {
+  let cls = "kpm-modal-content";
+  if (className) {
+    cls += ` ${className}`;
+  }
   return (
     <MenuPaneWrapper>
-      <div className="kpm-modal-content">{children}</div>
+      <div className={cls}>{children}</div>
     </MenuPaneWrapper>
   );
 }
@@ -107,5 +116,24 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
     <dialog ref={nodeRef} className={cls}>
       {children}
     </dialog>
+  );
+}
+
+type TMenuPaneHeaderProps = {
+  title: string;
+  children?: any;
+};
+
+export function MenuPaneHeader({
+  title,
+  children = undefined,
+}: TMenuPaneHeaderProps): JSX.Element {
+  return (
+    <header className="kpm-modal-content-header">
+      <h2>{title}</h2>
+      {children && (
+        <aside className="kpm-modal-content-header-actions">{children}</aside>
+      )}
+    </header>
   );
 }

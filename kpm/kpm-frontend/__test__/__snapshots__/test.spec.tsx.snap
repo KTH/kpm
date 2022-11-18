@@ -5,13 +5,20 @@ exports[`<App /> Can be rendered 1`] = `
   className="kpm-menu"
 >
   <ul>
-    <li>
+    <li
+      className="kpm-profile-item"
+    >
       <a
         className=""
         href="#/profile"
         onClick={[Function]}
       >
-        Profil
+        <img
+          alt="Profile Image"
+          className="kpm-profile-image"
+          src="https://www.kth.se/files/thumbnail/jhsware"
+        />
+        Dr.LocalDev
       </a>
     </li>
     <li>
@@ -95,7 +102,6 @@ exports[`<App /> Can be rendered 1`] = `
       <li>
         <a
           href="https://www.kth.se/social/home/subscriptions/"
-          target={null}
         >
           <svg
             height="1em"

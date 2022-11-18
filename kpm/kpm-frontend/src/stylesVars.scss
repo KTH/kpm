@@ -12,9 +12,21 @@ html {
   --kpmPaneBg: white;
   --kpmPaneFg: #006cb7;
   --kpmPaneText: black;
+  --kpmPaneTextMuted: #c0c0c0;
   --kpmPaneSepatorFg: #d4d4d4;
 
   --kpmPad: 0.5rem;
   --kpmMargin: 0.75rem;
   --kpmGap: 0.35em;
+
+  --kpmButtonBg: var(--kpmPaneBg);
+  --kpmButtonFg: var(--kpmPaneSepatorFg);
+  --kpmButtonText: var(--kpmPaneText);
+  --kpmButtonHoverBg: var(--kpmPaneFg);
+  --kpmButtonHoverFg: var(--kpmButtonBg);
+  --kpmButtonHoverText: var(--kpmButtonBg);
+  --kpmButtonRadius: 0.25em;
+
+  --kpmIconStarBg: #eee;
+  --kpmIconStarActiveBg: #fab919;
 }
