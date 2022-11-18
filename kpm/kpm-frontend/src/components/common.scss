@@ -16,9 +16,21 @@
   }
 }
 
+#kpm-6cf53 .kpm-empty-placeholder {
+  display: flex;
+  min-height: 20rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--kpmPaneTextMuted);
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
 #kpm-6cf53 .kpm-loading-placeholder {
   display: flex;
-  min-height: 10rem;
+  min-height: 20rem;
   width: 100%;
   justify-content: center;
   align-items: center;
