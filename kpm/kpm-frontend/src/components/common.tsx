@@ -10,17 +10,15 @@ export function LoadingPlaceholder(): JSX.Element {
 }
 
 type TEmptyPlaceholderProps = {
-  children: any,
-}
+  children: any;
+};
 
-export function EmptyPlaceholder({ children }: TEmptyPlaceholderProps): JSX.Element {
+export function EmptyPlaceholder({
+  children,
+}: TEmptyPlaceholderProps): JSX.Element {
   // TODO: Perhaps add an image/icon when only text like they do on Github?
   // TODO: Perhaps add an explanation on what you are expected to do.
-  return (
-    <div className="kpm-empty-placeholder">
-      {children}
-    </div>
-  );
+  return <div className="kpm-empty-placeholder">{children}</div>;
 }
 
 type TErrorMessageProps = {

@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
-import { EmptyPlaceholder, ErrorMessage, LoadingPlaceholder } from "../components/common";
+import {
+  EmptyPlaceholder,
+  ErrorMessage,
+  LoadingPlaceholder,
+} from "../components/common";
 import { i18n } from "../i18n/i18n";
 import "./groups.scss";
 import { IconSettings, IconStar } from "../components/icons";
@@ -63,11 +67,13 @@ export function Groups() {
       </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
-      {isEmpty && <EmptyPlaceholder>
-        {filter === "favs"
-          ? i18n("You have no groups marked as favourites.")
-          : i18n("You don't belong to any groups.")}
-      </EmptyPlaceholder>}
+      {isEmpty && (
+        <EmptyPlaceholder>
+          {filter === "favs"
+            ? i18n("You have no groups marked as favourites.")
+            : i18n("You don't belong to any groups.")}
+        </EmptyPlaceholder>
+      )}
       {!isEmpty && (
         <ul>
           {filteredGroups?.map((group) => (

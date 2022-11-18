@@ -9,7 +9,7 @@
     flex-grow: 0;
   }
 
-  &>li {
+  & > li {
     display: flex;
     align-items: center;
     width: calc(50% - 2 * var(--kpmGap));
@@ -31,13 +31,13 @@
   .kpm-services-links {
     flex-grow: 2;
 
-    &>ul {
+    & > ul {
       display: flex;
       flex-flow: row wrap;
       align-items: flex-start;
       gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
 
-      &>li {
+      & > li {
         width: calc(50% - 2 * var(--kpmGap));
         margin-bottom: 0;
       }

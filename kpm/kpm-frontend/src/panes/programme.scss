@@ -1,11 +1,10 @@
 #kpm-6cf53 .kpm-programmes {
-
   & > ul {
     display: flex;
     flex-flow: row wrap;
     gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
     align-items: center;
-  
+
     & > li {
       display: flex;
       align-items: center;
@@ -13,12 +12,12 @@
       margin-bottom: 0;
       padding: var(--kpmPad);
       gap: calc(2 * var(--kpmGap));
-  
+
       .icon.star {
         color: var(--kpmIconStarBg);
         // Fix alignment error
         margin-bottom: 2px;
-  
+
         &.active {
           color: var(--kpmIconStarActiveBg);
         }

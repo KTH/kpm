@@ -92,9 +92,9 @@ function Backdrop({
 }
 
 type TMenuPaneProps = {
-  className?: string | undefined | null,
-  children: any,
-}
+  className?: string | undefined | null;
+  children: any;
+};
 
 export function MenuPane({ className = undefined, children }: any) {
   let cls = "kpm-modal-content";
