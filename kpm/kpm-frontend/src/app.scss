@@ -49,6 +49,9 @@
     }
   }
 
+  // Use for profile image and icons
+  $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
+
   .kpm-profile-item a {
     display: flex;
     align-items: center;
@@ -56,8 +59,8 @@
     padding: 0 calc(2 * var(--kpmPad)) 0 0;
 
     .kpm-profile-image {
-      height: calc(1.5em + 2 * var(--kpmPad));
-      width: calc(1.5em + 2 * var(--kpmPad));
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
     }
   }
 
@@ -67,9 +70,10 @@
     flex-direction: row;
 
     a {
-      display: inline-block;
+      display: block;
       flex-grow: 1;
-      height: 100%;
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
       padding: calc(var(--kpmPad));
     }
 
