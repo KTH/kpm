@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ApiError } from "../panes/utils";
 import "./common.scss";
 
 export function LoadingPlaceholder(): JSX.Element {
@@ -22,13 +23,13 @@ export function EmptyPlaceholder({
 }
 
 type TErrorMessageProps = {
-  error: Error;
+  error: ApiError;
 };
 export function ErrorMessage({ error }: TErrorMessageProps): JSX.Element {
   return (
     <div className="kpm-error-message">
-      <h2>There was an error</h2>
-      <p>{error.message}</p>
+      <h2>ERROR: {error.message}</h2>
+      <p>{error.description}</p>
     </div>
   );
 }

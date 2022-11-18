@@ -25,18 +25,39 @@ export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
   const [error, setError] = useState<Error>();
   const [res, setRes] = useState<T>();
   useEffect(() => {
-    try {
-      loaderFunc().then((res: T) => {
-        setRes(res);
-        setLoading(false);
-      });
-    } catch (e) {
-      setError(e as Error);
+    loaderFunc().then((res: T) => {
+      setRes(res);
       setLoading(false);
-    }
+    }).catch((e) => {
+      setError(beautifyError(e as Error));
+      setLoading(false);
+    });
   }, []);
 
   return { res, loading, error };
+}
+
+type TApiErrorOpts = {
+  description?: string;
+}
+export class ApiError extends Error {
+  description?: string;
+  constructor(title: string, { description }: TApiErrorOpts = {} ) {
+    super(title);
+    this.description = description;
+  }
+}
+
+function beautifyError(e: Error): Error {
+  switch (e.name) {
+    case "SyntaxError":
+      return new ApiError(
+        "Backend is speaking jibberisch!", {
+        description: "The backend responded with HTML, but JSON was expected."
+      });
+    default:
+      return new ApiError( "An error occured when talking to server.", { description: e.message});
+  }
 }
 
 export function formatTerm(startTerm: string) {

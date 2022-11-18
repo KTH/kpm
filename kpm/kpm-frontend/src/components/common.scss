@@ -69,4 +69,17 @@
   width: 100%;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  font-size: 0.9em;
+  line-height: 2em;
+
+  h2 {
+    font-size: 1.2em;
+    font-weight: 400;
+  }
+
+  p {
+    color: var(--kpmPaneTextSoft);
+    max-width: 50ch;
+  }
 }
