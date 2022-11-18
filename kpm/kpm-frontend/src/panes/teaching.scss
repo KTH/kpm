@@ -3,7 +3,7 @@
   $colGap: calc(5 * var(--kpmGap));
   $colCount: 3;
   $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
-  
+
   display: flex;
   flex-flow: column nowrap;
 
