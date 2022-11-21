@@ -1,6 +1,7 @@
+import { Response, Request, NextFunction, Errback } from "express";
 import log from "skog";
 
-export function loggingHandler(req: any, res: any, next: any) {
+export function loggingHandler(req: Request, res: Response, next: NextFunction) {
   log.info(`=> ${req.path}`);
   next();
   res.on("finish", () => {
@@ -8,7 +9,7 @@ export function loggingHandler(req: any, res: any, next: any) {
   });
 }
 
-export function errorHandler(err: any, req: any, res: any, next: any) {
+export function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
   const statusCode = 500;
   const message = `${statusCode} Oops! Something went sour.`;
 

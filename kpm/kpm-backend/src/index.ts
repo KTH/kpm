@@ -1,6 +1,6 @@
 import "./config";
 import express, { static as staticHandler } from "express";
-import { loggingHandler } from "kpm-api-common";
+import { loggingHandler, errorHandler } from "kpm-api-common";
 import { api } from "./api";
 import { auth, requiresValidSessionUser } from "./auth";
 import { sessionMiddleware, cookieParserMiddleware } from "./session";
@@ -37,6 +37,8 @@ app.use(`${PREFIX}/assets`, widgetJsAssets);
 if (IS_DEV || IS_STAGE) {
   app.use(`${PREFIX}/index.:ext`, previewHandler);
 }
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   log.info(`Listening on port ${PORT}`);
