@@ -21,13 +21,14 @@ app.use(sessionMiddleware);
 app.use(cookieParserMiddleware);
 app.use(loggingHandler);
 
-// We currently only need CORS in STAGE due to ref web on different domain as api
-app.use(
-  cors({
-    origin: "https://www-r.referens.sys.kth.se",
-  })
-);
-
+if (IS_STAGE) {
+  // We currently only need CORS in STAGE due to ref web on different domain as api
+  app.use(
+    cors({
+      origin: "https://www-r.referens.sys.kth.se",
+    })
+  );
+}
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
 app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
