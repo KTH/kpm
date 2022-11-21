@@ -27,6 +27,7 @@ const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_STAGE = process.env.DEPLOYMENT === "stage";
 
 const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, PROXY_HOST);
 /**
@@ -126,7 +127,7 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
 });
 
 export function getFakeUserForDevelopment(): TSessionUser | undefined {
-  if (IS_DEV && USE_FAKE_USER)
+  if ((IS_DEV || IS_STAGE) && USE_FAKE_USER)
     return {
       kthid: USE_FAKE_USER,
       display_name: "Test Userson",
