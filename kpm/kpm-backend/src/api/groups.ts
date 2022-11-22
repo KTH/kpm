@@ -19,6 +19,15 @@ class GroupsApiEndpointError extends EndpointError<TAPIGroupsEndpointError> {}
 
 function getSocialErrorHandler(err: RequestError) {
   // First our handled errors (these are operational errors that are expected)
+  if (err.code === "ECONNREFUSED") {
+    throw new GroupsApiEndpointError({
+      type: "NotAvailable",
+      statusCode: 503,
+      message: "We can't connect to the Social API",
+      details: null,
+      err
+    })
+  }
   
   // And last our unhandled operational errors, we need to create a proper async
   // stacktrace for debugging
