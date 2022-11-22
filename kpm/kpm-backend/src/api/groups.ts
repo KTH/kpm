@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { APIGroups } from "kpm-backend-interface";
+import { RequestError } from "got";
+import { EndpointError } from "kpm-api-common/src/errors";
+import { APIGroups, TAPIGroupsEndpointError } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
+
 
 export async function groupsApiHandler(req: Request, res: Response<APIGroups>, next: NextFunction) {
   try {
@@ -12,7 +15,14 @@ export async function groupsApiHandler(req: Request, res: Response<APIGroups>, n
   }
 }
 
-function getSocialErrorHandler(err: Error) {
-  // Throw a proper error EndpointError
+class GroupsApiEndpointError extends EndpointError<TAPIGroupsEndpointError> {}
+
+function getSocialErrorHandler(err: RequestError) {
+  // First our handled errors (these are operational errors that are expected)
+  
+  // And last our unhandled operational errors, we need to create a proper async
+  // stacktrace for debugging
+  Error.captureStackTrace(err, getSocialErrorHandler);
+  throw err;
 }
 

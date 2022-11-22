@@ -13,6 +13,10 @@ export async function servicesApiHandler(req: Request, res: Response<APIServices
 }
 
 function getSocialErrorHandler(err: Error) {
-  // Throw a proper error EndpointError
+  // First our handled errors (these are operational errors that are expected)
+  
+  // And last our unhandled operational errors, we need to create a proper async
+  // stacktrace for debugging
+  Error.captureStackTrace(err, getSocialErrorHandler);
+  throw err;
 }
-
