@@ -3,7 +3,11 @@ import { OperationalError, RecoverableError } from "./errors";
 
 import log from "skog";
 
-export function loggingHandler(req: Request, res: Response, next: NextFunction) {
+export function loggingHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   log.info(`=> ${req.path}`);
   next();
   res.on("finish", () => {
@@ -11,7 +15,12 @@ export function loggingHandler(req: Request, res: Response, next: NextFunction) 
   });
 }
 
-export function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+export function errorHandler(
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   let statusCode: number;
   let name: "EndpointError" | "AuthError" | "RecoverableError" | "Error";
   let type: string | undefined;
@@ -20,7 +29,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
 
   if (err instanceof OperationalError) {
     // Operational errors are known fail states that just need to be reported to frontend.
-    // These include data validation, authentication and failing calls to external APIs. 
+    // These include data validation, authentication and failing calls to external APIs.
     // We only log these for stats.
     name = err.name;
     statusCode = err.statusCode;
@@ -39,7 +48,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     // This is an unhandled error and should be considered a bug, we need to log the actual error
     // for debugging. Use Error.captureStackTrace for improved stacktraces in async calls.
     name = "Error";
-    statusCode = 500
+    statusCode = 500;
     message = `${statusCode} We encountered an unhandled error. This should be fixed or handled!`;
     log.error({ statusCode: 500, message, err });
   }

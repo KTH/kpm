@@ -1,6 +1,10 @@
 import { EndpointError } from "kpm-api-common/src/errors";
 
-export function handleCommonGotErrors(name: string, err: any, errFactory: (props: any) => EndpointError<string>) {
+export function handleCommonGotErrors(
+  name: string,
+  err: any,
+  errFactory: (props: any) => EndpointError<string>
+) {
   // First our handled errors (these are operational errors that are expected)
   if (err.name === "RequestError") {
     if (err.code === "ECONNREFUSED") {
@@ -10,8 +14,8 @@ export function handleCommonGotErrors(name: string, err: any, errFactory: (props
         statusCode: 503,
         message: `We can't connect to the ${name}`,
         details: null,
-        err
-      })
+        err,
+      });
     }
   }
 
@@ -23,8 +27,8 @@ export function handleCommonGotErrors(name: string, err: any, errFactory: (props
         statusCode: 503,
         message: `We got an error from ${name}`,
         details: err.message,
-        err
-      })
+        err,
+      });
     }
   }
 
@@ -36,8 +40,8 @@ export function handleCommonGotErrors(name: string, err: any, errFactory: (props
         statusCode: 503,
         message: `The call to ${name} took too long`,
         details: null,
-        err
-      })
+        err,
+      });
     }
   }
 }

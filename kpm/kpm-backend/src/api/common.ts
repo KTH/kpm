@@ -28,7 +28,10 @@ export function sessionUser(session: SessionData): TSessionUser {
   return user;
 }
 
-export async function getSocial<T>(user: TSessionUser, endpoint: string): Promise<T> {
+export async function getSocial<T>(
+  user: TSessionUser,
+  endpoint: string
+): Promise<T> {
   return await got
     .get<T>(`${SOCIAL_USER_API}/${user.kthid}/${endpoint}.json`, {
       headers: {

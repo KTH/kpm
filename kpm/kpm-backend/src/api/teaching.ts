@@ -1,15 +1,30 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
 import log from "skog";
-import { getCourseInfo, getSocial, get_canvas_rooms, sessionUser } from "./common";
-import { APITeaching, TAPITeachingEndpointError, TCourseCode, TTeachingCourse, TTeachingRole } from "kpm-backend-interface";
+import {
+  getCourseInfo,
+  getSocial,
+  get_canvas_rooms,
+  sessionUser,
+} from "./common";
+import {
+  APITeaching,
+  TAPITeachingEndpointError,
+  TCourseCode,
+  TTeachingCourse,
+  TTeachingRole,
+} from "kpm-backend-interface";
 import { EndpointError } from "kpm-api-common/src/errors";
 import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_TEACHING_API_URI =
   process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
 
-export async function teachingApiHandler(req: Request, res: Response<APITeaching>, next: NextFunction) {
+export async function teachingApiHandler(
+  req: Request,
+  res: Response<APITeaching>,
+  next: NextFunction
+) {
   try {
     const user = sessionUser(req.session);
 
@@ -25,7 +40,9 @@ export async function teachingApiHandler(req: Request, res: Response<APITeaching
       .then((r) => r.body)
       .catch(getMyTeachingApiErrorHandler);
 
-    const rooms_fut = get_canvas_rooms(user.kthid).catch(getMyCanvasRoomsApiErrorHandler);
+    const rooms_fut = get_canvas_rooms(user.kthid).catch(
+      getMyCanvasRoomsApiErrorHandler
+    );
     log.debug({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
     const teaching = await teaching_fut;
@@ -37,7 +54,7 @@ export async function teachingApiHandler(req: Request, res: Response<APITeaching
         [course_code]: getCourseInfo(course_code).catch(getKoppsErrorHandler),
       }))
     );
-    const { rooms } = await rooms_fut || {};
+    const { rooms } = (await rooms_fut) || {};
     log.debug({ elapsed_ms: elapsed_ms() }, "Resolved my-canvas-rooms-api");
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
@@ -67,24 +84,34 @@ export async function teachingApiHandler(req: Request, res: Response<APITeaching
 class TeachingApiEndpointError extends EndpointError<TAPITeachingEndpointError> {}
 
 function getKoppsErrorHandler(err: any) {
-  handleCommonGotErrors("KOPPS", err, (props: any) => new TeachingApiEndpointError(props));
-  
+  handleCommonGotErrors(
+    "KOPPS",
+    err,
+    (props: any) => new TeachingApiEndpointError(props)
+  );
+
   Error.captureStackTrace(err, getKoppsErrorHandler);
   throw err;
 }
 
 function getMyTeachingApiErrorHandler(err: any) {
-  handleCommonGotErrors("my-teaching-api", err, (props: any) => new TeachingApiEndpointError(props));
-  
+  handleCommonGotErrors(
+    "my-teaching-api",
+    err,
+    (props: any) => new TeachingApiEndpointError(props)
+  );
+
   Error.captureStackTrace(err, getMyTeachingApiErrorHandler);
   throw err;
 }
 
 function getMyCanvasRoomsApiErrorHandler(err: any) {
-  handleCommonGotErrors("my-canvas-rooms-api", err, (props: any) => new TeachingApiEndpointError(props));
-  
+  handleCommonGotErrors(
+    "my-canvas-rooms-api",
+    err,
+    (props: any) => new TeachingApiEndpointError(props)
+  );
+
   Error.captureStackTrace(err, getMyCanvasRoomsApiErrorHandler);
   throw err;
 }
-
-

@@ -1,8 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
 import { EndpointError } from "kpm-api-common/src/errors";
-import { APIStudies, TAPIStudiesEndpointError, TCourseCode, TProgramCode, TStudiesCourse } from "kpm-backend-interface";
-import { getCourseInfo, get_canvas_rooms, sessionUser, TKoppsCourseInfo } from "./common";
+import {
+  APIStudies,
+  TAPIStudiesEndpointError,
+  TCourseCode,
+  TProgramCode,
+  TStudiesCourse,
+} from "kpm-backend-interface";
+import {
+  getCourseInfo,
+  get_canvas_rooms,
+  sessionUser,
+  TKoppsCourseInfo,
+} from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_STUDIES_API_URI =
@@ -32,7 +43,11 @@ export type TApiUserStudies = {
   programmes: Record<TProgramCode, TUserProgramme[]>;
 };
 
-export async function studiesApiHandler(req: Request, res: Response<APIStudies>, next: NextFunction) {
+export async function studiesApiHandler(
+  req: Request,
+  res: Response<APIStudies>,
+  next: NextFunction
+) {
   try {
     const user = sessionUser(req.session);
 
@@ -42,16 +57,21 @@ export async function studiesApiHandler(req: Request, res: Response<APIStudies>,
       })
       .then((r) => r.body)
       .catch(getMyStudiesApiErrorHandler);
-    const rooms_fut = get_canvas_rooms(user.kthid).catch(getMyCanvasRoomsApiErrorHandler);
+    const rooms_fut = get_canvas_rooms(user.kthid).catch(
+      getMyCanvasRoomsApiErrorHandler
+    );
 
     const studies = await studies_fut;
-    const kopps_futs: Record<TCourseCode, Promise<TKoppsCourseInfo>> = Object.assign(
+    const kopps_futs: Record<
+      TCourseCode,
+      Promise<TKoppsCourseInfo>
+    > = Object.assign(
       {},
       ...Object.keys(studies?.courses || []).map((course_code) => ({
         [course_code]: getCourseInfo(course_code).catch(getKoppsErrorHandler),
       }))
     );
-    const { rooms } = await rooms_fut || {};
+    const { rooms } = (await rooms_fut) || {};
 
     let courses: Record<TCourseCode, TStudiesCourse> = {};
     for (let [course_code, roles] of Object.entries(studies?.courses || [])) {
@@ -80,21 +100,33 @@ export async function studiesApiHandler(req: Request, res: Response<APIStudies>,
 class StudiesApiEndpointError extends EndpointError<TAPIStudiesEndpointError> {}
 
 function getMyStudiesApiErrorHandler(err: any) {
-  handleCommonGotErrors("my-studies-api", err, (props: any) => new StudiesApiEndpointError(props));
-  
+  handleCommonGotErrors(
+    "my-studies-api",
+    err,
+    (props: any) => new StudiesApiEndpointError(props)
+  );
+
   Error.captureStackTrace(err, getMyStudiesApiErrorHandler);
   throw err;
 }
 
 function getKoppsErrorHandler(err: any) {
-  handleCommonGotErrors('KOPPS', err, (props: any) => new StudiesApiEndpointError(props));
-  
+  handleCommonGotErrors(
+    "KOPPS",
+    err,
+    (props: any) => new StudiesApiEndpointError(props)
+  );
+
   Error.captureStackTrace(err, getKoppsErrorHandler);
   throw err;
 }
 
 function getMyCanvasRoomsApiErrorHandler(err: any) {
-  handleCommonGotErrors("my-canvas-rooms-api", err, (props: any) => new StudiesApiEndpointError(props));
+  handleCommonGotErrors(
+    "my-canvas-rooms-api",
+    err,
+    (props: any) => new StudiesApiEndpointError(props)
+  );
 
   Error.captureStackTrace(err, getMyCanvasRoomsApiErrorHandler);
   throw err;

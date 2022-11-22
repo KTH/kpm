@@ -1,4 +1,7 @@
-export type TAPIGotCommonEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
+export type TAPIGotCommonEndpointError =
+  | "NotAvailable"
+  | "BadResponse"
+  | "TimeoutError";
 
 export type TAPICanvasRoomsApiEndpointError = TAPIGotCommonEndpointError | "";
 export type APICanvasRooms = {
@@ -109,4 +112,4 @@ export type TService = {
   url: string;
 };
 
-export * from './errors';
+export * from "./errors";

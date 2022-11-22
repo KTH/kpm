@@ -6,4 +6,4 @@ export type TApiError = {
   type?: string;
   message: string;
   details?: string;
-}
+};
