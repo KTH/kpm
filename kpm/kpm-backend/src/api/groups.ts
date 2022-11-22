@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { RequestError, HTTPError, TimeoutError } from "got";
 import { EndpointError } from "kpm-api-common/src/errors";
 import { APIGroups, TAPIGroupsEndpointError } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
-import { handleCommonGotErrors, handleCommonSocialErrors } from "./commonErrors";
-
+import { handleCommonGotErrors } from "./commonErrors";
 
 export async function groupsApiHandler(req: Request, res: Response<APIGroups>, next: NextFunction) {
   try {
