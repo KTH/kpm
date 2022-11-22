@@ -50,9 +50,9 @@ export async function teachingApiHandler(req: Request, res: Response<APITeaching
 
       courses[course_code] = {
         course_code: course_code,
-        title: kopps.title,
-        credits: kopps.credits,
-        creditUnitAbbr: kopps.creditUnitAbbr,
+        title: kopps?.title,
+        credits: kopps?.credits,
+        creditUnitAbbr: kopps?.creditUnitAbbr,
         roles: roles,
         rooms: rooms?.[course_code] || [],
       };
