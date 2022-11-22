@@ -78,7 +78,7 @@ export function handleCommonKoppsErrors(err: any, errFactory: (props: any) => En
   }
 }
 
-export function handleCommonMyApiErrors(name: string, err: any, errFactory: (props: any) => EndpointError<string>) {
+export function handleCommonGotErrors(name: string, err: any, errFactory: (props: any) => EndpointError<string>) {
   // First our handled errors (these are operational errors that are expected)
   if (err.name === "RequestError") {
     if (err.code === "ECONNREFUSED") {

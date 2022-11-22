@@ -1,5 +1,6 @@
 export type TAPIGotCommonEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
 
+export type TAPICanvasRoomsApiEndpointError = TAPIGotCommonEndpointError | "";
 export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };

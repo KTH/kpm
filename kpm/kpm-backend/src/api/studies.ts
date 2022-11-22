@@ -3,7 +3,7 @@ import got from "got";
 import { EndpointError } from "kpm-api-common/src/errors";
 import { APIStudies, TAPIStudiesEndpointError, TCourseCode, TProgramCode, TStudiesCourse } from "kpm-backend-interface";
 import { getCourseInfo, get_canvas_rooms, sessionUser, TKoppsCourseInfo } from "./common";
-import { handleCommonKoppsErrors, handleCommonMyApiErrors } from "./commonErrors";
+import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
@@ -80,40 +80,22 @@ export async function studiesApiHandler(req: Request, res: Response<APIStudies>,
 class StudiesApiEndpointError extends EndpointError<TAPIStudiesEndpointError> {}
 
 function getMyStudiesApiErrorHandler(err: any) {
-  // First our handled errors (these are operational errors that are expected)
-  // - Handle specific errors and throw GroupsApiEndpointError
-
-  // - Handle common errors (but make sure we get specific error type)  if (err.name === "RequestError") {
-  handleCommonMyApiErrors("my-studies-api", err, (props: any) => new StudiesApiEndpointError(props));
+  handleCommonGotErrors("my-studies-api", err, (props: any) => new StudiesApiEndpointError(props));
   
-  // And last our unhandled operational errors, we need to create a proper async
-  // stacktrace for debugging
   Error.captureStackTrace(err, getMyStudiesApiErrorHandler);
   throw err;
 }
 
 function getKoppsErrorHandler(err: any) {
-  // First our handled errors (these are operational errors that are expected)
-  // - Handle specific errors and throw GroupsApiEndpointError
-
-  // - Handle common errors (but make sure we get specific error type)  if (err.name === "RequestError") {
-  handleCommonKoppsErrors(err, (props: any) => new StudiesApiEndpointError(props));
+  handleCommonGotErrors('KOPPS', err, (props: any) => new StudiesApiEndpointError(props));
   
-  // And last our unhandled operational errors, we need to create a proper async
-  // stacktrace for debugging
   Error.captureStackTrace(err, getKoppsErrorHandler);
   throw err;
 }
 
 function getMyCanvasRoomsApiErrorHandler(err: any) {
-  // First our handled errors (these are operational errors that are expected)
-  // - Handle specific errors and throw GroupsApiEndpointError
+  handleCommonGotErrors("my-canvas-rooms-api", err, (props: any) => new StudiesApiEndpointError(props));
 
-  // - Handle common errors (but make sure we get specific error type)  if (err.name === "RequestError") {
-  handleCommonMyApiErrors("my-canvas-rooms-api", err, (props: any) => new StudiesApiEndpointError(props));
-  
-  // And last our unhandled operational errors, we need to create a proper async
-  // stacktrace for debugging
   Error.captureStackTrace(err, getMyCanvasRoomsApiErrorHandler);
   throw err;
 }
