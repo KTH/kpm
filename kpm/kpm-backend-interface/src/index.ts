@@ -1,11 +1,15 @@
+export type TAPIGotCommonEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
+
 export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };
 
+export type TAPITeachingEndpointError = TAPIGotCommonEndpointError | "";
 export type APITeaching = {
   courses: Record<TCourseCode, TTeachingCourse>;
 };
 
+export type TAPIStudiesEndpointError = TAPIGotCommonEndpointError | "";
 export type APIStudies = {
   courses: Record<TCourseCode, TStudiesCourse>;
   programmes: Record<TProgramCode, TStudiesProgramme[]>;
@@ -72,9 +76,7 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
-export type TAPISocialCommonEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
-
-export type TAPIGroupsEndpointError = TAPISocialCommonEndpointError | "";
+export type TAPIGroupsEndpointError = TAPIGotCommonEndpointError | "";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
@@ -85,7 +87,7 @@ export type TGroup = {
   starred: boolean;
 };
 
-export type TAPIProgrammesEndpointError = TAPISocialCommonEndpointError | "";
+export type TAPIProgrammesEndpointError = TAPIGotCommonEndpointError | "";
 export type APIProgrammes = {
   programmes: TProgram[];
 };
@@ -96,7 +98,7 @@ export type TProgram = {
   starred: boolean;
 };
 
-export type TAPIServicesEndpointError = TAPISocialCommonEndpointError | "";
+export type TAPIServicesEndpointError = TAPIGotCommonEndpointError | "";
 export type APIServices = {
   servicelinks: TService[];
   studentlinks: TService[];
