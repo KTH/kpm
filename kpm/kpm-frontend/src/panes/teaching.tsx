@@ -20,7 +20,12 @@ export async function loaderTeaching({
     signal: request?.signal,
   });
   const json = await res.json();
-  return json;
+  if (res.ok) {
+    return json;
+  } else {
+    // TODO: Handle more kinds of errors or keep it simple?
+    throw new Error(json.message);
+  }
 }
 
 export function Teaching() {
