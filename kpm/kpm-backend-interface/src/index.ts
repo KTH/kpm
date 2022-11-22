@@ -100,3 +100,5 @@ export type TService = {
   name: string;
   url: string;
 };
+
+export * from './errors';
