@@ -25,24 +25,24 @@ export async function teachingApiHandler(req: Request, res: Response<APITeaching
       .then((r) => r.body)
       .catch(getMyTeachingApiErrorHandler);
 
-    const rooms_fut = get_canvas_rooms(user.kthid);
+    const rooms_fut = get_canvas_rooms(user.kthid).catch(getMyCanvasRoomsApiErrorHandler);
     log.debug({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
-    const teaching = await teaching_fut.catch(getMyTeachingApiErrorHandler);
+    const teaching = await teaching_fut;
     log.debug({ elapsed_ms: elapsed_ms() }, "Resolved my-teaching-api");
 
     const kopps_futs = Object.assign(
       {},
       ...Object.keys(teaching || []).map((course_code) => ({
-        [course_code]: getCourseInfo(course_code),
+        [course_code]: getCourseInfo(course_code).catch(getKoppsErrorHandler),
       }))
     );
-    const { rooms } = await rooms_fut.catch(getMyCanvasRoomsApiErrorHandler) || {};
+    const { rooms } = await rooms_fut || {};
     log.debug({ elapsed_ms: elapsed_ms() }, "Resolved my-canvas-rooms-api");
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
     for (let [course_code, roles] of Object.entries(teaching || [])) {
-      const kopps = await kopps_futs[course_code].catch(getKoppsErrorHandler);
+      const kopps = await kopps_futs[course_code];
       log.debug(
         { elapsed_ms: elapsed_ms() },
         `Resolved kopps for ${course_code}`
