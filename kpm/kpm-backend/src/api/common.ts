@@ -52,7 +52,6 @@ export async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
   return r.body;
 }
 
-
 // kopps_cache is a local cache of course_code -> kopps info object.
 // Note that we don't cache the entire (much larger) kopps response,
 // but only the fields we care about.

@@ -13,13 +13,14 @@ export function loggingHandler(req: Request, res: Response, next: NextFunction) 
 
 export function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
   let statusCode: number;
-  let name: "EndpointError" | "AuthError" | "RecoverableError" | undefined;
+  let name: "EndpointError" | "AuthError" | "RecoverableError" | "Error";
   let type: string | undefined;
   let message: string;
-  let details: string | undefined;
+  let details: string | null | undefined;
 
   if (err instanceof OperationalError) {
     // Operational errors are known fail states that just need to be reported to frontend.
+    // These include data validation, authentication and failing calls to external APIs. 
     // We only log these for stats.
     name = err.name;
     statusCode = err.statusCode;
@@ -28,7 +29,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     details = err.details;
     log.error({ statusCode, message });
   } else if (err instanceof RecoverableError) {
-    // This is an acceptable error in our code so we treat it more relaxed.
+    // This is an acceptable error IN OUR CODE so we treat it more relaxed.
     // It has been caught and repackaged by a try/catch or similar
     name = "RecoverableError";
     statusCode = 500;
@@ -36,23 +37,19 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     log.error({ statusCode: 500, message });
   } else {
     // This is an unhandled error and should be considered a bug, we need to log the actual error
-    // for debugging.
+    // for debugging. Use Error.captureStackTrace for improved stacktraces in async calls.
+    name = "Error";
     statusCode = 500
     message = `${statusCode} We encountered an unhandled error. This should be fixed or handled!`;
     log.error({ statusCode: 500, message, err });
   }
 
   // Return the error to caller
-  if (req.xhr) {
-    return res.status(statusCode).send({
-      statusCode,
-      name,
-      type,
-      message,
-      details,
-    });
-  }
-
-  // TODO: Wrap this fallback in KTH template
-  res.status(statusCode).send(message + (details ? "\n" + details : ""));
+  return res.status(statusCode).send({
+    error: name,
+    statusCode,
+    type,
+    message,
+    details,
+  });
 }

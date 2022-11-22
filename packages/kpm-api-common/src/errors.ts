@@ -13,7 +13,7 @@ export abstract class OperationalError<T = string> extends Error {
   details;
   err;
 
-  constructor({ name, statusCode, type, message, details, err }: { name: TErrorName, statusCode: number, type: T, message: string, details: string, err: Error }) {
+  constructor({ name, statusCode, type, message, details, err }: { name: TErrorName, statusCode: number, type: T, message: string, details: string | null, err: Error }) {
     super(message);
     this.name = name;
     this.statusCode = statusCode;
@@ -24,12 +24,13 @@ export abstract class OperationalError<T = string> extends Error {
 }
 
 /**
-* All errors of type EndpointError must be handled by the frontend code that calls the
-* actual endpoint. This error is used for all errors, from data validation to auth issues calling
+* All errors of type EndpointError must be handled by the API-consumer.
+* These include data validation and failing calls to external APIs.
 * a 3rd party API.
 *
-* Use generic T to define the different error types you have. This helps enforcing complete error handling.
-* The T type should be defined in kpm-backend-interface to allow it to be imported in both backend and frontend.
+* Use generic T to define the different error types you have. This helps enforcing complete
+* error handling. The T type should be defined in kpm-backend-interface to allow it to be 
+* imported in both backend and frontend.
 */
 export class EndpointError<T> extends OperationalError<T> {
   // Errors that must be handled by frontend
@@ -39,8 +40,8 @@ export class EndpointError<T> extends OperationalError<T> {
 }
 
 /**
-* AuthError should be handled by the frontend. Used for local authentication issues. If you get an auth error
-* calling a 3rd party API you should return an EndpointError.
+* AuthError should be handled by the API-consumer. Used for local authentication issues.
+* If you get an auth error calling an external API you should return an EndpointError.
 *
 * Use generic T to define the different error types you have. This helps enforcing complete error handling.
 * The T type should be defined in kpm-backend-interface to allow it to be imported in both backend and frontend.
@@ -52,8 +53,7 @@ export class AuthError<T> extends OperationalError<T> {
 }
 
 /**
-* Error for recoverable programmer errors. This tells the consuming
-* code that it shouldn't crash the application. 
+* Error for recoverable programmer errors IN OUR CODE. This shouldn't crash the application. 
 */
 export class RecoverableError extends Error {
   name = "RecoverableError";

@@ -8,8 +8,7 @@ import { studiesApiHandler } from "./studies";
 
 export const api = express.Router();
 
-// TODO: Add session handling
-
+// TODO: Add proper session handling
 api.get("/", (req, res) => {
   return res.send({
     msg: "ok",
