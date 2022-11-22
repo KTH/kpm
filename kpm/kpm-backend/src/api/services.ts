@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { APIServices } from "kpm-backend-interface";
+import { EndpointError } from "kpm-api-common/src/errors";
+import { APIServices, TAPIServicesEndpointError } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
+import { handleCommonSocialErrors } from "./commonErrors";
 
 export async function servicesApiHandler(req: Request, res: Response<APIServices>, next: NextFunction) {
   try {
@@ -12,8 +14,13 @@ export async function servicesApiHandler(req: Request, res: Response<APIServices
   }
 }
 
+class ServicesApiEndpointError extends EndpointError<TAPIServicesEndpointError> {}
 function getSocialErrorHandler(err: Error) {
   // First our handled errors (these are operational errors that are expected)
+  // - Handle specific errors and throw GroupsApiEndpointError
+
+  // - Handle common social errors (but make sure we get specific error type)
+  handleCommonSocialErrors(err, (props: any) => new ServicesApiEndpointError(props));
   
   // And last our unhandled operational errors, we need to create a proper async
   // stacktrace for debugging

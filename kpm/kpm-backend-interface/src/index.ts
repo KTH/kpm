@@ -72,7 +72,9 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
-export type TAPIGroupsEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
+export type TAPISocialCommonEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
+
+export type TAPIGroupsEndpointError = TAPISocialCommonEndpointError | "";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
@@ -83,6 +85,7 @@ export type TGroup = {
   starred: boolean;
 };
 
+export type TAPIProgrammesEndpointError = TAPISocialCommonEndpointError | "";
 export type APIProgrammes = {
   programmes: TProgram[];
 };
@@ -93,6 +96,7 @@ export type TProgram = {
   starred: boolean;
 };
 
+export type TAPIServicesEndpointError = TAPISocialCommonEndpointError | "";
 export type APIServices = {
   servicelinks: TService[];
   studentlinks: TService[];
