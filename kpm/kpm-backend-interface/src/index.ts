@@ -72,7 +72,7 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
-export type TAPIGroupsEndpointError = "NotAvailable" | "";
+export type TAPIGroupsEndpointError = "NotAvailable" | "BadResponse" | "TimeoutError";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
