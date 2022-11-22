@@ -77,7 +77,7 @@ export function Groups() {
       {!isEmpty && (
         <ul>
           {filteredGroups?.map((group) => (
-            <li>
+            <li key={group.url}>
               <IconStar className={group.starred ? "star active" : "star"} />
               <a href={group.url}>{group.name}</a>
             </li>

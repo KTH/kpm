@@ -77,7 +77,7 @@ export function Programme() {
       {!isEmpty && (
         <ul>
           {filteredProgrammes?.map((programme) => (
-            <li>
+            <li key={programme.url}>
               <IconStar
                 className={programme.starred ? "star active" : "star"}
               />
