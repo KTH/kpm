@@ -57,7 +57,7 @@ function beautifyError(e: Error): Error {
         description: "The backend responded with HTML, but JSON was expected.",
       });
     default:
-      return new ApiError("An error occured when talking to server.", {
+      return new ApiError("An error occured when talking to server", {
         description: e.message,
       });
   }

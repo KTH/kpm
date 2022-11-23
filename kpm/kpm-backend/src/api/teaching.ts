@@ -3,18 +3,15 @@ import got from "got";
 import log from "skog";
 import {
   getCourseInfo,
-  getSocial,
   get_canvas_rooms,
   sessionUser,
 } from "./common";
 import {
-  APITeaching,
-  TAPITeachingEndpointError,
+  TTeachingEndpoint,
   TCourseCode,
   TTeachingCourse,
   TTeachingRole,
 } from "kpm-backend-interface";
-import { EndpointError } from "kpm-api-common/src/errors";
 import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_TEACHING_API_URI =
@@ -22,7 +19,7 @@ const MY_TEACHING_API_URI =
 
 export async function teachingApiHandler(
   req: Request,
-  res: Response<APITeaching>,
+  res: Response<TTeachingEndpoint>,
   next: NextFunction
 ) {
   try {
@@ -38,10 +35,10 @@ export async function teachingApiHandler(
         }
       )
       .then((r) => r.body)
-      .catch(getMyTeachingApiErrorHandler);
+      .catch(myTeachingApiErr);
 
     const rooms_fut = get_canvas_rooms(user.kthid).catch(
-      getMyCanvasRoomsApiErrorHandler
+      myCanvasRoomsApiErr
     );
     log.debug({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
@@ -51,7 +48,7 @@ export async function teachingApiHandler(
     const kopps_futs = Object.assign(
       {},
       ...Object.keys(teaching || []).map((course_code) => ({
-        [course_code]: getCourseInfo(course_code).catch(getKoppsErrorHandler),
+        [course_code]: getCourseInfo(course_code).catch(koppsErr),
       }))
     );
     const { rooms } = (await rooms_fut) || {};
@@ -81,37 +78,23 @@ export async function teachingApiHandler(
   }
 }
 
-class TeachingApiEndpointError extends EndpointError<TAPITeachingEndpointError> {}
-
-function getKoppsErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "KOPPS",
-    err,
-    (props: any) => new TeachingApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getKoppsErrorHandler);
+function koppsErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, koppsErr);
   throw err;
 }
 
-function getMyTeachingApiErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "my-teaching-api",
-    err,
-    (props: any) => new TeachingApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getMyTeachingApiErrorHandler);
+function myTeachingApiErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, myTeachingApiErr);
   throw err;
 }
 
-function getMyCanvasRoomsApiErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "my-canvas-rooms-api",
-    err,
-    (props: any) => new TeachingApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getMyCanvasRoomsApiErrorHandler);
+function myCanvasRoomsApiErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, myCanvasRoomsApiErr);
   throw err;
 }

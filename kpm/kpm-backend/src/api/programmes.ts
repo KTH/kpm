@@ -1,36 +1,27 @@
 import { Request, Response, NextFunction } from "express";
-import { EndpointError } from "kpm-api-common/src/errors";
 import {
-  APIProgrammes,
-  TAPIProgrammesEndpointError,
+  TProgrammesEndpoint,
 } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 export async function programmesApiHandler(
   req: Request,
-  res: Response<APIProgrammes>,
+  res: Response<TProgrammesEndpoint>,
   next: NextFunction
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<APIProgrammes>(user, "programmes").catch(
-      getSocialErrorHandler
-    );
+    const data = await getSocial<TProgrammesEndpoint>(user, "programmes").catch(socialErr);
     res.send(data!);
   } catch (err) {
     next(err);
   }
 }
 
-class ProgrammesApiEndpointError extends EndpointError<TAPIProgrammesEndpointError> {}
-function getSocialErrorHandler(err: Error) {
-  handleCommonGotErrors(
-    "Social API",
-    err,
-    (props: any) => new ProgrammesApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getSocialErrorHandler);
+function socialErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, socialErr);
   throw err;
 }

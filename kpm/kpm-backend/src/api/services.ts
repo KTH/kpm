@@ -1,18 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { EndpointError } from "kpm-api-common/src/errors";
-import { APIServices, TAPIServicesEndpointError } from "kpm-backend-interface";
+import { TServicesEndpoint } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 export async function servicesApiHandler(
   req: Request,
-  res: Response<APIServices>,
+  res: Response<TServicesEndpoint>,
   next: NextFunction
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<APIServices>(user, "services").catch(
-      getSocialErrorHandler
+    const data = await getSocial<TServicesEndpoint>(user, "services").catch(
+      socialErr
     );
     res.send(data!);
   } catch (err) {
@@ -20,14 +19,9 @@ export async function servicesApiHandler(
   }
 }
 
-class ServicesApiEndpointError extends EndpointError<TAPIServicesEndpointError> {}
-function getSocialErrorHandler(err: Error) {
-  handleCommonGotErrors(
-    "Social API",
-    err,
-    (props: any) => new ServicesApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getSocialErrorHandler);
+function socialErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, socialErr);
   throw err;
 }

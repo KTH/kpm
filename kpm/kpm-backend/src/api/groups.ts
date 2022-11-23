@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { EndpointError } from "kpm-api-common/src/errors";
-import { APIGroups, TAPIGroupsEndpointError } from "kpm-backend-interface";
+import { APIGroups } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
@@ -12,7 +11,7 @@ export async function groupsApiHandler(
   try {
     const user = sessionUser(req.session);
     const data = await getSocial<APIGroups>(user, "groups").catch(
-      getSocialErrorHandler
+      socialErr
     );
     res.send(data!);
   } catch (err) {
@@ -20,14 +19,9 @@ export async function groupsApiHandler(
   }
 }
 
-class GroupsApiEndpointError extends EndpointError<TAPIGroupsEndpointError> {}
-function getSocialErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "Social API",
-    err,
-    (props: any) => new GroupsApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getSocialErrorHandler);
+function socialErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, socialErr);
   throw err;
 }

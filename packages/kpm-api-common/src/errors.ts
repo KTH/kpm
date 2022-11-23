@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 /**
  * Common ancestor of all operational errors allowing
  * for more catch all checks.
@@ -5,13 +6,21 @@
  * Use generic T to define the different error types you have. This helps enforcing complete error handling.
  */
 type TErrorName = "EndpointError" | "AuthError";
-
-export abstract class OperationalError<T = string> extends Error {
-  name: TErrorName;
+type TOperationalError<ErrType> = {
+  name: TErrorName,
+  statusCode: number,
+  type: ErrType,
+  message: string,
+  details: any | undefined,
+  err: Error,
+}
+export abstract class OperationalError<ErrType> extends Error {
+  name; // Set by subclass
   statusCode;
   type;
   details;
   err;
+  errId: string;
 
   constructor({
     name,
@@ -20,20 +29,14 @@ export abstract class OperationalError<T = string> extends Error {
     message,
     details,
     err,
-  }: {
-    name: TErrorName;
-    statusCode: number;
-    type: T;
-    message: string;
-    details: string | null;
-    err: Error;
-  }) {
+  }: TOperationalError<ErrType>) {
     super(message);
     this.name = name;
     this.statusCode = statusCode;
     this.type = type;
     this.details = details;
     this.err = err;
+    this.errId = nanoid();
   }
 }
 
@@ -46,7 +49,14 @@ export abstract class OperationalError<T = string> extends Error {
  * error handling. The T type should be defined in kpm-backend-interface to allow it to be
  * imported in both backend and frontend.
  */
-export class EndpointError<T> extends OperationalError<T> {
+type TEndpointError<ErrType> = {
+  type: ErrType,
+  statusCode: number,
+  message: string,
+  details: any | undefined,
+  err: Error,
+}
+export class EndpointError<ErrType> extends OperationalError<ErrType> {
   // Errors that must be handled by frontend
   constructor({
     type,
@@ -54,11 +64,8 @@ export class EndpointError<T> extends OperationalError<T> {
     message,
     details,
     err,
-  }: Pick<
-    OperationalError<T>,
-    "type" | "statusCode" | "message" | "details" | "err"
-  >) {
-    super({ name: "EndpointError", statusCode, type, message, details, err });
+  }: TEndpointError<ErrType>) {
+    super({name: "EndpointError", statusCode, type, message, details, err});
   }
 }
 
@@ -69,32 +76,45 @@ export class EndpointError<T> extends OperationalError<T> {
  * Use generic T to define the different error types you have. This helps enforcing complete error handling.
  * The T type should be defined in kpm-backend-interface to allow it to be imported in both backend and frontend.
  */
-export class AuthError<T> extends OperationalError<T> {
+type TAuthError<ErrType> = {
+  type: ErrType,
+  message: string,
+  details: any | undefined,
+  err: Error,
+}
+export class AuthError<ErrType> extends OperationalError<ErrType> {
   constructor({
     type,
     message,
     details,
     err,
-  }: Pick<OperationalError<T>, "type" | "message" | "details" | "err">) {
-    super({ name: "AuthError", statusCode: 401, type, message, details, err });
+  }: TAuthError<ErrType>) {
+    super({name: "AuthError", statusCode: 401, type, message, details, err});
   }
 }
 
 /**
  * Error for recoverable programmer errors IN OUR CODE. This shouldn't crash the application.
  */
-export class RecoverableError extends Error {
+type TRecoverableError<ErrType> = {
+  type: ErrType,
+  message: string,
+  err: Error,
+}
+export class RecoverableError<ErrType> extends Error {
   name = "RecoverableError";
-  err: Error;
+  type: ErrType;
+  err;
+  errId: string;
 
   constructor({
     message = "We encountered an error in our code.",
+    type,
     err,
-  }: {
-    message: string;
-    err: Error;
-  }) {
+  }: TRecoverableError<ErrType>) {
     super(message);
+    this.type = type;
     this.err = err;
+    this.errId = nanoid();
   }
 }

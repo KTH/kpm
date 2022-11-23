@@ -1,20 +1,18 @@
-export type TAPIGotCommonEndpointError =
-  | "NotAvailable"
-  | "BadResponse"
-  | "TimeoutError";
+export type TGotErrType = "NotAvailable" | "BadResponse" | "TimeoutError";
 
-export type TAPICanvasRoomsApiEndpointError = TAPIGotCommonEndpointError | "";
-export type APICanvasRooms = {
+// TODO: ValueError is just a marker to see what this looks like
+export type TCanvasRoomsEndpointErrType = TGotErrType | "ValueError";
+export type TCanvasRoomsEndpoint = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };
 
-export type TAPITeachingEndpointError = TAPIGotCommonEndpointError | "";
-export type APITeaching = {
+export type TTeachingEndpointErrType = TGotErrType | "ValueError";
+export type TTeachingEndpoint = {
   courses: Record<TCourseCode, TTeachingCourse>;
 };
 
-export type TAPIStudiesEndpointError = TAPIGotCommonEndpointError | "";
-export type APIStudies = {
+export type TStudiesEndpointErrType = TGotErrType | "ValueError";
+export type TStudiesEndpoint = {
   courses: Record<TCourseCode, TStudiesCourse>;
   programmes: Record<TProgramCode, TStudiesProgramme[]>;
 };
@@ -80,7 +78,7 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
-export type TAPIGroupsEndpointError = TAPIGotCommonEndpointError | "";
+export type TGroupsEndpointErrType = TGotErrType | "ValueError";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
@@ -91,8 +89,8 @@ export type TGroup = {
   starred: boolean;
 };
 
-export type TAPIProgrammesEndpointError = TAPIGotCommonEndpointError | "";
-export type APIProgrammes = {
+export type TProgrammesEndpointErrType = TGotErrType | "ValueError";
+export type TProgrammesEndpoint = {
   programmes: TProgram[];
 };
 export type TProgram = {
@@ -102,8 +100,8 @@ export type TProgram = {
   starred: boolean;
 };
 
-export type TAPIServicesEndpointError = TAPIGotCommonEndpointError | "";
-export type APIServices = {
+export type TServicesEndpointErrType = TGotErrType | "ValueError";
+export type TServicesEndpoint = {
   servicelinks: TService[];
   studentlinks: TService[];
 };

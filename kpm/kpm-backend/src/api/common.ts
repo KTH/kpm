@@ -4,7 +4,7 @@ import NodeCache from "node-cache";
 import got from "got";
 
 import { TSessionUser, getFakeUserForDevelopment } from "../auth";
-import { APICanvasRooms, TCourseCode } from "kpm-backend-interface";
+import { TCanvasRoomsEndpoint, TCourseCode } from "kpm-backend-interface";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
@@ -39,8 +39,8 @@ export async function getSocial<T>(
       },
       responseType: "json",
     })
-    .then((r) => r.body);
-}
+    .then((r) => r.body);TCanvasRoomsEndpoint
+}TCanvasRoomsEndpoint
 
 export async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
   const r = await got.get<APICanvasRooms>(

@@ -1,18 +1,18 @@
+import { RequestError, HTTPError, TimeoutError } from "got";
 import { EndpointError } from "kpm-api-common/src/errors";
+import { TGotErrType } from "kpm-backend-interface";
 
 export function handleCommonGotErrors(
-  name: string,
-  err: any,
-  errFactory: (props: any) => EndpointError<string>
+  err: RequestError | HTTPError | TimeoutError,
 ) {
   // First our handled errors (these are operational errors that are expected)
   if (err.name === "RequestError") {
     if (err.code === "ECONNREFUSED") {
       Error.captureStackTrace(err, handleCommonGotErrors);
-      throw errFactory({
+      throw new EndpointError<TGotErrType>({
         type: "NotAvailable",
         statusCode: 503,
-        message: `We can't connect to the ${name}`,
+        message: "We can't connect to an external API",
         details: null,
         err,
       });
@@ -22,10 +22,10 @@ export function handleCommonGotErrors(
   if (err.name === "HTTPError") {
     if (err.code === "ERR_NON_2XX_3XX_RESPONSE") {
       Error.captureStackTrace(err, handleCommonGotErrors);
-      throw errFactory({
+      throw new EndpointError<TGotErrType>({
         type: "BadResponse",
         statusCode: 503,
-        message: `We got an error from ${name}`,
+        message: "We can't connect to an external API",
         details: err.message,
         err,
       });
@@ -35,10 +35,10 @@ export function handleCommonGotErrors(
   if (err.name === "TimeoutError") {
     if (err.code === "TimeoutError") {
       Error.captureStackTrace(err, handleCommonGotErrors);
-      throw errFactory({
+      throw new EndpointError<TGotErrType>({
         type: "TimeoutError",
         statusCode: 503,
-        message: `The call to ${name} took too long`,
+        message: "We can't connect to an external API",
         details: null,
         err,
       });

@@ -15,7 +15,13 @@ api.get("/", (req, res) => {
   });
 });
 
-api.get("/canvas-rooms", canvasRoomsApiHandler);
+api.get("/canvas-rooms", (req, res, next) => {
+  try {
+    canvasRoomsApiHandler(req, res, next)
+  } catch (e) {
+    next(e);
+  }
+});
 
 api.get("/teaching", teachingApiHandler);
 

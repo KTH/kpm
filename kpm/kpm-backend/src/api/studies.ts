@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
-import { EndpointError } from "kpm-api-common/src/errors";
 import {
-  APIStudies,
-  TAPIStudiesEndpointError,
+  TStudiesEndpoint,
   TCourseCode,
   TProgramCode,
   TStudiesCourse,
@@ -45,7 +43,7 @@ export type TApiUserStudies = {
 
 export async function studiesApiHandler(
   req: Request,
-  res: Response<APIStudies>,
+  res: Response<TStudiesEndpoint>,
   next: NextFunction
 ) {
   try {
@@ -56,10 +54,9 @@ export async function studiesApiHandler(
         responseType: "json",
       })
       .then((r) => r.body)
-      .catch(getMyStudiesApiErrorHandler);
-    const rooms_fut = get_canvas_rooms(user.kthid).catch(
-      getMyCanvasRoomsApiErrorHandler
-    );
+      .catch(myStudiesApiErr);
+    const rooms_fut = get_canvas_rooms(user.kthid)
+      .catch(myCanvasRoomsApiErr);
 
     const studies = await studies_fut;
     const kopps_futs: Record<
@@ -68,7 +65,7 @@ export async function studiesApiHandler(
     > = Object.assign(
       {},
       ...Object.keys(studies?.courses || []).map((course_code) => ({
-        [course_code]: getCourseInfo(course_code).catch(getKoppsErrorHandler),
+        [course_code]: getCourseInfo(course_code).catch(koppsErr),
       }))
     );
     const { rooms } = (await rooms_fut) || {};
@@ -97,37 +94,28 @@ export async function studiesApiHandler(
   }
 }
 
-class StudiesApiEndpointError extends EndpointError<TAPIStudiesEndpointError> {}
-
-function getMyStudiesApiErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "my-studies-api",
-    err,
-    (props: any) => new StudiesApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getMyStudiesApiErrorHandler);
+// DONE: Remove downstream API name and add an error logging code that we can show to the user for debugging
+// DONE: Always throw EndpointError, not point in subclassing, makes shared code more complicated.
+// FAIL: Make sure the allowed ErrorTypes are explicit in the error handler
+// TODO: Wrap the error handlers in common try/catch se we can remove some boilerplate code in the handlers
+//       - if this doesn't mess upp the async stacktrace
+function myStudiesApiErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, myStudiesApiErr);
   throw err;
 }
 
-function getKoppsErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "KOPPS",
-    err,
-    (props: any) => new StudiesApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getKoppsErrorHandler);
+function koppsErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, koppsErr);
   throw err;
 }
 
-function getMyCanvasRoomsApiErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "my-canvas-rooms-api",
-    err,
-    (props: any) => new StudiesApiEndpointError(props)
-  );
-
-  Error.captureStackTrace(err, getMyCanvasRoomsApiErrorHandler);
+function myCanvasRoomsApiErr(err: any) {
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, myCanvasRoomsApiErr);
   throw err;
 }
