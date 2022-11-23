@@ -9,7 +9,7 @@ import {
 } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import "./programme.scss";
-import { IconSettings, IconStar } from "../components/icons";
+import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderProgrammes({
@@ -86,12 +86,14 @@ export function Programme() {
       {!isEmpty && (
         <ul>
           {filteredProgrammes?.map((programme) => (
-            <li key={programme.url}>
-              <IconStar
-                className={programme.starred ? "star active" : "star"}
-              />
+            <StarableItem
+              key={`kpm-program-${programme.slug}`}
+              kind="program"
+              slug={programme.slug}
+              starred={programme.starred}
+            >
               <a href={programme.url}>{i18n(programme.name)}</a>
-            </li>
+            </StarableItem>
           ))}
         </ul>
       )}

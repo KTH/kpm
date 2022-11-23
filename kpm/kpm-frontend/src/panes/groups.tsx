@@ -9,7 +9,7 @@ import {
 } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import "./groups.scss";
-import { IconSettings, IconStar } from "../components/icons";
+import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
@@ -86,10 +86,13 @@ export function Groups() {
       {!isEmpty && (
         <ul>
           {filteredGroups?.map((group) => (
-            <li key={group.url}>
-              <IconStar className={group.starred ? "star active" : "star"} />
+            <StarableItem
+              kind="group"
+              slug={group.slug}
+              starred={group.starred}
+            >
               <a href={group.url}>{group.name}</a>
-            </li>
+            </StarableItem>
           ))}
         </ul>
       )}

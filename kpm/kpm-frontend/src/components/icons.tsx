@@ -1,5 +1,6 @@
 import React from "react";
 import { i18n } from "../i18n/i18n";
+import { createApiUri } from "../panes/utils";
 
 type TLinkIconProps = {
   href: string;
@@ -112,16 +113,67 @@ export function IconSettings({
   );
 }
 
-export function IconStar({ title, className = "" }: TIconProps) {
+export type TStarProps = {
+  kind: "group" | "program";
+  slug: string;
+  starred: boolean;
+};
+
+export function StarableItem({
+  kind,
+  slug,
+  starred,
+  children,
+}: {
+  kind: "group" | "program";
+  slug: string;
+  starred: boolean;
+  children: any;
+}) {
+  const [star_state, star_set] = React.useState(starred);
+  async function toggleStar() {
+    console.log("Toggle star:", kind, slug, star_state);
+    const resp = await fetch(createApiUri("/api/star"), {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        kind: kind,
+        slug: slug,
+        starred: !star_state,
+      }),
+    });
+    if (resp.ok) {
+      star_set(!star_state);
+    } else {
+      console.log("Error:", resp);
+    }
+  }
+  return (
+    <li className={star_state ? "starrable active" : "starrable"}>
+      <IconStar starred={star_state} onClick={toggleStar} />
+      {children}
+    </li>
+  );
+}
+
+export function IconStar({
+  starred,
+  onClick,
+}: {
+  starred: boolean;
+    onClick(e: MouseEvent): void;
+}) {
   return (
     <svg
-      className={className ? `icon ${className}` : "icon"}
+      onClick={onClick}
+      className={starred ? "icon star active" : "icon star"}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 880 880"
       width="1em"
       height="1em"
     >
-      <title>{title}</title>
       <path
         d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
         fill="currentColor"

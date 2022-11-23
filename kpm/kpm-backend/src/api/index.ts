@@ -5,6 +5,7 @@ import { servicesApiHandler } from "./services";
 import { canvasRoomsApiHandler } from "./canvasRooms";
 import { teachingApiHandler } from "./teaching";
 import { studiesApiHandler } from "./studies";
+import { starApiHandler } from "./star";
 
 export const api = express.Router();
 
@@ -32,3 +33,5 @@ api.get("/groups", groupsApiHandler);
 api.get("/programmes", programmesApiHandler);
 
 api.get("/services", servicesApiHandler);
+
+api.post("/star", starApiHandler);

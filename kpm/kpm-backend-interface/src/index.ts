@@ -85,6 +85,7 @@ export type APIGroups = {
 export type TGroup = {
   name: string;
   url: string;
+  slug: string;
   starred: boolean;
 };
 
