@@ -16,7 +16,7 @@ const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 export const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true}));
 app.use(sessionMiddleware);
 app.use(cookieParserMiddleware);
 app.use(loggingHandler);
