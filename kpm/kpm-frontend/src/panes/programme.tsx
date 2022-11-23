@@ -19,7 +19,12 @@ export async function loaderProgrammes({
     signal: request?.signal,
   });
   const json = await res.json();
-  return json;
+  if (res.ok) {
+    return json;
+  } else {
+    // TODO: Handle more kinds of errors or keep it simple?
+    throw new Error(json.message);
+  }
 }
 
 type TFilter = "favs" | "all";
@@ -77,7 +82,7 @@ export function Programme() {
       {!isEmpty && (
         <ul>
           {filteredProgrammes?.map((programme) => (
-            <li>
+            <li key={programme.url}>
               <IconStar
                 className={programme.starred ? "star active" : "star"}
               />

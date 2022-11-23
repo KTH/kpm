@@ -53,11 +53,11 @@ export class ApiError extends Error {
 function beautifyError(e: Error): Error {
   switch (e.name) {
     case "SyntaxError":
-      return new ApiError("Backend is speaking jibberisch!", {
+      return new ApiError("Backend is speaking gibberish!", {
         description: "The backend responded with HTML, but JSON was expected.",
       });
     default:
-      return new ApiError("An error occured when talking to server.", {
+      return new ApiError("An error occured when talking to server", {
         description: e.message,
       });
   }

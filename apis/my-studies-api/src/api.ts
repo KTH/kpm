@@ -109,7 +109,6 @@ api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
       programmes,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).send("Error" as any);
   }
 });

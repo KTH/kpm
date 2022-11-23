@@ -1,11 +1,16 @@
+export type TGotErrType = "NotAvailable" | "BadResponse" | "TimeoutError";
+
+export type APICanvasRoomsErrType = TGotErrType | "ValueError";
 export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };
 
+export type APITeachingErrType = TGotErrType | "ValueError";
 export type APITeaching = {
   courses: Record<TCourseCode, TTeachingCourse>;
 };
 
+export type APIStudiesErrType = TGotErrType | "ValueError";
 export type APIStudies = {
   courses: Record<TCourseCode, TStudiesCourse>;
   programmes: Record<TProgramCode, TStudiesProgramme[]>;
@@ -72,6 +77,7 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
+export type APIGroupsErrType = TGotErrType | "ValueError";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
@@ -82,6 +88,7 @@ export type TGroup = {
   starred: boolean;
 };
 
+export type APIProgrammesErrType = TGotErrType | "ValueError";
 export type APIProgrammes = {
   programmes: TProgram[];
 };
@@ -92,6 +99,7 @@ export type TProgram = {
   starred: boolean;
 };
 
+export type APIServicesErrType = TGotErrType | "ValueError";
 export type APIServices = {
   servicelinks: TService[];
   studentlinks: TService[];
@@ -100,3 +108,5 @@ export type TService = {
   name: string;
   url: string;
 };
+
+export * from "./errors";
