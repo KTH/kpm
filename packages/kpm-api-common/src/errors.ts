@@ -12,7 +12,7 @@ type TOperationalError<ErrType> = {
   type: ErrType;
   message: string;
   details: any | undefined;
-  err: Error;
+  err?: Error;
 };
 export abstract class OperationalError<ErrType> extends Error {
   name; // Set by subclass
@@ -79,8 +79,8 @@ export class EndpointError<ErrType> extends OperationalError<ErrType> {
 type TAuthError<ErrType> = {
   type: ErrType;
   message: string;
-  details: any | undefined;
-  err: Error;
+  details?: any | undefined;
+  err?: Error | undefined;
 };
 export class AuthError<ErrType> extends OperationalError<ErrType> {
   constructor({ type, message, details, err }: TAuthError<ErrType>) {

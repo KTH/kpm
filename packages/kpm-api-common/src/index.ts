@@ -75,7 +75,6 @@ export function errorHandler(
     statusCode,
     type,
     message,
-    details,
     errId,
   });
 }
