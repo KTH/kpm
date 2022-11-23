@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  APICanvasRooms,
-} from "kpm-backend-interface";
+import { APICanvasRooms } from "kpm-backend-interface";
 import { get_canvas_rooms, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 

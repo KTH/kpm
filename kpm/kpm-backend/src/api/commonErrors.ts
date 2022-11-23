@@ -3,7 +3,7 @@ import { EndpointError } from "kpm-api-common/src/errors";
 import { TGotErrType } from "kpm-backend-interface";
 
 export function handleCommonGotErrors(
-  err: RequestError | HTTPError | TimeoutError,
+  err: RequestError | HTTPError | TimeoutError
 ) {
   // First our handled errors (these are operational errors that are expected)
   if (err.name === "RequestError") {
@@ -13,7 +13,10 @@ export function handleCommonGotErrors(
         type: "NotAvailable",
         statusCode: 503,
         message: "We can't connect to an external API",
-        details: null,
+        details: {
+          requestUrl: err?.request?.requestUrl,
+          message: err.message,
+        },
         err,
       });
     }
@@ -26,7 +29,10 @@ export function handleCommonGotErrors(
         type: "BadResponse",
         statusCode: 503,
         message: "We can't connect to an external API",
-        details: err.message,
+        details: {
+          requestUrl: err?.request?.requestUrl,
+          message: err.message,
+        },
         err,
       });
     }
@@ -39,7 +45,10 @@ export function handleCommonGotErrors(
         type: "TimeoutError",
         statusCode: 503,
         message: "We can't connect to an external API",
-        details: null,
+        details: {
+          requestUrl: err?.request?.requestUrl,
+          message: err.message,
+        },
         err,
       });
     }

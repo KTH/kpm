@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 import { OperationalError, RecoverableError } from "./errors";
 
 import log from "skog";
@@ -39,7 +39,15 @@ export function errorHandler(
     message = err.message;
     details = err.details;
     errId = err.errId;
-    log.error({ name, type, statusCode, message, details, errId, err: err.err });
+    log.error({
+      name,
+      type,
+      statusCode,
+      message,
+      details,
+      errId,
+      err: err.err,
+    });
   } else if (err instanceof RecoverableError) {
     // This is an acceptable error IN OUR CODE so we treat it more relaxed.
     // It has been caught and repackaged by a try/catch or similar.

@@ -55,8 +55,7 @@ export async function studiesApiHandler(
       })
       .then((r) => r.body)
       .catch(myStudiesApiErr);
-    const rooms_fut = get_canvas_rooms(user.kthid)
-      .catch(myCanvasRoomsApiErr);
+    const rooms_fut = get_canvas_rooms(user.kthid).catch(myCanvasRoomsApiErr);
 
     const studies = await studies_fut;
     const kopps_futs: Record<

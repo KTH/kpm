@@ -17,7 +17,7 @@ api.get("/", (req, res) => {
 
 api.get("/canvas-rooms", (req, res, next) => {
   try {
-    canvasRoomsApiHandler(req, res, next)
+    canvasRoomsApiHandler(req, res, next);
   } catch (e) {
     next(e);
   }

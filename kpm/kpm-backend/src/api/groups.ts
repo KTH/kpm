@@ -10,9 +10,7 @@ export async function groupsApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<APIGroups>(user, "groups").catch(
-      socialErr
-    );
+    const data = await getSocial<APIGroups>(user, "groups").catch(socialErr);
     res.send(data!);
   } catch (err) {
     next(err);

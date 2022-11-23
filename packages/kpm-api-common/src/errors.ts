@@ -1,4 +1,4 @@
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 /**
  * Common ancestor of all operational errors allowing
  * for more catch all checks.
@@ -7,13 +7,13 @@ import {v4 as uuid} from 'uuid';
  */
 type TErrorName = "EndpointError" | "AuthError";
 type TOperationalError<ErrType> = {
-  name: TErrorName,
-  statusCode: number,
-  type: ErrType,
-  message: string,
-  details: any | undefined,
-  err: Error,
-}
+  name: TErrorName;
+  statusCode: number;
+  type: ErrType;
+  message: string;
+  details: any | undefined;
+  err: Error;
+};
 export abstract class OperationalError<ErrType> extends Error {
   name; // Set by subclass
   statusCode;
@@ -50,12 +50,12 @@ export abstract class OperationalError<ErrType> extends Error {
  * imported in both backend and frontend.
  */
 type TEndpointError<ErrType> = {
-  type: ErrType,
-  statusCode: number,
-  message: string,
-  details: any | undefined,
-  err: Error,
-}
+  type: ErrType;
+  statusCode: number;
+  message: string;
+  details: any | undefined;
+  err: Error;
+};
 export class EndpointError<ErrType> extends OperationalError<ErrType> {
   // Errors that must be handled by frontend
   constructor({
@@ -65,7 +65,7 @@ export class EndpointError<ErrType> extends OperationalError<ErrType> {
     details,
     err,
   }: TEndpointError<ErrType>) {
-    super({name: "EndpointError", statusCode, type, message, details, err});
+    super({ name: "EndpointError", statusCode, type, message, details, err });
   }
 }
 
@@ -77,19 +77,14 @@ export class EndpointError<ErrType> extends OperationalError<ErrType> {
  * The T type should be defined in kpm-backend-interface to allow it to be imported in both backend and frontend.
  */
 type TAuthError<ErrType> = {
-  type: ErrType,
-  message: string,
-  details: any | undefined,
-  err: Error,
-}
+  type: ErrType;
+  message: string;
+  details: any | undefined;
+  err: Error;
+};
 export class AuthError<ErrType> extends OperationalError<ErrType> {
-  constructor({
-    type,
-    message,
-    details,
-    err,
-  }: TAuthError<ErrType>) {
-    super({name: "AuthError", statusCode: 401, type, message, details, err});
+  constructor({ type, message, details, err }: TAuthError<ErrType>) {
+    super({ name: "AuthError", statusCode: 401, type, message, details, err });
   }
 }
 
@@ -97,10 +92,10 @@ export class AuthError<ErrType> extends OperationalError<ErrType> {
  * Error for recoverable programmer errors IN OUR CODE. This shouldn't crash the application.
  */
 type TRecoverableError<ErrType> = {
-  type: ErrType,
-  message: string,
-  err: Error,
-}
+  type: ErrType;
+  message: string;
+  err: Error;
+};
 export class RecoverableError<ErrType> extends Error {
   name = "RecoverableError";
   type: ErrType;

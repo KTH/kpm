@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
 import log from "skog";
-import {
-  getCourseInfo,
-  get_canvas_rooms,
-  sessionUser,
-} from "./common";
+import { getCourseInfo, get_canvas_rooms, sessionUser } from "./common";
 import {
   APITeaching,
   TCourseCode,
@@ -37,9 +33,7 @@ export async function teachingApiHandler(
       .then((r) => r.body)
       .catch(myTeachingApiErr);
 
-    const rooms_fut = get_canvas_rooms(user.kthid).catch(
-      myCanvasRoomsApiErr
-    );
+    const rooms_fut = get_canvas_rooms(user.kthid).catch(myCanvasRoomsApiErr);
     log.debug({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
     const teaching = await teaching_fut;
