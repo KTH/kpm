@@ -109,6 +109,10 @@ export type TService = {
   url: string;
 };
 
-export type APIAuthErrType = "SessionExpired" | "SessionStoreError" | "ClientResponseError" | "TypeError";
+export type APIAuthErrType =
+  | "SessionExpired"
+  | "SessionStoreError"
+  | "ClientResponseError"
+  | "TypeError";
 
 export * from "./errors";

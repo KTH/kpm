@@ -144,7 +144,6 @@ function openIdErr(err: any) {
     });
   }
 
-
   Error.captureStackTrace(err, openIdErr);
   throw err;
 }
@@ -170,7 +169,7 @@ export function requiresValidSessionUser(
     // Allow running locally without login
     if (IS_DEV && USE_FAKE_USER) return next();
 
-    throwIfNotValidSession(req.session.user)
+    throwIfNotValidSession(req.session.user);
 
     next();
   } catch (err) {
@@ -182,9 +181,9 @@ export function throwIfNotValidSession(user?: TSessionUser): void {
   if (user === undefined) {
     throw new AuthError<APIAuthErrType>({
       type: "SessionStoreError",
-      message: "No logged in user found"
+      message: "No logged in user found",
     });
-  };
+  }
 
   // TODO: Clear session if not valid
   if (!isValidSession(user)) {
@@ -193,15 +192,15 @@ export function throwIfNotValidSession(user?: TSessionUser): void {
       message: "Your session has expired",
       details: user,
     });
-  };
+  }
 }
 
 export function isValidSession(user?: TSessionUser): boolean {
   if (user === undefined) return false;
-  
+
   const { exp, nbf } = user;
   const now = Date.now() / 1000;
-  return (exp > now && nbf < now);
+  return exp > now && nbf < now;
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
