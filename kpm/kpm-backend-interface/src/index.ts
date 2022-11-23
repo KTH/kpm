@@ -1,18 +1,17 @@
 export type TGotErrType = "NotAvailable" | "BadResponse" | "TimeoutError";
 
-// TODO: ValueError is just a marker to see what this looks like
-export type TCanvasRoomsEndpointErrType = TGotErrType | "ValueError";
-export type TCanvasRoomsEndpoint = {
+export type APICanvasRoomsErrType = TGotErrType | "ValueError";
+export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
 };
 
-export type TTeachingEndpointErrType = TGotErrType | "ValueError";
-export type TTeachingEndpoint = {
+export type APITeachingErrType = TGotErrType | "ValueError";
+export type APITeaching = {
   courses: Record<TCourseCode, TTeachingCourse>;
 };
 
-export type TStudiesEndpointErrType = TGotErrType | "ValueError";
-export type TStudiesEndpoint = {
+export type APIStudiesErrType = TGotErrType | "ValueError";
+export type APIStudies = {
   courses: Record<TCourseCode, TStudiesCourse>;
   programmes: Record<TProgramCode, TStudiesProgramme[]>;
 };
@@ -78,7 +77,7 @@ export type TStudiesProgramme = {
   term?: "1" | "2";
 };
 
-export type TGroupsEndpointErrType = TGotErrType | "ValueError";
+export type APIGroupsErrType = TGotErrType | "ValueError";
 export type APIGroups = {
   groups: TGroup[];
   group_search_url: string;
@@ -89,8 +88,8 @@ export type TGroup = {
   starred: boolean;
 };
 
-export type TProgrammesEndpointErrType = TGotErrType | "ValueError";
-export type TProgrammesEndpoint = {
+export type APIProgrammesErrType = TGotErrType | "ValueError";
+export type APIProgrammes = {
   programmes: TProgram[];
 };
 export type TProgram = {
@@ -100,8 +99,8 @@ export type TProgram = {
   starred: boolean;
 };
 
-export type TServicesEndpointErrType = TGotErrType | "ValueError";
-export type TServicesEndpoint = {
+export type APIServicesErrType = TGotErrType | "ValueError";
+export type APIServices = {
   servicelinks: TService[];
   studentlinks: TService[];
 };

@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { EndpointError } from "kpm-api-common/src/errors";
 import {
-  TCanvasRoomsEndpoint,
-  TCanvasRoomsEndpointErrType,
+  APICanvasRooms,
 } from "kpm-backend-interface";
 import { get_canvas_rooms, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 export async function canvasRoomsApiHandler(
   req: Request,
-  res: Response<TCanvasRoomsEndpoint>,
+  res: Response<APICanvasRooms>,
   next: NextFunction
 ) {
   try {
@@ -24,14 +22,9 @@ export async function canvasRoomsApiHandler(
   }
 }
 
-class CanvasRoomsApiEndpointError extends EndpointError<TCanvasRoomsEndpointErrType> {}
 function getApiCanvasRoomsErrorHandler(err: any) {
-  handleCommonGotErrors(
-    "Canvas Rooms API",
-    err,
-    (props: any) => new CanvasRoomsApiEndpointError(props)
-  );
-
+  handleCommonGotErrors(err);
+  // TODO: Add API specific error handling
   Error.captureStackTrace(err, getApiCanvasRoomsErrorHandler);
   throw err;
 }

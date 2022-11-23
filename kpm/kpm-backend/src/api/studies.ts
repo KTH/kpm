@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
 import {
-  TStudiesEndpoint,
+  APIStudies,
   TCourseCode,
   TProgramCode,
   TStudiesCourse,
@@ -43,7 +43,7 @@ export type TApiUserStudies = {
 
 export async function studiesApiHandler(
   req: Request,
-  res: Response<TStudiesEndpoint>,
+  res: Response<APIStudies>,
   next: NextFunction
 ) {
   try {

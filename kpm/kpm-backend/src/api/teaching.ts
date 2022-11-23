@@ -7,7 +7,7 @@ import {
   sessionUser,
 } from "./common";
 import {
-  TTeachingEndpoint,
+  APITeaching,
   TCourseCode,
   TTeachingCourse,
   TTeachingRole,
@@ -19,7 +19,7 @@ const MY_TEACHING_API_URI =
 
 export async function teachingApiHandler(
   req: Request,
-  res: Response<TTeachingEndpoint>,
+  res: Response<APITeaching>,
   next: NextFunction
 ) {
   try {

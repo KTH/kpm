@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  TProgrammesEndpoint,
+  APIProgrammes,
 } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 export async function programmesApiHandler(
   req: Request,
-  res: Response<TProgrammesEndpoint>,
+  res: Response<APIProgrammes>,
   next: NextFunction
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<TProgrammesEndpoint>(user, "programmes").catch(socialErr);
+    const data = await getSocial<APIProgrammes>(user, "programmes").catch(socialErr);
     res.send(data!);
   } catch (err) {
     next(err);

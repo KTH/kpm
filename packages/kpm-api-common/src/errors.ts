@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import {v4 as uuid} from 'uuid';
 /**
  * Common ancestor of all operational errors allowing
  * for more catch all checks.
@@ -36,7 +36,7 @@ export abstract class OperationalError<ErrType> extends Error {
     this.type = type;
     this.details = details;
     this.err = err;
-    this.errId = nanoid();
+    this.errId = uuid();
   }
 }
 
@@ -115,6 +115,6 @@ export class RecoverableError<ErrType> extends Error {
     super(message);
     this.type = type;
     this.err = err;
-    this.errId = nanoid();
+    this.errId = uuid();
   }
 }

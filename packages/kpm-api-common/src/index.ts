@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import { nanoid } from 'nanoid'
+import {v4 as uuid} from 'uuid';
 import { OperationalError, RecoverableError } from "./errors";
 
 import log from "skog";
@@ -55,7 +55,7 @@ export function errorHandler(
     // for debugging. Use Error.captureStackTrace for improved stacktraces in async calls.
     name = "Error";
     statusCode = 500;
-    errId = nanoid();
+    errId = uuid();
     message = `We encountered an unexpected error! (errId: ${errId})`;
     log.error({ statusCode, message, err, errId });
     // QUESTION: Should we perform a graceful shutdown?

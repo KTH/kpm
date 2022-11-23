@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import { TServicesEndpoint } from "kpm-backend-interface";
+import { APIServices } from "kpm-backend-interface";
 import { getSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
 export async function servicesApiHandler(
   req: Request,
-  res: Response<TServicesEndpoint>,
+  res: Response<APIServices>,
   next: NextFunction
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<TServicesEndpoint>(user, "services").catch(
+    const data = await getSocial<APIServices>(user, "services").catch(
       socialErr
     );
     res.send(data!);
