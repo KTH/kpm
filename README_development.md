@@ -13,7 +13,7 @@ Here are som guidlines for developers to help maintain the quality of our applic
 
     - `i18n("your text")`
     - english: **kpm-frontend/src/i18n/en.ts**
-    - english: **kpm-frontend/src/i18n/sv.ts**
+    - swedish: **kpm-frontend/src/i18n/sv.ts**
 
 3. Add a Jest snapshot test to make sure your component can be rendered
 
