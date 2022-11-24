@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
+import { AuthError } from "kpm-api-common/src/errors";
+import { APIAuthErrType } from "kpm-backend-interface";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -104,27 +106,52 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       .callback(redirectUrl.toString(), params, {
         nonce: req.session.tmpNonce,
       })
-      .then((tokenSet) => tokenSet.claims());
+      .then((tokenSet) => tokenSet.claims())
+      .catch(openIdErr);
 
-    const user = createValidSesisonUser(claims);
-    if (isValidSession(user)) {
-      req.session.user = user;
-    } else {
-      //
-      console.log("Invalid TSessionUser object.");
-    }
+    const user =
+      (IS_DEV || IS_STAGE) && USE_FAKE_USER
+        ? getFakeUserForDevelopment()
+        : createValidSesisonUser(claims);
+
+    throwIfNotValidSession(user);
+
+    req.session.user = user;
     res.redirect(nextUrl);
   } catch (err) {
-    if (err instanceof errors.OPError) {
-      if (err.error === "login_required") {
-        // user is logged out
-        res.redirect(`${nextUrl}?login_success=false`);
-        return;
-      }
+    if (err instanceof errors.OPError && err.error === "login_required") {
+      // user is logged out
+      res.redirect(`${nextUrl}?login_success=false`);
+      return;
     }
+
     next(err);
   }
 });
+
+function openIdErr(err: any) {
+  // https://github.com/panva/node-openid-client/blob/main/docs/README.md#errors
+  if (err instanceof errors.OPError) {
+    // Trigger login
+    if (err.error === "login_required") throw err;
+    // TODO: Any other error types we need to handle?
+  } else if (err instanceof errors.RPError) {
+    throw new AuthError<APIAuthErrType>({
+      type: "ClientResponseError",
+      message: "Login failed due to invalid response",
+      details: err,
+    });
+  } else if (err instanceof TypeError) {
+    throw new AuthError<APIAuthErrType>({
+      type: "TypeError",
+      message: "Login failed due to invalid response",
+      details: err,
+    });
+  }
+
+  Error.captureStackTrace(err, openIdErr);
+  throw err;
+}
 
 export function getFakeUserForDevelopment(): TSessionUser | undefined {
   if ((IS_DEV || IS_STAGE) && USE_FAKE_USER)
@@ -143,23 +170,42 @@ export function requiresValidSessionUser(
   res: Express.Response,
   next: Function
 ) {
-  // Allow running locally without login
-  if (IS_DEV && USE_FAKE_USER) return next();
+  try {
+    // Allow running locally without login
+    if (IS_DEV && USE_FAKE_USER) return next();
 
-  if (!isValidSession(req.session.user)) {
-    throw new Error("Not a valid TSessionUser");
+    throwIfNotValidSession(req.session.user);
+
+    next();
+  } catch (err) {
+    return next(err);
   }
-
-  next();
 }
 
-export function isValidSession(user?: TSessionUser) {
-  if (user === undefined) return false;
+export function throwIfNotValidSession(user?: TSessionUser): void {
+  if (user === undefined) {
+    throw new AuthError<APIAuthErrType>({
+      type: "SessionStoreError",
+      message: "No logged in user found",
+    });
+  }
 
   // TODO: Clear session if not valid
+  if (!isValidSession(user)) {
+    throw new AuthError<APIAuthErrType>({
+      type: "SessionExpired",
+      message: "Your session has expired",
+      details: user,
+    });
+  }
+}
+
+export function isValidSession(user?: TSessionUser): boolean {
+  if (user === undefined) return false;
+
   const { exp, nbf } = user;
   const now = Date.now() / 1000;
-  return exp > now && nbf < now;
+  return exp > now && nbf <= now;
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
