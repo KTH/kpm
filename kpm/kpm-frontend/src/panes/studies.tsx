@@ -9,7 +9,11 @@ import { createApiUri, formatTerm, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
-import { EmptyPlaceholder, ErrorMessage, LoadingPlaceholder } from "../components/common";
+import {
+  EmptyPlaceholder,
+  ErrorMessage,
+  LoadingPlaceholder,
+} from "../components/common";
 
 export async function loaderStudies({
   request,
@@ -35,8 +39,8 @@ export function Studies() {
   const { courses } = res || {};
   // const { courses, programmes } = useLoaderData() as APIStudies;
 
-  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
-  
+  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
+
   return (
     <MenuPane>
       {loading && <LoadingPlaceholder />}

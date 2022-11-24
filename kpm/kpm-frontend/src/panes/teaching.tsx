@@ -8,7 +8,11 @@ import {
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
-import { EmptyPlaceholder, ErrorMessage, LoadingPlaceholder } from "../components/common";
+import {
+  EmptyPlaceholder,
+  ErrorMessage,
+  LoadingPlaceholder,
+} from "../components/common";
 import { i18n } from "../i18n/i18n";
 
 import "./teaching.scss";
@@ -37,7 +41,7 @@ export function Teaching() {
   const { courses } = res || {};
   // const { courses } = useLoaderData() as APITeaching;
 
-  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
+  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
 
   return (
     <MenuPane>
