@@ -12,7 +12,9 @@ Monorepos for KPM implemented in Typescript for Nodejs.
 
 This starts all the applications in development mode including a frontend development server with hot module replacement (code in app updates automatically).
 
-Normally you reach the frontend at http://localhost:1234.
+Normally you reach the frontend at http://localhost:1234
+
+You can find our [development guidelines here](README_development.md).
 
 ### Developing the loader script
 
