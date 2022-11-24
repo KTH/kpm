@@ -8,7 +8,7 @@ import {
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
-import { ErrorMessage, LoadingPlaceholder } from "../components/common";
+import { EmptyPlaceholder, ErrorMessage, LoadingPlaceholder } from "../components/common";
 import { i18n } from "../i18n/i18n";
 
 import "./teaching.scss";
@@ -37,10 +37,17 @@ export function Teaching() {
   const { courses } = res || {};
   // const { courses } = useLoaderData() as APITeaching;
 
+  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
+
   return (
     <MenuPane>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
+      {isEmpty && (
+        <EmptyPlaceholder>
+          {i18n("You aren't teaching any courses.")}
+        </EmptyPlaceholder>
+      )}
       {courses && (
         <div className="kpm-teaching">
           {Object.entries(courses).map(([code, course]) => {
