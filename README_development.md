@@ -12,8 +12,8 @@ Here are som guidlines for developers to help maintain the quality of our applic
 2. Always wrap you text with the translator and add translations:
 
     - `i18n("your text")`
-    - english: **kpm-frontend/src/i18n/en.ts**
-    - swedish: **kpm-frontend/src/i18n/sv.ts**
+    - english: [kpm-frontend/src/i18n/en.ts](kpm/kpm-frontend/src/i18n/en.ts)
+    - swedish: [kpm-frontend/src/i18n/sv.ts](kpm/kpm-frontend/src/i18n/sv.ts)
 
 3. Add a Jest snapshot test to make sure your component can be rendered
 
@@ -30,7 +30,7 @@ Here are som guidlines for developers to help maintain the quality of our applic
 
 2. Wrap returned data in an object
 
-3. Make sure you have defined the API endpoint and Error Types in  **kpm-backend-interface/src/index.ts**
+3. Make sure you have defined the API endpoint and Error Types in  [kpm-backend-interface/src/index.ts](kpm/kpm-backend-interface/src/index.ts)
 
     - `type APIXxxErrType = "xxx" | "yyy";`
     - `type APIXxx = { ... }`
@@ -38,15 +38,15 @@ Here are som guidlines for developers to help maintain the quality of our applic
 ## Error Handling
 
 ### Frontend developer
-1. To see the shape of errors passed to frontend, check **kpm-api-commons/src/index.ts**:
+1. To see the shape of errors passed to frontend, check [kpm-api-commons/src/index.ts](packages/kpm-api-common/src/index.ts):
 
     - function errorHandler()
 
-2. To see what error types you can get for each endpoint, check **kpm-backend-interface/src/index.ts**:
+2. To see what error types you can get for each endpoint, check [kpm-backend-interface/src/index.ts](kpm/kpm-backend-interface/src/index.ts):
 
     - APIXxxErrType for each endpoint (Xxx)
 
-3. To see what authentication error types you can get, check **kpm-backend-interface/src/index.ts**:
+3. To see what authentication error types you can get, check [kpm-backend-interface/src/index.ts](kpm/kpm-backend-interface/src/index.ts):
 
     - TAuthErrType
 
