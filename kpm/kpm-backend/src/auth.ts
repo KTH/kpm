@@ -109,9 +109,10 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       .then((tokenSet) => tokenSet.claims())
       .catch(openIdErr);
 
-    const user = (IS_DEV || IS_STAGE) && USE_FAKE_USER
-      ? getFakeUserForDevelopment()
-      : createValidSesisonUser(claims);
+    const user =
+      (IS_DEV || IS_STAGE) && USE_FAKE_USER
+        ? getFakeUserForDevelopment()
+        : createValidSesisonUser(claims);
 
     throwIfNotValidSession(user);
 
