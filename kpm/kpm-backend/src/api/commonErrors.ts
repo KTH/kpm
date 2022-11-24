@@ -11,7 +11,7 @@ export function handleCommonGotErrors(
       Error.captureStackTrace(err, handleCommonGotErrors);
       throw new EndpointError<TGotErrType>({
         type: "NotAvailable",
-        statusCode: 424,
+        statusCode: 502,
         message: "We can't connect to an external API",
         details: {
           requestUrl: err?.request?.requestUrl,
@@ -27,7 +27,7 @@ export function handleCommonGotErrors(
       Error.captureStackTrace(err, handleCommonGotErrors);
       throw new EndpointError<TGotErrType>({
         type: "BadResponse",
-        statusCode: 424,
+        statusCode: 502,
         message: "We can't connect to an external API",
         details: {
           requestUrl: err?.request?.requestUrl,
@@ -43,7 +43,7 @@ export function handleCommonGotErrors(
       Error.captureStackTrace(err, handleCommonGotErrors);
       throw new EndpointError<TGotErrType>({
         type: "TimeoutError",
-        statusCode: 424,
+        statusCode: 502,
         message: "We can't connect to an external API",
         details: {
           requestUrl: err?.request?.requestUrl,
