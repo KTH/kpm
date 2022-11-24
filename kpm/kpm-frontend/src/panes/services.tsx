@@ -18,8 +18,8 @@ export async function loaderServices({
   const res = await fetch(createApiUri("/api/services"), {
     signal: request?.signal,
     headers: {
-      'Accept': 'application/json'
-    }
+      Accept: "application/json",
+    },
   });
   const json = await res.json();
   if (res.ok) {

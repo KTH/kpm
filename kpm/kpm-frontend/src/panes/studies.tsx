@@ -17,8 +17,8 @@ export async function loaderStudies({
   const res = await fetch(createApiUri("/api/studies"), {
     signal: request?.signal,
     headers: {
-      'Accept': 'application/json'
-    }
+      Accept: "application/json",
+    },
   });
   const json = await res.json();
   if (res.ok) {
