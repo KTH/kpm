@@ -17,6 +17,9 @@ export async function loaderProgrammes({
 }: any = {}): Promise<APIProgrammes> {
   const res = await fetch(createApiUri("/api/programmes"), {
     signal: request?.signal,
+    headers: {
+      'Accept': 'application/json'
+    }
   });
   const json = await res.json();
   if (res.ok) {

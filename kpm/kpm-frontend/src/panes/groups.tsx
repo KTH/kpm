@@ -15,6 +15,9 @@ import { FilterOption, TabFilter } from "../components/filter";
 export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
   const res = await fetch(createApiUri("/api/groups"), {
     signal: request?.signal,
+    headers: {
+      'Accept': 'application/json'
+    }
   });
   const json = await res.json();
   if (res.ok) {
