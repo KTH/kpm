@@ -109,8 +109,12 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
       .then((tokenSet) => tokenSet.claims())
       .catch(openIdErr);
 
-    const user = createValidSesisonUser(claims);
+    const user = (IS_DEV || IS_STAGE) && USE_FAKE_USER
+      ? getFakeUserForDevelopment()
+      : createValidSesisonUser(claims);
+
     throwIfNotValidSession(user);
+
     req.session.user = user;
     res.redirect(nextUrl);
   } catch (err) {
@@ -200,7 +204,7 @@ export function isValidSession(user?: TSessionUser): boolean {
 
   const { exp, nbf } = user;
   const now = Date.now() / 1000;
-  return exp > now && nbf < now;
+  return exp > now && nbf <= now;
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
