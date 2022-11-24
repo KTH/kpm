@@ -16,6 +16,7 @@ export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
   const res = await fetch(createApiUri("/api/groups"), {
     signal: request?.signal,
     headers: {
+      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
       Accept: "application/json",
     },
   });
