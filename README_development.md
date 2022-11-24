@@ -26,7 +26,7 @@ Here are som guidlines for developers to help maintain the quality of our applic
 
 1. Make sure you have error handlers for all external API calls and DB calls (typically anything with an await)
 
-    - se section "Error Handling" below
+    - se section [Error Handling](#error-handling) below
 
 2. Wrap returned data in an object
 
