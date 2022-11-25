@@ -46,8 +46,6 @@ export function DropdownMenuGroup({
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
     useState(undefined);
 
-  const toogleBlockerRef = useRef<NodeJS.Timeout | null>(null);
-
   const detailsRef = useRef(null);
   const summaryRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -70,22 +68,23 @@ export function DropdownMenuGroup({
     cls += ` ${className}`;
   }
 
-  const doToggleOnClick = (e: MouseEvent) => {
+  const doCloseOnClickIfOpen = (e: MouseEvent) => {
     e.preventDefault();
-    if (toogleBlockerRef.current === null) {
-      setOpen(!open);
+    if (open && summaryRef.current === e.target) {
+        setOpen(false);
     }
   };
 
-  const doOpenOnFocus = () => {
-    // onFocus can be fired before onClick so we make sure we don't close again if they are close
-    toogleBlockerRef.current = setTimeout(
-      () => (toogleBlockerRef.current = null),
-      300
-    );
-    // Open on focus
-    if (!open) {
-      setOpen(true);
+  const doOpenOnFocus = (event: any) => {
+    const e = event as FocusEvent;
+    if (e.target === summaryRef.current) {
+      // Open on focus
+      if (!open) {
+        // onFocus can be fired before onClick so we make sure we don't close again if they are close
+        setTimeout(() => {
+          setOpen(true);
+        }, 100);
+      }
     }
   };
 
@@ -96,6 +95,7 @@ export function DropdownMenuGroup({
       open &&
       !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
     ) {
+      // Delay close so we don't cancel the click event
       setOpen(false);
     }
   };
@@ -116,7 +116,7 @@ export function DropdownMenuGroup({
       className={cls}
       open={open}
       onBlur={doCloseOnBlur}
-      onClick={doToggleOnClick}
+      onClick={doCloseOnClickIfOpen}
     >
       <summary ref={summaryRef} onFocus={doOpenOnFocus}>
         {title}
