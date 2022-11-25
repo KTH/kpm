@@ -69,9 +69,11 @@ export function DropdownMenuGroup({
   }
 
   const doCloseOnClickIfOpen = (e: MouseEvent) => {
-    e.preventDefault();
-    if (open && summaryRef.current === e.target) {
-      setOpen(false);
+    if (summaryRef.current === e.target) {
+      e.preventDefault();
+      if (open) {
+        setOpen(false);
+      }
     }
   };
 
