@@ -80,7 +80,8 @@ export function DropdownMenuGroup({
     if (e.target === summaryRef.current) {
       // Open on focus
       if (!open) {
-        // onFocus can be fired before onClick so we make sure we don't close again if they are close
+        // onFocus can be fired before onClick so we the timeout makes
+        // sure we don't immediately close it again.
         setTimeout(() => {
           setOpen(true);
         }, 100);
