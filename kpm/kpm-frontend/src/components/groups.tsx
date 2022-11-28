@@ -98,7 +98,6 @@ export function DropdownMenuGroup({
       open &&
       !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
     ) {
-      // Delay close so we don't cancel the click event
       setOpen(false);
     }
   };
@@ -112,6 +111,8 @@ export function DropdownMenuGroup({
       <ul ref={dropdownRef}>{children}</ul>
     </div>
   );
+
+  // TODO: Move onClick to summary!
 
   return (
     <details
