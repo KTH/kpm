@@ -46,8 +46,7 @@ export function useMutateGroups(res: APIGroups | undefined): {
     }
   }, [res]);
 
-  // *****************
-
+  // ******************************************************
   // Allow widget to mutate the star property
   const setStar = async (slug: string, value: boolean) => {
     // Store to reset if call to API fails
@@ -104,7 +103,16 @@ export function Groups() {
   const { res, loading, error } = useDataFecther<APIGroups>(loaderStudies);
   const { groups, setStar, errorSetStar } = useMutateGroups(res);
 
-  const [filter, setFilter] = useState<TFilter>("favs");
+  const [filter, setFilter] = useState<TFilter>();
+
+  // Switch to all if there are no starred groups
+  useEffect(() => {
+    if (filter === undefined && Array.isArray(groups)) {
+      const hasStarred = !!groups?.find((g) => g.starred);
+      setFilter(hasStarred ? "favs" : "all");
+    }
+  }, [groups]);
+
   const filteredGroups = groups?.filter((group) => {
     switch (filter) {
       case "favs":
@@ -133,12 +141,12 @@ export function Groups() {
       <TabFilter>
         <FilterOption<TFilter>
           value="favs"
-          filter={filter}
+          filter={filter || "all"}
           onSelect={setFilter}
         >
           {i18n("Favourites")}
         </FilterOption>
-        <FilterOption<TFilter> value="all" filter={filter} onSelect={setFilter}>
+        <FilterOption<TFilter> value="all" filter={filter || "all"} onSelect={setFilter}>
           {i18n("All Subscriptions")}
         </FilterOption>
       </TabFilter>
