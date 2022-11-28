@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes } from "kpm-backend-interface";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
@@ -31,12 +31,81 @@ export async function loaderProgrammes({
   }
 }
 
+
+export function useMutateProgrammes(res: APIProgrammes | undefined): {
+  programmes: APIProgrammes["programmes"] | undefined,
+  setStar(slug: string, value: boolean): void,
+  errorSetStar: Error | undefined,
+} {
+  const [programmes, setProgrammes] = useState<APIProgrammes["programmes"]>();
+  const [errorSetStar, setErrorSetStar] = useState<Error>();
+
+  // Update state on res change (loaded/updated)
+  useEffect(() => {
+    if (res) {
+      const { programmes } = res;
+      setProgrammes(programmes);
+      setErrorSetStar(undefined);
+    }
+  }, [res]);
+
+  // *****************
+
+  // Allow widget to mutate the star property
+  const setStar = async (slug: string, value: boolean) => {
+    // Store to reset if call to API fails
+    const oldProgrammes = programmes && [...programmes];
+    // Clear error due to new interaction
+    setErrorSetStar(undefined);
+
+    let didChange = false;
+    const newProgrammes = programmes?.map((programme) => {
+      if (programme.slug === slug) {
+        const { starred, ...other } = programme;
+        if (programme.starred !== value) {
+          didChange = true;
+        }
+        return {
+          starred: value,
+          ...other
+        };
+      }
+      return programme;
+    })
+    // Store change locally for quick feedback in UI
+    setProgrammes(newProgrammes);
+
+    if (didChange) {
+      const res = await fetch(createApiUri(`/api/star`), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          kind: "program",
+          slug,
+          starred: value,
+        }),
+      }).catch((err: any) => {
+        // Expose error and reset groups
+        setErrorSetStar(err);
+        setProgrammes(oldProgrammes);
+      });
+    }
+  }
+
+  return {
+    programmes,
+    setStar,
+    errorSetStar,
+  }
+}
+
 type TFilter = "favs" | "all";
 
 export function Programme() {
-  const { res, loading, error } =
-    useDataFecther<APIProgrammes>(loaderProgrammes);
-  const { programmes } = res || {};
+  const { res, loading, error } = useDataFecther<APIProgrammes>(loaderProgrammes);
+  const { programmes, setStar, errorSetStar } = useMutateProgrammes(res);
 
   const [filter, setFilter] = useState<TFilter>("favs");
 
@@ -76,6 +145,7 @@ export function Programme() {
       </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
+      {errorSetStar && <ErrorMessage error={errorSetStar} compact />}
       {isEmpty && (
         <EmptyPlaceholder>
           {filter === "favs"
@@ -88,9 +158,8 @@ export function Programme() {
           {filteredProgrammes?.map((programme) => (
             <StarableItem
               key={`kpm-program-${programme.slug}`}
-              kind="program"
-              slug={programme.slug}
               starred={programme.starred}
+              onToggle={() => setStar(programme.slug, !programme.starred)}
             >
               <a href={programme.url}>{i18n(programme.name)}</a>
             </StarableItem>

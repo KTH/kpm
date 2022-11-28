@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
@@ -29,14 +29,82 @@ export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
   }
 }
 
+export function useMutateGroups(res: APIGroups | undefined): {
+  groups: APIGroups["groups"] | undefined,
+  setStar(slug: string, value: boolean): void,
+  errorSetStar: Error | undefined,
+} {
+  const [groups, setGroups] = useState<APIGroups["groups"]>();
+  const [errorSetStar, setErrorSetStar] = useState<Error>();
+
+  // Update state on res change (loaded/updated)
+  useEffect(() => {
+    if (res) {
+      const { groups } = res;
+      setGroups(groups);
+      setErrorSetStar(undefined);
+    }
+  }, [res]);
+
+  // *****************
+
+  // Allow widget to mutate the star property
+  const setStar = async (slug: string, value: boolean) => {
+    // Store to reset if call to API fails
+    const oldGroups = groups && [...groups];
+    // Clear error due to new interaction
+    setErrorSetStar(undefined);
+
+    let didChange = false;
+    const newGroups = groups?.map((group) => {
+      if (group.slug === slug) {
+        const { starred, ...other} = group;
+        if (group.starred !== value) {
+          didChange = true;
+        }
+        return {
+          starred: value,
+          ...other
+        };
+      }
+      return group;
+    })
+    // Store change locally for quick feedback in UI
+    setGroups(newGroups);
+    
+    if (didChange) {
+      const res = await fetch(createApiUri(`/api/star`), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          kind: "group",
+          slug,
+          starred: value,
+        }),
+      }).catch((err: any) => {
+        // Expose error and reset groups
+        setErrorSetStar(err);
+        setGroups(oldGroups);
+      });
+    }
+  }
+
+  return {
+    groups,
+    setStar,
+    errorSetStar,
+  }
+}
+
 type TFilter = "favs" | "all";
 
 export function Groups() {
   const { res, loading, error } = useDataFecther<APIGroups>(loaderStudies);
-  const { groups, group_search_url } = res || {};
+  const { groups, setStar, errorSetStar } = useMutateGroups(res);
 
   const [filter, setFilter] = useState<TFilter>("favs");
-
   const filteredGroups = groups?.filter((group) => {
     switch (filter) {
       case "favs":
@@ -76,6 +144,7 @@ export function Groups() {
       </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
+      {errorSetStar && <ErrorMessage error={errorSetStar} compact />}
       {isEmpty && (
         <EmptyPlaceholder>
           {filter === "favs"
@@ -87,9 +156,9 @@ export function Groups() {
         <ul>
           {filteredGroups?.map((group) => (
             <StarableItem
-              kind="group"
-              slug={group.slug}
+              key={`kpm-group-${group.slug}`}
               starred={group.starred}
+              onToggle={() => setStar(group.slug, !group.starred)}
             >
               <a href={group.url}>{group.name}</a>
             </StarableItem>

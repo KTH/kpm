@@ -67,11 +67,16 @@
   display: flex;
   min-height: 20rem;
   width: 100%;
+  padding: var(--kpmPad);
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-size: 0.9em;
   line-height: 2em;
+
+  &.compact {
+    min-height: unset;
+  }
 
   h2 {
     font-size: 1.2em;

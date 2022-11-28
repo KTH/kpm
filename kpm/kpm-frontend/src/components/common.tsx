@@ -24,8 +24,13 @@ export function EmptyPlaceholder({
 
 type TErrorMessageProps = {
   error: ApiError;
+  compact?: boolean;
 };
-export function ErrorMessage({ error }: TErrorMessageProps): JSX.Element {
+export function ErrorMessage({ error, compact = false }: TErrorMessageProps): JSX.Element {
+  let cls = "kpm-error-message";
+  if (compact) {
+    cls += " compact"
+  }
   return (
     <div className="kpm-error-message">
       <h2>ERROR: {error.message}</h2>

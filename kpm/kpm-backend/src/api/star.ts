@@ -3,6 +3,7 @@ import { APIGroups } from "kpm-backend-interface";
 import { postSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
+// TODO: Add API interface  and error types in kpm-backend-interface
 export async function starApiHandler(
   req: Request,
   res: Response, // FIXME: Response type!

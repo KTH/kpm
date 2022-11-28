@@ -120,39 +120,18 @@ export type TStarProps = {
 };
 
 export function StarableItem({
-  kind,
-  slug,
   starred,
   children,
+  onToggle
 }: {
-  kind: "group" | "program";
-  slug: string;
   starred: boolean;
   children: any;
+  onToggle(): void
 }) {
-  const [star_state, star_set] = React.useState(starred);
-  async function toggleStar() {
-    console.log("Toggle star:", kind, slug, star_state);
-    const resp = await fetch(createApiUri("/api/star"), {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        kind: kind,
-        slug: slug,
-        starred: !star_state,
-      }),
-    });
-    if (resp.ok) {
-      star_set(!star_state);
-    } else {
-      console.log("Error:", resp);
-    }
-  }
   return (
-    <li className={star_state ? "starrable active" : "starrable"}>
-      <IconStar starred={star_state} onClick={toggleStar} />
+    // TODO: Do we really need CSS class active?
+    <li className={starred ? "starrable active" : "starrable"}>
+      <IconStar starred={starred} onClick={() => onToggle()} />
       {children}
     </li>
   );
@@ -163,7 +142,7 @@ export function IconStar({
   onClick,
 }: {
   starred: boolean;
-    onClick(e: MouseEvent): void;
+    onClick(e: any): void;
 }) {
   return (
     <svg
