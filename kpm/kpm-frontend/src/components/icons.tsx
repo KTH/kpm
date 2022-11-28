@@ -122,11 +122,11 @@ export type TStarProps = {
 export function StarableItem({
   starred,
   children,
-  onToggle
+  onToggle,
 }: {
   starred: boolean;
   children: any;
-  onToggle(): void
+  onToggle(): void;
 }) {
   return (
     // TODO: Do we really need CSS class active?
@@ -142,7 +142,7 @@ export function IconStar({
   onClick,
 }: {
   starred: boolean;
-    onClick(e: any): void;
+  onClick(e: any): void;
 }) {
   return (
     <svg

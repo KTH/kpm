@@ -31,11 +31,10 @@ export async function loaderProgrammes({
   }
 }
 
-
 export function useMutateProgrammes(res: APIProgrammes | undefined): {
-  programmes: APIProgrammes["programmes"] | undefined,
-  setStar(slug: string, value: boolean): void,
-  errorSetStar: Error | undefined,
+  programmes: APIProgrammes["programmes"] | undefined;
+  setStar(slug: string, value: boolean): void;
+  errorSetStar: Error | undefined;
 } {
   const [programmes, setProgrammes] = useState<APIProgrammes["programmes"]>();
   const [errorSetStar, setErrorSetStar] = useState<Error>();
@@ -48,7 +47,6 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
       setErrorSetStar(undefined);
     }
   }, [res]);
-
 
   // ******************************************************
   // Allow widget to mutate the star property
@@ -67,11 +65,11 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
         }
         return {
           starred: value,
-          ...other
+          ...other,
         };
       }
       return programme;
-    })
+    });
     // Store change locally for quick feedback in UI
     setProgrammes(newProgrammes);
 
@@ -92,24 +90,24 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
         setProgrammes(oldProgrammes);
       });
     }
-  }
+  };
 
   return {
     programmes,
     setStar,
     errorSetStar,
-  }
+  };
 }
 
 type TFilter = "favs" | "all";
 
 export function Programme() {
-  const { res, loading, error } = useDataFecther<APIProgrammes>(loaderProgrammes);
+  const { res, loading, error } =
+    useDataFecther<APIProgrammes>(loaderProgrammes);
   const { programmes, setStar, errorSetStar } = useMutateProgrammes(res);
 
-  
   const [filter, setFilter] = useState<TFilter>();
-  
+
   // Switch to all if there are no starred programmes
   useEffect(() => {
     if (filter === undefined && Array.isArray(programmes)) {
@@ -148,7 +146,11 @@ export function Programme() {
         >
           {i18n("Favourites")}
         </FilterOption>
-        <FilterOption<TFilter> value="all" filter={filter || "all"} onSelect={setFilter}>
+        <FilterOption<TFilter>
+          value="all"
+          filter={filter || "all"}
+          onSelect={setFilter}
+        >
           {i18n("All Subscriptions")}
         </FilterOption>
       </TabFilter>

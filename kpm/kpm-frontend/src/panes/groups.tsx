@@ -30,9 +30,9 @@ export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
 }
 
 export function useMutateGroups(res: APIGroups | undefined): {
-  groups: APIGroups["groups"] | undefined,
-  setStar(slug: string, value: boolean): void,
-  errorSetStar: Error | undefined,
+  groups: APIGroups["groups"] | undefined;
+  setStar(slug: string, value: boolean): void;
+  errorSetStar: Error | undefined;
 } {
   const [groups, setGroups] = useState<APIGroups["groups"]>();
   const [errorSetStar, setErrorSetStar] = useState<Error>();
@@ -57,20 +57,20 @@ export function useMutateGroups(res: APIGroups | undefined): {
     let didChange = false;
     const newGroups = groups?.map((group) => {
       if (group.slug === slug) {
-        const { starred, ...other} = group;
+        const { starred, ...other } = group;
         if (group.starred !== value) {
           didChange = true;
         }
         return {
           starred: value,
-          ...other
+          ...other,
         };
       }
       return group;
-    })
+    });
     // Store change locally for quick feedback in UI
     setGroups(newGroups);
-    
+
     if (didChange) {
       const res = await fetch(createApiUri(`/api/star`), {
         method: "post",
@@ -88,13 +88,13 @@ export function useMutateGroups(res: APIGroups | undefined): {
         setGroups(oldGroups);
       });
     }
-  }
+  };
 
   return {
     groups,
     setStar,
     errorSetStar,
-  }
+  };
 }
 
 type TFilter = "favs" | "all";
@@ -146,7 +146,11 @@ export function Groups() {
         >
           {i18n("Favourites")}
         </FilterOption>
-        <FilterOption<TFilter> value="all" filter={filter || "all"} onSelect={setFilter}>
+        <FilterOption<TFilter>
+          value="all"
+          filter={filter || "all"}
+          onSelect={setFilter}
+        >
           {i18n("All Subscriptions")}
         </FilterOption>
       </TabFilter>
