@@ -38,7 +38,8 @@ export function Services() {
   const { servicelinks, studentlinks } = res || {};
 
   const isEmptyServiceLinks = !loading && !error && servicelinks?.length === 0;
-  const isEmptyStudentLinks = !loading && !error && studentlinks?.length === 0;
+  const hasStudentlinks = Array.isArray(studentlinks) && studentlinks?.length > 0;
+  const showStudentLinksWidget = error || hasStudentlinks;
 
   return (
     <MenuPane className="kpm-services">
@@ -123,16 +124,11 @@ export function Services() {
             </ul>
           )}
         </div>
-        <div className="kpm-col">
+        {showStudentLinksWidget && <div className="kpm-col">
           <h3 className="kpm-col-header">{i18n("Services for Students")}</h3>
           {loading && <LoadingPlaceholder />}
           {error && <ErrorMessage error={error} />}
-          {isEmptyStudentLinks && (
-            <EmptyPlaceholder>
-              {i18n("You have no student links.")}
-            </EmptyPlaceholder>
-          )}
-          {!isEmptyStudentLinks && (
+          {hasStudentlinks && (
             <ul>
               {studentlinks?.map((links) => (
                 <li>
@@ -143,7 +139,7 @@ export function Services() {
               ))}
             </ul>
           )}
-        </div>
+        </div>}
       </Fragment>
     </MenuPane>
   );
