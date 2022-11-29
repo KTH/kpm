@@ -28,10 +28,12 @@
   "license": "MIT",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.7.0",
+    "@types/pretty": "^2.0.1",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/react-test-renderer": "^18.0.0",
     "@types/react-transition-group": "^4.4.5",
+    "pretty": "^2.0.0",
     "jest-environment-jsdom": "^29.1.2",
     "parcel": "^2.7.0",
     "prettier": "^2.7.1",

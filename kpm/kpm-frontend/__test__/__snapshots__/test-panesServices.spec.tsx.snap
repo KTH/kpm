@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Services /> Can be rendered 1`] = `
+<dialog
+  className="kpm-modal"
+>
+  <div
+    className="kpm-modal-content kpm-services"
+  >
+    <header
+      className="kpm-modal-content-header"
+    >
+      <h2>
+        My Services
+      </h2>
+      <aside
+        className="kpm-modal-content-header-actions"
+      >
+        <a
+          href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
+          title="Help / feedback for the personal menu in connection with the transition to new Ladok"
+        >
+          Help / feedback
+        </a>
+        <a
+          className="icon"
+          href="https://www.kth.se/social/servicelinks"
+        >
+          <svg
+            height="1.2em"
+            viewBox="0 0 86 86"
+            width="1.2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              Select how you are notified, how the schedule is displayed, or remove subscriptions.
+            </title>
+            <path
+              d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z"
+              fill="currentColor"
+              fillRule="evenodd"
+            />
+          </svg>
+        </a>
+      </aside>
+    </header>
+    <div
+      className="kpm-col"
+    >
+      <h3
+        className="kpm-col-header"
+      >
+        LADOK for Students
+      </h3>
+      <ul>
+        <li>
+          <h4>
+            <a
+              href="https://www.student.ladok.se/student/app/studentwebb/start"
+            >
+              Home page
+            </a>
+          </h4>
+          <p>
+            Relevant information right now. Course registration, Exam registration
+          </p>
+        </li>
+        <li>
+          <h4>
+            <a
+              href="https://www.student.ladok.se/student/app/studentwebb/min-utbildning/alla"
+            >
+              My education
+            </a>
+          </h4>
+          <p>
+            Overview of your studies. Programmes, courses, results on courses
+          </p>
+        </li>
+        <li>
+          <h4>
+            <a
+              href="https://www.student.ladok.se/student/app/studentwebb/examinationstillfallen/oppna-for-anmalan"
+            >
+              Examinations
+            </a>
+          </h4>
+          <p>
+            Sign up for examinations
+          </p>
+        </li>
+        <li>
+          <h4>
+            <a
+              href="https://www.student.ladok.se/student/app/studentwebb/intyg"
+            >
+              Transcripts
+            </a>
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a
+              href="https://www.student.ladok.se/student/app/studentwebb/examen-bevis"
+            >
+              Degree Certificate
+            </a>
+          </h4>
+          <p>
+            Apply for degree certificate
+          </p>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="kpm-col kpm-services-links"
+    >
+      <h3
+        className="kpm-col-header"
+      >
+        Other Selected Services
+      </h3>
+      <div
+        className="kpm-loading-placeholder"
+      >
+        <div
+          className="kpm-loader"
+        />
+      </div>
+      <ul />
+    </div>
+  </div>
+</dialog>
+`;
+
+exports[`<Services /> Can be rendered with data 1`] = `
+"<dialog class="kpm-modal">
+  <div class="kpm-modal-content kpm-services">
+    <header class="kpm-modal-content-header">
+      <h2>My Services</h2>
+      <aside class="kpm-modal-content-header-actions"><a title="Help / feedback for the personal menu in connection with the transition to new Ladok" href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/">Help / feedback</a><a class="icon" href="https://www.kth.se/social/servicelinks"><svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em">
+            <title>Select how you are notified, how the schedule is displayed, or remove subscriptions.</title>
+            <path d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z" fill="currentColor" fill-rule="evenodd"></path>
+          </svg></a></aside>
+    </header>
+    <div class="kpm-col">
+      <h3 class="kpm-col-header">LADOK for Students</h3>
+      <ul>
+        <li>
+          <h4><a href="https://www.student.ladok.se/student/app/studentwebb/start">Home page</a></h4>
+          <p>Relevant information right now. Course registration, Exam registration</p>
+        </li>
+        <li>
+          <h4><a href="https://www.student.ladok.se/student/app/studentwebb/min-utbildning/alla">My education</a></h4>
+          <p>Overview of your studies. Programmes, courses, results on courses</p>
+        </li>
+        <li>
+          <h4><a href="https://www.student.ladok.se/student/app/studentwebb/examinationstillfallen/oppna-for-anmalan">Examinations</a></h4>
+          <p>Sign up for examinations</p>
+        </li>
+        <li>
+          <h4><a href="https://www.student.ladok.se/student/app/studentwebb/intyg">Transcripts</a></h4>
+        </li>
+        <li>
+          <h4><a href="https://www.student.ladok.se/student/app/studentwebb/examen-bevis">Degree Certificate</a></h4>
+          <p>Apply for degree certificate</p>
+        </li>
+      </ul>
+    </div>
+    <div class="kpm-col kpm-services-links">
+      <h3 class="kpm-col-header">Other Selected Services</h3>
+      <div class="kpm-error-message">
+        <h2>ERROR: An error occured when talking to server</h2>
+        <p>Response is not defined</p>
+      </div>
+      <ul></ul>
+    </div>
+    <div class="kpm-col">
+      <h3 class="kpm-col-header">Services for Students</h3>
+      <div class="kpm-error-message">
+        <h2>ERROR: An error occured when talking to server</h2>
+        <p>Response is not defined</p>
+      </div>
+    </div>
+  </div>
+</dialog>"
+`;
