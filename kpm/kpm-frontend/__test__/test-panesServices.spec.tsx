@@ -1,26 +1,14 @@
 import * as React from "react";
-import { describe, expect, test, afterEach, beforeEach } from "@jest/globals";
+import { describe, expect, test, afterEach } from "@jest/globals";
 import renderer from "react-test-renderer";
-import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { Services } from "../src/panes/services";
-import prettify from "pretty";
 import { mockFetchJson, resetMockedFetch } from "./utils";
 import { APIServices } from "kpm-backend-interface";
 
 describe("<Services />", () => {
-  let container: any;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
   afterEach(() => {
     resetMockedFetch();
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
   });
 
   test("Can be rendered", () => {
@@ -36,10 +24,12 @@ describe("<Services />", () => {
       studentlinks: [{ name: "Test Student Link", url: "//:test/test/student" }],
     });
 
+    let component: any;
     await act(() => {
-      render(<Services />, container);
+      component = renderer.create(<Services />);
     })
 
-    expect(prettify(container.innerHTML)).toMatchSnapshot();
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });
