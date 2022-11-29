@@ -38,7 +38,8 @@ export function Services() {
   const { servicelinks, studentlinks } = res || {};
 
   const isEmptyServiceLinks = !loading && !error && servicelinks?.length === 0;
-  const hasStudentlinks = Array.isArray(studentlinks) && studentlinks?.length > 0;
+  const hasStudentlinks =
+    Array.isArray(studentlinks) && studentlinks?.length > 0;
   const showStudentLinksWidget = error || hasStudentlinks;
 
   return (
@@ -124,22 +125,24 @@ export function Services() {
             </ul>
           )}
         </div>
-        {showStudentLinksWidget && <div className="kpm-col">
-          <h3 className="kpm-col-header">{i18n("Services for Students")}</h3>
-          {loading && <LoadingPlaceholder />}
-          {error && <ErrorMessage error={error} />}
-          {hasStudentlinks && (
-            <ul>
-              {studentlinks?.map((links) => (
-                <li>
-                  <h4>
-                    <a href={links.url}>{i18n(links.name)}</a>
-                  </h4>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>}
+        {showStudentLinksWidget && (
+          <div className="kpm-col">
+            <h3 className="kpm-col-header">{i18n("Services for Students")}</h3>
+            {loading && <LoadingPlaceholder />}
+            {error && <ErrorMessage error={error} />}
+            {hasStudentlinks && (
+              <ul>
+                {studentlinks?.map((links) => (
+                  <li>
+                    <h4>
+                      <a href={links.url}>{i18n(links.name)}</a>
+                    </h4>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </Fragment>
     </MenuPane>
   );
