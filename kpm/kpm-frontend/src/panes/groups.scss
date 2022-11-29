@@ -9,6 +9,7 @@
     flex-flow: row wrap;
     gap: $rowGap $colGap;
     align-items: center;
+    width: 100%;
 
     & > li {
       display: flex;
