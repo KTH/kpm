@@ -23,6 +23,6 @@ describe("fetch", () => {
     const res = await fetch("/test");
     const data = await res.json();
 
-    expect(data).toStrictEqual(input);
+    expect(data).toEqual(input);
   });
 });
