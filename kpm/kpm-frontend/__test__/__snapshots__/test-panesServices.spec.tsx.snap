@@ -253,18 +253,17 @@ exports[`<Services /> Can be rendered with data 1`] = `
       >
         Other Selected Services
       </h3>
-      <div
-        className="kpm-error-message"
-      >
-        <h2>
-          ERROR: 
-          An error occured when talking to server
-        </h2>
-        <p>
-          Response is not defined
-        </p>
-      </div>
-      <ul />
+      <ul>
+        <li>
+          <h4>
+            <a
+              href="//:test/test/service"
+            >
+              Test Service Link
+            </a>
+          </h4>
+        </li>
+      </ul>
     </div>
     <div
       className="kpm-col"
@@ -274,17 +273,17 @@ exports[`<Services /> Can be rendered with data 1`] = `
       >
         Services for Students
       </h3>
-      <div
-        className="kpm-error-message"
-      >
-        <h2>
-          ERROR: 
-          An error occured when talking to server
-        </h2>
-        <p>
-          Response is not defined
-        </p>
-      </div>
+      <ul>
+        <li>
+          <h4>
+            <a
+              href="//:test/test/student"
+            >
+              Test Student Link
+            </a>
+          </h4>
+        </li>
+      </ul>
     </div>
   </div>
 </dialog>

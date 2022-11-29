@@ -1,0 +1,248 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Groups /> Can be rendered 1`] = `
+<dialog
+  className="kpm-modal"
+>
+  <div
+    className="kpm-modal-content kpm-groups"
+  >
+    <header
+      className="kpm-modal-content-header"
+    >
+      <h2>
+        My Groups
+      </h2>
+      <aside
+        className="kpm-modal-content-header-actions"
+      >
+        <a
+          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          title="Search for interesting groups to follow"
+        >
+          Find groups
+        </a>
+        <a
+          href="https://www.kth.se/social/group-create/"
+        >
+          Create new group
+        </a>
+        <a
+          className="icon"
+          href="https://www.kth.se/social/home/settings/groups"
+        >
+          <svg
+            height="1.2em"
+            viewBox="0 0 86 86"
+            width="1.2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              Select how you are notified, how the schedule is displayed, or remove subscriptions.
+            </title>
+            <path
+              d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z"
+              fill="currentColor"
+              fillRule="evenodd"
+            />
+          </svg>
+        </a>
+      </aside>
+    </header>
+    <nav
+      className="kpm-tab-filter"
+    >
+      <ul>
+        <li
+          className="active"
+          onClick={[Function]}
+        >
+          Favourites
+        </li>
+        <li
+          onClick={[Function]}
+        >
+          All Subscriptions
+        </li>
+      </ul>
+    </nav>
+    <div
+      className="kpm-loading-placeholder"
+    >
+      <div
+        className="kpm-loader"
+      />
+    </div>
+    <ul />
+  </div>
+</dialog>
+`;
+
+exports[`<Groups /> Can be rendered with data and none starred 1`] = `
+<dialog
+  className="kpm-modal"
+>
+  <div
+    className="kpm-modal-content kpm-groups"
+  >
+    <header
+      className="kpm-modal-content-header"
+    >
+      <h2>
+        My Groups
+      </h2>
+      <aside
+        className="kpm-modal-content-header-actions"
+      >
+        <a
+          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          title="Search for interesting groups to follow"
+        >
+          Find groups
+        </a>
+        <a
+          href="https://www.kth.se/social/group-create/"
+        >
+          Create new group
+        </a>
+        <a
+          className="icon"
+          href="https://www.kth.se/social/home/settings/groups"
+        >
+          <svg
+            height="1.2em"
+            viewBox="0 0 86 86"
+            width="1.2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              Select how you are notified, how the schedule is displayed, or remove subscriptions.
+            </title>
+            <path
+              d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z"
+              fill="currentColor"
+              fillRule="evenodd"
+            />
+          </svg>
+        </a>
+      </aside>
+    </header>
+    <nav
+      className="kpm-tab-filter"
+    >
+      <ul>
+        <li
+          className="active"
+          onClick={[Function]}
+        >
+          Favourites
+        </li>
+        <li
+          onClick={[Function]}
+        >
+          All Subscriptions
+        </li>
+      </ul>
+    </nav>
+    <div
+      className="kpm-empty-placeholder"
+    >
+      You have no groups marked as favourites.
+    </div>
+  </div>
+</dialog>
+`;
+
+exports[`<Groups /> Can be rendered with data and one starred 1`] = `
+<dialog
+  className="kpm-modal"
+>
+  <div
+    className="kpm-modal-content kpm-groups"
+  >
+    <header
+      className="kpm-modal-content-header"
+    >
+      <h2>
+        My Groups
+      </h2>
+      <aside
+        className="kpm-modal-content-header-actions"
+      >
+        <a
+          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          title="Search for interesting groups to follow"
+        >
+          Find groups
+        </a>
+        <a
+          href="https://www.kth.se/social/group-create/"
+        >
+          Create new group
+        </a>
+        <a
+          className="icon"
+          href="https://www.kth.se/social/home/settings/groups"
+        >
+          <svg
+            height="1.2em"
+            viewBox="0 0 86 86"
+            width="1.2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              Select how you are notified, how the schedule is displayed, or remove subscriptions.
+            </title>
+            <path
+              d="M11.41 72.18a42.98 42.98 0 0 0 20.65 12.41A10.62 10.62 0 0 1 32 83.5a10.5 10.5 0 1 1 20.91 1.35 42.95 42.95 0 0 0 21.3-12.28 10.5 10.5 0 0 1 10.3-18.3 43.05 43.05 0 0 0 0-22.54 10.5 10.5 0 0 1-10.3-18.3A42.94 42.94 0 0 0 52 .94l.01.56a10.5 10.5 0 0 1-21 .2 43 43 0 0 0-19.59 12.12A10.49 10.49 0 0 1 1.38 32.16a43.07 43.07 0 0 0 0 21.68 10.5 10.5 0 0 1 10.04 18.34zM42 57.94a15 15 0 1 0 0-30 15 15 0 0 0 0 30z"
+              fill="currentColor"
+              fillRule="evenodd"
+            />
+          </svg>
+        </a>
+      </aside>
+    </header>
+    <nav
+      className="kpm-tab-filter"
+    >
+      <ul>
+        <li
+          className="active"
+          onClick={[Function]}
+        >
+          Favourites
+        </li>
+        <li
+          onClick={[Function]}
+        >
+          All Subscriptions
+        </li>
+      </ul>
+    </nav>
+    <ul>
+      <li>
+        <svg
+          className="icon star active"
+          height="1em"
+          viewBox="0 0 880 880"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title />
+          <path
+            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            fill="currentColor"
+            stroke="#7d5c0c"
+            strokeWidth="10"
+          />
+        </svg>
+        <a
+          href="//:test/group_1"
+        >
+          Test Group 1 starred
+        </a>
+      </li>
+    </ul>
+  </div>
+</dialog>
+`;

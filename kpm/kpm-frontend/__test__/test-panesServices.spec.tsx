@@ -3,7 +3,7 @@ import { describe, expect, test, afterEach } from "@jest/globals";
 import renderer from "react-test-renderer";
 import { act } from "react-dom/test-utils";
 import { Services } from "../src/panes/services";
-import { mockFetchJson, resetMockedFetch } from "./utils";
+import { mockFetchJson, resetMockedFetch } from "fetch-for-jest";
 import { APIServices } from "kpm-backend-interface";
 
 describe("<Services />", () => {
