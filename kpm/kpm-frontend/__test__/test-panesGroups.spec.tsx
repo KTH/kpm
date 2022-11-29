@@ -30,15 +30,15 @@ describe("<Groups />", () => {
           name: "Test Group 2",
           url: "//:test/group_2",
           starred: false,
-        }
+        },
       ],
-      group_search_url: "https://"
+      group_search_url: "https://",
     });
 
     let component: any;
     await act(() => {
       component = renderer.create(<Groups />);
-    })
+    });
 
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -56,15 +56,15 @@ describe("<Groups />", () => {
           name: "Test Group 2 not starred",
           url: "//:test/group_2",
           starred: false,
-        }
+        },
       ],
-      group_search_url: "https://"
+      group_search_url: "https://",
     });
 
     let component: any;
     await act(() => {
       component = renderer.create(<Groups />);
-    })
+    });
 
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();

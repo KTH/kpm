@@ -20,14 +20,18 @@ describe("<Services />", () => {
 
   test("Can be rendered with data", async () => {
     mockFetchJson<APIServices>({
-      servicelinks: [{ name: "Test Service Link", url: "//:test/test/service" }],
-      studentlinks: [{ name: "Test Student Link", url: "//:test/test/student" }],
+      servicelinks: [
+        { name: "Test Service Link", url: "//:test/test/service" },
+      ],
+      studentlinks: [
+        { name: "Test Student Link", url: "//:test/test/student" },
+      ],
     });
 
     let component: any;
     await act(() => {
       component = renderer.create(<Services />);
-    })
+    });
 
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();

@@ -3,9 +3,9 @@ import { describe, expect, test, afterEach } from "@jest/globals";
 import { mockFetchJson, resetMockedFetch } from "../src/index";
 
 type TTest = {
-  name: string,
-  number: number,
-}
+  name: string;
+  number: number;
+};
 
 describe("fetch", () => {
   afterEach(() => {

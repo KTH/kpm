@@ -9,7 +9,7 @@ let response: any = {
   body: undefined,
   headers: undefined,
   status: undefined,
-}
+};
 
 // TODO: Extend this if needed
 class Response {
@@ -27,7 +27,7 @@ class Response {
     }
   }
   async json() {
-    return this.body
+    return this.body;
   }
 
   get statusText() {
@@ -45,21 +45,24 @@ class Response {
   }
 }
 
-export function mockFetchJson<TApiData>(body: TApiData | undefined, status = 200, headers?: Headers): void {
+export function mockFetchJson<TApiData>(
+  body: TApiData | undefined,
+  status = 200,
+  headers?: Headers
+): void {
   response = {
     body,
     status,
-    headers
-  }
+    headers,
+  };
 
-  const fetch = async (input: RequestInfo | URL, init?: RequestInit | undefined): Promise<globalThis.Response> => {
-    const res = new Response(
-      response.body,
-      response.status,
-      response.headers,
-    )
+  const fetch = async (
+    input: RequestInfo | URL,
+    init?: RequestInit | undefined
+  ): Promise<globalThis.Response> => {
+    const res = new Response(response.body, response.status, response.headers);
     return res as globalThis.Response;
-  }
+  };
 
   global.fetch = fetch;
 }
