@@ -24,11 +24,13 @@ describe("<Groups />", () => {
         {
           name: "Test Group 1",
           url: "//:test/group_1",
+          slug: "test_group_1",
           starred: false,
         },
         {
           name: "Test Group 2",
           url: "//:test/group_2",
+          slug: "test_group_2",
           starred: false,
         },
       ],
@@ -50,11 +52,13 @@ describe("<Groups />", () => {
         {
           name: "Test Group 1 starred",
           url: "//:test/group_1",
+          slug: "test_group_1_starred",
           starred: true,
         },
         {
           name: "Test Group 2 not starred",
           url: "//:test/group_2",
+          slug: "test_group_2",
           starred: false,
         },
       ],
