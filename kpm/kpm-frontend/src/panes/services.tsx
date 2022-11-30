@@ -64,7 +64,9 @@ export function Services() {
                 </a>
               </h4>
               <p>
-                {i18n("Relevant information right now. Course registration, Exam registration")}
+                {i18n(
+                  "Relevant information right now. Course registration, Exam registration"
+                )}
               </p>
             </li>
             <li>
@@ -74,7 +76,9 @@ export function Services() {
                 </a>
               </h4>
               <p>
-                {i18n("Overview of your studies. Programmes, courses, results on courses")}
+                {i18n(
+                  "Overview of your studies. Programmes, courses, results on courses"
+                )}
               </p>
             </li>
             <li>

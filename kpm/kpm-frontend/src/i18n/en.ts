@@ -25,27 +25,32 @@ export const en: Record<string, string> = {
   antagna: "Admitted",
   registrerade: "Registered",
   godkand: "Completed",
-  "Search for interesting groups to follow": "Search for interesting groups to follow",
+  "Search for interesting groups to follow":
+    "Search for interesting groups to follow",
   "Profile Image": "Profile Image",
-  "Help / feedback for the personal menu": "Help / feedback for the personal menu",
+  "Help / feedback for the personal menu":
+    "Help / feedback for the personal menu",
   "Home page": "Home page",
-  "Relevant information right now. Course registration, Exam registration": "Relevant information right now. Course registration, Exam registration",
+  "Relevant information right now. Course registration, Exam registration":
+    "Relevant information right now. Course registration, Exam registration",
   "My education": "My education",
-  "Overview of your studies. Programmes, courses, results on courses": "Overview of your studies. Programmes, courses, results on courses",
-  "Examinations": "Examinations",
+  "Overview of your studies. Programmes, courses, results on courses":
+    "Overview of your studies. Programmes, courses, results on courses",
+  Examinations: "Examinations",
   "Sign up for examinations": "Sign up for examinations",
-  "Transcripts": "Transcripts",
+  Transcripts: "Transcripts",
   "Degree Certificate": "Degree Certificate",
   "Apply for degree certificate": "Apply for degree certificate",
-  "Teaching": "Teaching",
+  Teaching: "Teaching",
   "KTH Webmail": "KTH Webmail",
   "News feed": "News feed",
-  "News from your courses, groups and programmes": "News from your courses, groups and programmes",
+  "News from your courses, groups and programmes":
+    "News from your courses, groups and programmes",
   "Direct notifications": "Direct notifications",
   "Change password": "Change password",
   "Wireless network": "Wireless network",
 
-  "Settings": "Settings",
+  Settings: "Settings",
   "About me": "About me",
   "My Profile": "My Profile",
   "Forward KTH email": "Forward KTH email",
@@ -53,7 +58,8 @@ export const en: Record<string, string> = {
   "(in LADOK)": "(in LADOK)",
   "My Settings": "My Settings",
   "Subscriptions, my schedule": "Subscriptions, my schedule",
-  "Export My schedule (e.g. to your mobile phone)": "Export My schedule (e.g. to your mobile phone)",
+  "Export My schedule (e.g. to your mobile phone)":
+    "Export My schedule (e.g. to your mobile phone)",
 
   "Kurs-PM": "Course Description",
   "Registrera dig": "Register",
@@ -62,7 +68,7 @@ export const en: Record<string, string> = {
   HT: "HT",
   Kursen: "The Course",
   "My Programmes": "My Programmes",
-  "Favourites": "Favourites",
+  Favourites: "Favourites",
   "All Subscriptions": "All Subscriptions",
   "You don't belong to any programme.": "You don't belong to any programme.",
   "Create new group": "Create new group",
@@ -74,7 +80,8 @@ export const en: Record<string, string> = {
   "Publikationer (DiVA)": "Publications (DiVA)",
   "Personalförmåner (KTH för mig)": "Employee Benefits (My KTH)",
   "Lediga datorer i datorsalarna": "Free computers in computer rooms",
-  "Ladok för personal (administratörer och lärare)": "Ladok för employees (administrators and teachers)",
+  "Ladok för personal (administratörer och lärare)":
+    "Ladok för employees (administrators and teachers)",
   "Kursadministration ": "Course administration ",
   "Kurs- och programplanering (KOPPS)": "Course and programme planning (KOPPS)",
   "KTH Play": "KTH Play",
@@ -86,6 +93,4 @@ export const en: Record<string, string> = {
   "Other Selected Services": "Other Selected Services",
   "LADOK for Students": "LADOK for Students",
   "My Services": "My Services",
-
-
 };
