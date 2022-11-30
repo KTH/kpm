@@ -42,6 +42,22 @@ export async function getSocial<T>(
     .then((r) => r.body);
 }
 
+export async function postSocial<T>(
+  user: TSessionUser,
+  endpoint: string,
+  post_data: Record<string, any>
+): Promise<T> {
+  return await got
+    .post<T>(`${SOCIAL_USER_API}/${user.kthid}/${endpoint}`, {
+      headers: {
+        authorization: SOCIAL_KEY,
+      },
+      responseType: "json",
+      json: post_data,
+    })
+    .then((r) => r.body);
+}
+
 export async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
   const r = await got.get<APICanvasRooms>(
     `${MY_CANVAS_ROOMS_API_URI}/user/${user}`,

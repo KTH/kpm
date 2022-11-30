@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes } from "kpm-backend-interface";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
@@ -9,7 +9,7 @@ import {
 } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import "./programme.scss";
-import { IconSettings, IconStar } from "../components/icons";
+import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderProgrammes({
@@ -31,14 +31,90 @@ export async function loaderProgrammes({
   }
 }
 
+export function useMutateProgrammes(res: APIProgrammes | undefined): {
+  programmes: APIProgrammes["programmes"] | undefined;
+  setStar(slug: string, value: boolean): void;
+  errorSetStar: Error | undefined;
+} {
+  const [programmes, setProgrammes] = useState<APIProgrammes["programmes"]>();
+  const [errorSetStar, setErrorSetStar] = useState<Error>();
+
+  // Update state on res change (loaded/updated)
+  useEffect(() => {
+    if (res) {
+      const { programmes } = res;
+      setProgrammes(programmes);
+      setErrorSetStar(undefined);
+    }
+  }, [res]);
+
+  // ******************************************************
+  // Allow widget to mutate the star property
+  const setStar = async (slug: string, value: boolean) => {
+    // Store to reset if call to API fails
+    const oldProgrammes = programmes && [...programmes];
+    // Clear error due to new interaction
+    setErrorSetStar(undefined);
+
+    let didChange = false;
+    const newProgrammes = programmes?.map((programme) => {
+      if (programme.slug === slug) {
+        const { starred, ...other } = programme;
+        if (programme.starred !== value) {
+          didChange = true;
+        }
+        return {
+          starred: value,
+          ...other,
+        };
+      }
+      return programme;
+    });
+    // Store change locally for quick feedback in UI
+    setProgrammes(newProgrammes);
+
+    if (didChange) {
+      const res = await fetch(createApiUri(`/api/star`), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          kind: "program",
+          slug,
+          starred: value,
+        }),
+      }).catch((err: any) => {
+        // Expose error and reset groups
+        setErrorSetStar(err);
+        setProgrammes(oldProgrammes);
+      });
+    }
+  };
+
+  return {
+    programmes,
+    setStar,
+    errorSetStar,
+  };
+}
+
 type TFilter = "favs" | "all";
 
 export function Programme() {
   const { res, loading, error } =
     useDataFecther<APIProgrammes>(loaderProgrammes);
-  const { programmes } = res || {};
+  const { programmes, setStar, errorSetStar } = useMutateProgrammes(res);
 
-  const [filter, setFilter] = useState<TFilter>("favs");
+  const [filter, setFilter] = useState<TFilter>();
+
+  // Switch to all if there are no starred programmes
+  useEffect(() => {
+    if (filter === undefined && Array.isArray(programmes)) {
+      const hasStarred = !!programmes?.find((p) => p.starred);
+      setFilter(hasStarred ? "favs" : "all");
+    }
+  }, [programmes]);
 
   const filteredProgrammes = programmes?.filter((programme) => {
     switch (filter) {
@@ -65,17 +141,22 @@ export function Programme() {
       <TabFilter>
         <FilterOption<TFilter>
           value="favs"
-          filter={filter}
+          filter={filter || "all"}
           onSelect={setFilter}
         >
           {i18n("Favourites")}
         </FilterOption>
-        <FilterOption<TFilter> value="all" filter={filter} onSelect={setFilter}>
+        <FilterOption<TFilter>
+          value="all"
+          filter={filter || "all"}
+          onSelect={setFilter}
+        >
           {i18n("All Subscriptions")}
         </FilterOption>
       </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
+      {errorSetStar && <ErrorMessage error={errorSetStar} compact />}
       {isEmpty && (
         <EmptyPlaceholder>
           {filter === "favs"
@@ -86,12 +167,13 @@ export function Programme() {
       {!isEmpty && (
         <ul>
           {filteredProgrammes?.map((programme) => (
-            <li key={programme.url}>
-              <IconStar
-                className={programme.starred ? "star active" : "star"}
-              />
+            <StarableItem
+              key={`kpm-program-${programme.slug}`}
+              starred={programme.starred}
+              onToggle={() => setStar(programme.slug, !programme.starred)}
+            >
               <a href={programme.url}>{i18n(programme.name)}</a>
-            </li>
+            </StarableItem>
           ))}
         </ul>
       )}
