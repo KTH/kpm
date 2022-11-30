@@ -46,7 +46,7 @@ export function Services() {
     <MenuPane className="kpm-services">
       <MenuPaneHeader title={i18n("My Services")}>
         <a
-          title="Help / feedback for the personal menu in connection with the transition to new Ladok"
+          title={i18n("Help / feedback for the personal menu")}
           href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
         >
           Help / feedback
@@ -60,47 +60,45 @@ export function Services() {
             <li>
               <h4>
                 <a href="https://www.student.ladok.se/student/app/studentwebb/start">
-                  Home page
+                  {i18n("Home page")}
                 </a>
               </h4>
               <p>
-                Relevant information right now. Course registration, Exam
-                registration
+                {i18n("Relevant information right now. Course registration, Exam registration")}
               </p>
             </li>
             <li>
               <h4>
                 <a href="https://www.student.ladok.se/student/app/studentwebb/min-utbildning/alla">
-                  My education
+                  {i18n("My education")}
                 </a>
               </h4>
               <p>
-                Overview of your studies. Programmes, courses, results on
-                courses
+                {i18n("Overview of your studies. Programmes, courses, results on courses")}
               </p>
             </li>
             <li>
               <h4>
                 <a href="https://www.student.ladok.se/student/app/studentwebb/examinationstillfallen/oppna-for-anmalan">
-                  Examinations
+                  {i18n("Examinations")}
                 </a>
               </h4>
-              <p>Sign up for examinations</p>
+              <p>{i18n("Sign up for examinations")}</p>
             </li>
             <li>
               <h4>
                 <a href="https://www.student.ladok.se/student/app/studentwebb/intyg">
-                  Transcripts
+                  {i18n("Transcripts")}
                 </a>
               </h4>
             </li>
             <li>
               <h4>
                 <a href="https://www.student.ladok.se/student/app/studentwebb/examen-bevis">
-                  Degree Certificate
+                  {i18n("Degree Certificate")}
                 </a>
               </h4>
-              <p>Apply for degree certificate</p>
+              <p>{i18n("Apply for degree certificate")}</p>
             </li>
           </ul>
         </div>

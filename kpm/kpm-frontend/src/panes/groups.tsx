@@ -128,7 +128,7 @@ export function Groups() {
     <MenuPane className="kpm-groups">
       <MenuPaneHeader title={i18n("My Groups")}>
         <a
-          title="Search for interesting groups to follow"
+          title={i18n("Search for interesting groups to follow")}
           href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
         >
           {i18n("Find groups")}

@@ -28,7 +28,7 @@ export function Profile() {
             >
               <img
                 src={`https://www.kth.se/files/thumbnail/${currentUser.username}`}
-                alt="Profile Image"
+                alt={i18n("Profile Image")}
               />
               {i18n("My Profile")}
             </a>

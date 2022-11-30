@@ -1,6 +1,8 @@
 import { en } from "./en";
 import { sv } from "./sv";
 
+const doCheckTranslations = process?.env.NODE_ENV !== "production";
+
 export type TLang = "sv" | "en";
 
 export function i18n(strObj: Record<TLang, string> | string): string {
@@ -19,5 +21,8 @@ export function i18n(strObj: Record<TLang, string> | string): string {
       break;
   }
 
+  if (doCheckTranslations) {
+    console.warn(`No translation for: "${strObj}"`);
+  }
   return strObj;
 }
