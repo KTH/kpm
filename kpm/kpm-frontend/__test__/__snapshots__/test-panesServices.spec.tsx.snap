@@ -11,14 +11,14 @@ exports[`<Services /> Can be rendered 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        My Services
+        Mina tjänster
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
       >
         <a
           href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
-          title="Help / feedback for the personal menu in connection with the transition to new Ladok"
+          title="Hjälp och förslag kring personliga menyn"
         >
           Help / feedback
         </a>
@@ -50,7 +50,7 @@ exports[`<Services /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        LADOK for Students
+        LADOK för studenter
       </h3>
       <ul>
         <li>
@@ -58,11 +58,11 @@ exports[`<Services /> Can be rendered 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/start"
             >
-              Home page
+              Startsida
             </a>
           </h4>
           <p>
-            Relevant information right now. Course registration, Exam registration
+            Aktuell information. Kursregistrering, tentaregistrering
           </p>
         </li>
         <li>
@@ -70,11 +70,11 @@ exports[`<Services /> Can be rendered 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/min-utbildning/alla"
             >
-              My education
+              Min utbildning
             </a>
           </h4>
           <p>
-            Overview of your studies. Programmes, courses, results on courses
+            Studieöversikt: program, kurser och resultat
           </p>
         </li>
         <li>
@@ -82,11 +82,11 @@ exports[`<Services /> Can be rendered 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/examinationstillfallen/oppna-for-anmalan"
             >
-              Examinations
+              Tentor
             </a>
           </h4>
           <p>
-            Sign up for examinations
+            Anmäl dig till tentor
           </p>
         </li>
         <li>
@@ -94,7 +94,7 @@ exports[`<Services /> Can be rendered 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/intyg"
             >
-              Transcripts
+              Intyg
             </a>
           </h4>
         </li>
@@ -103,11 +103,11 @@ exports[`<Services /> Can be rendered 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/examen-bevis"
             >
-              Degree Certificate
+              Examensbevis
             </a>
           </h4>
           <p>
-            Apply for degree certificate
+            Ta ut din examen
           </p>
         </li>
       </ul>
@@ -118,7 +118,7 @@ exports[`<Services /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        Other Selected Services
+        Andra valda tjänster
       </h3>
       <div
         className="kpm-loading-placeholder"
@@ -144,14 +144,14 @@ exports[`<Services /> Can be rendered with data 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        My Services
+        Mina tjänster
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
       >
         <a
           href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
-          title="Help / feedback for the personal menu in connection with the transition to new Ladok"
+          title="Hjälp och förslag kring personliga menyn"
         >
           Help / feedback
         </a>
@@ -183,7 +183,7 @@ exports[`<Services /> Can be rendered with data 1`] = `
       <h3
         className="kpm-col-header"
       >
-        LADOK for Students
+        LADOK för studenter
       </h3>
       <ul>
         <li>
@@ -191,11 +191,11 @@ exports[`<Services /> Can be rendered with data 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/start"
             >
-              Home page
+              Startsida
             </a>
           </h4>
           <p>
-            Relevant information right now. Course registration, Exam registration
+            Aktuell information. Kursregistrering, tentaregistrering
           </p>
         </li>
         <li>
@@ -203,11 +203,11 @@ exports[`<Services /> Can be rendered with data 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/min-utbildning/alla"
             >
-              My education
+              Min utbildning
             </a>
           </h4>
           <p>
-            Overview of your studies. Programmes, courses, results on courses
+            Studieöversikt: program, kurser och resultat
           </p>
         </li>
         <li>
@@ -215,11 +215,11 @@ exports[`<Services /> Can be rendered with data 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/examinationstillfallen/oppna-for-anmalan"
             >
-              Examinations
+              Tentor
             </a>
           </h4>
           <p>
-            Sign up for examinations
+            Anmäl dig till tentor
           </p>
         </li>
         <li>
@@ -227,7 +227,7 @@ exports[`<Services /> Can be rendered with data 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/intyg"
             >
-              Transcripts
+              Intyg
             </a>
           </h4>
         </li>
@@ -236,11 +236,11 @@ exports[`<Services /> Can be rendered with data 1`] = `
             <a
               href="https://www.student.ladok.se/student/app/studentwebb/examen-bevis"
             >
-              Degree Certificate
+              Examensbevis
             </a>
           </h4>
           <p>
-            Apply for degree certificate
+            Ta ut din examen
           </p>
         </li>
       </ul>
@@ -251,7 +251,7 @@ exports[`<Services /> Can be rendered with data 1`] = `
       <h3
         className="kpm-col-header"
       >
-        Other Selected Services
+        Andra valda tjänster
       </h3>
       <ul>
         <li>

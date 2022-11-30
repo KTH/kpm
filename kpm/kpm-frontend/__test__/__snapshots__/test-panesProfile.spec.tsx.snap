@@ -11,7 +11,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Dr.LocalDev - Settings
+        Dr.LocalDev - Inställningar
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
@@ -30,7 +30,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        About me
+        Om mig
       </h3>
       <ul>
         <li>
@@ -39,27 +39,27 @@ exports[`<Profile /> Can be rendered 1`] = `
             href="https://www.kth.se/profile/jhsware/"
           >
             <img
-              alt="Profile Image"
+              alt="Profilbild"
               src="https://www.kth.se/files/thumbnail/jhsware"
             />
-            My Profile
+            Min profil
           </a>
         </li>
         <li>
           <a
             href="https://www.kth.se/emailforward"
           >
-            Forward KTH email
+            Vidarebefordra e-post
           </a>
         </li>
         <li>
           <a
             href="https://www.student.ladok.se/student/app/studentwebb/mina-uppgifter"
           >
-            Contact details
+            Kontaktuppgifter
           </a>
            
-          (in LADOK)
+          (i LADOK)
         </li>
       </ul>
     </div>
@@ -69,35 +69,35 @@ exports[`<Profile /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        My Settings
+        Mina inställningar
       </h3>
       <ul>
         <li>
           <a
             href="https://www.kth.se/social/home/settings/"
           >
-            Subscriptions, my schedule
+            Prenumerationer, mitt schema
           </a>
         </li>
         <li>
           <a
             href="https://www.kth.se/social/home/calendar/settings/"
           >
-            Export My schedule (e.g. to your mobile phone)
+            Exporter mitt schema (iCal)
           </a>
         </li>
         <li>
           <a
             href="https://login.sys.kth.se/peap.html"
           >
-            Wireless network
+            Trådlöst nätverk (WiFi)
           </a>
         </li>
         <li>
           <a
             href="https://login.kth.se/password/change"
           >
-            Change password
+            Byt lösenord
           </a>
         </li>
       </ul>
