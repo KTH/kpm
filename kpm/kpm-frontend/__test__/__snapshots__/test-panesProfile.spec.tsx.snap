@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Profile /> Can be rendered 1`] = `
+<dialog
+  className="kpm-modal"
+>
+  <div
+    className="kpm-modal-content"
+  >
+    <header
+      className="kpm-modal-content-header"
+    >
+      <h2>
+        Dr.LocalDev - Settings
+      </h2>
+      <aside
+        className="kpm-modal-content-header-actions"
+      >
+        <a
+          className="kpm-button"
+          href="/kpm/auth/logout"
+        >
+          Logga ut
+        </a>
+      </aside>
+    </header>
+    <div
+      className="kpm-col"
+    >
+      <h3
+        className="kpm-col-header"
+      >
+        About me
+      </h3>
+      <ul>
+        <li>
+          <a
+            className="kpm-profile-link"
+            href="https://www.kth.se/profile/jhsware/"
+          >
+            <img
+              alt="Profile Image"
+              src="https://www.kth.se/files/thumbnail/jhsware"
+            />
+            My Profile
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.kth.se/emailforward"
+          >
+            Forward KTH email
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.student.ladok.se/student/app/studentwebb/mina-uppgifter"
+          >
+            Contact details
+          </a>
+           
+          (in LADOK)
+        </li>
+      </ul>
+    </div>
+    <div
+      className="kpm-col"
+    >
+      <h3
+        className="kpm-col-header"
+      >
+        My Settings
+      </h3>
+      <ul>
+        <li>
+          <a
+            href="https://www.kth.se/social/home/settings/"
+          >
+            Subscriptions, my schedule
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.kth.se/social/home/calendar/settings/"
+          >
+            Export My schedule (e.g. to your mobile phone)
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://login.sys.kth.se/peap.html"
+          >
+            Wireless network
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://login.kth.se/password/change"
+          >
+            Change password
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</dialog>
+`;

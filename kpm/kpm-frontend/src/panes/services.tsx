@@ -116,7 +116,7 @@ export function Services() {
           {!isEmptyServiceLinks && (
             <ul>
               {servicelinks?.map((links) => (
-                <li>
+                <li key={links.url}>
                   <h4>
                     <a href={links.url}>{i18n(links.name)}</a>
                   </h4>
@@ -133,7 +133,7 @@ export function Services() {
             {hasStudentlinks && (
               <ul>
                 {studentlinks?.map((links) => (
-                  <li>
+                  <li key={links.url}>
                     <h4>
                       <a href={links.url}>{i18n(links.name)}</a>
                     </h4>
