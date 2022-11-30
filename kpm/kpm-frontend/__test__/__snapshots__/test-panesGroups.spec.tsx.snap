@@ -54,12 +54,12 @@ exports[`<Groups /> Can be rendered 1`] = `
     >
       <ul>
         <li
-          className="active"
           onClick={[Function]}
         >
           Favourites
         </li>
         <li
+          className="active"
           onClick={[Function]}
         >
           All Subscriptions
@@ -132,23 +132,68 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
     >
       <ul>
         <li
-          className="active"
           onClick={[Function]}
         >
           Favourites
         </li>
         <li
+          className="active"
           onClick={[Function]}
         >
           All Subscriptions
         </li>
       </ul>
     </nav>
-    <div
-      className="kpm-empty-placeholder"
-    >
-      You have no groups marked as favourites.
-    </div>
+    <ul>
+      <li
+        className="starrable"
+      >
+        <svg
+          className="icon star"
+          height="1em"
+          onClick={[Function]}
+          viewBox="0 0 880 880"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            fill="currentColor"
+            stroke="#7d5c0c"
+            strokeWidth="10"
+          />
+        </svg>
+        <a
+          href="//:test/group_1"
+        >
+          Test Group 1
+        </a>
+      </li>
+      <li
+        className="starrable"
+      >
+        <svg
+          className="icon star"
+          height="1em"
+          onClick={[Function]}
+          viewBox="0 0 880 880"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            fill="currentColor"
+            stroke="#7d5c0c"
+            strokeWidth="10"
+          />
+        </svg>
+        <a
+          href="//:test/group_2"
+        >
+          Test Group 2
+        </a>
+      </li>
+    </ul>
   </div>
 </dialog>
 `;
@@ -220,15 +265,17 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
       </ul>
     </nav>
     <ul>
-      <li>
+      <li
+        className="starrable active"
+      >
         <svg
           className="icon star active"
           height="1em"
+          onClick={[Function]}
           viewBox="0 0 880 880"
           width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <title />
           <path
             d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
             fill="currentColor"
