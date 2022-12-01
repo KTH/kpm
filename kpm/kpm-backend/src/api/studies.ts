@@ -16,6 +16,7 @@ import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
+const MY_STUDIES_API_TOKEN = process.env.MY_STUDIES_API_TOKEN!; // required by .env.in
 
 // Copied from my-studies-api:
 export type TApiUserCourse = {
@@ -52,6 +53,9 @@ export async function studiesApiHandler(
     const studies_fut = got
       .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",
+        headers: {
+          authorization: MY_STUDIES_API_TOKEN,
+        },
       })
       .then((r) => r.body)
       .catch(myStudiesApiErr);
