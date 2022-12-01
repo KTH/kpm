@@ -40,7 +40,7 @@ export const sv: Record<string, string> = {
   Transcripts: "Intyg",
   "Degree Certificate": "Examensbevis",
   "Apply for degree certificate": "Ta ut din examen",
-  Teaching: "Utbildning",
+  Teaching: "Undervisning",
   "KTH Webmail": "KTH Webmail",
   "News feed": "Nyheter",
   "News from your courses, groups and programmes":
