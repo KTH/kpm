@@ -18,16 +18,8 @@ const OAUTH_SERVER_BASE_URI =
   process.env.OAUTH_SERVER_BASE_URI || "https://login.ref.ug.kth.se/adfs";
 const UG_REST_BASE_URI =
   process.env.UG_REST_BASE_URI || "https://integral-api.sys.kth.se/test/ug";
-const MY_STUDIES_API_TOKEN = process.env.MY_STUDIES_API_TOKEN!; // Required in .env.in
 
 export const api = express.Router();
-
-api.get("/", (_req, res) => {
-  res.send({ msg: "Hello World!!!" });
-});
-api.get("/_monitor", (_req, res) => {
-  res.send("APPLICATION_STATUS: OK");
-});
 
 api.get("/mine", (req, res) => {
   res.send({ msg: "Not implemented yet." });
@@ -60,10 +52,6 @@ export type TUserStudies = {
 
 api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
   try {
-    if (req.headers.authorization !== MY_STUDIES_API_TOKEN) {
-      // TODO: Formalize structure for error objects
-      return res.status(401).send("Invalid access token" as any);
-    }
     const userName = req.params.user;
 
     const ugClient = new UGRestClient({

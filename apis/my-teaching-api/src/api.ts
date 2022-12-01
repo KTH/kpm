@@ -10,17 +10,8 @@ const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in
 const CLIENT_SECRET = process.env.CLIENT_SECRET!; // Required in .env.in
 const UG_REST_BASE_URI =
   process.env.UG_REST_BASE_URI || "https://integral-api.sys.kth.se/test/ug";
-const MY_TEACHING_API_TOKEN = process.env.MY_TEACHING_API_TOKEN!; // Required in .env.in
 
 export const api = express.Router();
-
-api.get("/", (req, res) => {
-  res.send({ msg: "Hello World!!!" });
-});
-
-api.get("/_monitor", (_req, res) => {
-  res.send("APPLICATION_STATUS: OK");
-});
 
 api.get("/mine", (req, res) => {
   res.send({ msg: "Not implemented yet." });
@@ -42,11 +33,6 @@ export type TUgGroup = {
 };
 
 api.get("/user/:user", async (req, res, next) => {
-  if (req.headers.authorization !== MY_TEACHING_API_TOKEN) {
-    // TODO: Formalize structure for error objects
-    return res.status(401).send("Invalid access token" as any);
-  }
-
   const userName = req.params.user;
 
   const ugClient = new UGRestClient({
