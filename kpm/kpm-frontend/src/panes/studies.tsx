@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   APIStudies,
   TStudiesCourse,
-  TStudiesCourseInner,
+  TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
@@ -67,7 +67,7 @@ type TCourseProps = {
 };
 
 function Course({ courseCode, course }: TCourseProps) {
-  const roleToShow = course.roles[0];
+  const roleToShow = course.rounds[0];
   const roomToShow = course.rooms?.[0] || undefined;
   return (
     <div className={`kpm-studies-course kpm-${roleToShow.status}`}>
@@ -102,7 +102,7 @@ function getCourseInfoUrl(code: string) {
 }
 
 type TCourseStatusProps = {
-  status: TStudiesCourseInner["status"];
+  status: TStudiesCourseRound["status"];
 };
 
 function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {

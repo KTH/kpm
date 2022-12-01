@@ -4,7 +4,11 @@ import NodeCache from "node-cache";
 import got from "got";
 
 import { TSessionUser, getFakeUserForDevelopment } from "../auth";
-import { APICanvasRooms, TCourseCode } from "kpm-backend-interface";
+import {
+  APICanvasRooms,
+  TCourseCode,
+  TLocalizedString,
+} from "kpm-backend-interface";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
@@ -80,10 +84,40 @@ export async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
 // time every day by using 40 hours.
 const kopps_cache = new NodeCache({ stdTTL: 40 * 3600, useClones: false });
 
+/// This is the kopps info we cache, a middle ground between what we
+/// get from kopps and what we want to deliver in the studies and
+/// teaching enpoints.
 export type TKoppsCourseInfo = {
-  title: { sv: string; en: string };
+  title: TLocalizedString;
   credits: number;
-  creditUnitAbbr: string; // usually "hp", check other values!
+  creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
+  rounds: Record<string, TKoppsRoundInTerm[]>; // key is term as "YYYYT"
+};
+
+export type TCourseRound = {
+  term: string; // TODO: Or year + termnumber?
+  shortName?: string;
+  ladokRoundId: string; // A one-digit number
+  ladokUID: string; // A full uid
+  firstTuitionDate: string; // "YYYY-MM-DD"
+  lastTuitionDate: string; // "YYYY-MM-DD"
+};
+
+// This is the relevant parts of what we get from kopps courseroundterms endpoint.
+type TKoppsCourseRoundTerms = {
+  course: TKoppsCourseInfo;
+  termsWithCourseRounds: TKoppsTermWithCourseRounds[];
+};
+type TKoppsTermWithCourseRounds = {
+  term: string;
+  rounds: TKoppsRoundInTerm[];
+};
+type TKoppsRoundInTerm = {
+  shortName?: string;
+  ladokRoundId: string; // A one-digit number
+  ladokUID: string; // A full uid
+  firstTuitionDate: string; // "YYYY-MM-DD"
+  lastTuitionDate: string; // "YYYY-MM-DD"
 };
 
 export async function getCourseInfo(
@@ -94,12 +128,28 @@ export async function getCourseInfo(
     if (result) {
       return result;
     }
-    const { title, credits, creditUnitAbbr } = await got
-      .get<TKoppsCourseInfo>(`${KOPPS_API}/course/${course_code}`, {
-        responseType: "json",
-      })
+    const reply = await got
+      .get<TKoppsCourseRoundTerms>(
+        `${KOPPS_API}/course/${course_code}/courseroundterms`,
+        {
+          responseType: "json",
+        }
+      )
       .then((r) => r.body);
-    const info = { title, credits, creditUnitAbbr };
+
+    const { title, credits, creditUnitAbbr } = reply.course;
+    const info: TKoppsCourseInfo = {
+      title,
+      credits,
+      creditUnitAbbr,
+      rounds: {},
+    };
+
+    for (let { term, rounds } of reply.termsWithCourseRounds) {
+      // TODO: Shave off unused parts of rounds?
+      info.rounds[term] = rounds;
+    }
+
     kopps_cache.set(course_code, info);
     return info;
   } catch (err: any) {
@@ -109,6 +159,11 @@ export async function getCourseInfo(
     // Ugly but type-correct fallback, so things don't crash.
     // This is not cached!  Or should we cache it for a few minutes to
     // give kopps a chance to start if it's broken?
-    return { title: { sv: "-", en: "-" }, credits: 0, creditUnitAbbr: "-" };
+    return {
+      title: { sv: "-", en: "-" },
+      credits: 0,
+      creditUnitAbbr: { sv: "-", en: "-" },
+      rounds: {},
+    };
   }
 }
