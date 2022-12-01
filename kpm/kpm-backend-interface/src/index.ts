@@ -42,7 +42,7 @@ export type TTeachingCourse = {
   course_code: TCourseCode;
   title: TLocalizedString;
   credits: number;
-  creditUnitAbbr: string; // usually "hp", check other values!
+  creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
   roles: TTeachingRole[];
   rooms: TCanvasRoom[];
 };
@@ -58,15 +58,20 @@ export type TStudiesCourse = {
   course_code: TCourseCode;
   title: TLocalizedString;
   credits: number;
-  creditUnitAbbr: string; // usually "hp", check other values!
-  roles: TStudiesCourseInner[];
+  creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
+  completed: boolean;
+  rounds: TStudiesCourseRound[]; // any rounds that are current comes first.
   rooms: TCanvasRoom[];
 };
-export type TStudiesCourseInner = {
-  status?: "antagna" | "godkand" | "registrerade";
-  year?: number;
-  term?: "1" | "2";
-  round?: string;
+export type TStudiesCourseRound = {
+  status: "antagna" | "registrerade";
+  year: number;
+  term: "1" | "2";
+  ladokRoundId?: string;
+  firstTuitionDate?: string; // "YYYY-MM-DD"
+  lastTuitionDate?: string; // "YYYY-MM-DD"
+  shortName?: string;
+  current: boolean;
 };
 
 export type TStudiesProgramme = {

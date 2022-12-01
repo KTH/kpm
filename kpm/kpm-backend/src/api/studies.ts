@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
+import log from "skog";
 import {
   APIStudies,
   TCourseCode,
   TProgramCode,
   TStudiesCourse,
+  TStudiesCourseRound,
 } from "kpm-backend-interface";
 import {
   getCourseInfo,
@@ -72,19 +74,68 @@ export async function studiesApiHandler(
       }))
     );
     const { rooms } = (await rooms_fut) || {};
+    const DAY_IN_MS = 24 * 3600 * 1000;
 
     let courses: Record<TCourseCode, TStudiesCourse> = {};
     for (let [course_code, roles] of Object.entries(studies?.courses || [])) {
       const kopps = await kopps_futs[course_code];
 
+      let completed = false;
+      let current_rounds: TStudiesCourseRound[] = [];
+      let other_rounds: TStudiesCourseRound[] = [];
+      for (let role of roles) {
+        if (role.status === "godkand") {
+          completed = true;
+        } else if (role.status && role.year && role.term && role.round) {
+          const term = `${role.year}${role.term}`;
+          const round = kopps.rounds[term].find(
+            (value) => value.ladokRoundId == role.round
+          );
+          if (round) {
+            const start = Date.parse(round.firstTuitionDate) - 5 * DAY_IN_MS;
+            const end = Date.parse(round.lastTuitionDate) + 25 * DAY_IN_MS;
+            const now = Date.now();
+            const current = start < now && end > now;
+            let result: TStudiesCourseRound = {
+              status: role.status,
+              year: role.year,
+              term: role.term,
+              ladokRoundId: round.ladokRoundId,
+              firstTuitionDate: round.firstTuitionDate,
+              lastTuitionDate: round.lastTuitionDate,
+              shortName: round.shortName,
+              current,
+            };
+            if (current) {
+              current_rounds.push(result);
+            } else {
+              other_rounds.push(result);
+            }
+          } else {
+            log.warn(
+              { course_code, term, round: role.round },
+              "Round not found in kopps"
+            );
+            let result: TStudiesCourseRound = {
+              status: role.status,
+              year: role.year,
+              term: role.term,
+              ladokRoundId: role.round,
+              current: false,
+            };
+            other_rounds.push(result);
+          }
+        }
+      }
       if (kopps) {
         courses[course_code] = {
           course_code: course_code,
           title: kopps.title,
           credits: kopps.credits,
           creditUnitAbbr: kopps.creditUnitAbbr,
-          roles: roles,
           rooms: rooms?.[course_code] || [],
+          completed,
+          rounds: [...current_rounds, ...other_rounds],
         };
       }
     }
