@@ -12,6 +12,7 @@ import { handleCommonGotErrors } from "./commonErrors";
 
 const MY_TEACHING_API_URI =
   process.env.MY_TEACHING_API_URI || "http://localhost:3002/kpm/teaching";
+const MY_TEACHING_API_TOKEN = process.env.MY_TEACHING_API_TOKEN!; // required by .env.in
 
 export async function teachingApiHandler(
   req: Request,
@@ -28,6 +29,9 @@ export async function teachingApiHandler(
         `${MY_TEACHING_API_URI}/user/${user.kthid}`,
         {
           responseType: "json",
+          headers: {
+            authorization: MY_TEACHING_API_TOKEN,
+          },
         }
       )
       .then((r) => r.body)
