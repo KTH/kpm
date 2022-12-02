@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
+const IS_HTTPS = PROXY_HOST.startsWith("https:")
 
 export const sessionMiddleware = expressSession({
   name: "kpm.sid",
@@ -13,8 +14,9 @@ export const sessionMiddleware = expressSession({
     domain: new URL(PROXY_HOST).hostname,
     maxAge: 14 * 24 * 3600 * 1000,
     httpOnly: true,
-    // secure: "auto",
-    // sameSite: "none",
+    // https://www.codeconcisely.com/posts/how-to-set-up-cors-and-cookie-session-in-express/
+    secure: IS_HTTPS,
+    sameSite: IS_HTTPS ? "none" : undefined,
   },
 
   // Read more: https://www.npmjs.com/package/express-session#resave
