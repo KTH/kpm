@@ -45,7 +45,7 @@ exports[`<App /> Can be rendered 1`] = `
         href="#/teaching"
         onClick={[Function]}
       >
-        Utbildning
+        Undervisning
       </a>
     </li>
     <li>
