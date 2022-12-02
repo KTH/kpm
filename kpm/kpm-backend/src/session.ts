@@ -30,4 +30,7 @@ export const sessionMiddleware = expressSession({
 
 // Using cookie-parser may result in issues if the secret is not the same between this module and cookie-parser.
 // https://expressjs.com/en/resources/middleware/session.html
-export const cookieParserMiddleware = cookieParser(SESSION_SECRET);
+export const cookieParserMiddleware = cookieParser(SESSION_SECRET, {
+  secure: IS_HTTPS,
+  sameSite: IS_HTTPS ? "none" : undefined,
+} as any);
