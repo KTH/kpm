@@ -9,3 +9,4 @@
 /packages/evolene-local-packages/package-lock.json
 /packages/kpm-api-common/package-lock.json
 /packages/kpm-ug-rest-client/package-lock.json
+/packages/fetch-for-jest/package-lock.json
