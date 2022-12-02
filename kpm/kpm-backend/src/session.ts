@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
-const IS_HTTPS = PROXY_HOST.startsWith("https:")
+const IS_HTTPS = PROXY_HOST.startsWith("https:");
 
 export const sessionMiddleware = expressSession({
   name: "kpm.sid",
