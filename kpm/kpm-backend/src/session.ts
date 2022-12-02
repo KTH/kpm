@@ -33,4 +33,5 @@ export const sessionMiddleware = expressSession({
 export const cookieParserMiddleware = cookieParser(SESSION_SECRET, {
   secure: IS_HTTPS,
   sameSite: IS_HTTPS ? "none" : undefined,
+  secret: SESSION_SECRET,
 } as any);
