@@ -17,6 +17,7 @@ export async function loaderServices({
 }: any = {}): Promise<APIServices> {
   const res = await fetch(createApiUri("/api/services"), {
     signal: request?.signal,
+    credentials: "include",
     headers: {
       // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
       Accept: "application/json",
