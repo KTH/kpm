@@ -22,22 +22,24 @@ app.use(sessionMiddleware);
 app.use(cookieParserMiddleware);
 app.use(loggingHandler);
 
+let corsWhitelist: string[] = [];
 if (IS_STAGE) {
-  // We currently only need CORS in STAGE due to ref web on different domain as api
-  app.use(
-    cors({
-      origin: "https://www-r.referens.sys.kth.se",
-    })
-  );
+  corsWhitelist = [
+    "https://login.ref.ug.kth.se",
+    "https://www-r.referens.sys.kth.se",
+    "https://kth.test.instructure.com",
+  ];
 } else if (!IS_DEV) {
-  // We are behind a proxy and need to set proper origin etc.
-  // https://expressjs.com/en/guide/behind-proxies.html
-  app.set("trust proxy", true);
-  const corsWhitelist = [
+  corsWhitelist = [
     "https://login.ug.kth.se",
     "https://www.kth.se",
     "https://canvas.kth.se",
   ];
+}
+if (!IS_DEV) {
+  // We are behind a proxy and need to set proper origin etc.
+  // https://expressjs.com/en/guide/behind-proxies.html
+  app.set("trust proxy", true);
   app.use(
     cors({
       origin: function (origin, callback) {
@@ -51,6 +53,7 @@ if (IS_STAGE) {
     })
   );
 }
+
 app.use(`${PREFIX}`, status);
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
