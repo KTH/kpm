@@ -21,7 +21,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
   const assets = getLatestDistFileNames();
 
   const loggedIn = isValidSession(req.session.user);
-  const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=/kpm/index.html`; // TODO: Read nextUrl from browser, and full URI instead of rel path
+  const LOGIN_URL = `${publicUriBase}/auth/login`;
 
   if (loggedIn) {
     const { display_name, email, kthid, exp, username } = req.session
@@ -49,7 +49,7 @@ window.__kpmCurrentUser__ = ${
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";
-n.innerHTML = "<a href='${LOGIN_URL}'>Login</a>"; document.body.prepend(n);
+n.innerHTML = "<a href='${LOGIN_URL}?nextUrl=" + location.href + "'>Login</a>"; document.body.prepend(n);
       })("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   }
 
