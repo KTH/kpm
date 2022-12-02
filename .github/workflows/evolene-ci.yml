@@ -48,4 +48,4 @@ jobs:
           MONOREPO_SUBPATH: ${{matrix.workspaces}}
 
         run: |
-          ${{ secrets.EVOLENE_LATEST_RUN_COMMAND }}
+          ${{ secrets.EVOLENE_RUN_COMMAND }}
