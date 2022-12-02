@@ -1,16 +1,9 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import CanvasClient, { CanvasRoom } from "./canvasApi";
 
 export const api = express.Router();
 
-api.get("/", (_req, res) => {
-  res.send({ msg: "Hello World!!!" });
-});
-api.get("/_monitor", (_req, res) => {
-  res.send("APPLICATION_STATUS: OK");
-});
-
-api.get("/mine", async (req, res, next) => {
+api.get("/mine", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await do_getRooms(req, "self");
     res.send({ rooms: result });
@@ -19,14 +12,17 @@ api.get("/mine", async (req, res, next) => {
   }
 });
 
-api.get("/user/:user", async (req, res, next) => {
-  try {
-    const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
-    res.send({ rooms: result });
-  } catch (err) {
-    next(err);
+api.get(
+  "/user/:user",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
+      res.send({ rooms: result });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 async function do_getRooms(
   req: Request,
@@ -34,20 +30,31 @@ async function do_getRooms(
 ): Promise<Record<string, Link[]>> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
+
   let result: Record<string, Link[]> = {};
-  for await (let room of rooms) {
-    // Each canvas room may belong to multiple courses, and each
-    // course usually has many canvas rooms.
-    let { course_codes, link } = get_rooms_courses_and_link(room);
-    for (let code of course_codes) {
-      if (result[code]) {
-        result[code].push(link);
-      } else {
-        result[code] = [link];
+  try {
+    for await (let room of rooms) {
+      // Each canvas room may belong to multiple courses, and each
+      // course usually has many canvas rooms.
+      let { course_codes, link } = get_rooms_courses_and_link(room);
+      for (let code of course_codes) {
+        if (result[code]) {
+          result[code].push(link);
+        } else {
+          result[code] = [link];
+        }
       }
     }
+  } catch (e) {
+    getRoomsErrorHandler(e);
   }
   return result;
+}
+
+function getRoomsErrorHandler(err: any) {
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, getRoomsErrorHandler);
+  throw err;
 }
 
 type Link = {

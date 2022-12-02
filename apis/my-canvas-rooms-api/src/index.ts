@@ -3,6 +3,7 @@ import express from "express";
 import { loggingHandler, errorHandler } from "kpm-api-common";
 import log from "skog";
 import { api } from "./api";
+import { status } from "./publicApi";
 
 const PORT = parseInt(process.env.PORT || "3000");
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
@@ -25,6 +26,7 @@ function localErrorHandler(err: any, req: any, res: any, next: any) {
 const app = express();
 
 app.use(loggingHandler);
+app.use(PREFIX, status);
 app.use(PREFIX, api);
 app.use(localErrorHandler);
 

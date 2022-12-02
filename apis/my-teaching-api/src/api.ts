@@ -13,8 +13,12 @@ const UG_REST_BASE_URI =
 
 export const api = express.Router();
 
-api.get("/mine", (req, res) => {
-  res.send({ msg: "Not implemented yet." });
+api.get("/mine", (req, res, next) => {
+  try {
+    res.send({ msg: "Not implemented yet." });
+  } catch (e: any) {
+    next(e);
+  }
 });
 
 // Expected values from UG
@@ -33,40 +37,47 @@ export type TUgGroup = {
 };
 
 api.get("/user/:user", async (req, res, next) => {
-  const userName = req.params.user;
+  try {
+    const userName = req.params.user;
 
-  const ugClient = new UGRestClient({
-    authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
-    resourceBaseURI: UG_REST_BASE_URI,
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-  });
+    const ugClient = new UGRestClient({
+      authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
+      resourceBaseURI: UG_REST_BASE_URI,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
 
-  // throw new Error("Test");
+    // throw new Error("Test");
 
-  const perf1 = Date.now();
-  // TODO: Remove these, they are only part of our though process:
-  // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
-  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
-  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups/${userName}`);
-  // NOTE: The following combined filter is VERY slow
-  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
-  // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
+    const perf1 = Date.now();
+    // TODO: Remove these, they are only part of our though process:
+    // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
+    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
+    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups/${userName}`);
+    // NOTE: The following combined filter is VERY slow
+    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
+    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
 
-  const { data, json, statusCode } = await ugClient.get<
-    { memberOf: TUgGroup[] }[]
-  >(`users?$filter=kthid eq '${userName}'&$expand=memberOf`);
-  console.log(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
+    const { data, json, statusCode } =
+      (await ugClient
+        .get<{ memberOf: TUgGroup[] }[]>(
+          `users?$filter=kthid eq '${userName}'&$expand=memberOf`
+        )
+        .catch(ugClientGetErrorHandler)) || {};
+    console.log(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
 
-  if (json === undefined || statusCode !== 200) {
-    if (IS_DEV) {
-      return res.status(statusCode || 500).send(data);
+    if (json === undefined || statusCode !== 200) {
+      if (IS_DEV) {
+        return res.status(statusCode || 500).send(data);
+      } else {
+        return res.status(statusCode || 500).send("error");
+      }
     } else {
-      return res.status(statusCode || 500).send("error");
+      const result = teachingResult(json[0].memberOf);
+      res.status(statusCode || 200).send(result);
     }
-  } else {
-    const result = teachingResult(json[0].memberOf);
-    res.status(statusCode || 200).send(result);
+  } catch (e: any) {
+    next(e);
   }
 });
 
@@ -114,4 +125,10 @@ export function teachingResult(data: TUgGroup[]): {
     }
   }
   return courses;
+}
+
+function ugClientGetErrorHandler(err: any) {
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, ugClientGetErrorHandler);
+  throw err;
 }
