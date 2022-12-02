@@ -29,7 +29,7 @@ if (IS_STAGE) {
       origin: "https://www-r.referens.sys.kth.se",
     })
   );
-} else {
+} else if (!IS_DEV) {
   // We are behind a proxy and need to set proper origin etc.
   // https://expressjs.com/en/guide/behind-proxies.html
   app.set("trust proxy", true);
