@@ -29,6 +29,19 @@ if (IS_STAGE) {
       origin: "https://www-r.referens.sys.kth.se",
     })
   );
+} else {
+  const corsWhitelist = ["https://www.kth.se", "https://canvas.kth.se"];
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        if (origin && corsWhitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      }
+    })
+  );
 }
 app.use(`${PREFIX}`, status);
 app.use(`${PREFIX}/auth`, auth);
