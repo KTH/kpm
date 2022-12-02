@@ -1,7 +1,8 @@
 import { en } from "./en";
 import { sv } from "./sv";
 
-const doCheckTranslations = process?.env.NODE_ENV !== "production";
+const doCheckTranslations =
+  process?.env.NODE_ENV !== "production" && process?.env.NODE_ENV !== "test";
 
 export type TLang = "sv" | "en";
 
