@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { UGRestClient } from "kpm-ug-rest-client";
 import {
   convertToCourseObjects,
@@ -50,58 +50,70 @@ export type TUserStudies = {
   programmes: Record<TProgramCode, TUserProgram[]>;
 };
 
-api.get("/user/:user", async (req, res: express.Response<TUserStudies>) => {
-  try {
-    const userName = req.params.user;
+api.get(
+  "/user/:user",
+  async (req: Request, res: Response<TUserStudies>, next: NextFunction) => {
+    try {
+      const userName = req.params.user;
 
-    const ugClient = new UGRestClient({
-      authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
-      resourceBaseURI: UG_REST_BASE_URI,
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-    });
+      const ugClient = new UGRestClient({
+        authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
+        resourceBaseURI: UG_REST_BASE_URI,
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+      });
 
-    const perf1 = Date.now();
+      const perf1 = Date.now();
 
-    const { data, json, statusCode } = await ugClient.get<
-      { memberOf: TUgGroup[] }[]
-    >(`users?$filter=kthid eq '${userName}'&$expand=memberOf`);
-    console.log(`Exec time: ${Date.now() - perf1}ms`);
+      const { data, json, statusCode } =
+        (await ugClient
+          .get<{ memberOf: TUgGroup[] }[]>(
+            `users?$filter=kthid eq '${userName}'&$expand=memberOf`
+          )
+          .catch(ugClientGetErrorHandler)) || {};
+      console.log(`Exec time: ${Date.now() - perf1}ms`);
 
-    if (json === undefined || statusCode !== 200) {
-      if (IS_DEV) {
-        return res.status(statusCode || 500).send(data as any);
+      if (json === undefined || statusCode !== 200) {
+        if (IS_DEV) {
+          return res.status(statusCode || 500).send(data as any);
+        }
       }
-    }
 
-    const { courseNames, programmeNames } = getListOfCourseProgrammeNames(
-      json![0].memberOf.map((o) => o.name)
-    );
+      const { courseNames, programmeNames } = getListOfCourseProgrammeNames(
+        json![0].memberOf.map((o) => o.name)
+      );
 
-    let courses: { [index: TCourseCode]: TUserCourse[] } = {};
-    for (const obj of convertToCourseObjects(courseNames)) {
-      let course_code = obj.course_code;
-      if (courses[course_code]) {
-        courses[course_code].push(obj);
-      } else {
-        courses[course_code] = [obj];
+      let courses: { [index: TCourseCode]: TUserCourse[] } = {};
+      for (const obj of convertToCourseObjects(courseNames)) {
+        let course_code = obj.course_code;
+        if (courses[course_code]) {
+          courses[course_code].push(obj);
+        } else {
+          courses[course_code] = [obj];
+        }
       }
-    }
-    let programmes: { [index: TProgramCode]: TUserProgram[] } = {};
-    for (const obj of convertToProgrammeObjects(programmeNames)) {
-      let program_code = obj.program_code;
-      if (programmes[program_code]) {
-        programmes[program_code].push(obj);
-      } else {
-        programmes[program_code] = [obj];
+      let programmes: { [index: TProgramCode]: TUserProgram[] } = {};
+      for (const obj of convertToProgrammeObjects(programmeNames)) {
+        let program_code = obj.program_code;
+        if (programmes[program_code]) {
+          programmes[program_code].push(obj);
+        } else {
+          programmes[program_code] = [obj];
+        }
       }
-    }
 
-    res.status(statusCode || 200).send({
-      courses,
-      programmes,
-    });
-  } catch (err) {
-    return res.status(500).send("Error" as any);
+      res.status(statusCode || 200).send({
+        courses,
+        programmes,
+      });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
+
+function ugClientGetErrorHandler(err: any) {
+  // TODO: Add API specific error handling
+  Error.captureStackTrace(err, ugClientGetErrorHandler);
+  throw err;
+}
