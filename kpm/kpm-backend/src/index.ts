@@ -30,11 +30,14 @@ if (IS_STAGE) {
     })
   );
 } else {
+  // We are behind a proxy and need to set proper origin etc.
+  // https://expressjs.com/en/guide/behind-proxies.html
+  app.set('trust proxy', true);
   const corsWhitelist = ["https://www.kth.se", "https://canvas.kth.se"];
   app.use(
     cors({
       origin: function (origin, callback) {
-        if (origin && corsWhitelist.indexOf(origin) !== -1) {
+        if (!origin || corsWhitelist.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
           callback(new Error(`Not allowed by CORS (origin: ${origin})`));
