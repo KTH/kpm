@@ -32,7 +32,7 @@ if (IS_STAGE) {
 } else {
   // We are behind a proxy and need to set proper origin etc.
   // https://expressjs.com/en/guide/behind-proxies.html
-  app.set('trust proxy', true);
+  app.set("trust proxy", true);
   const corsWhitelist = ["https://www.kth.se", "https://canvas.kth.se"];
   app.use(
     cors({
