@@ -47,6 +47,7 @@ if (IS_STAGE) {
           callback(new Error(`Not allowed by CORS (origin: ${origin})`));
         }
       },
+      credentials: true,
     })
   );
 }
