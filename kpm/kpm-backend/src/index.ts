@@ -2,6 +2,7 @@ import "./config";
 import express, { static as staticHandler } from "express";
 import { loggingHandler, errorHandler } from "kpm-api-common";
 import { api } from "./api";
+import { status } from "./status";
 import { auth, requiresValidSessionUser } from "./auth";
 import { sessionMiddleware, cookieParserMiddleware } from "./session";
 import log from "skog";
@@ -29,6 +30,7 @@ if (IS_STAGE) {
     })
   );
 }
+app.use(`${PREFIX}`, status);
 app.use(`${PREFIX}/auth`, auth);
 app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
 app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
