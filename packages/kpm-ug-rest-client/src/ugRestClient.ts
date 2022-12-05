@@ -91,19 +91,17 @@ export class UGRestClient {
 
   public async get<T>(path: string): Promise<TUGRestClientResponse<T>> {
     // TODO: Add error handling
-    const client = await this.getClient().catch(getClientErr) as BaseClient;
-    const accessToken = await this.getAccessToken().catch(getAccessTokenErr) as string;
+    const client = (await this.getClient().catch(getClientErr)) as BaseClient;
+    const accessToken = (await this.getAccessToken().catch(
+      getAccessTokenErr
+    )) as string;
     const resourceUri = `${this._resourceBaseURI}/${path}`;
     let res: { body?: Buffer } & IncomingMessage;
     try {
-      res =
-        await client.requestResource(
-          resourceUri,
-          accessToken
-        );
+      res = await client.requestResource(resourceUri, accessToken);
     } catch (err) {
       requestResourceErr(err, { resourceUri });
-    } 
+    }
 
     const { headers, method, statusCode, statusMessage, url, body } = res!;
     const textBody = await new TextDecoder().decode(body);
