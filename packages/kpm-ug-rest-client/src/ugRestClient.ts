@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { IncomingHttpHeaders } from "node:http";
-import { Client, Issuer, TokenSet } from "openid-client";
+import { IncomingHttpHeaders, IncomingMessage } from "node:http";
+import { BaseClient, Client, Issuer, TokenSet } from "openid-client";
 
 export type TUGRestClient = {
   authServerDiscoveryURI: string;
@@ -91,13 +91,21 @@ export class UGRestClient {
 
   public async get<T>(path: string): Promise<TUGRestClientResponse<T>> {
     // TODO: Add error handling
-    const client = await this.getClient();
-    const accessToken = await this.getAccessToken();
-    const { headers, method, statusCode, statusMessage, url, body } =
-      await client.requestResource(
-        `${this._resourceBaseURI}/${path}`,
-        accessToken
-      );
+    const client = await this.getClient().catch(getClientErr) as BaseClient;
+    const accessToken = await this.getAccessToken().catch(getAccessTokenErr) as string;
+    const resourceUri = `${this._resourceBaseURI}/${path}`;
+    let res: { body?: Buffer } & IncomingMessage;
+    try {
+      res =
+        await client.requestResource(
+          resourceUri,
+          accessToken
+        );
+    } catch (err) {
+      requestResourceErr(err, { resourceUri });
+    } 
+
+    const { headers, method, statusCode, statusMessage, url, body } = res!;
     const textBody = await new TextDecoder().decode(body);
 
     const outp = {
@@ -119,4 +127,20 @@ export class UGRestClient {
       return outp;
     }
   }
+}
+
+function getClientErr(err: any) {
+  Error.captureStackTrace(err, getClientErr);
+  throw err;
+}
+
+function getAccessTokenErr(err: any) {
+  Error.captureStackTrace(err, getAccessTokenErr);
+  throw err;
+}
+
+function requestResourceErr(err: any, details: object) {
+  Error.captureStackTrace(err, requestResourceErr);
+  err.details = details;
+  throw err;
 }
