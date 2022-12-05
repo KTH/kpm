@@ -2,12 +2,22 @@ import assert from "node:assert/strict";
 import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { BaseClient, Client, Issuer, TokenSet } from "openid-client";
 
-class UGRestClientResponseError extends Error {
+type TErrorTypes = "UGRestClientResponseError" | "UGRestClientError" | "UGRestClientTokenError" | "UGRestClientRequestError";
+
+class UGRestClientError extends Error {
+  type: TErrorTypes;
+  err: any;
   details: any;
 
-  constructor({ message, details }: { message: string; details: any }) {
+  constructor({ message, type = "UGRestClientError", err = undefined, details = undefined }: { message: string; type?: TErrorTypes, err?: any, details?: any }) {
     super(message);
-    this.details = details;
+    this.type = type;
+    if (err) {
+      this.err = err;
+    }
+    if (details) {
+      this.details = details;
+    }
   }
 }
 
@@ -84,7 +94,7 @@ export class UGRestClient {
       return this._accessTokenSet.access_token!;
     }
 
-    const client = await this.getClient();
+    const client = await this.getClient().catch(getClientErr) as BaseClient;
     const accessToken = await client.grant({
       grant_type: "client_credentials",
       scope: "openid",
@@ -101,9 +111,7 @@ export class UGRestClient {
   public async get<T>(path: string): Promise<TUGRestClientResponse<T>> {
     // TODO: Add error handling
     const client = (await this.getClient().catch(getClientErr)) as BaseClient;
-    const accessToken = (await this.getAccessToken().catch(
-      getAccessTokenErr
-    )) as string;
+    const accessToken = (await this.getAccessToken().catch(getAccessTokenErr)) as string;
     const resourceUri = `${this._resourceBaseURI}/${path}`;
     let res: { body?: Buffer } & IncomingMessage;
     try {
@@ -124,9 +132,11 @@ export class UGRestClient {
       data: textBody,
     };
 
+    // Is this even reachable?
     if (statusCode === undefined || statusCode >= 400) {
-      throw new UGRestClientResponseError({
+      throw new UGRestClientError({
         message: textBody,
+        type: "UGRestClientResponseError",
         details: {
           resourceUri,
           method,
@@ -150,16 +160,28 @@ export class UGRestClient {
 
 function getClientErr(err: any) {
   Error.captureStackTrace(err, getClientErr);
-  throw err;
+  throw new UGRestClientError({
+    message: err.message,
+    type: "UGRestClientError", 
+    err
+  });
 }
 
 function getAccessTokenErr(err: any) {
   Error.captureStackTrace(err, getAccessTokenErr);
-  throw err;
+  throw new UGRestClientError({
+    message: err.message,
+    type: "UGRestClientTokenError",
+    err
+  });
 }
 
 function requestResourceErr(err: any, details: object) {
   Error.captureStackTrace(err, requestResourceErr);
-  err.details = details;
-  throw err;
+  throw new UGRestClientError({
+    message: err.message,
+    type: "UGRestClientRequestError",
+    details,
+    err
+  });
 }
