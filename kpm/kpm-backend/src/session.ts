@@ -1,5 +1,19 @@
 import expressSession from "express-session";
 import cookieParser from "cookie-parser";
+import connectRedis from "connect-redis";
+import { createClient } from "redis";
+
+// Initialize Redis Client
+const redisClient = createClient({
+  url: process.env.REDIS_URL!,
+  legacyMode: true,
+});
+redisClient.connect();
+
+// Initialize session store
+// See: https://www.npmjs.com/package/connect-redis
+const RedisStore = connectRedis(expressSession);
+const redisStore = new RedisStore({ client: redisClient });
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
@@ -26,6 +40,8 @@ export const sessionMiddleware = expressSession({
   // to "false" prevents creation of sessions when app is accessed via API
   saveUninitialized: false,
   secret: SESSION_SECRET,
+
+  store: redisStore,
 });
 
 // Using cookie-parser may result in issues if the secret is not the same between this module and cookie-parser.
