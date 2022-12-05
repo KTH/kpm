@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import express, { NextFunction, Request, Response } from "express";
-import { UGRestClient } from "kpm-ug-rest-client";
+import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
 import {
   convertToCourseObjects,
   convertToProgrammeObjects,
@@ -113,7 +113,10 @@ api.get(
 );
 
 function ugClientGetErrorHandler(err: any) {
-  // TODO: Add API specific error handling
+  if (err instanceof UGRestClientError) {
+    throw err;
+  }
+
   Error.captureStackTrace(err, ugClientGetErrorHandler);
   throw err;
 }

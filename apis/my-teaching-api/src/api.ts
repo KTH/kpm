@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import express from "express";
-import { UGRestClient } from "kpm-ug-rest-client";
+import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -128,7 +128,10 @@ export function teachingResult(data: TUgGroup[]): {
 }
 
 function ugClientGetErrorHandler(err: any) {
-  // TODO: Add API specific error handling
+  if (err instanceof UGRestClientError) {
+    throw err;
+  }
+
   Error.captureStackTrace(err, ugClientGetErrorHandler);
   throw err;
 }
