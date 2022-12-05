@@ -5,7 +5,7 @@ import { BaseClient, Client, Issuer, TokenSet } from "openid-client";
 class UGRestClientResponseError extends Error {
   details: any;
 
-  constructor({ message, details }: { message: string, details: any }) {
+  constructor({ message, details }: { message: string; details: any }) {
     super(message);
     this.details = details;
   }
@@ -132,8 +132,8 @@ export class UGRestClient {
           method,
           headers,
           statusCode,
-        }
-      })
+        },
+      });
     }
 
     try {
