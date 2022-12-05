@@ -2,6 +2,15 @@ import assert from "node:assert/strict";
 import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { BaseClient, Client, Issuer, TokenSet } from "openid-client";
 
+class UGRestClientResponseError extends Error {
+  details: any;
+
+  constructor({ message, details }: { message: string, details: any }) {
+    super(message);
+    this.details = details;
+  }
+}
+
 export type TUGRestClient = {
   authServerDiscoveryURI: string;
   resourceBaseURI: string;
@@ -114,6 +123,18 @@ export class UGRestClient {
       url,
       data: textBody,
     };
+
+    if (statusCode === undefined || statusCode >= 400) {
+      throw new UGRestClientResponseError({
+        message: textBody,
+        details: {
+          resourceUri,
+          method,
+          headers,
+          statusCode,
+        }
+      })
+    }
 
     try {
       const jsonBody = JSON.parse(textBody);
