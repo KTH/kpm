@@ -1,0 +1,72 @@
+@use './base.scss';
+
+.KTHPageHeader {
+  padding: 20px 0 0;
+  background-color: white;
+  flex-grow: 0;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    max-width: 1228px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+  .mainLogo img {
+    width: 75px;
+    height: 75px;
+  }
+
+  .gradientBorder {
+    display: block;
+    width: 100%;
+    height: 6px;
+    margin-top: 13px;
+    background-image: linear-gradient(to left,#005ea4,#5c98c4);
+  }
+}
+
+.KTHPage {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+
+  min-height: 100vh;
+  background-color: #f6f6f6;
+  min-height: 100vh;
+  padding-bottom: 14px;
+
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 32px;
+    width: 100%;
+    background: #65656c;
+  }
+
+  .content {
+    flex-grow: 1;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 1228px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+  }
+
+  .KTHPageFooter {
+    width: 100%;
+    max-width: 1228px;
+    min-height: 60px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #65656c;
+  }
+
+}

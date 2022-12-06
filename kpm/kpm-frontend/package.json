@@ -14,10 +14,14 @@
       "outputFormat": "global",
       "includeNodeModules": true,
       "sourceMap": true
+    },
+    "activation": {
+      "source": "src/beta/index.html"
     }
   },
   "scripts": {
     "dev": "parcel",
+    "dev:activation": "parcel --target activation",
     "build": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
@@ -35,6 +39,7 @@
     "@types/react-transition-group": "^4.4.5",
     "fetch-for-jest": "^0.1.0",
     "jest-environment-jsdom": "^29.1.2",
+    "kth-style": "^8.0.29",
     "parcel": "^2.7.0",
     "prettier": "^2.7.1",
     "process": "^0.11.10",
