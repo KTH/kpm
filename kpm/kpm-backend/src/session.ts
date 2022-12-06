@@ -5,10 +5,20 @@ import { createClient } from "redis";
 
 // Initialize Redis Client
 const redisClient = createClient({
-  url: process.env.REDIS_URL!,
+  socket: {
+    port: parseInt(process.env.REDIS_PORT!, 10) || 6379,
+    host: process.env.REDIS_HOST || "localhost",
+  },
+  password: process.env.REDIS_PASSWORD || "",
   legacyMode: true,
 });
 redisClient.connect();
+
+redisClient.on("error", (err) => {
+  // TODO: Error handling
+  // NOTE: wrong password errors can be caught here
+  throw err;
+});
 
 // Initialize session store
 // See: https://www.npmjs.com/package/connect-redis
