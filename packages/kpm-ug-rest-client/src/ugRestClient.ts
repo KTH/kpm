@@ -3,6 +3,8 @@ import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { BaseClient, Client, Issuer, TokenSet } from "openid-client";
 
 type TErrorTypes =
+  | "UGRestClientDiscoverError"
+  | "UGRestClientCredentialsError"
   | "UGRestClientResponseError"
   | "UGRestClientError"
   | "UGRestClientTokenError"
@@ -80,7 +82,7 @@ export class UGRestClient {
     const perf1 = Date.now();
     // We use OAuth flow "Client Credentials" to receive an access token
     // This token is then passed to UG REST API using client.requestResource.
-    const issuer = await Issuer.discover(this._authServerDiscoveryURI);
+    const issuer = (await Issuer.discover(this._authServerDiscoveryURI).catch(discoverErr)) as Issuer<BaseClient>;
 
     const grantTypes = issuer.metadata.grant_types_supported as string[];
     assert(
@@ -109,10 +111,10 @@ export class UGRestClient {
     }
 
     const client = (await this.getClient().catch(getClientErr)) as BaseClient;
-    const accessToken = await client.grant({
+    const accessToken = (await client.grant({
       grant_type: "client_credentials",
       scope: "openid",
-    });
+    }).catch(getCredentialsErr)) as TokenSet;
     assert(
       typeof accessToken.access_token === "string",
       "No access token provided by auth server"
@@ -174,10 +176,32 @@ export class UGRestClient {
   }
 }
 
+function discoverErr(err: any) {
+  Error.captureStackTrace(err, discoverErr);
+  throw new UGRestClientError({
+    message: "Error during open-id discovery",
+    type: "UGRestClientDiscoverError",
+    err,
+  });
+}
+
+function getCredentialsErr(err: any) {
+  Error.captureStackTrace(err, discoverErr);
+  throw new UGRestClientError({
+    message: "Error getting open-id grants",
+    type: "UGRestClientCredentialsError",
+    err,
+  });
+}
+
 function getClientErr(err: any) {
+  if (err instanceof UGRestClientError) {
+    throw err;
+  }
+
   Error.captureStackTrace(err, getClientErr);
   throw new UGRestClientError({
-    message: err.message,
+    message: "Error creating open-id client",
     type: "UGRestClientError",
     err,
   });
@@ -186,7 +210,7 @@ function getClientErr(err: any) {
 function getAccessTokenErr(err: any) {
   Error.captureStackTrace(err, getAccessTokenErr);
   throw new UGRestClientError({
-    message: err.message,
+    message: "Error fetching open-id access token",
     type: "UGRestClientTokenError",
     err,
   });
@@ -195,7 +219,7 @@ function getAccessTokenErr(err: any) {
 function requestResourceErr(err: any, details: object) {
   Error.captureStackTrace(err, requestResourceErr);
   throw new UGRestClientError({
-    message: err.message,
+    message: "Error calling UG REST endpoint",
     type: "UGRestClientRequestError",
     details,
     err,
