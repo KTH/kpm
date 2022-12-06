@@ -1,37 +1,21 @@
 import expressSession from "express-session";
 import cookieParser from "cookie-parser";
-import connectRedis from "connect-redis";
-import { createClient } from "redis";
-
-// Initialize Redis Client
-const redisClient = createClient({
-  socket: {
-    port: parseInt(process.env.REDIS_PORT!, 10) || 6379,
-    host: process.env.REDIS_HOST || "localhost",
-    tls: process.env.REDIS_PORT === "6380",
-  },
-  password: process.env.REDIS_PASSWORD || "",
-  legacyMode: true,
-});
-redisClient.connect().catch((err) => {
-  // TODO: Error handling (e.g. wrong password)
-  throw err;
-});
-
-redisClient.on("error", (err) => {
-  // TODO: Error handling
-  throw err;
-});
-
-// Initialize session store
-// See: https://www.npmjs.com/package/connect-redis
-const RedisStore = connectRedis(expressSession);
-const redisStore = new RedisStore({ client: redisClient });
+import connectRedis, { RedisStore } from "connect-redis";
+import { getRedisClient } from "./redisClient";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const IS_HTTPS = PROXY_HOST.startsWith("https:");
+
+const redisClient = getRedisClient();
+let redisStore: RedisStore | undefined = undefined;
+if (redisClient) {
+  // Initialize session store
+  // See: https://www.npmjs.com/package/connect-redis
+  const RedisStore = connectRedis(expressSession);
+  redisStore = new RedisStore({ client: redisClient });
+}
 
 export const sessionMiddleware = expressSession({
   name: "kpm.sid",
@@ -54,7 +38,7 @@ export const sessionMiddleware = expressSession({
   saveUninitialized: false,
   secret: SESSION_SECRET,
 
-  store: redisStore,
+  store: redisStore, // if undefined, we use the memory store
 });
 
 // Using cookie-parser may result in issues if the secret is not the same between this module and cookie-parser.
