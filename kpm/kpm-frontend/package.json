@@ -22,7 +22,9 @@
   "scripts": {
     "dev": "parcel",
     "dev:activation": "parcel --target activation",
-    "build": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
+    "build": "npm run build:production && npm run build:activation",
+    "build:production": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
+    "build:activation": "parcel build --target activation --no-cache --dist-dir distProd --public-url ./",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
     "test:regression": "jest",
