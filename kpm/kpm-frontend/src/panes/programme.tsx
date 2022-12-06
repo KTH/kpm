@@ -77,6 +77,7 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
     if (didChange) {
       const res = await fetch(createApiUri(`/api/star`), {
         method: "post",
+        credentials: "include",
         headers: {
           "content-type": "application/json",
         },
