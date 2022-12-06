@@ -8,15 +8,18 @@ const redisClient = createClient({
   socket: {
     port: parseInt(process.env.REDIS_PORT!, 10) || 6379,
     host: process.env.REDIS_HOST || "localhost",
+    tls: process.env.REDIS_PORT === "6380",
   },
   password: process.env.REDIS_PASSWORD || "",
   legacyMode: true,
 });
-redisClient.connect();
+redisClient.connect().catch((err) => {
+  // TODO: Error handling (e.g. wrong password)
+  throw err;
+});
 
 redisClient.on("error", (err) => {
   // TODO: Error handling
-  // NOTE: wrong password errors can be caught here
   throw err;
 });
 
