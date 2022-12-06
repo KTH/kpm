@@ -82,7 +82,9 @@ export class UGRestClient {
     const perf1 = Date.now();
     // We use OAuth flow "Client Credentials" to receive an access token
     // This token is then passed to UG REST API using client.requestResource.
-    const issuer = (await Issuer.discover(this._authServerDiscoveryURI).catch(discoverErr)) as Issuer<BaseClient>;
+    const issuer = (await Issuer.discover(this._authServerDiscoveryURI).catch(
+      discoverErr
+    )) as Issuer<BaseClient>;
 
     const grantTypes = issuer.metadata.grant_types_supported as string[];
     assert(
@@ -111,10 +113,12 @@ export class UGRestClient {
     }
 
     const client = (await this.getClient().catch(getClientErr)) as BaseClient;
-    const accessToken = (await client.grant({
-      grant_type: "client_credentials",
-      scope: "openid",
-    }).catch(getCredentialsErr)) as TokenSet;
+    const accessToken = (await client
+      .grant({
+        grant_type: "client_credentials",
+        scope: "openid",
+      })
+      .catch(getCredentialsErr)) as TokenSet;
     assert(
       typeof accessToken.access_token === "string",
       "No access token provided by auth server"
