@@ -68,11 +68,12 @@ type TCourseProps = {
 };
 
 function Course({ courseCode, course }: TCourseProps) {
-  const roleToShow = course.rounds[0];
+  const roleToShow = course.rounds?.[0];
   const roomToShow = course.rooms?.[0] || undefined;
+  const status = course.completed ? "godkand" : roleToShow?.status || "other";
   return (
-    <div className={`kpm-studies-course kpm-${roleToShow.status}`}>
-      <CourseStatus status={roleToShow.status} />
+    <div className={`kpm-studies-course kpm-${status}`}>
+      <CourseStatus status={status} />
       <h2>
         {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
         {i18n(course.creditUnitAbbr)}
@@ -103,7 +104,7 @@ function getCourseInfoUrl(code: string) {
 }
 
 type TCourseStatusProps = {
-  status: TStudiesCourseRound["status"];
+  status: "godkand" | TStudiesCourseRound["status"] | "other";
 };
 
 function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {
