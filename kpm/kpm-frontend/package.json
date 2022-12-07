@@ -21,7 +21,7 @@
   },
   "scripts": {
     "dev": "parcel",
-    "dev:activation": "parcel --target activation",
+    "dev-activation": "parcel --target activation",
     "build": "npm run build:production && npm run build:activation",
     "build:production": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
     "build:activation": "parcel build --target activation --no-cache --dist-dir distProd --public-url ./",

@@ -3,7 +3,8 @@
   "description": "Monorepo for KTH Personal Menu",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all -l --parallel dev:*",
+    "dev": "npm-run-all -l --parallel  dev:my-* dev:kpm-backend dev:kpm-frontend",
+    "dev-activation": "npm-run-all -l --parallel dev:my-* dev:kpm-backend dev:kpm-frontend-activation",
     "dev-prod": "npm run build --workspace=kpm-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend",
     "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
@@ -12,7 +13,8 @@
     "dev:my-teaching-api": "FORCE_COLOR=1 PORT=3002 npm run dev --workspace=my-teaching-api",
     "dev:my-studies-api": "FORCE_COLOR=1 PORT=3003 npm run dev --workspace=my-studies-api",
     "dev:kpm-backend": "FORCE_COLOR=1 PORT=3000 npm run dev --workspace=kpm-backend",
-    "dev:kpm-frontend": "FORCE_COLOR=1 npm run dev --workspace=kpm-frontend"
+    "dev:kpm-frontend": "FORCE_COLOR=1 npm run dev --workspace=kpm-frontend",
+    "dev:kpm-frontend-activation": "FORCE_COLOR=1 npm run dev-activation --workspace=kpm-frontend"
   },
   "repository": {
     "type": "git",
