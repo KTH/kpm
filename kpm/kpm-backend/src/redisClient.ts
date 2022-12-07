@@ -4,7 +4,9 @@ import log from "skog";
 const REDIS_PORT = parseInt(process.env.REDIS_PORT || "6379", 10);
 const REDIS_HOST = process.env.REDIS_HOST || "localhost";
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "";
-const REDIS_CONNECT_TIMEOUT = parseInt(process.env.REDIS_CONNECT_TIMEOUT || "5000");
+const REDIS_CONNECT_TIMEOUT = parseInt(
+  process.env.REDIS_CONNECT_TIMEOUT || "5000"
+);
 const useRedis = !!process.env.REDIS_HOST;
 
 let redisClient: RedisClientType | undefined = undefined;
@@ -42,7 +44,7 @@ export function getRedisClient(): RedisClientType | undefined {
 
     redisClient.on("error", (err) => {
       // Rethrowing errors here can cause redis-client v4 to give up on life
-      // https://github.com/redis/node-redis/issues/2032 
+      // https://github.com/redis/node-redis/issues/2032
       log.error({ message: "Redis client error", err });
     });
 
