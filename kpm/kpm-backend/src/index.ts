@@ -8,6 +8,7 @@ import { sessionMiddleware, cookieParserMiddleware } from "./session";
 import log from "skog";
 import { widgetJsHandler, widgetJsAssets, previewHandler } from "./widget.js";
 import cors from "cors";
+import { activation } from "./activation";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
@@ -60,9 +61,10 @@ app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
 app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
 app.use(`${PREFIX}/assets`, widgetJsAssets);
 
-if (IS_DEV || IS_STAGE) {
+/*if (IS_DEV || IS_STAGE) {
   app.use(`${PREFIX}/index.:ext`, previewHandler);
-}
+}*/
+app.use(`${PREFIX}`, activation);
 
 app.use(errorHandler);
 

@@ -1,0 +1,28 @@
+/*************************
+ * CSS Variables for KTH *
+ *************************/
+:root {
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007fae;
+  --secondary: #fff;
+  --success: #528400;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #d4351c;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: "Open Sans", Arial, "Helvetica Neue", helvetica,
+    sans-serif;
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --horiz-gap: 0.5rem;
+  --horiz-pad: 0.5rem;
+}
