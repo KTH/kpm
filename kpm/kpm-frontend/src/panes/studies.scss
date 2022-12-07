@@ -38,9 +38,9 @@
       font-size: 1em;
       margin: 0;
       padding: 0;
-      height: calc(3 * 1.2em);
       line-height: 1.2em;
       overflow: hidden;
+      font-weight: 600;
     }
 
     ul {
@@ -48,30 +48,8 @@
     }
 
     .kpm-studies-course-status {
-      padding: calc(var(--kpmPad) / 8) var(--kpmPad);
-      border: 1px solid var(--borderFg);
-      border-radius: var(--kpmPad);
-      background-color: var(--bg);
-      color: var(--text);
-      font-size: 0.75em;
-
-      &.kpm-antagen {
-        --text: black;
-        --bg: #fcf8e3;
-        --borderFg: black;
-      }
-
-      &.kpm-registrerad {
-        --text: black;
-        --bg: #fff;
-        --borderFg: black;
-      }
-
-      &.kpm-godkand {
-        --text: white;
-        --bg: #62922e;
-        --borderFg: #62922e;
-      }
+        font-weight: 400;
+        color: var(--kpmPaneTextSoft);
     }
   }
 }

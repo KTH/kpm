@@ -70,18 +70,17 @@ type TCourseProps = {
 function Course({ courseCode, course }: TCourseProps) {
   const roleToShow = course.rounds?.[0];
   const roomToShow = course.rooms?.[0] || undefined;
-  const status = course.completed ? "godkand" : roleToShow?.status || "other";
+  const status = course.completed ? "godkand" : roleToShow?.status;
   return (
     <div className={`kpm-studies-course kpm-${status}`}>
-      <CourseStatus status={status} />
-      <h2>
-        {courseCode.toString()} {i18n(course.title)} {course.credits}{" "}
-        {i18n(course.creditUnitAbbr)}
-      </h2>
+      <h2>{courseCode} <CourseStatus status={status} /></h2>
+      <p>{i18n(course.title)}</p>
+      {roleToShow &&
+        <h3>{roleToShow.term} {roleToShow.year}</h3>}
       <ul>
-        <li>
+        {!course.completed && <li>
           <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
-        </li>
+        </li>}
         <li>
           <a href={getCourseInfoUrl(courseCode)}>
             {i18n("Kurs-PM")}{" "}
@@ -104,16 +103,16 @@ function getCourseInfoUrl(code: string) {
 }
 
 type TCourseStatusProps = {
-  status: "godkand" | TStudiesCourseRound["status"] | "other";
+  status: "godkand" | TStudiesCourseRound["status"] | undefined;
 };
 
 function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {
   if (status === undefined) return null;
 
   return (
-    <div className={`kpm-studies-course-status kpm-${status}`}>
+    <React.Fragment>| <span className={`kpm-studies-course-status kpm-${status}`}>
       {i18n(status)}
-    </div>
+    </span></React.Fragment>
   );
 }
 
