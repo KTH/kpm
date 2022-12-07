@@ -73,14 +73,21 @@ function Course({ courseCode, course }: TCourseProps) {
   const status = course.completed ? "godkand" : roleToShow?.status;
   return (
     <div className={`kpm-studies-course kpm-${status}`}>
-      <h2>{courseCode} <CourseStatus status={status} /></h2>
+      <h2>
+        {courseCode} <CourseStatus status={status} />
+      </h2>
       <p>{i18n(course.title)}</p>
-      {roleToShow &&
-        <h3>{roleToShow.term} {roleToShow.year}</h3>}
+      {roleToShow && (
+        <h3>
+          {roleToShow.term} {roleToShow.year}
+        </h3>
+      )}
       <ul>
-        {!course.completed && <li>
-          <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
-        </li>}
+        {!course.completed && (
+          <li>
+            <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
+          </li>
+        )}
         <li>
           <a href={getCourseInfoUrl(courseCode)}>
             {i18n("Kurs-PM")}{" "}
@@ -110,9 +117,12 @@ function CourseStatus({ status }: TCourseStatusProps): JSX.Element | null {
   if (status === undefined) return null;
 
   return (
-    <React.Fragment>| <span className={`kpm-studies-course-status kpm-${status}`}>
-      {i18n(status)}
-    </span></React.Fragment>
+    <React.Fragment>
+      |{" "}
+      <span className={`kpm-studies-course-status kpm-${status}`}>
+        {i18n(status)}
+      </span>
+    </React.Fragment>
   );
 }
 
