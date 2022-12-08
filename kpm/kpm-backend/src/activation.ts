@@ -26,7 +26,7 @@ activation.get("/", (req, res) => {
   } else {
     const projectRoot = process.cwd();
     log.info("Serving activation page from: " + projectRoot);
-    res.sendFile("./distProdActivation/index.html", {
+    res.sendFile("./distActivation/index.html", {
       root: projectRoot,
     });
   }
@@ -34,6 +34,6 @@ activation.get("/", (req, res) => {
 
 export const widgetJsAssets = IS_DEV
   ? staticHandler("../kpm-frontend/distProd/activation")
-  : staticHandler("./distProdActivation");
+  : staticHandler("./distActivation");
 
 activation.use("/", widgetJsAssets);
