@@ -36,7 +36,7 @@ function KTHBreadCrumbs({ path }: TKTHBreadCrumbs) {
       <nav id="breadcrumbs" aria-label="Brödsmulor">
         <ol className="breadcrumb">
           {path.map(([href, label]) => (
-            <li className="breadcrumb-item">
+            <li key={href} className="breadcrumb-item">
               <a href={href}>{label}</a>
             </li>
           ))}
