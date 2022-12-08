@@ -5,10 +5,10 @@
   $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
 
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   align-items: flex-start;
-  flex-wrap: wrap;
   gap: $rowGap $colGap;
+  width: 100%;
 
   --borderFg: var(--kpmPaneSepatorFg);
 
