@@ -32,7 +32,7 @@ var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53"; n.style = "inset: 0; position: fixed; height: calc(var(--kpm-bar-height,2em) + 1px); margin: 0 auto; background-color: #65656c;";n.innerHtml = "";document.body.prepend(n);
+let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
       publicUriBase
       // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
