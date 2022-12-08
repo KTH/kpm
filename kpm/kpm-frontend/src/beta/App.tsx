@@ -12,8 +12,10 @@ function doActivateMenu(active: boolean) {
     },
   }).then((response) => {
     if (!response.ok) {
-      document?.querySelector("div.stateSwitcher p")?.textContent =
-        "Something went wrong.";
+      const p = document.querySelector("div.stateSwitcher p");
+      if (p) {
+        p.textContent = "Something went wrong.";
+      }
     } else {
       document.location.reload();
     }
