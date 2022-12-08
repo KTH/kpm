@@ -2,24 +2,24 @@ import * as React from "react";
 import { Page } from "./Page";
 import "./App.scss";
 
-function doActivateMenu(active: boolean) {
-  fetch("/kpm/api/use_beta", {
+async function doActivateMenu(
+  active: boolean,
+  setFeedbackMsg: (msg: string) => void
+) {
+  const res = await fetch("/kpm/api/use_beta", {
     credentials: "include",
     method: "POST",
     body: JSON.stringify({ active }),
     headers: {
       "content-type": "application/json",
     },
-  }).then((response) => {
-    if (!response.ok) {
-      const p = document.querySelector("div.stateSwitcher p");
-      if (p) {
-        p.textContent = "Something went wrong.";
-      }
-    } else {
-      document.location.reload();
-    }
   });
+
+  if (!res.ok) {
+    return setFeedbackMsg("Something went wrong.");
+  }
+
+  document.location.reload();
 }
 
 function isMenuActive() {
@@ -30,6 +30,7 @@ function isMenuActive() {
 }
 
 export function App() {
+  const [feedbackMsg, setFeedbackMsg] = React.useState<string>();
   const isActive = isMenuActive();
   return (
     <Page id="kpm-activation">
@@ -53,7 +54,7 @@ export function App() {
           <p>You have activated the beta.</p>
           <button
             className="btn btn-primary"
-            onClick={() => doActivateMenu(false)}
+            onClick={() => doActivateMenu(false, setFeedbackMsg)}
           >
             De-activate
           </button>
@@ -65,10 +66,15 @@ export function App() {
           </p>
           <button
             className="btn btn-primary"
-            onClick={() => doActivateMenu(true)}
+            onClick={() => doActivateMenu(true, setFeedbackMsg)}
           >
             Activate
           </button>
+        </div>
+      )}
+      {feedbackMsg && (
+        <div className="alert alert-danger" role="alert">
+          {feedbackMsg}
         </div>
       )}
     </Page>
