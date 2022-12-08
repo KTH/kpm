@@ -23,7 +23,9 @@ activation.get("/", (req, res) => {
       root: path.join(__dirname, "..", ".."),
     });
   } else {
-    res.sendFile("../distProd/activation/index.html", { root: __dirname });
+    res.sendFile("./distProd/activation/index.html", {
+      root: path.join(__dirname, ".."),
+    });
   }
 });
 
