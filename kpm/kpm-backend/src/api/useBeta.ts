@@ -25,7 +25,12 @@ export async function useBeta(
         sameSite: "none",
       });
     } else {
-      res.clearCookie("use_kpm");
+      res.clearCookie("use_kpm", {
+        domain: ".kth.se",
+        httpOnly: false,
+        secure: true,
+        sameSite: "none",
+      });
     }
     res.send({ ok: true, active });
   } catch (err) {
