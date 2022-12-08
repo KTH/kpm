@@ -32,9 +32,11 @@ if (IS_STAGE) {
   ];
 } else if (!IS_DEV) {
   corsWhitelist = [
+    "https://app.kth.se",
+    "https://canvas.kth.se",
+    "https://intra.kth.se",
     "https://login.ug.kth.se",
     "https://www.kth.se",
-    "https://canvas.kth.se",
   ];
 }
 if (!IS_DEV) {
