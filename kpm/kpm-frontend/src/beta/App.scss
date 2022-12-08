@@ -1,24 +1,8 @@
 #kpm-activation {
-  // button {
-  //   padding: 0.5em 1em;
-  //   border-radius: 0.25rem;
-  //   color: #fff;
-  //   background: #007fae;
-  //   border: 1px solid #007fae;
-  //   transition:
-  //     color .15s ease-in-out,
-  //     background-color .15s ease-in-out,
-  //     border-color .15s ease-in-out,
-  //     box-shadow .15s ease-in-out;
+  padding: 0 0 30px 0;
 
-  //   &:hover {
-  //     background: #006388;
-  //     border-color: #005a7b;
-  //   }
-
-  //   &:active {
-  //     background: #005a7b;
-  //     border-color: #00506e;
-  //   }
-  // }
+  #mainContent {
+    margin: 0;
+    padding: 15px 15px 0;
+  }
 }
