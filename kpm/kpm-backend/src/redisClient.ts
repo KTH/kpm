@@ -47,7 +47,7 @@ export function getRedisClient(): RedisClientType | undefined {
     });
 
     redisClient.on("error", (err) => {
-      if (err?.type === "SocketClosedUnexpectedlyError") {
+      if (err?.name === "SocketClosedUnexpectedlyError") {
         log.info("Redis closed unexpectedly. It will reconnect");
         return;
       }
