@@ -50,8 +50,10 @@ export function App() {
         </p>
       </div>
       {isActive ? (
-        <div className="paragraphs stateSwitcher">
-          <p>You have activated the beta.</p>
+        <div className="paragraphs">
+          <div className="alert alert-success" role="alert">
+            You have activated the beta.
+          </div>
           <button
             className="btn btn-primary"
             onClick={() => doActivateMenu(false, setFeedbackMsg)}
@@ -61,9 +63,9 @@ export function App() {
         </div>
       ) : (
         <div className="paragraphs">
-          <p>
+          <div className="alert alert-info" role="alert">
             You have <em>not</em> activated the beta.
-          </p>
+          </div>
           <button
             className="btn btn-primary"
             onClick={() => doActivateMenu(true, setFeedbackMsg)}
