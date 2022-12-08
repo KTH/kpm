@@ -1,8 +1,4 @@
-import {
-  createClient,
-  RedisClientType,
-  SocketClosedUnexpectedlyError,
-} from "redis";
+import { createClient, RedisClientType } from "redis";
 import log from "skog";
 
 const REDIS_PORT = parseInt(process.env.REDIS_PORT || "6379", 10);
@@ -35,25 +31,28 @@ export function getRedisClient(): RedisClientType | undefined {
       legacyMode: true,
     });
     redisClient.connect().catch((err) => {
-      log.error({ message: "Redis client connection error", err });
+      log.error(err, "Redis client connection error");
     });
 
     redisClient.on("reconnecting", () => {
-      log.info({ message: "Redis client reconnecting" });
+      log.info("Redis client reconnecting");
     });
 
     redisClient.on("ready", () => {
-      log.info({ message: "Redis client ready to go!" });
+      log.info("Redis client ready to go!");
     });
 
     redisClient.on("error", (err) => {
-      if (err?.name === "SocketClosedUnexpectedlyError") {
+      if (
+        err instanceof Error &&
+        err.name === "SocketClosedUnexpectedlyError"
+      ) {
         log.info("Redis closed unexpectedly. It will reconnect");
         return;
       }
       // Rethrowing errors here can cause redis-client v4 to give up on life
-      // https://github.com/redis/node-redis/issues/2032
-      log.error({ message: "Redis client error", err });
+      // https://github.com/redis/node-reedis/issues/2032
+      log.error(err, `Redis client error: ${err?.name}`);
     });
 
     return redisClient;
