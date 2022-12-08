@@ -1,4 +1,5 @@
 import express, { static as staticHandler } from "express";
+import log from "skog";
 import path from "path";
 import { isValidSession, TSessionUser } from "./auth";
 
@@ -23,14 +24,16 @@ activation.get("/", (req, res) => {
       root: path.join(__dirname, "..", ".."),
     });
   } else {
-    res.sendFile("./distProd/activation/index.html", {
-      root: path.join(__dirname, ".."),
+    const projectRoot = process.cwd();
+    log.info("Serving activation page from: " + projectRoot);
+    res.sendFile("./distProdActivation/index.html", {
+      root: projectRoot,
     });
   }
 });
 
 export const widgetJsAssets = IS_DEV
   ? staticHandler("../kpm-frontend/distProd/activation")
-  : staticHandler("./distProd/activation");
+  : staticHandler("./distProdActivation");
 
 activation.use("/", widgetJsAssets);

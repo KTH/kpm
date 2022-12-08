@@ -25,7 +25,7 @@ RUN npm ci --omit=dev
 FROM node:16-alpine AS production
 WORKDIR /usr/src/app
 COPY --from=frontend /usr/src/app/kpm-frontend/distProd/production kpm-backend/distProd
-COPY --from=frontend /usr/src/app/kpm-frontend/distProd/activation kpm-backend/distProd/activation
+COPY --from=frontend /usr/src/app/kpm-frontend/distProd/activation kpm-backend/distActivation
 COPY --from=backend /usr/src/app/kpm-backend/node_modules kpm-backend/node_modules
 COPY . .
 
