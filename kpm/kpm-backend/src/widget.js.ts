@@ -48,7 +48,7 @@ window.__kpmCurrentUser__ = ${
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "inset: 0; position: fixed; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: end; max-width: 1228px; margin: 0 auto; background-color: var(--kpmMenuBg);";
-n.innerHTML = "<a href='${LOGIN_URL}?nextUrl=" + location.href + "' style="color: white;">Login</a>"; document.body.prepend(n);
+n.innerHTML = "<a href='${LOGIN_URL}?nextUrl=" + location.href + "' style='color: white;'>Login</a>"; document.body.prepend(n);
       })("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   }
 
