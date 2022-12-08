@@ -33,7 +33,7 @@ export function App() {
   const [feedbackMsg, setFeedbackMsg] = React.useState<string>();
   const isActive = isMenuActive();
   return (
-    <Page id="kpm-activation">
+    <Page id="mainContent">
       <h1>New Personal Menu (Beta)</h1>
       <div className="lead">
         <p>

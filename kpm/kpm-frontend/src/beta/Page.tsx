@@ -23,7 +23,7 @@ export function Page({
                   />
                 </a>
               </figure>
-              <div className="block siteName" data-cid="1.260060">
+              <div className="block siteName">
                 <a href="/forskning">Forskning</a>
               </div>
               <div className="block list links secondaryMenu" lang="sv-SE">
@@ -124,33 +124,21 @@ export function Page({
         </div>
         <div id="gradientBorder"></div>
       </header>
-      <div className="container start">
+      <div className="container main">
         <div className="row">
           <div className="col">
-            <main id={pageId}>
-              <article id="mainContent" className="article standard">
+            <main id={pageId} className="">
+              <article id="mainContent" className="mainContent">
                 {children}
               </article>
-              <footer id="articleFooter" className="row">
-                <div className="articleFooterDivider"></div>
-              </footer>
             </main>
           </div>
         </div>
-        <div className="container" style={{ height: "1px" }}></div>
       </div>
       <footer className="container">
-        <div
-          className="block columnSplitter row  using4Columns  "
-          data-cid="1.202278"
-          lang="sv-SE"
-        >
+        <div className="block columnSplitter row using4Columns" lang="sv-SE">
           <div className="col c1">
-            <div
-              className="block list links defaultTheme"
-              data-cid="1.202279"
-              lang="sv-SE"
-            >
+            <div className="block list links defaultTheme" lang="sv-SE">
               <h2>KTH</h2>
 
               <ul>
@@ -179,11 +167,7 @@ export function Page({
             </div>
           </div>
           <div className="col c2">
-            <div
-              className="block list links defaultTheme"
-              data-cid="1.202289"
-              lang="sv-SE"
-            >
+            <div className="block list links defaultTheme" lang="sv-SE">
               <h2>Organisation</h2>
 
               <ul>
@@ -207,11 +191,7 @@ export function Page({
             </div>
           </div>
           <div className="col c3">
-            <div
-              className="block list links defaultTheme"
-              data-cid="1.202317"
-              lang="sv-SE"
-            >
+            <div className="block list links defaultTheme" lang="sv-SE">
               <h2>Tjänster</h2>
 
               <ul>
@@ -233,11 +213,7 @@ export function Page({
             </div>
           </div>
           <div className="col c4">
-            <article
-              className="block teaser top white"
-              data-cid="1.865130"
-              lang="sv-SE"
-            >
+            <article className="block teaser top white" lang="sv-SE">
               <div className="teaserBody">
                 <h2 className="teaserHeading">Kontakt</h2>
                 <div className="lead">
@@ -252,11 +228,7 @@ export function Page({
                 </div>
               </div>
             </article>
-            <div
-              className="block list links defaultTheme"
-              data-cid="1.582032"
-              lang="sv-SE"
-            >
+            <div className="block list links defaultTheme" lang="sv-SE">
               <ul>
                 <li>
                   <a href="/om/kontakt">Kontakta KTH</a>
