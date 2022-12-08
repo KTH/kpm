@@ -86,6 +86,7 @@ auth.get("/login", async function checkHandler(req, res) {
 auth.get("/logout", async function logoutHandler(req, res) {
   const nextUrl = req.query.nextUrl || "https://www.kth.se";
   req.session.user = undefined;
+  const client = await getOpenIdClient();
   const url = client.endSessionUrl({
     redirect_uri: nextUrl,
   });
