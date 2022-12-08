@@ -10,6 +10,13 @@ function doActivateMenu(active: boolean) {
     headers: {
       "content-type": "application/json",
     },
+  }).then((response) => {
+    if (!response.ok) {
+      document.querySelector("div.stateSwitcher p").textContent =
+        "Something went wrong.";
+    } else {
+      document.location.reload();
+    }
   });
 }
 
@@ -40,7 +47,7 @@ export function App() {
         </p>
       </div>
       {isActive ? (
-        <div className="paragraphs">
+        <div className="paragraphs stateSwitcher">
           <p>You have activated the beta.</p>
           <button
             className="btn btn-primary"
