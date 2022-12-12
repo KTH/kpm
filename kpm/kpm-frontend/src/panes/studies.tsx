@@ -67,31 +67,57 @@ type TCourseProps = {
   course: TStudiesCourse;
 };
 
+function RoundDesc({ round }: { round: TStudiesCourseRound }) {
+  return (
+    <React.Fragment>
+      {i18n("term" + round.term)}
+      {round.year % 100} ({round.shortName || round.ladokRoundId})
+    </React.Fragment>
+  );
+}
+
 function Course({ courseCode, course }: TCourseProps) {
-  const roleToShow = course.rounds?.[0];
+  const [roundToShow, setRoundToShow] = React.useState(course.rounds?.[0]);
+  // TODO: Try to find relevant room for selected round?
   const roomToShow = course.rooms?.[0] || undefined;
-  const status = course.completed ? "godkand" : roleToShow?.status;
+  const status = course.completed ? "godkand" : roundToShow?.status;
   return (
     <div className={`kpm-studies-course kpm-${status}`}>
       <h2>
         {courseCode} <CourseStatus status={status} />
       </h2>
       <p>{i18n(course.title)}</p>
-      {roleToShow && (
+      {course.rounds?.length > 1 && (
+        <select className="kpm-rounds">
+          <option selected>Visa</option>
+          {course.rounds.map((r) => (
+            <option
+              onClick={(e) => {
+                setRoundToShow(r);
+                const p = (e.target as Element).parentElement;
+                (p as HTMLSelectElement).selectedIndex = 0;
+                p?.blur();
+              }}
+            >
+              <RoundDesc round={r} />
+            </option>
+          ))}
+        </select>
+      )}
+      {roundToShow && (
         <h3>
-          {roleToShow.term} {roleToShow.year}
+          <RoundDesc round={roundToShow} />
         </h3>
       )}
       <ul>
-        {!course.completed && (
+        {status == "antagna" && (
           <li>
             <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
           </li>
         )}
         <li>
-          <a href={getCourseInfoUrl(courseCode)}>
-            {i18n("Kurs-PM")}{" "}
-            {roomToShow?.startTerm && formatTerm(roomToShow.startTerm)}
+          <a href={getCourseInfoUrl(courseCode, roundToShow)}>
+            {i18n("Kurs-PM")}
           </a>
         </li>
         <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
@@ -105,8 +131,12 @@ function getRegisterUrl(code: string) {
   return `#${code}`;
 }
 
-function getCourseInfoUrl(code: string) {
-  return `#${code}`;
+function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {
+  if (round) {
+    return `https://www.kth.se/kurs-pm/${code}/${round.year}${round.term}/${round.ladokRoundId}`;
+  } else {
+    return `https://www.kth.se/kurs-pm/${code}/`;
+  }
 }
 
 type TCourseStatusProps = {

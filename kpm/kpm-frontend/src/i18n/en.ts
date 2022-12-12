@@ -66,6 +66,8 @@ export const en: Record<string, string> = {
   "i Canvas": "in Canvas",
   VT: "VT",
   HT: "HT",
+  term1: "VT",
+  term2: "HT",
   Kursen: "The Course",
   "My Programmes": "My Programmes",
   Favourites: "Favourites",

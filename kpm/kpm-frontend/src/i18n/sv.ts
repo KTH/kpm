@@ -63,6 +63,8 @@ export const sv: Record<string, string> = {
   "i Canvas": "i Canvas",
   VT: "VT",
   HT: "HT",
+  term1: "VT",
+  term2: "HT",
   Kursen: "Kursen",
   "My Programmes": "Mina program",
   Favourites: "Favoriter",
