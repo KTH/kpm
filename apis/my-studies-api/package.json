@@ -1,6 +1,6 @@
 {
   "name": "my-studies-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "API for which courses I am studying, KPM.",
   "main": "src/index.ts",
   "scripts": {
