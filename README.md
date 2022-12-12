@@ -24,7 +24,7 @@ This builds the frontend bundle and starts all other apps in development mode. Y
 
 ### Understanding the postinstall script
 
-After you run `npm i` the project will run a postinstall script. This script is needed to prepare the project for the CD/CI-pipelin Evolene. This is what happens:
+After you run `npm i` the project will run a postinstall script. This script is needed to prepare the project for the CI/CD-pipelin Evolene. This is what happens:
 
 1. any local development dependencies are temporarily moved to a folder in each workspace:
 
@@ -51,9 +51,9 @@ echo "Revert to proper package.json for each workspace"
 npm exec --workspaces -c "mv package.json.bak package.json"
 ```
 
-## CD/CI
+## CI/CD
 
-The Evolene CD/CI-pipeline is triggered on pushes to Github. The file `evolene-ci.yml` specifies what applications we want Evolene to work by setting the env-var `MONOREPO_SUBPATH` for each app.
+The Evolene CI/CD-pipeline is triggered on pushes to Github. The file `evolene-ci.yml` specifies what applications we want Evolene to work by setting the env-var `MONOREPO_SUBPATH` for each app.
 
 Evolene will check for the presence of the following file:
 
