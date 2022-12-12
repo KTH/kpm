@@ -78,7 +78,7 @@ export async function studiesApiHandler(
       canvas_data = (await rooms_fut) || { rooms: {} };
     } catch (err) {
       log.error({ err, user }, "Failed to load canvas rooms");
-      canvas_data = { rooms: {} }
+      canvas_data = { rooms: {} };
     }
     const { rooms } = canvas_data;
 
