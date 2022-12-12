@@ -34,11 +34,11 @@
       font-size: 1em;
       margin: 0;
       padding: 0;
-      line-height: 1.2em;
       overflow: hidden;
       font-weight: 600;
     }
     h2 + p {
+      line-height: 1.2em;
       height: 2.4em;
       overflow: hidden;
       text-overflow: ellipsis;
