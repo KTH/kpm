@@ -73,7 +73,15 @@ export async function studiesApiHandler(
         [course_code]: getCourseInfo(course_code).catch(koppsErr),
       }))
     );
-    const { rooms } = (await rooms_fut) || {};
+    let canvas_data;
+    try {
+      canvas_data = (await rooms_fut) || { rooms: {} };
+    } catch (err) {
+      log.error({ err, user }, "Failed to load canvas rooms");
+      canvas_data = { rooms: {} }
+    }
+    const { rooms } = canvas_data;
+
     const DAY_IN_MS = 24 * 3600 * 1000;
 
     let courses: Record<TCourseCode, TStudiesCourse> = {};
