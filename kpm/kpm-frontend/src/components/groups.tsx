@@ -120,9 +120,12 @@ export function DropdownMenuGroup({
       className={cls}
       open={open}
       onBlur={doCloseOnBlur}
-      onClick={doCloseOnClickIfOpen}
     >
-      <summary ref={summaryRef} onFocus={doOpenOnFocus}>
+      <summary
+        ref={summaryRef}
+        onFocus={doOpenOnFocus}
+        onClick={doCloseOnClickIfOpen}
+      >
         {title}
       </summary>
       {modal ? (
