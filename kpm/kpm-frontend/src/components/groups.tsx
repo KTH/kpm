@@ -112,9 +112,10 @@ export function DropdownMenuGroup({
 
   const doSilenceDefaultDetailsOpen = (event: any) => {
     // Silence event so browser doesn't cause dropdown to toggle
-    // state once before proper toggle.
+    // state when onMouseDown toggle is performed. To avoid
+    // toggle open + toggle close = no change
     const e = event as MouseEvent;
-    if (e.target !== detailsRef.current) {
+    if (e.target === summaryRef.current) {
       e.preventDefault();
     }
   };
