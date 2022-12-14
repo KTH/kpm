@@ -17,8 +17,7 @@ try {
 
   const cmdBuffer = execSync("git branch --show-current");
   const cmdOutput = await new TextDecoder().decode(cmdBuffer);
-  //if (cmdOutput !== "main") {
-  if (cmdOutput.trim() !== "create-release-script") {
+  if (cmdOutput !== "main") {
     throw new Error(
       `You can only release when you are on main. Current branch is: ${cmdOutput}`
     );
