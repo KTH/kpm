@@ -66,7 +66,7 @@ try {
   }
 
   execSync(
-    "git add docker.conf && git commit -m 'Bump docker.conf for deployment to STAGE only' && git push origin main"
+    "git add . && git commit -m 'Bump docker.conf for deployment to STAGE only' && git push origin main"
   );
 } catch (err: any) {
   console.log(err.message);
