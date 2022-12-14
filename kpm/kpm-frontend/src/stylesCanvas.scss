@@ -8,10 +8,23 @@ div.ReactTrayPortal div.ReactTray__Overlay,
 #flash_message_holder {
   top: var(--kpm-bar-height) !important;
 }
-header.ic-app-header {
-  height: calc(100% - var(--kpm-bar-height));
+
+// Space for main app 
+#application.ic-app {
+  margin-top: var(--kpm-bar-height);
+}
+
+// Make sticky menu stick to KPM
+#left-side.ic-sticky-on > .ic-sticky-frame {
   top: var(--kpm-bar-height);
 }
+
+// Make main icon menu give space to KPM
+header.ic-app-header {
+    height: calc(100% - var(--kpm-bar-height));
+    top: var(--kpm-bar-height);
+}
+
 body.use-personal-menu div.ui-widget.ui-tooltip {
   z-index: 10030;
 }
