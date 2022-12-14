@@ -4,5 +4,8 @@
   "description": "Frontend and backend for KPM application",
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "release": "cellus-release"
+  }
 }
