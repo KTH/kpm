@@ -1,3 +1,5 @@
+$kthStyleBaseUri: "https://app.kth.se";
+
 #kpm-6cf53 .kpm-collapsable-group {
   .kpm-link-list {
     margin: 0;
@@ -55,6 +57,25 @@
   }
 
   summary {
+    position: relative;
     cursor: context-menu;
+    padding: 0 1rem 0 0; // Override KTH Style
+    list-style: none; // Inherit from KTH Style for local dev
+  }
+
+  & > summary:first-of-type::after {
+    content: '';
+    background: url($kthStyleBaseUri + "/style/static/kth-style/img/kth-style/icons/arrow-expand-black.svg");
+    width: .3rem;
+    height: .5rem;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform .2s ease-in-out;
+  }
+
+  &[open] > summary:first-of-type::after {
+    transform: translateY(-50%) rotate(90deg);
   }
 }
