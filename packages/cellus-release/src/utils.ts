@@ -46,6 +46,19 @@ export async function loadDockerConf(
   return outp;
 }
 
+export async function writeDockerConf(
+  pkgPath: string,
+  data: Record<string, string>
+) {
+  const pathToDockerConf = path.join(pkgPath, "docker.conf");
+  let body = "";
+  for (const [key, val] of Object.entries(data)) {
+    body += `${key}=${val}\n`;
+  }
+  const encodedBody = await new TextEncoder().encode(body);
+  await fsAsync.writeFile(pathToDockerConf, encodedBody);
+}
+
 export async function renameFileIfExist(
   srcPath: string,
   destPath: string

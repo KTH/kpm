@@ -7,6 +7,16 @@ import { loadPackageJson, loadDockerConf, writeDockerConf } from "./utils";
 
 const cwd = process.cwd();
 
+const cmdBuffer = execSync("git branch --show-current");
+const cmdOutput = await new TextDecoder().decode(cmdBuffer);
+if (cmdOutput !== "main") {
+  throw new Error(
+    `You can only release when you are on main. Current branch is: ${cmdOutput}`
+  );
+}
+
+process.exit(1);
+
 console.log(`Creating package-lock.json files for workspaces in ${cwd}`);
 const dockerConf = await loadDockerConf(cwd);
 const packageJson = await loadPackageJson(cwd);
