@@ -6,6 +6,6 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "release": "cellus-release"
+    "release": "ts-node --esm ../node_modules/.bin/cellus-release"
   }
 }

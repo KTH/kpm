@@ -15,7 +15,8 @@
     "dev:my-studies-api": "FORCE_COLOR=1 PORT=3003 npm run dev --workspace=my-studies-api",
     "dev:kpm-backend": "FORCE_COLOR=1 PORT=3000 npm run dev --workspace=kpm-backend",
     "dev:kpm-frontend": "FORCE_COLOR=1 npm run dev --workspace=kpm-frontend",
-    "dev:kpm-frontend-activation": "FORCE_COLOR=1 npm run dev-activation --workspace=kpm-frontend"
+    "dev:kpm-frontend-activation": "FORCE_COLOR=1 npm run dev-activation --workspace=kpm-frontend",
+    "/* -- RELEASE -- */": ""
   },
   "repository": {
     "type": "git",
