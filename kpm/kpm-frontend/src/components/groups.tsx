@@ -68,12 +68,12 @@ export function DropdownMenuGroup({
     cls += ` ${className}`;
   }
 
-  const doCloseOnClickIfOpen = (e: MouseEvent) => {
+  const doToggleOnMouseDown = (e: MouseEvent) => {
     if (summaryRef.current === e.target) {
-      e.preventDefault();
-      if (open) {
-        setOpen(false);
-      }
+      const currentOpen = open;
+      setTimeout(() => {
+        setOpen(!currentOpen);
+      }, 100);
     }
   };
 
@@ -82,11 +82,8 @@ export function DropdownMenuGroup({
     if (e.target === summaryRef.current) {
       // Open on focus
       if (!open) {
-        // onFocus can be fired before onClick so we the timeout makes
-        // sure we don't immediately close it again.
-        setTimeout(() => {
-          setOpen(true);
-        }, 100);
+        e.preventDefault();
+        setOpen(true);
       }
     }
   };
@@ -98,6 +95,7 @@ export function DropdownMenuGroup({
       open &&
       !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
     ) {
+      e.preventDefault();
       setOpen(false);
     }
   };
@@ -112,19 +110,27 @@ export function DropdownMenuGroup({
     </div>
   );
 
-  // TODO: Move onClick to summary!
+  const doSilenceDefaultDetailsOpen = (event: any) => {
+    // Silence event so browser doesn't cause dropdown to toggle
+    // state once before proper toggle.
+    const e = event as MouseEvent;
+    if (e.target !== detailsRef.current) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <details
       ref={detailsRef}
       className={cls}
       open={open}
+      onClick={doSilenceDefaultDetailsOpen}
       onBlur={doCloseOnBlur}
     >
       <summary
         ref={summaryRef}
         onFocus={doOpenOnFocus}
-        onClick={doCloseOnClickIfOpen}
+        onMouseDown={doToggleOnMouseDown}
       >
         {title}
       </summary>
