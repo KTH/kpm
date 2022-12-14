@@ -28,6 +28,7 @@ $kthStyleBaseUri: "https://app.kth.se";
 
 #kpm-6cf53 .kpm-dropdownmenu-group {
   position: relative;
+  margin-bottom: 0; // Override KTH Style
 
   .kpm-link-list {
     // NOTE: Currently this popup menu is layered on top of the menubar
@@ -59,8 +60,10 @@ $kthStyleBaseUri: "https://app.kth.se";
   summary {
     position: relative;
     cursor: context-menu;
-    padding: 0 1rem 0 0; // Override KTH Style
-    list-style: none; // Inherit from KTH Style for local dev
+    padding: 0; // Override KTH Style
+    min-height: 0; // Override KTH Style
+    padding-right: 1rem;
+    list-style: none; // We use our own icon
   }
 
   & > summary:first-of-type::after {
@@ -72,7 +75,7 @@ $kthStyleBaseUri: "https://app.kth.se";
     top: 50%;
     right: 0;
     transform: translateY(-50%) rotate(0deg);
-    transition: transform .2s ease-in-out;
+    transition: transform .1s ease-in-out;
   }
 
   &[open] > summary:first-of-type::after {
