@@ -34,7 +34,6 @@ try {
   console.log(
     `\n${packageJson.name} --- VERSION: "~${currentVersion}.0" # Deploy any minor version match\n`
   );
-  process.exit(0);
 
   // Tag a release
   const tag = `v${currentVersion}`;
