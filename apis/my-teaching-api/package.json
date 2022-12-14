@@ -9,7 +9,8 @@
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
     "test:regression": "jest",
-    "test:update-snapshots": "jest --updateSnapshot"
+    "test:update-snapshots": "jest --updateSnapshot",
+    "release": "ts-node --esm ../../node_modules/.bin/cellus-release"
   },
   "author": "KTH Royal Institute of Technology",
   "license": "MIT",

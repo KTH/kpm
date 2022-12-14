@@ -8,13 +8,15 @@
     "dev-loader": "npm run build --workspace=kpm-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend",
     "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
+    "release": "ts-node --esm node_modules/.bin/cellus-release apis/my-canvas-rooms-api apis/my-studies-api apis/my-teaching-api kpm",
     "/* ----------- */": "",
     "dev:my-canvas-rooms-api": "FORCE_COLOR=1 PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
     "dev:my-teaching-api": "FORCE_COLOR=1 PORT=3002 npm run dev --workspace=my-teaching-api",
     "dev:my-studies-api": "FORCE_COLOR=1 PORT=3003 npm run dev --workspace=my-studies-api",
     "dev:kpm-backend": "FORCE_COLOR=1 PORT=3000 npm run dev --workspace=kpm-backend",
     "dev:kpm-frontend": "FORCE_COLOR=1 npm run dev --workspace=kpm-frontend",
-    "dev:kpm-frontend-activation": "FORCE_COLOR=1 npm run dev-activation --workspace=kpm-frontend"
+    "dev:kpm-frontend-activation": "FORCE_COLOR=1 npm run dev-activation --workspace=kpm-frontend",
+    "/* -- RELEASE -- */": ""
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
   },
   "dependencies": {
     "evolene-local-packages": "^0.1.0",
+    "cellus-release": "^0.1.0",
     "lightningcss": "^1.16.0"
   },
   "workspaces": [
