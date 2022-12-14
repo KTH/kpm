@@ -1,6 +1,6 @@
 // Make space in Canvas for KPM, this was taken verbatim from Social
 
-div.ef-file-preview-overlay { 
+div.ef-file-preview-overlay {
   /*to keep the Canvas preview below the personal menu*/
   margin-top: var(--kpm-bar-height);
 }
@@ -9,7 +9,7 @@ div.ReactTrayPortal div.ReactTray__Overlay,
   top: var(--kpm-bar-height) !important;
 }
 
-// Space for main app 
+// Space for main app
 #application.ic-app {
   margin-top: var(--kpm-bar-height);
 }
@@ -21,8 +21,8 @@ div.ReactTrayPortal div.ReactTray__Overlay,
 
 // Make main icon menu give space to KPM
 header.ic-app-header {
-    height: calc(100% - var(--kpm-bar-height));
-    top: var(--kpm-bar-height);
+  height: calc(100% - var(--kpm-bar-height));
+  top: var(--kpm-bar-height);
 }
 
 body.use-personal-menu div.ui-widget.ui-tooltip {
@@ -30,12 +30,13 @@ body.use-personal-menu div.ui-widget.ui-tooltip {
 }
 
 body.use-personal-menu #nav-tray-portal > span > span,
-div#main.ic-Layout-columns > span > span, #discussion-toolbar > div {
+div#main.ic-Layout-columns > span > span,
+#discussion-toolbar > div {
   top: var(--kpm-bar-height);
 }
 body.use-personal-menu .bcs__trigger {
   top: var(--kpm-bar-height);
   &::after {
-      top: calc(58px + var(--kpm-bar-height));
+    top: calc(58px + var(--kpm-bar-height));
   }
 }
