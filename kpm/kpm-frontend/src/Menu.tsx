@@ -13,6 +13,7 @@ import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 import { currentUser } from "./app";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -24,6 +25,9 @@ export function Menu({ hasStudies, hasTeaching }: any) {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();
+  const menuRef = useRef(null);
+  // Update CSS --kpm-bar-height
+  useSetKpmBarHeight(menuRef);
 
   const hasMatch: boolean = !!getRoutes().find(
     (route) => route.path === location.pathname
@@ -32,7 +36,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
   return (
     <React.Fragment>
       <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
-      <nav className="kpm-menu">
+      <nav ref={menuRef} className="kpm-menu">
         <ul>
           <li className="kpm-profile-item">
             <ToggleNavLink to="profile" className={linkClassName}>
@@ -95,4 +99,32 @@ export function Menu({ hasStudies, hasTeaching }: any) {
       <Outlet />
     </React.Fragment>
   );
+}
+
+function useSetKpmBarHeight(menuRef: RefObject<HTMLElement | null>) {
+  // We check the size of the menu on each animation frame because this
+  // is more robust than listening to resize events. We only write if
+  // there was a change in order to avoid layout updates.
+  const requestAnimFrameRef = useRef(0); // Do we really need a ref here? perhaps due to useEffect at bottom.
+  let currentHeight = 0;
+
+  const calculate = () => {
+    // Update the kpm bar height
+    const menuHeight = menuRef.current?.clientHeight ?? 0;
+    if (currentHeight !== menuHeight) {
+      currentHeight = menuHeight;
+      document.documentElement.style.setProperty(
+        "--kpm-bar-height",
+        menuHeight + "px"
+      );
+    }
+
+    requestAnimFrameRef.current = requestAnimationFrame(calculate);
+  };
+
+  // Continue polling until unmounted
+  useEffect(() => {
+    requestAnimFrameRef.current = requestAnimationFrame(calculate);
+    return () => cancelAnimationFrame(requestAnimFrameRef.current);
+  }, []);
 }
