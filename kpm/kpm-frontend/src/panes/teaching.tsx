@@ -73,9 +73,9 @@ function Course({ courseCode, course }: any) {
 
   return (
     <div className="kpm-teaching-course">
-      <h2>{courseCode}</h2>
+      <h2 className="kpm-teaching-course-code">{courseCode}</h2>
       <div className="kpm-row">
-        <p>{courseName}</p>
+        <p className="kpm-teaching-course-name">{courseName}</p>
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}
