@@ -49,10 +49,13 @@ export function Menu({ hasStudies, hasTeaching }: any) {
               {formatDisplayName(currentUser.display_name)}
             </ToggleNavLink>
           </li>
-          <li>
-            <ToggleNavLink to="schedule" className={linkClassName}>
+          <li className="kpm-schedule-item">
+            <a href="https://www.kth.se/social/home/calendar/">
+              {i18n("Schedule")}…
+            </a>
+            {/* <ToggleNavLink to="schedule" className={linkClassName}>
               {i18n("Schedule")}
-            </ToggleNavLink>
+            </ToggleNavLink> */}
           </li>
           {hasStudies && (
             <li>

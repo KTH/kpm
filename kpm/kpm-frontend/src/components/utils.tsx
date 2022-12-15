@@ -1,5 +1,5 @@
 export function linkClassName({ isActive }: { isActive: boolean }) {
-  return isActive ? " active" : "";
+  return isActive ? "active" : "";
 }
 
 export function formatDisplayName(name: string) {

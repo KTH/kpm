@@ -70,6 +70,14 @@
     }
   }
 
+  .kpm-schedule-item a {
+    padding: var(--kpmPad) calc(2 * var(--kpmPad));
+
+    &::after {
+      display: none;
+    }
+  }
+
   .kpm-menu-shotcuts {
     margin-left: auto;
     display: flex;
