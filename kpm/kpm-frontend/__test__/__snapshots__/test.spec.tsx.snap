@@ -21,13 +21,14 @@ exports[`<App /> Can be rendered 1`] = `
         Dr.LocalDev
       </a>
     </li>
-    <li>
+    <li
+      className="kpm-schedule-item"
+    >
       <a
-        className=""
-        href="#/schedule"
-        onClick={[Function]}
+        href="https://www.kth.se/social/home/calendar/"
       >
         Schema
+        …
       </a>
     </li>
     <li>
