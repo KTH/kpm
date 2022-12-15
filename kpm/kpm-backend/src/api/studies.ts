@@ -13,6 +13,7 @@ import {
   get_canvas_rooms,
   sessionUser,
   TKoppsCourseInfo,
+  TKoppsRoundInTerm,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
@@ -82,56 +83,53 @@ export async function studiesApiHandler(
     }
     const { rooms } = canvas_data;
 
-    const DAY_IN_MS = 24 * 3600 * 1000;
-
     let courses: Record<TCourseCode, TStudiesCourse> = {};
     for (let [course_code, roles] of Object.entries(studies?.courses || [])) {
       const kopps = await kopps_futs[course_code];
 
       let completed = false;
-      let current_rounds: TStudiesCourseRound[] = [];
-      let other_rounds: TStudiesCourseRound[] = [];
+      let mytermrounds: Record<string, Record<string, TStudiesCourseRound>> = {};
       for (let role of roles) {
         if (role.status === "godkand") {
           completed = true;
         } else if (role.status && role.year && role.term && role.round) {
           const term = `${role.year}${role.term}`;
-          const round = kopps.rounds[term].find(
-            (value) => value.ladokRoundId == role.round
-          );
-          if (round) {
-            const start = Date.parse(round.firstTuitionDate) - 5 * DAY_IN_MS;
-            const end = Date.parse(round.lastTuitionDate) + 25 * DAY_IN_MS;
-            const now = Date.now();
-            const current = start < now && end > now;
-            let result: TStudiesCourseRound = {
-              status: role.status,
-              year: role.year,
-              term: role.term,
-              ladokRoundId: round.ladokRoundId,
-              firstTuitionDate: round.firstTuitionDate,
-              lastTuitionDate: round.lastTuitionDate,
-              shortName: round.shortName,
-              current,
-            };
-            if (current) {
-              current_rounds.push(result);
-            } else {
-              other_rounds.push(result);
-            }
-          } else {
-            log.warn(
-              { course_code, term, round: role.round },
-              "Round not found in kopps"
+          if (!mytermrounds[term]) {
+            mytermrounds[term] = {};
+          }
+          if (!mytermrounds[term][role.round]) {
+            const round = kopps.rounds[term].find(
+              (value) => value.ladokRoundId == role.round
             );
-            let result: TStudiesCourseRound = {
+            mytermrounds[term][role.round] = {
               status: role.status,
               year: role.year,
               term: role.term,
               ladokRoundId: role.round,
-              current: false,
+              firstTuitionDate: round?.firstTuitionDate,
+              lastTuitionDate: round?.lastTuitionDate,
+              shortName: round?.shortName,
+              current: isRoundCurrent(round)
             };
-            other_rounds.push(result);
+            if (!round) {
+              log.warn(
+                { course_code, term, round: role.round },
+                "Round not found in kopps"
+              );
+            }
+          } else if (!mytermrounds[term][role.round].status || role.status == "registrerade") {
+            mytermrounds[term][role.round].status = role.status;
+          }
+        }
+      }
+      let current_rounds: TStudiesCourseRound[] = [];
+      let other_rounds: TStudiesCourseRound[] = [];
+      for (let [_term, rounds] of Object.entries(mytermrounds)) {
+        for (let [_id, round] of Object.entries(rounds)) {
+          if (round.current) {
+            current_rounds.push(round);
+          } else {
+            other_rounds.push(round);
           }
         }
       }
@@ -153,6 +151,18 @@ export async function studiesApiHandler(
     });
   } catch (err) {
     next(err);
+  }
+}
+
+function isRoundCurrent(round?: TKoppsRoundInTerm) {
+  if (round) {
+    const DAY_IN_MS = 24 * 3600 * 1000;
+    const start = Date.parse(round.firstTuitionDate) - 5 * DAY_IN_MS;
+    const end = Date.parse(round.lastTuitionDate) + 25 * DAY_IN_MS;
+    const now = Date.now();
+    return start < now && end > now;
+  } else {
+    return false;
   }
 }
 

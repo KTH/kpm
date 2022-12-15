@@ -112,7 +112,7 @@ type TKoppsTermWithCourseRounds = {
   term: string;
   rounds: TKoppsRoundInTerm[];
 };
-type TKoppsRoundInTerm = {
+export type TKoppsRoundInTerm = {
   shortName?: string;
   ladokRoundId: string; // A one-digit number
   ladokUID: string; // A full uid
