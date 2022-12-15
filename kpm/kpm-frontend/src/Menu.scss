@@ -62,7 +62,7 @@
     display: flex;
     align-items: center;
     gap: $rowGap $colGap;
-    padding: 0 calc(2 * var(--kpmPad)) 0 0;
+    padding: 0 calc(3.5 * var(--kpmPad)) 0 0;
 
     .kpm-profile-image {
       height: $fullMenuHeight;
