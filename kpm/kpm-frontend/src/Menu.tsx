@@ -14,6 +14,7 @@ import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 import { currentUser } from "./app";
 import { RefObject, useEffect, useRef, useState } from "react";
+import "./Menu.scss";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =

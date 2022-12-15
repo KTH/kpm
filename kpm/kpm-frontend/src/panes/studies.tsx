@@ -54,7 +54,13 @@ export function Studies() {
       {courses && (
         <ul className="kpm-studies">
           {Object.entries(courses)?.map(([course_code, course]) => {
-            return <Course courseCode={course_code} course={course} />;
+            return (
+              <Course
+                key={course_code}
+                courseCode={course_code}
+                course={course}
+              />
+            );
           })}
         </ul>
       )}
