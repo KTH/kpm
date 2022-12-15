@@ -1,0 +1,91 @@
+@import "./vars";
+
+#kpm-6cf53 .kpm-menu {
+  pointer-events: all;
+  background-color: var(--kpmMenuBg);
+  color: var(--kpmMenuText);
+  width: 100%;
+  flex-grow: 0;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+
+  li {
+    display: inline-block;
+    list-style: none;
+    cursor: pointer;
+
+    a {
+      position: relative;
+      display: inline-block;
+      color: var(--kpmMenuText);
+      text-decoration: none;
+      padding: var(--kpmPad) calc(4 * var(--kpmPad)) var(--kpmPad) calc(2 * var(--kpmPad));
+
+      &::after {
+        content: "";
+        background: kthStyleUrl("/icons/arrow-expand-white.svg");
+        width: 0.3rem;
+        height: 0.5rem;
+        position: absolute;
+        top: 50%;
+        right: calc(2 * var(--kpmPad));
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+
+    a.active,
+    a:hover {
+      color: var(--kpmMenuHoverText);
+      background-color: var(--kpmMenuHoverBg);
+      &::after {
+        background: kthStyleUrl("/icons/arrow-expand-black.svg");
+      }
+    }
+  }
+
+  // Use for profile image and icons
+  $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
+
+  .kpm-profile-item a {
+    $rowGap: calc(2 * var(--kpmGap));
+    $colGap: $rowGap;
+
+    display: flex;
+    align-items: center;
+    gap: $rowGap $colGap;
+    padding: 0 calc(2 * var(--kpmPad)) 0 0;
+
+    .kpm-profile-image {
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
+    }
+  }
+
+  .kpm-menu-shotcuts {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+
+    a {
+      display: block;
+      flex-grow: 1;
+      height: $fullMenuHeight;
+      width: $fullMenuHeight;
+      padding: calc(var(--kpmPad));
+    }
+
+    svg {
+      height: 100%;
+      vertical-align: middle;
+      width: auto;
+    }
+  }
+}
