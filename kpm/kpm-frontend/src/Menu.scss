@@ -27,7 +27,7 @@
       display: inline-block;
       color: var(--kpmMenuText);
       text-decoration: none;
-      padding: var(--kpmPad) calc(4 * var(--kpmPad)) var(--kpmPad) calc(2 * var(--kpmPad));
+      padding: var(--kpmPad) calc(3.5 * var(--kpmPad)) var(--kpmPad) calc(2 * var(--kpmPad));
 
       &::after {
         content: "";
@@ -36,7 +36,7 @@
         height: 0.5rem;
         position: absolute;
         top: 50%;
-        right: calc(2 * var(--kpmPad));
+        right: calc(1.5 * var(--kpmPad));
         transform: translate(-50%, -50%) rotate(90deg);
       }
     }
