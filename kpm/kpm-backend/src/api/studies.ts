@@ -88,7 +88,10 @@ export async function studiesApiHandler(
       const kopps = await kopps_futs[course_code];
 
       let completed = false;
-      let mytermrounds: Record<string, Record<string, TStudiesCourseRound>> = {};
+      let mytermrounds: Record<
+        string,
+        Record<string, TStudiesCourseRound>
+      > = {};
       for (let role of roles) {
         if (role.status === "godkand") {
           completed = true;
@@ -109,7 +112,7 @@ export async function studiesApiHandler(
               firstTuitionDate: round?.firstTuitionDate,
               lastTuitionDate: round?.lastTuitionDate,
               shortName: round?.shortName,
-              current: isRoundCurrent(round)
+              current: isRoundCurrent(round),
             };
             if (!round) {
               log.warn(
@@ -117,7 +120,10 @@ export async function studiesApiHandler(
                 "Round not found in kopps"
               );
             }
-          } else if (!mytermrounds[term][role.round].status || role.status == "registrerade") {
+          } else if (
+            !mytermrounds[term][role.round].status ||
+            role.status == "registrerade"
+          ) {
             mytermrounds[term][role.round].status = role.status;
           }
         }
