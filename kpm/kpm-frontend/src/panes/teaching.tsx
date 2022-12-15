@@ -102,19 +102,21 @@ type TCanvasRoomShortListProps = {
 function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
   return (
     <ul className="kpm-teaching-course-rooms">
-      {rooms.map((room: TCanvasRoom) => {
-        const key = `${room.registrationCode}-${room.startTerm}`;
-        return (
-          <li key={key}>
-            <CanvasRoomLink
-              url={room.url}
-              type={room.type}
-              code={room.registrationCode}
-              startTerm={room.startTerm!}
-            />
-          </li>
-        );
-      })}
+      {rooms
+        .filter((room: TCanvasRoom) => room.type !== "rapp")
+        .map((room: TCanvasRoom) => {
+          const key = `${room.registrationCode}-${room.startTerm}`;
+          return (
+            <li key={key}>
+              <CanvasRoomLink
+                url={room.url}
+                type={room.type}
+                code={room.registrationCode}
+                startTerm={room.startTerm!}
+              />
+            </li>
+          );
+        })}
     </ul>
   );
 }
@@ -167,6 +169,7 @@ function CanvasRoomExpandedList({
             <div className="kpm-col">
               {groups[year]?.["vt"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
+                  key={`${room.registrationCode}-${room.startTerm}`}
                   url={room.url}
                   type={room.type}
                   code={room.registrationCode}
@@ -175,6 +178,11 @@ function CanvasRoomExpandedList({
               ))}
               {groups[year]?.["other"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
+                  key={
+                    room.type !== "rapp"
+                      ? `${room.registrationCode}-${room.startTerm}`
+                      : room.url.toString().split("/course/")[1]
+                  }
                   url={room.url}
                   type={room.type}
                   code={room.registrationCode}
@@ -185,6 +193,7 @@ function CanvasRoomExpandedList({
             <div className="kpm-col">
               {groups[year]?.["ht"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink
+                  key={`${room.registrationCode}-${room.startTerm}`}
                   url={room.url}
                   type={room.type}
                   code={room.registrationCode}
