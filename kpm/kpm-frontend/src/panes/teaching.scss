@@ -72,9 +72,21 @@
       $rowGap: 20px;
       $colGap: $rowGap;
       display: flex;
-      flex-flow: row wrap;
+      flex-flow: row nowrap;
       gap: $rowGap $colGap;
       align-items: flex-start;
+
+      .kpm-col {
+        min-width: 12ch;
+      }
+
+      .kpm-col.kpm-exam-room-links {
+        max-width: 25ch;
+        a {
+          display: inline;
+          word-wrap: normal;
+        }
+      }
     }
   }
 }

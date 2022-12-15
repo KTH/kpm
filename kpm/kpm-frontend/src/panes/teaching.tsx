@@ -68,7 +68,7 @@ function Course({ courseCode, course }: any) {
   const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
   const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
-  const { current, other } = filterCanvasRooms(course.rooms);
+  const { current, exams, other } = filterCanvasRooms(course.rooms);
   const currentTerm = "HT2022";
 
   return (
@@ -88,6 +88,7 @@ function Course({ courseCode, course }: any) {
             rooms={[...current, ...other]}
             title={i18n("Alla kursrum")}
           />
+          <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
         </div>
       </div>
     </div>
@@ -208,6 +209,52 @@ function CanvasRoomExpandedList({
   );
 }
 
+type TExamRoomListProps = {
+  rooms: TCanvasRoom[];
+  title: string;
+};
+function ExamRoomList({ rooms, title }: TExamRoomListProps) {
+  // Only show this if it has any items
+  if (rooms.length === 0) return null;
+
+  const roomsByYear: Record<string, TCanvasRoom[]> = {};
+  rooms.forEach((room: TCanvasRoom) => {
+    const examYear = room.examDate?.split("-")[0] || "other";
+    if (roomsByYear[examYear] === undefined) {
+      roomsByYear[examYear] = [];
+    }
+    roomsByYear[examYear].push(room);
+  });
+
+  return (
+    <DropdownMenuGroup title={title}>
+      {Object.entries(roomsByYear).map(([year, rooms]) => (
+        <div className="kpm-teaching-course-rooms-dd-item">
+          <h3>{year}</h3>
+          <div className="kpm-col kpm-exam-room-links">
+            {rooms.map((room) => (
+              <li
+                key={`${room.registrationCode}-${room.startTerm}`}
+                className="kpm-row"
+              >
+                <ExamRoomLink
+                  key={
+                    room.type !== "rapp"
+                      ? `${room.registrationCode}-${room.startTerm}`
+                      : room.url.toString().split("/course/")[1]
+                  }
+                  url={room.url}
+                  name={room.name}
+                />
+              </li>
+            ))}
+          </div>
+        </div>
+      ))}
+    </DropdownMenuGroup>
+  );
+}
+
 {
   /* <GroupItem key={room.startTerm}>
 <CanvasRoomLink
@@ -240,13 +287,22 @@ export function CanvasRoomLink({
   );
 }
 
+type TExamRoomLinkProps = {
+  url: URL | string;
+  name: string;
+};
+
+export function ExamRoomLink({ url, name }: TExamRoomLinkProps) {
+  // This is a Component to force consistency
+  return <a href={typeof url === "string" ? url : url.href}>{name}</a>;
+}
+
 function filterCanvasRooms(rooms: TCanvasRoom[]): {
   current: TCanvasRoom[];
   other: TCanvasRoom[];
+  exams: TCanvasRoom[];
 } {
-  const outp = [...rooms];
-
-  outp.sort((a: TCanvasRoom, b: TCanvasRoom) => {
+  rooms.sort((a: TCanvasRoom, b: TCanvasRoom) => {
     const aVal = parseInt(a.startTerm || "0");
     const bVal = parseInt(b.startTerm || "0");
     if (aVal === bVal) return 0;
@@ -254,23 +310,29 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
     return 1;
   });
 
-  if (outp.length <= 4) {
+  const exams = rooms.filter((c: TCanvasRoom) => c.type === "exam");
+  const courseRooms = rooms.filter((c: TCanvasRoom) => c.type !== "exam");
+
+  if (courseRooms.length <= 4) {
     return {
-      current: outp,
+      current: courseRooms,
       other: [],
+      exams,
     };
   }
 
-  if (outp.length === 0) {
+  if (courseRooms.length === 0) {
     return {
       current: [],
       other: [],
+      exams,
     };
   }
 
   return {
-    current: outp.slice(0, 3),
-    other: outp.slice(3),
+    current: courseRooms.slice(0, 3),
+    other: courseRooms.slice(3),
+    exams,
   };
 }
 

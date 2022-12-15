@@ -72,6 +72,8 @@ api.get("/user/:user", async (req, res, next) => {
       } else {
         return res.status(statusCode || 500).send("error");
       }
+    } else if (json.length === 0) {
+      res.status(statusCode || 200).send([]);
     } else {
       const result = teachingResult(json[0].memberOf);
       res.status(statusCode || 200).send(result);
