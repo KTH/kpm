@@ -34,6 +34,11 @@
       margin-right: calc(3 * var(--kpmGap));
     }
 
+    .kpm-teaching-course-code,
+    .kpm-teaching-course-name {
+      font-weight: 600;
+    }
+
     .kpm-row {
       gap: $rowGap $colGap;
     }
