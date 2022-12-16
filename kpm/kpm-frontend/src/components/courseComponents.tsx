@@ -28,18 +28,14 @@ export function ExamRoomList({ rooms, title }: TExamRoomListProps) {
           <div className="kpm-col kpm-exam-room-links">
             {rooms.map((room) => (
               <li
-                key={`${room.registrationCode}-${room.startTerm}`}
+                key={
+                  room.type !== "rapp"
+                    ? `${room.registrationCode}-${room.startTerm}`
+                    : room.url.toString().split("/course/")[1]
+                }
                 className="kpm-row"
               >
-                <ExamRoomLink
-                  key={
-                    room.type !== "rapp"
-                      ? `${room.registrationCode}-${room.startTerm}`
-                      : room.url.toString().split("/course/")[1]
-                  }
-                  url={room.url}
-                  name={room.name}
-                />
+                <ExamRoomLink url={room.url} name={room.name} />
               </li>
             ))}
           </div>
