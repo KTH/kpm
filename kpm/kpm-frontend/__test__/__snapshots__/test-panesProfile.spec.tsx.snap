@@ -11,7 +11,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Dr.LocalDev - Inställningar
+        Dr.LocalDev - Settings
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
@@ -20,7 +20,7 @@ exports[`<Profile /> Can be rendered 1`] = `
           className="kpm-button"
           href="/kpm/auth/logout"
         >
-          Logga ut
+          Logout
         </a>
       </aside>
     </header>
@@ -30,7 +30,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        Om mig
+        About me
       </h3>
       <ul>
         <li>
@@ -39,27 +39,27 @@ exports[`<Profile /> Can be rendered 1`] = `
             href="https://www.kth.se/profile/jhsware/"
           >
             <img
-              alt="Profilbild"
+              alt="Profile Image"
               src="https://www.kth.se/files/thumbnail/jhsware"
             />
-            Min profil
+            My Profile
           </a>
         </li>
         <li>
           <a
             href="https://www.kth.se/emailforward"
           >
-            Vidarebefordra e-post
+            Forward KTH email
           </a>
         </li>
         <li>
           <a
             href="https://www.student.ladok.se/student/app/studentwebb/mina-uppgifter"
           >
-            Kontaktuppgifter
+            Contact details
           </a>
            
-          (i LADOK)
+          (in LADOK)
         </li>
       </ul>
     </div>
@@ -69,35 +69,35 @@ exports[`<Profile /> Can be rendered 1`] = `
       <h3
         className="kpm-col-header"
       >
-        Mina inställningar
+        My Settings
       </h3>
       <ul>
         <li>
           <a
             href="https://www.kth.se/social/home/settings/"
           >
-            Prenumerationer, mitt schema
+            Subscriptions, my schedule
           </a>
         </li>
         <li>
           <a
             href="https://www.kth.se/social/home/calendar/settings/"
           >
-            Exporter mitt schema (iCal)
+            Export My schedule (e.g. to your mobile phone)
           </a>
         </li>
         <li>
           <a
             href="https://login.sys.kth.se/peap.html"
           >
-            Trådlöst nätverk (WiFi)
+            Wireless network
           </a>
         </li>
         <li>
           <a
             href="https://login.kth.se/password/change"
           >
-            Byt lösenord
+            Change password
           </a>
         </li>
       </ul>

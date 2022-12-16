@@ -22,6 +22,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
 
   const loggedIn = isValidSession(req.session.user);
   const LOGIN_URL = `${publicUriBase}/auth/login`;
+  const lang = req.cookies["language"];
 
   if (loggedIn) {
     const { display_name, email, kthid, exp, username } = req.session
@@ -41,6 +42,7 @@ window.__kpmCurrentUser__ = ${
       // Inject some user data to allow rendering the menu properly
       JSON.stringify(userToFrontend)
     };
+window.__kpmSettings__ = ${JSON.stringify({ lang })};
 })("${publicUriBase}/assets/${
       assets["index.js"]?.fileName
     }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
@@ -49,7 +51,10 @@ window.__kpmCurrentUser__ = ${
 var cr = (t) => document.createElement(t);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "inset: 0; position: fixed; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: end; margin: 0 auto; background-color: #65656c;";
 n.innerHTML = "<div style='max-width: 1228px; display: flex; align-items: center;'><a href='${LOGIN_URL}?nextUrl=" + location.href + "' style='margin-left: auto; color: white;'>Login</a></div>"; document.body.prepend(n);
-      })("${publicUriBase}/assets/${assets["index.js"]?.fileName}", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
+      })("${publicUriBase}/assets/${
+      assets["index.js"]?.fileName
+    }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");
+    window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
   }
 
   // Need to check
