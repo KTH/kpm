@@ -2,6 +2,25 @@
 
 Monorepos for KPM implemented in Typescript for Nodejs.
 
+## Release
+
+KPM consists of multiple applications that should be released in sync. Follow this procedure:
+
+1. Check out **main** and stash any uncommited changes
+2. Run `npm run release`
+   - the release script in cellus-release will be executed
+   - your release will be tagged with current version in docker.conf
+   - docker.conf files will be updated with a new minor version
+3. Update ACTIVE for each app in cellus-registry with the release version string that has been output to console
+   - kpm/ACTIVE/docker-stack.yml
+   - my-canvas-rooms-api/ACTIVE/docker-stack.yml
+   - my-studies-api/ACTIVE/docker-stack.yml
+   - my-teaching-api/ACTIVE/docker-stack.yml
+
+Any further commits on main will now only be deployed in STAGE because docker.conf was updated for each app.
+
+The deployed image will be marked with the release tag.
+
 ## Development
 
 1. Clone the repos and enter
@@ -18,7 +37,7 @@ You can find our [development guidelines here](README_development.md).
 
 ### Developing the loader script
 
-- Run `npm run dev-prod`
+- Run `npm run dev-loader`
 
 This builds the frontend bundle and starts all other apps in development mode. You can now reach the frontend at http://localhost:3000/kpm/index.html. This is an empty HTML-page that injects the menu using loader.
 
