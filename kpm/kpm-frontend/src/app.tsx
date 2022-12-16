@@ -15,9 +15,14 @@ export type TCurrentUser = {
   exp: number;
 };
 
+type TSettings = {
+  lang?: string;
+};
+
 declare global {
   interface Window {
     __kpmCurrentUser__: TCurrentUser;
+    __kpmSettings__: TSettings;
   }
 }
 
