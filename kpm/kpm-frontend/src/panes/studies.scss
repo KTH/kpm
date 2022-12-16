@@ -64,5 +64,18 @@
       font-weight: 400;
       color: var(--kpmPaneTextSoft);
     }
+
+    .kpm-link-list {
+      min-height: 50px;
+      min-width: 30ch;
+
+      ul {
+        $rowGap: calc(3 * var(--kpmGap));
+        $colGap: $rowGap;
+        display: flex;
+        flex-direction: column;
+        gap: $rowGap $colGap;
+      }
+    }
   }
 }

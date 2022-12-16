@@ -14,6 +14,7 @@ import {
   ErrorMessage,
   LoadingPlaceholder,
 } from "../components/common";
+import { ExamRoomList } from "../components/courseComponents";
 
 export async function loaderStudies({
   request,
@@ -87,6 +88,7 @@ function Course({ courseCode, course }: TCourseProps) {
   // TODO: Try to find relevant room for selected round?
   const roomToShow = course.rooms?.[0] || undefined;
   const status = course.completed ? "godkand" : roundToShow?.status;
+  const exams = course.rooms?.filter((c) => c.type === "exam");
   return (
     <div className={`kpm-studies-course kpm-${status}`}>
       <h2>
@@ -128,7 +130,7 @@ function Course({ courseCode, course }: TCourseProps) {
         </li>
         <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
       </ul>
-      {/* TODO: Show examinationsrum */}
+      <ExamRoomList rooms={exams} title={i18n("Examinationsrum")} />
     </div>
   );
 }

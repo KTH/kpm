@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
-import {
-  APITeaching,
-  TCanvasRoom,
-  TTeachingCourse,
-} from "kpm-backend-interface";
+import React from "react";
+import type { APITeaching, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { createApiUri, formatTerm, useDataFecther } from "./utils";
@@ -16,6 +11,7 @@ import {
 import { i18n } from "../i18n/i18n";
 
 import "./teaching.scss";
+import { ExamRoomList } from "../components/courseComponents";
 
 export async function loaderTeaching({
   request,
@@ -165,7 +161,7 @@ function CanvasRoomExpandedList({
     <DropdownMenuGroup title={title}>
       {groupKeys.map((year: string) => {
         return (
-          <div className="kpm-teaching-course-rooms-dd-item">
+          <div className="kpm-course-rooms-dd-item">
             <h3>{year}</h3>
             <div className="kpm-col">
               {groups[year]?.["vt"].map((room: TCanvasRoom) => (
@@ -209,52 +205,6 @@ function CanvasRoomExpandedList({
   );
 }
 
-type TExamRoomListProps = {
-  rooms: TCanvasRoom[];
-  title: string;
-};
-function ExamRoomList({ rooms, title }: TExamRoomListProps) {
-  // Only show this if it has any items
-  if (rooms.length === 0) return null;
-
-  const roomsByYear: Record<string, TCanvasRoom[]> = {};
-  rooms.forEach((room: TCanvasRoom) => {
-    const examYear = room.examDate?.split("-")[0] || "other";
-    if (roomsByYear[examYear] === undefined) {
-      roomsByYear[examYear] = [];
-    }
-    roomsByYear[examYear].push(room);
-  });
-
-  return (
-    <DropdownMenuGroup title={title}>
-      {Object.entries(roomsByYear).map(([year, rooms]) => (
-        <div className="kpm-teaching-course-rooms-dd-item">
-          <h3>{year}</h3>
-          <div className="kpm-col kpm-exam-room-links">
-            {rooms.map((room) => (
-              <li
-                key={`${room.registrationCode}-${room.startTerm}`}
-                className="kpm-row"
-              >
-                <ExamRoomLink
-                  key={
-                    room.type !== "rapp"
-                      ? `${room.registrationCode}-${room.startTerm}`
-                      : room.url.toString().split("/course/")[1]
-                  }
-                  url={room.url}
-                  name={room.name}
-                />
-              </li>
-            ))}
-          </div>
-        </div>
-      ))}
-    </DropdownMenuGroup>
-  );
-}
-
 {
   /* <GroupItem key={room.startTerm}>
 <CanvasRoomLink
@@ -285,16 +235,6 @@ export function CanvasRoomLink({
       {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
-}
-
-type TExamRoomLinkProps = {
-  url: URL | string;
-  name: string;
-};
-
-export function ExamRoomLink({ url, name }: TExamRoomLinkProps) {
-  // This is a Component to force consistency
-  return <a href={typeof url === "string" ? url : url.href}>{name}</a>;
 }
 
 function filterCanvasRooms(rooms: TCanvasRoom[]): {
