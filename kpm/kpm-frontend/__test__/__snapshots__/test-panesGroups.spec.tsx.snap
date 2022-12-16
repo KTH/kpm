@@ -11,21 +11,21 @@ exports[`<Groups /> Can be rendered 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Mina grupper
+        My Groups
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
       >
         <a
           href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
-          title="Sök bland grupper att följa"
+          title="Search for interesting groups to follow"
         >
-          Sök bland grupper
+          Find groups
         </a>
         <a
           href="https://www.kth.se/social/group-create/"
         >
-          Skapa ny grupp
+          Create new group
         </a>
         <a
           className="icon"
@@ -56,13 +56,13 @@ exports[`<Groups /> Can be rendered 1`] = `
         <li
           onClick={[Function]}
         >
-          Favoriter
+          Favourites
         </li>
         <li
           className="active"
           onClick={[Function]}
         >
-          Alla prenumerationer
+          All Subscriptions
         </li>
       </ul>
     </nav>
@@ -89,21 +89,21 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Mina grupper
+        My Groups
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
       >
         <a
           href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
-          title="Sök bland grupper att följa"
+          title="Search for interesting groups to follow"
         >
-          Sök bland grupper
+          Find groups
         </a>
         <a
           href="https://www.kth.se/social/group-create/"
         >
-          Skapa ny grupp
+          Create new group
         </a>
         <a
           className="icon"
@@ -134,13 +134,13 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
         <li
           onClick={[Function]}
         >
-          Favoriter
+          Favourites
         </li>
         <li
           className="active"
           onClick={[Function]}
         >
-          Alla prenumerationer
+          All Subscriptions
         </li>
       </ul>
     </nav>
@@ -209,21 +209,21 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Mina grupper
+        My Groups
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
       >
         <a
           href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
-          title="Sök bland grupper att följa"
+          title="Search for interesting groups to follow"
         >
-          Sök bland grupper
+          Find groups
         </a>
         <a
           href="https://www.kth.se/social/group-create/"
         >
-          Skapa ny grupp
+          Create new group
         </a>
         <a
           className="icon"
@@ -255,12 +255,12 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
           className="active"
           onClick={[Function]}
         >
-          Favoriter
+          Favourites
         </li>
         <li
           onClick={[Function]}
         >
-          Alla prenumerationer
+          All Subscriptions
         </li>
       </ul>
     </nav>
