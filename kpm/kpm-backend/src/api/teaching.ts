@@ -66,7 +66,7 @@ export async function teachingApiHandler(
         credits: kopps?.credits,
         creditUnitAbbr: kopps?.creditUnitAbbr,
         roles: roles,
-        rooms: rooms?.[course_code] || [],
+        rooms: rooms?.[course_code] || null,
       };
     }
 
@@ -91,6 +91,10 @@ function myTeachingApiErr(err: any) {
 }
 
 function myCanvasRoomsApiErr(err: any) {
+  if (err.message.indexOf("401") > -1) {
+    // We couldn't access Canvas, setting result to null
+    return null;
+  }
   handleCommonGotErrors(err);
   // TODO: Add API specific error handling
   Error.captureStackTrace(err, myCanvasRoomsApiErr);
