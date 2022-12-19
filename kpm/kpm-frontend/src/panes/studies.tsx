@@ -15,6 +15,8 @@ import {
   LoadingPlaceholder,
 } from "../components/common";
 import { ExamRoomList } from "../components/courseComponents";
+import { useEffect, useState } from "react";
+import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderStudies({
   request,
@@ -36,15 +38,61 @@ export async function loaderStudies({
   }
 }
 
+type TFilter = "current" | "other";
+
+function _isCurrentCourse(course: TStudiesCourse): boolean {
+  return !!course.rounds.find((r) => r.current);
+}
+
 export function Studies() {
   const { res, loading, error } = useDataFecther<APIStudies>(loaderStudies);
   const { courses } = res || {};
   // const { courses, programmes } = useLoaderData() as APIStudies;
+  const coursesArr = Object.entries(courses || {});
 
-  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
+  const [filter, setFilter] = useState<TFilter>();
+
+  // Switch to all if there are no starred programmes
+  useEffect(() => {
+    if (filter === undefined && coursesArr.length > 0) {
+      const hasCurrent = !!coursesArr.find(([k, c]) =>
+        c.rounds.find((r) => r.current)
+      );
+      setFilter(hasCurrent ? "current" : "other");
+    }
+  }, [courses]);
+
+  const filteredCourseEntries = coursesArr.filter(([key, course]) => {
+    switch (filter) {
+      case "current":
+        return _isCurrentCourse(course);
+      case "other":
+        return !_isCurrentCourse(course);
+    }
+  });
+
+  const isEmpty = !loading && !error && filteredCourseEntries.length === 0;
+
+  const coursesToShow = Object.fromEntries(filteredCourseEntries);
 
   return (
     <MenuPane>
+      <TabFilter>
+        <FilterOption<TFilter>
+          value="current"
+          filter={filter || "other"}
+          onSelect={setFilter}
+        >
+          {i18n("Current Courses")}
+        </FilterOption>
+        <FilterOption<TFilter>
+          value="other"
+          filter={filter || "other"}
+          onSelect={setFilter}
+        >
+          {i18n("Other")}
+        </FilterOption>
+      </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {isEmpty && (
@@ -52,9 +100,9 @@ export function Studies() {
           {i18n("You aren't studying any courses.")}
         </EmptyPlaceholder>
       )}
-      {courses && (
+      {coursesToShow && (
         <ul className="kpm-studies">
-          {Object.entries(courses)?.map(([course_code, course]) => {
+          {Object.entries(coursesToShow)?.map(([course_code, course]) => {
             return (
               <Course
                 key={course_code}
