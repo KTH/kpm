@@ -99,4 +99,10 @@
       text-decoration: underline;
     }
   }
+
+  .kpm-muted-text {
+    padding-top: 0.1em;
+    color: var(--kpmPaneTextMuted);
+    font-size: 0.9em;
+  }
 }

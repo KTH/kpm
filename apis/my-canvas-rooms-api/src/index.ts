@@ -22,7 +22,7 @@ function localErrorHandler(err: any, req: any, res: any, next: any) {
   // using async errorhandlers to get proper stack trace. Look at `function openIdErr(err: any)`
   // TODO: When implemented you can switch `localErrorHandler` for `errorHandler` as error
   // middleware
-  if (err.message.startsWith("Unauthorized.")) {
+  if (err.code === 401) {
     err = new AuthError<APIAuthErrType>({
       type: "Unauthorized",
       message: "Client didn't provide a valid Canvas auth token",

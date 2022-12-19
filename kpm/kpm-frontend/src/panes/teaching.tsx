@@ -64,7 +64,11 @@ function Course({ courseCode, course }: any) {
   const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
   const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
-  const { current, exams, other } = filterCanvasRooms(course.rooms);
+  const {
+    current = [],
+    exams = [],
+    other = [],
+  } = course.rooms ? filterCanvasRooms(course.rooms) : {};
   const currentTerm = "HT2022";
 
   return (
@@ -79,6 +83,11 @@ function Course({ courseCode, course }: any) {
         />
         <div className="kpm-row">
           <h3>{i18n("Canvas:")}</h3>
+          {course.rooms === null && (
+            <p className="kpm-muted-text">
+              {i18n("Canvas is silent, try later...")}
+            </p>
+          )}
           <CanvasRoomShortList rooms={current} />
           <CanvasRoomExpandedList
             rooms={[...current, ...other]}
