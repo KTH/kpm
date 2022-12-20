@@ -84,6 +84,45 @@ export async function fetchApi(
     ...otherOptions,
   };
   const res = await fetch(createApiUri(path), fetchOptions);
-  // If auth error, show dialog
+
+  if (res.status === 401 /* Unauthorized */) {
+    // Trigger login dialog by event or callback
+    loginEventPubSub.send({
+      name: "authenticated",
+      value: false,
+    });
+  }
+
   return res;
 }
+
+// Minimalistic pub/sub for event passing (used to show login dialog)
+export type TPubSubEvent<TEventName> = {
+  name: TEventName;
+  value: any;
+};
+type TPubSubscriper<TEventName> = (event: TPubSubEvent<TEventName>) => void;
+
+class PubSub<TEventName = string> {
+  _subscribers: TPubSubscriper<any>[];
+  constructor() {
+    this._subscribers = [];
+  }
+
+  subscribe(cb: TPubSubscriper<TEventName>) {
+    this._subscribers.push(cb);
+  }
+
+  unsubscribe(cb: TPubSubscriper<TEventName>) {
+    this._subscribers = this._subscribers.filter((fn) => fn !== cb);
+  }
+
+  send(event: TPubSubEvent<TEventName>) {
+    for (const cb of this._subscribers) {
+      cb(event);
+    }
+  }
+}
+
+export type TLoginEvents = "authenticated";
+export const loginEventPubSub = new PubSub<TLoginEvents>();

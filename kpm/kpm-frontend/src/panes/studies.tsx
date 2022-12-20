@@ -28,7 +28,6 @@ export async function loaderStudies({
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
     throw new Error(json.message);
   }
 }

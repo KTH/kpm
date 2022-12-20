@@ -96,7 +96,7 @@ type TMenuPaneProps = {
   children: any;
 };
 
-export function MenuPane({ className = undefined, children }: any) {
+export function MenuPane({ className = undefined, children }: TMenuPaneProps) {
   let cls = "kpm-modal-content";
   if (className) {
     cls += ` ${className}`;

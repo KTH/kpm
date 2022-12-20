@@ -68,6 +68,29 @@
     background-color: var(--kpmButtonHoverBg);
     border-color: var(--kpmButtonHoverFg);
     text-decoration: none;
+    cursor: pointer;
+  }
+
+  &.kpm-button-primary {
+    --kpmButtonBg: var(--kpmPaneFg);
+    --kpmButtonFg: var(--kpmPaneBg);
+    --kpmButtonText: var(--kpmPaneBg);
+  }
+  
+  &.kpm-button-link {
+    --kpmButtonBg: var(--kpmPaneBg);
+    --kpmButtonHoverBg: var(--kpmPaneBg);
+    --kpmButtonFg: var(--kpmPaneBg);
+    --kpmButtonHoverFg: var(--kpmPaneBg);
+    --kpmButtonText: var(--kpmPaneFg);
+    --kpmButtonHoverText: var(--kpmPaneText);
+    padding: calc(var(--kpmPad) / 2) 0;
+    margin: calc(var(--kpmPad) / 2) 0;
+    border: 1px solid var(--kpmButtonBg);
+    border-radius: 0;
+    &:hover {
+      border-bottom-color: var(--kpmButtonHoverText);
+    }
   }
 }
 

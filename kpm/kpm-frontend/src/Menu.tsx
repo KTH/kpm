@@ -13,8 +13,9 @@ import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 import { currentUser } from "./app";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import "./Menu.scss";
+import { LoginModal, useLogin } from "./components/login";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -29,6 +30,8 @@ export function Menu({ hasStudies, hasTeaching }: any) {
   const menuRef = useRef(null);
   // Update CSS --kpm-bar-height
   useSetKpmBarHeight(menuRef);
+
+  const [showLogin, setShowLogin] = useLogin();
 
   const hasMatch: boolean = !!getRoutes().find(
     (route) => route.path === location.pathname
@@ -101,6 +104,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
         <LoadingIndicator isLoading={navigation.state === "loading"} />
       </nav>
       <Outlet />
+      <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} />
     </React.Fragment>
   );
 }
