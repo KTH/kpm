@@ -4,6 +4,7 @@ import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -23,7 +24,9 @@ export async function loaderTeaching({
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }

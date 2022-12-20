@@ -22,10 +22,17 @@ export function LoginModal({
     return null;
   }
 
-  const loginUri = `${createApiUri("/auth/login")}?nextUrl=${location.href}`;
-
   return (
-    <MenuPane className="kpm-login-dialog">
+    <MenuPane>
+      <LoginWidget onDismiss={onDismiss} />
+    </MenuPane>
+  );
+}
+
+export function LoginWidget({ onDismiss }: { onDismiss: () => void }) {
+  const loginUri = `${createApiUri("/auth/login")}?nextUrl=${location.href}`;
+  return (
+    <div className="kpm-login-widget">
       <a href={loginUri} className="kpm-button kpm-button-primary">
         {i18n("Login again")}
       </a>
@@ -36,7 +43,7 @@ export function LoginModal({
       >
         {i18n("Dismiss")}
       </button>
-    </MenuPane>
+    </div>
   );
 }
 

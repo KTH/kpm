@@ -10,6 +10,7 @@ import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -28,6 +29,9 @@ export async function loaderStudies({
   if (res.ok) {
     return json;
   } else {
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }

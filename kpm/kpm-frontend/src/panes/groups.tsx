@@ -3,6 +3,7 @@ import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
 import { fetchApi, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -20,6 +21,9 @@ export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
   if (res.ok) {
     return json;
   } else {
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }

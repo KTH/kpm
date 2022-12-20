@@ -104,7 +104,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
         <LoadingIndicator isLoading={navigation.state === "loading"} />
       </nav>
       <Outlet />
-      <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} />
+      {/* <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} /> */}
     </React.Fragment>
   );
 }

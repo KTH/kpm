@@ -172,6 +172,8 @@ export function requiresValidSessionUser(
   next: Function
 ) {
   try {
+    throwIfNotValidSession(undefined);
+
     // Allow running locally without login
     if (IS_DEV && USE_FAKE_USER) return next();
 

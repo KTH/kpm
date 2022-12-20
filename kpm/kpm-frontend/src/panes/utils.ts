@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
 
 declare global {
@@ -51,6 +52,8 @@ export class ApiError extends Error {
 }
 
 function beautifyError(e: Error): Error {
+  if (e instanceof AuthError) return e;
+
   switch (e.name) {
     case "SyntaxError":
       return new ApiError("Backend is speaking gibberish!", {

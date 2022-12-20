@@ -3,6 +3,7 @@ import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIServices } from "kpm-backend-interface";
 import { fetchApi, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -22,7 +23,9 @@ export async function loaderServices({
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }
@@ -36,7 +39,7 @@ export function Services() {
   const isEmptyServiceLinks = !loading && !error && servicelinks?.length === 0;
   const hasStudentlinks =
     Array.isArray(studentlinks) && studentlinks?.length > 0;
-  const showStudentLinksWidget = error || hasStudentlinks;
+  const showStudentLinksWidget = hasStudentlinks;
 
   return (
     <MenuPane className="kpm-services">

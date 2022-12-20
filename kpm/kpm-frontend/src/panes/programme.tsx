@@ -3,6 +3,7 @@ import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes } from "kpm-backend-interface";
 import { fetchApi, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -22,7 +23,9 @@ export async function loaderProgrammes({
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }

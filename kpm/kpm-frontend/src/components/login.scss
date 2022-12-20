@@ -1,9 +1,14 @@
-#kpm-6cf53 .kpm-login-dialog {
+#kpm-6cf53 .kpm-login-widget {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
   justify-content: center;
   align-items: center;
+  padding: calc(var(--kpmPad) / 2);
 
   .kpm-button {
     --kpmPad: 0.3em;
-    font-size: 0.9em;
+    font-size: 0.9em; 
   }
 }
