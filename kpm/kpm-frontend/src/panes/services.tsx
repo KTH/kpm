@@ -1,7 +1,7 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIServices } from "kpm-backend-interface";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, useDataFecther } from "./utils";
 import {
   EmptyPlaceholder,
   ErrorMessage,
@@ -15,13 +15,8 @@ import { FilterOption, TabFilter } from "../components/filter";
 export async function loaderServices({
   request,
 }: any = {}): Promise<APIServices> {
-  const res = await fetch(createApiUri("/api/services"), {
+  const res = await fetchApi("/api/services", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {

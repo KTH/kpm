@@ -5,7 +5,7 @@ import {
   TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
@@ -21,13 +21,8 @@ import { FilterOption, TabFilter } from "../components/filter";
 export async function loaderStudies({
   request,
 }: any = {}): Promise<APIStudies> {
-  const res = await fetch(createApiUri("/api/studies"), {
+  const res = await fetchApi("/api/studies", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {

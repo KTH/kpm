@@ -2,7 +2,7 @@ import React from "react";
 import type { APITeaching, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import {
   EmptyPlaceholder,
   ErrorMessage,
@@ -16,13 +16,8 @@ import { ExamRoomList } from "../components/courseComponents";
 export async function loaderTeaching({
   request,
 }: any = {}): Promise<APITeaching> {
-  const res = await fetch(createApiUri("/api/teaching"), {
+  const res = await fetchApi("/api/teaching", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {

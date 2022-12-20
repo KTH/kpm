@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, useDataFecther } from "./utils";
 import {
   EmptyPlaceholder,
   ErrorMessage,
@@ -13,13 +13,8 @@ import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
-  const res = await fetch(createApiUri("/api/groups"), {
+  const res = await fetchApi("/api/groups", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {
@@ -73,12 +68,8 @@ export function useMutateGroups(res: APIGroups | undefined): {
     setGroups(newGroups);
 
     if (didChange) {
-      const res = await fetch(createApiUri(`/api/star`), {
+      const res = await fetchApi("/api/star", {
         method: "post",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
         body: JSON.stringify({
           kind: "group",
           slug,

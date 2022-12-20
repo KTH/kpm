@@ -69,3 +69,21 @@ export function formatTerm(startTerm: string) {
   const termStr = { 1: "VT", 2: "HT" }[termNr];
   return `${termStr && i18n(termStr)}${shortYear}`;
 }
+
+export async function fetchApi(
+  path: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const { headers, ...otherOptions } = options;
+  const fetchOptions: RequestInit = {
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      ...headers,
+    },
+    ...otherOptions,
+  };
+  const res = await fetch(createApiUri(path), fetchOptions);
+  // If auth error, show dialog
+  return res;
+}
