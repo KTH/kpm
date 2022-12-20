@@ -8,8 +8,8 @@ type TExamRoomListProps = {
   title: string;
 };
 export function ExamRoomList({ rooms, title }: TExamRoomListProps) {
-  // Only show this if it has any items
-  if (rooms.length === 0) return null;
+  // Only show this if rooms is array with length > 0
+  if (!rooms?.length) return null;
 
   const roomsByYear: Record<string, TCanvasRoom[]> = {};
   rooms.forEach((room: TCanvasRoom) => {

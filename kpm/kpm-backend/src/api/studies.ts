@@ -145,7 +145,7 @@ export async function studiesApiHandler(
           title: kopps.title,
           credits: kopps.credits,
           creditUnitAbbr: kopps.creditUnitAbbr,
-          rooms: rooms?.[course_code] || [],
+          rooms: rooms?.[course_code] || null,
           completed,
           rounds: [...current_rounds, ...other_rounds],
         };
@@ -192,6 +192,10 @@ function koppsErr(err: any) {
 }
 
 function myCanvasRoomsApiErr(err: any) {
+  if (err.message.indexOf("401") > -1) {
+    // We couldn't access Canvas, setting result to null
+    return null;
+  }
   handleCommonGotErrors(err);
   // TODO: Add API specific error handling
   Error.captureStackTrace(err, myCanvasRoomsApiErr);

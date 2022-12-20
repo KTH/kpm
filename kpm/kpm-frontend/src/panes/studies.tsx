@@ -174,6 +174,12 @@ function Course({ courseCode, course }: TCourseProps) {
         <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
       </ul>
       <ExamRoomList rooms={exams} title={i18n("Examinationsrum")} />
+      {course.rooms === null && (
+        <p className="kpm-muted-text">
+          {/* Show friendly warning if Canvas isn't responding */}
+          {i18n("Canvas is silent, try later...")}
+        </p>
+      )}
     </div>
   );
 }
