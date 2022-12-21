@@ -89,6 +89,10 @@
       height: $fullMenuHeight;
       width: $fullMenuHeight;
       padding: calc(var(--kpmPad));
+
+      &::after {
+        display: none;
+      }
     }
 
     svg {
