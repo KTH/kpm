@@ -1,9 +1,6 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import { i18n } from "../i18n/i18n";
 import { ApiError } from "../panes/utils";
 import "./common.scss";
-import { LoginWidget } from "./login";
 
 export function LoadingPlaceholder(): JSX.Element {
   return (
@@ -39,27 +36,16 @@ export function ErrorMessage({
   error,
   compact = false,
 }: TErrorMessageProps): JSX.Element {
-  const navigate = useNavigate();
-
   let cls = "kpm-error-message";
   if (compact) {
     cls += " compact";
   }
 
-  const showLogin = error instanceof AuthError;
   const description = (error as ApiError).description;
   return (
     <div className="kpm-error-message">
       <h2>ERROR: {error.message}</h2>
       {description && <p>{description}</p>}
-      {showLogin && <p>{i18n("Your session has expired")}</p>}
-      {showLogin && (
-        <LoginWidget
-          onDismiss={() => {
-            navigate("/");
-          }}
-        />
-      )}
     </div>
   );
 }

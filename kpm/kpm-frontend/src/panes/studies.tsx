@@ -74,7 +74,7 @@ export function Studies() {
   const coursesToShow = Object.fromEntries(filteredCourseEntries);
 
   return (
-    <MenuPane>
+    <MenuPane error={error}>
       <TabFilter>
         <FilterOption<TFilter>
           value="current"

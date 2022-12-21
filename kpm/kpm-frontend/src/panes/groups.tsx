@@ -121,7 +121,7 @@ export function Groups() {
   const isEmpty = !loading && !error && filteredGroups?.length === 0;
 
   return (
-    <MenuPane className="kpm-groups">
+    <MenuPane className="kpm-groups" error={error}>
       <MenuPaneHeader title={i18n("My Groups")}>
         <a
           title={i18n("Search for interesting groups to follow")}

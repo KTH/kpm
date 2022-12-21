@@ -3,11 +3,12 @@ import { SessionData } from "express-session";
 import NodeCache from "node-cache";
 import got from "got";
 
-import { TSessionUser, getFakeUserForDevelopment } from "../auth";
+import { getFakeUserForDevelopment } from "../auth";
 import {
   APICanvasRooms,
   TCourseCode,
   TLocalizedString,
+  TSessionUser,
 } from "kpm-backend-interface";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;

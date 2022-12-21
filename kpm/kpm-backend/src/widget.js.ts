@@ -1,5 +1,6 @@
 import { Response, Request, static as staticHandler } from "express";
-import { isValidSession, TSessionUser } from "./auth";
+import { TSessionUser } from "kpm-backend-interface";
+import { isValidSession } from "./auth";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
@@ -25,9 +26,9 @@ export async function widgetJsHandler(req: Request, res: Response) {
   const lang = req.cookies["language"];
 
   if (loggedIn) {
-    const { display_name, email, kthid, exp, username } = req.session
+    const { display_name, email, kthid, expires, username } = req.session
       .user as TSessionUser;
-    const userToFrontend = { display_name, email, kthid, exp, username };
+    const userToFrontend = { display_name, email, kthid, expires, username };
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);

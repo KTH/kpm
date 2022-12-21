@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { TCurrentUser } from "../app";
 import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
+import { authState } from "../state/authState";
 
 declare global {
   interface Window {
@@ -90,42 +92,11 @@ export async function fetchApi(
 
   if (res.status === 401 /* Unauthorized */) {
     // Trigger login dialog by event or callback
-    loginEventPubSub.send({
-      name: "authenticated",
-      value: false,
+    authState.send({
+      name: "CurrentUser",
+      value: undefined,
     });
   }
 
   return res;
 }
-
-// Minimalistic pub/sub for event passing (used to show login dialog)
-export type TPubSubEvent<TEventName> = {
-  name: TEventName;
-  value: any;
-};
-type TPubSubscriper<TEventName> = (event: TPubSubEvent<TEventName>) => void;
-
-class PubSub<TEventName = string> {
-  _subscribers: TPubSubscriper<any>[];
-  constructor() {
-    this._subscribers = [];
-  }
-
-  subscribe(cb: TPubSubscriper<TEventName>) {
-    this._subscribers.push(cb);
-  }
-
-  unsubscribe(cb: TPubSubscriper<TEventName>) {
-    this._subscribers = this._subscribers.filter((fn) => fn !== cb);
-  }
-
-  send(event: TPubSubEvent<TEventName>) {
-    for (const cb of this._subscribers) {
-      cb(event);
-    }
-  }
-}
-
-export type TLoginEvents = "authenticated";
-export const loginEventPubSub = new PubSub<TLoginEvents>();

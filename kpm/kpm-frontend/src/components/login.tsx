@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { i18n } from "../i18n/i18n";
-import {
-  createApiUri,
-  loginEventPubSub,
-  TLoginEvents,
-  TPubSubEvent,
-} from "../panes/utils";
+import { createApiUri } from "../panes/utils";
+import { authState, TAuthStateEvents } from "../state/authState";
+import { TPubSubEvent } from "../state/PubSub";
 import { MenuPane } from "./menu";
 
 import "./login.scss";
@@ -50,15 +47,15 @@ export function LoginWidget({ onDismiss }: { onDismiss: () => void }) {
 export function useLogin(): [show: boolean, setShow: (val: boolean) => void] {
   const [show, setShow] = useState(false);
 
-  const doLoginStateChange = (event: TPubSubEvent<TLoginEvents>) => {
+  const doLoginStateChange = (event: TPubSubEvent<TAuthStateEvents>) => {
     const { value } = event;
     setShow(!value);
   };
 
   // Continue polling until unmounted
   useEffect(() => {
-    loginEventPubSub.subscribe(doLoginStateChange);
-    return () => loginEventPubSub.unsubscribe(doLoginStateChange);
+    authState.subscribe(doLoginStateChange);
+    return () => authState.unsubscribe(doLoginStateChange);
   }, []);
 
   return [show, setShow];

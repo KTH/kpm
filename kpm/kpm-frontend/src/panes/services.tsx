@@ -42,7 +42,7 @@ export function Services() {
   const showStudentLinksWidget = hasStudentlinks;
 
   return (
-    <MenuPane className="kpm-services">
+    <MenuPane className="kpm-services" error={error}>
       <MenuPaneHeader title={i18n("My Services")}>
         <a
           title={i18n("Help / feedback for the personal menu")}

@@ -124,7 +124,7 @@ export function Programme() {
   const isEmpty = !loading && !error && filteredProgrammes?.length === 0;
 
   return (
-    <MenuPane className="kpm-programmes">
+    <MenuPane className="kpm-programmes" error={error}>
       <MenuPaneHeader title={i18n("My Programmes")}>
         <a
           title="Help / feedback for the personal menu in connection with the transition to new Ladok"

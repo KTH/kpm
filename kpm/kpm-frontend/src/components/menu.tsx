@@ -1,6 +1,10 @@
 import * as React from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { CSSTransition } from "react-transition-group";
+import { i18n } from "../i18n/i18n";
+import { useAuthState } from "../state/authState";
+import { LoginWidget } from "./login";
 
 import "./menu.scss";
 
@@ -93,17 +97,39 @@ function Backdrop({
 
 type TMenuPaneProps = {
   className?: string | undefined | null;
+  error?: Error | undefined;
   children: any;
 };
 
-export function MenuPane({ className = undefined, children }: TMenuPaneProps) {
+export function MenuPane({
+  className = undefined,
+  error = undefined,
+  children,
+}: TMenuPaneProps) {
   let cls = "kpm-modal-content";
   if (className) {
     cls += ` ${className}`;
   }
+
+  const navigate = useNavigate();
+  const [currentUser] = useAuthState();
+
   return (
     <MenuPaneWrapper>
-      <div className={cls}>{children}</div>
+      <div className={cls}>
+        {currentUser ? (
+          children
+        ) : (
+          <div className="kpm-error-message">
+            <h2>{i18n("Your session has expired")}</h2>
+            <LoginWidget
+              onDismiss={() => {
+                navigate("/");
+              }}
+            />
+          </div>
+        )}
+      </div>
     </MenuPaneWrapper>
   );
 }

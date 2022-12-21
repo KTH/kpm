@@ -3,5 +3,5 @@ export function linkClassName({ isActive }: { isActive: boolean }) {
 }
 
 export function formatDisplayName(name: string) {
-  return name.split(" ")[0];
+  return name?.split(" ")[0];
 }

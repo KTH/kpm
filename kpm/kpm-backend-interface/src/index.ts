@@ -1,5 +1,16 @@
 export type TGotErrType = "NotAvailable" | "BadResponse" | "TimeoutError";
 
+export type TSessionUser = {
+  kthid: string;
+  display_name: string;
+  email?: string;
+  username?: string;
+  expires: number;
+};
+export type APISession = {
+  user: TSessionUser;
+};
+
 export type APICanvasRoomsErrType = TGotErrType | "ValueError";
 export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };

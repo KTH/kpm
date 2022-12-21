@@ -39,7 +39,7 @@ export function Teaching() {
   const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
 
   return (
-    <MenuPane>
+    <MenuPane error={error}>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {isEmpty && (

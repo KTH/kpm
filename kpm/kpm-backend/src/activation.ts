@@ -1,7 +1,7 @@
 import express, { static as staticHandler } from "express";
 import log from "skog";
 import path from "path";
-import { isValidSession, TSessionUser } from "./auth";
+import { isValidSession } from "./auth";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
