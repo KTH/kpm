@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import type { NavigateFunction } from "react-router";
 import { CSSTransition } from "react-transition-group";
 import { i18n } from "../i18n/i18n";
 import { useAuthState } from "../state/authState";
@@ -111,7 +112,13 @@ export function MenuPane({
     cls += ` ${className}`;
   }
 
-  const navigate = useNavigate();
+  let navigate: NavigateFunction;
+  try {
+    navigate = useNavigate();
+  } catch (err: any) {
+    // For smokescreen tests we don't want to be required to mount panes
+    // in a router so then we want to accept that useNavigate isn't available.
+  }
   const [currentUser] = useAuthState();
 
   return (
