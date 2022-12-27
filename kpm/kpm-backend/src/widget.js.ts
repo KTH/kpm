@@ -55,7 +55,7 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53"; n.style = "inset: 0; position: fixed; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: center; margin: 0 auto; background-color: #65656c;";
+let n = cr('div'); n.id = "kpm-6cf53"; n.style = "pointer-events: all; inset: 0; position: fixed; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: center; margin: 0 auto; background-color: #65656c;";
 n.innerHTML = "<div style='width: 100%; max-width: 1228px; display: flex; align-items: center;'><a href='${LOGIN_URL}?nextUrl=" + location.href + "' style='margin-left: auto; color: white;'>Login</a></div>"; document.body.prepend(n);
       })("${publicUriBase}/assets/${
       assets["index.js"]?.fileName
