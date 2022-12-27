@@ -26,6 +26,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
   const lang = req.cookies["language"];
 
   if (loggedIn) {
+    // *** LOGGED IN ***
     const { display_name, email, kthid, expires, username } = req.session
       .user as TSessionUser;
     const userToFrontend = { display_name, email, kthid, expires, username };
@@ -48,8 +49,12 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};
       assets["index.js"]?.fileName
     }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
   } else {
+    // *** NOT LOGGED IN ***
+    // index.css contains Canvas CSS-fixes so we are passing it.
     res.type("text/javascript").send(`(function (js, css) {
-var cr = (t) => document.createElement(t);
+var cr = (t) => document.createElement(t),
+ap = (n) => document.head.appendChild(n);
+let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53"; n.style = "inset: 0; position: fixed; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: end; margin: 0 auto; background-color: #65656c;";
 n.innerHTML = "<div style='max-width: 1228px; display: flex; align-items: center;'><a href='${LOGIN_URL}?nextUrl=" + location.href + "' style='margin-left: auto; color: white;'>Login</a></div>"; document.body.prepend(n);
       })("${publicUriBase}/assets/${
