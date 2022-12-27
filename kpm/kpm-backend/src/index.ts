@@ -4,7 +4,11 @@ import { loggingHandler, errorHandler } from "kpm-api-common";
 import { api } from "./api";
 import { status } from "./status";
 import { auth, requiresValidSessionUser } from "./auth";
-import { sessionMiddleware, cookieParserMiddleware } from "./session";
+import {
+  sessionMiddleware,
+  cookieParserMiddleware,
+  sessionApiHandler,
+} from "./session";
 import log from "skog";
 import { widgetJsHandler, widgetJsAssets, previewHandler } from "./widget.js";
 import cors from "cors";
@@ -59,6 +63,7 @@ if (!IS_DEV) {
 
 app.use(`${PREFIX}`, status);
 app.use(`${PREFIX}/auth`, auth);
+app.use(`${PREFIX}/api/session`, sessionApiHandler);
 app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
 app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
 app.use(`${PREFIX}/assets`, widgetJsAssets);

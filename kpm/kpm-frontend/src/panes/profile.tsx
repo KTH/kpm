@@ -1,16 +1,18 @@
 import * as React from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { createApiUri } from "./utils";
+import { useAuthState } from "../state/authState";
 import { i18n } from "../i18n/i18n";
-import { currentUser } from "../app";
 import { formatDisplayName } from "../components/utils";
 import "./profile.scss";
 
 export function Profile() {
+  const [currentUser] = useAuthState();
+
   return (
     <MenuPane>
       <MenuPaneHeader
-        title={`${formatDisplayName(currentUser.display_name)} - ${i18n(
+        title={`${formatDisplayName(currentUser?.display_name)} - ${i18n(
           "Settings"
         )}`}
       >
@@ -24,10 +26,10 @@ export function Profile() {
           <li>
             <a
               className="kpm-profile-link"
-              href={`https://www.kth.se/profile/${currentUser.username}/`}
+              href={`https://www.kth.se/profile/${currentUser?.username}/`}
             >
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser.username}`}
+                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
                 alt={i18n("Profile Image")}
               />
               {i18n("My Profile")}

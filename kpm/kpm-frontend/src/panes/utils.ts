@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { TCurrentUser } from "../app";
+import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
+import { authState } from "../state/authState";
 
 declare global {
   interface Window {
@@ -51,6 +54,8 @@ export class ApiError extends Error {
 }
 
 function beautifyError(e: Error): Error {
+  if (e instanceof AuthError) return e;
+
   switch (e.name) {
     case "SyntaxError":
       return new ApiError("Backend is speaking gibberish!", {
@@ -68,4 +73,30 @@ export function formatTerm(startTerm: string) {
   const termNr = startTerm.slice(4, 5);
   const termStr = { 1: "VT", 2: "HT" }[termNr];
   return `${termStr && i18n(termStr)}${shortYear}`;
+}
+
+export async function fetchApi(
+  path: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const { headers, ...otherOptions } = options;
+  const fetchOptions: RequestInit = {
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      ...headers,
+    },
+    ...otherOptions,
+  };
+  const res = await fetch(createApiUri(path), fetchOptions);
+
+  if (res.status === 401 /* Unauthorized */) {
+    // Trigger login dialog by event or callback
+    authState.send({
+      name: "CurrentUser",
+      value: undefined,
+    });
+  }
+
+  return res;
 }

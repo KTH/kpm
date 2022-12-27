@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -13,19 +14,16 @@ import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
 
 export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
-  const res = await fetch(createApiUri("/api/groups"), {
+  const res = await fetchApi("/api/groups", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }
@@ -73,12 +71,8 @@ export function useMutateGroups(res: APIGroups | undefined): {
     setGroups(newGroups);
 
     if (didChange) {
-      const res = await fetch(createApiUri(`/api/star`), {
+      const res = await fetchApi("/api/star", {
         method: "post",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
         body: JSON.stringify({
           kind: "group",
           slug,
@@ -127,7 +121,7 @@ export function Groups() {
   const isEmpty = !loading && !error && filteredGroups?.length === 0;
 
   return (
-    <MenuPane className="kpm-groups">
+    <MenuPane className="kpm-groups" error={error}>
       <MenuPaneHeader title={i18n("My Groups")}>
         <a
           title={i18n("Search for interesting groups to follow")}

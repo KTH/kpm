@@ -22,8 +22,14 @@ export function EmptyPlaceholder({
   return <div className="kpm-empty-placeholder">{children}</div>;
 }
 
+export class AuthError extends Error {
+  constructor(props: any) {
+    super(props);
+  }
+}
+
 type TErrorMessageProps = {
-  error: ApiError;
+  error: ApiError | AuthError;
   compact?: boolean;
 };
 export function ErrorMessage({
@@ -34,10 +40,12 @@ export function ErrorMessage({
   if (compact) {
     cls += " compact";
   }
+
+  const description = (error as ApiError).description;
   return (
     <div className="kpm-error-message">
       <h2>ERROR: {error.message}</h2>
-      <p>{error.description}</p>
+      {description && <p>{description}</p>}
     </div>
   );
 }

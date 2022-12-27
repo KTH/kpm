@@ -7,13 +7,15 @@ import "./app.scss";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
-export type TCurrentUser = {
-  kthid: string;
-  display_name: string;
-  email: string;
-  username: string;
-  exp: number;
-};
+export type TCurrentUser =
+  | {
+      kthid: string;
+      display_name: string;
+      email: string;
+      username: string;
+      exp: number;
+    }
+  | undefined;
 
 type TSettings = {
   lang?: string;
@@ -26,17 +28,7 @@ declare global {
   }
 }
 
-export const currentUser: TCurrentUser =
-  window.__kpmCurrentUser__ ||
-  (IS_DEV && {
-    kthid: "u19t0qf2",
-    display_name: "Dr.LocalDev Server",
-    email: "test@email.com",
-    username: "jhsware",
-    exp: 1668683814,
-  });
-
-type TCreateRouterProps = {
+export type TCreateRouterProps = {
   hasStudies: boolean;
   hasTeaching: boolean;
 };

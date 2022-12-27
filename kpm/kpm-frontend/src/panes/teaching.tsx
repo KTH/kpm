@@ -2,8 +2,9 @@ import React from "react";
 import type { APITeaching, TCanvasRoom } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -16,19 +17,16 @@ import { ExamRoomList } from "../components/courseComponents";
 export async function loaderTeaching({
   request,
 }: any = {}): Promise<APITeaching> {
-  const res = await fetch(createApiUri("/api/teaching"), {
+  const res = await fetchApi("/api/teaching", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }
@@ -41,7 +39,7 @@ export function Teaching() {
   const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
 
   return (
-    <MenuPane>
+    <MenuPane error={error}>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {isEmpty && (

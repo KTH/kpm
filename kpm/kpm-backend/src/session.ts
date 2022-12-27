@@ -2,11 +2,15 @@ import expressSession from "express-session";
 import cookieParser from "cookie-parser";
 import connectRedis, { RedisStore } from "connect-redis";
 import { getRedisClient } from "./redisClient";
+import { APISession } from "kpm-backend-interface";
+import { Request, Response, NextFunction } from "express";
+import { sessionUser } from "./api/common";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const IS_HTTPS = PROXY_HOST.startsWith("https:");
+export const SESSION_MAX_AGE_MS = 14 * 24 * 3600 * 1000;
 
 const redisClient = getRedisClient();
 let redisStore: RedisStore | undefined = undefined;
@@ -23,7 +27,7 @@ export const sessionMiddleware = expressSession({
   // store: store,
   cookie: {
     domain: new URL(PROXY_HOST).hostname,
-    maxAge: 14 * 24 * 3600 * 1000,
+    maxAge: SESSION_MAX_AGE_MS,
     httpOnly: true,
     // https://www.codeconcisely.com/posts/how-to-set-up-cors-and-cookie-session-in-express/
     secure: IS_HTTPS,
@@ -48,3 +52,17 @@ export const cookieParserMiddleware = cookieParser(SESSION_SECRET, {
   sameSite: IS_HTTPS ? "none" : undefined,
   secret: SESSION_SECRET,
 } as any);
+
+// Get current session user
+export async function sessionApiHandler(
+  req: Request,
+  res: Response<APISession>, // FIXME: Response type!
+  next: NextFunction
+) {
+  try {
+    const user = sessionUser(req.session);
+    res.send({ user });
+  } catch (err) {
+    next(err);
+  }
+}

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes } from "kpm-backend-interface";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, useDataFecther } from "./utils";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -15,19 +16,16 @@ import { FilterOption, TabFilter } from "../components/filter";
 export async function loaderProgrammes({
   request,
 }: any = {}): Promise<APIProgrammes> {
-  const res = await fetch(createApiUri("/api/programmes"), {
+  const res = await fetchApi("/api/programmes", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }
@@ -75,12 +73,8 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
     setProgrammes(newProgrammes);
 
     if (didChange) {
-      const res = await fetch(createApiUri(`/api/star`), {
+      const res = await fetchApi("/api/star", {
         method: "post",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
         body: JSON.stringify({
           kind: "program",
           slug,
@@ -130,7 +124,7 @@ export function Programme() {
   const isEmpty = !loading && !error && filteredProgrammes?.length === 0;
 
   return (
-    <MenuPane className="kpm-programmes">
+    <MenuPane className="kpm-programmes" error={error}>
       <MenuPaneHeader title={i18n("My Programmes")}>
         <a
           title="Help / feedback for the personal menu in connection with the transition to new Ladok"

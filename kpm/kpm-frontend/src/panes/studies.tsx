@@ -5,11 +5,12 @@ import {
   TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { createApiUri, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
 import {
+  AuthError,
   EmptyPlaceholder,
   ErrorMessage,
   LoadingPlaceholder,
@@ -21,19 +22,16 @@ import { FilterOption, TabFilter } from "../components/filter";
 export async function loaderStudies({
   request,
 }: any = {}): Promise<APIStudies> {
-  const res = await fetch(createApiUri("/api/studies"), {
+  const res = await fetchApi("/api/studies", {
     signal: request?.signal,
-    credentials: "include",
-    headers: {
-      // Explicitly set Accept header to avoid non 20x responses converted to HTML page by Everest
-      Accept: "application/json",
-    },
   });
   const json = await res.json();
   if (res.ok) {
     return json;
   } else {
-    // TODO: Handle more kinds of errors or keep it simple?
+    if (res.status === 401) {
+      throw new AuthError(json.message);
+    }
     throw new Error(json.message);
   }
 }
@@ -76,7 +74,7 @@ export function Studies() {
   const coursesToShow = Object.fromEntries(filteredCourseEntries);
 
   return (
-    <MenuPane>
+    <MenuPane error={error}>
       <TabFilter>
         <FilterOption<TFilter>
           value="current"
@@ -179,6 +177,12 @@ function Course({ courseCode, course }: TCourseProps) {
         <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
       </ul>
       <ExamRoomList rooms={exams} title={i18n("Examinationsrum")} />
+      {course.rooms === null && (
+        <p className="kpm-muted-text">
+          {/* Show friendly warning if Canvas isn't responding */}
+          {i18n("Canvas is silent, try later...")}
+        </p>
+      )}
     </div>
   );
 }

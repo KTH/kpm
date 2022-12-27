@@ -2,7 +2,8 @@ import { Router } from "express";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
 import { AuthError } from "kpm-api-common/src/errors";
-import { APIAuthErrType } from "kpm-backend-interface";
+import { APIAuthErrType, TSessionUser } from "kpm-backend-interface";
+import { SESSION_MAX_AGE_MS } from "./session";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -13,15 +14,6 @@ declare module "express-session" {
     user?: TSessionUser;
   }
 }
-
-export type TSessionUser = {
-  kthid: string;
-  display_name: string;
-  email?: string;
-  username?: string;
-  exp: number;
-  nbf: number;
-};
 
 // Should these variables (PREFIX, PORT, PROXY_HOST) be defined in one place?
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
@@ -161,8 +153,7 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       display_name: "Test Userson",
       email: "test@email.com",
       username: "testuser",
-      exp: Date.now() / 1000 + 3600,
-      nbf: Date.now() / 1000,
+      expires: new Date().getTime() + SESSION_MAX_AGE_MS,
     };
 }
 
@@ -204,9 +195,9 @@ export function throwIfNotValidSession(user?: TSessionUser): void {
 export function isValidSession(user?: TSessionUser): boolean {
   if (user === undefined) return false;
 
-  const { exp, nbf } = user;
+  const { expires } = user;
   const now = Date.now() / 1000;
-  return exp > now && nbf <= now;
+  return expires > now;
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
@@ -216,7 +207,6 @@ function createValidSesisonUser(claim: any): TSessionUser {
     display_name: claim.unique_name[0],
     email: claim.email,
     username: claim.username,
-    exp: claim.exp,
-    nbf: claim.nbf,
+    expires: new Date().getTime() + SESSION_MAX_AGE_MS,
   };
 }
