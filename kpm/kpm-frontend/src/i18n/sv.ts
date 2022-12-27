@@ -69,11 +69,9 @@ export const sv: Record<string, string> = {
   "My Programmes": "Mina program",
   Favourites: "Favoriter",
   "All Subscriptions": "Alla prenumerationer",
-  "You don't belong to any programme.": "Du tillhör inget program",
   "Create new group": "Skapa ny grupp",
   "Find groups": "Sök bland grupper",
   "My Groups": "Mina grupper",
-  "You don't belong to any groups.": "Du följer ingen grupp",
   // Services
   "Resor (KTH-Res)": "Resor (KTH-Res)",
   "Publikationer (DiVA)": "Publikationer (DiVA)",
@@ -93,4 +91,10 @@ export const sv: Record<string, string> = {
   "Other Selected Services": "Andra valda tjänster",
   "LADOK for Students": "LADOK för studenter",
   "My Services": "Mina tjänster",
+  "Current Courses": "Aktuella kurser",
+  Other: "Övriga",
+  "You don't belong to any programme.": "Du tillhör inget program.",
+  "You don't belong to any groups.": "Du följer ingen grupp.",
+  "You aren't studying any courses.": "Du studerar inga kurser.",
+  "You aren't teaching any courses.": "Du undervisar inga kurser.",
 };
