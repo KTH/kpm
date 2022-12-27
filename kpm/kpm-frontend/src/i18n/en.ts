@@ -72,11 +72,9 @@ export const en: Record<string, string> = {
   "My Programmes": "My Programmes",
   Favourites: "Favourites",
   "All Subscriptions": "All Subscriptions",
-  "You don't belong to any programme.": "You don't belong to any programme.",
   "Create new group": "Create new group",
   "Find groups": "Find groups",
   "My Groups": "My Groups",
-  "You don't belong to any groups.": "You don't belong to any groups.",
   // Services
   "Resor (KTH-Res)": "Travel (KTH-Res)",
   "Publikationer (DiVA)": "Publications (DiVA)",
@@ -95,4 +93,10 @@ export const en: Record<string, string> = {
   "Other Selected Services": "Other Selected Services",
   "LADOK for Students": "LADOK for Students",
   "My Services": "My Services",
+  "Current Courses": "Current Courses",
+  Other: "Other",
+  "You don't belong to any programme.": "You don't belong to any programme.",
+  "You don't belong to any groups.": "You don't belong to any groups.",
+  "You aren't studying any courses.": "You aren't studying any courses.",
+  "You aren't teaching any courses.": "You aren't teaching any courses.",
 };

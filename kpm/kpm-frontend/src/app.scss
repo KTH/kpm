@@ -53,8 +53,8 @@
   }
 }
 
-#kpm-6cf53 button.kpm-button,
-#kpm-6cf53 a.kpm-button {
+#kpm-6cf53 .kpm-modal button.kpm-button,
+#kpm-6cf53 .kpm-modal a.kpm-button {
   display: flex;
   padding: calc(var(--kpmPad)) calc(3 * var(--kpmPad));
   border-radius: var(--kpmButtonRadius);
