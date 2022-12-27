@@ -2,27 +2,27 @@
 
 div.ef-file-preview-overlay {
   /*to keep the Canvas preview below the personal menu*/
-  margin-top: var(--kpm-bar-height);
+  margin-top: var(--kpm-bar-height, 2em);
 }
 div.ReactTrayPortal div.ReactTray__Overlay,
 #flash_message_holder {
-  top: var(--kpm-bar-height) !important;
+  top: var(--kpm-bar-height, 2em) !important;
 }
 
 // Space for main app
 #application.ic-app {
-  margin-top: var(--kpm-bar-height);
+  margin-top: var(--kpm-bar-height, 2em);
 }
 
 // Make sticky menu stick to KPM
 #left-side.ic-sticky-on > .ic-sticky-frame {
-  top: var(--kpm-bar-height);
+  top: var(--kpm-bar-height, 2em);
 }
 
 // Make main icon menu give space to KPM
 header.ic-app-header {
-  height: calc(100% - var(--kpm-bar-height));
-  top: var(--kpm-bar-height);
+  height: calc(100% - var(--kpm-bar-height, 2em));
+  top: var(--kpm-bar-height, 2em);
 }
 
 body.use-personal-menu div.ui-widget.ui-tooltip {
@@ -32,11 +32,11 @@ body.use-personal-menu div.ui-widget.ui-tooltip {
 body.use-personal-menu #nav-tray-portal > span > span,
 div#main.ic-Layout-columns > span > span,
 #discussion-toolbar > div {
-  top: var(--kpm-bar-height);
+  top: var(--kpm-bar-height, 2em);
 }
 body.use-personal-menu .bcs__trigger {
-  top: var(--kpm-bar-height);
+  top: var(--kpm-bar-height, 2em);
   &::after {
-    top: calc(58px + var(--kpm-bar-height));
+    top: calc(58px + var(--kpm-bar-height, 2em));
   }
 }
