@@ -1,14 +1,1 @@
 @import "./vars";
-
-// Mobile and desktop specific elements
-#kpm-6cf53 .kpm-mobile {
-  display: none;
-}
-@media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-mobile {
-    display: unset;
-  }
-  #kpm-6cf53 .kpm-desktop {
-    display: none!important;
-  }
-}
