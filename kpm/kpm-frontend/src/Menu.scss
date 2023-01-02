@@ -55,7 +55,8 @@
   // Use for profile image and icons
   $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
 
-  .kpm-profile-item a {
+  .kpm-mobile-menu > a,
+  .kpm-profile-item > a {
     $rowGap: calc(2 * var(--kpmGap));
     $colGap: $rowGap;
 

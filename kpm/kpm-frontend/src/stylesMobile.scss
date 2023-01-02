@@ -1,0 +1,118 @@
+@import "./vars";
+$mblBreakpoint: "screen and (max-width: 980px)";
+
+// Menu panes
+@media #{$mblBreakpoint} {
+  body #kpm-6cf53 > .kpm-modal-backdrop {
+    display: none;
+  }
+
+  body #kpm-6cf53 > .kpm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translateX(100vw);
+    transition: transform 0.3s ease-out;
+
+    &.active {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Hide mobile menu toggle on desktop
+#kpm-6cf53 .kpm-mobile {
+  display: none;
+}
+
+// Menu
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-mobile {
+    display: unset;
+  }
+  #kpm-6cf53 .kpm-desktop {
+    display: none!important;
+  }
+
+  body #kpm-6cf53 > .kpm-menu {
+    height: 88px;
+    overflow: hidden;
+    transition: height .2s ease-out;
+
+    &.active {
+      height: 100vh;
+    }
+  }
+
+  body #kpm-6cf53 > .kpm-menu > ul {
+    flex-direction: column;
+
+    & > .kpm-mobile-menu {
+      display: inline-flex;
+
+      & > a {
+        width: unset;
+        padding-right: 1.5em;
+      }
+      
+      & > a:after {
+        width: .8rem;
+        height: 1.3rem;
+        right: 1.3rem;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+
+    & > .kpm-menu-shotcuts {
+      position: fixed;
+      top: 0;
+      right: 0;
+      font-size: 2.5em;
+    }
+
+    .kpm-profile-item {
+      // Hide profile image
+      img {
+        display: none;
+      }      
+    }
+
+    .kpm-mobile-logout {
+      &:after {
+        // TODO: Add proper logout icon
+      }
+    }
+
+    & > li,
+    & > li.kpm-profile-item,
+    & > li.kpm-schedule-item {
+      font-size: 3em;
+      padding: 0;
+      // background-color: white;
+      // color: black;
+
+      & > a {
+        width: 100%;
+        padding: 1em .75em;
+        
+        &:hover {
+          color: var(--kpmMenuText);
+          background-color: var(--kpmMenuBg);
+
+          &::after {
+            background: kthStyleUrl("/icons/arrow-expand-white.svg");    
+          }
+        }
+      }
+
+      & > a::after {
+        width: 1.2rem;
+        height: 2rem;
+        transform: translate(-50%, -50%);
+        right: 2.5rem;
+      }
+    }
+  }
+}

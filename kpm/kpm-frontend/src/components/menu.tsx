@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { NavigateFunction } from "react-router";
 import { CSSTransition } from "react-transition-group";
@@ -142,9 +142,14 @@ export function MenuPane({
 }
 
 export function MenuPaneWrapper({ nodeRef, className, children }: any) {
+  const [isActive, setIsActive] = useState(false);
+
   let cls = "kpm-modal";
   if (className) cls += " " + className;
+  if (isActive) cls += " active";
 
+  // Simple animation on enter
+  if (!isActive) requestAnimationFrame(() => setIsActive(true));
   return (
     <dialog ref={nodeRef} className={cls}>
       {children}
