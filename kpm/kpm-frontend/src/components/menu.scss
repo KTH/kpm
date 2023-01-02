@@ -48,6 +48,10 @@
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 
+  .kpm-mobile {
+    display: none;
+  }
+
   a {
     color: var(--kpmLink);
     text-decoration: none;
@@ -102,8 +106,29 @@
     transform: translateX(100vw);
     transition: transform 0.3s ease-out;
 
+    .kpm-mobile {
+      display: unset;
+    }
+
     &.active {
       transform: translateX(0);
+    }
+
+    .kpm-modal-back-button.kpm-mobile {
+      position: sticky;
+      display: inline-flex;
+      padding: calc(2 * var(--kpmPad));
+      font-size: 2em;
+      align-items: center;
+      gap: var(--kpmGap);
+
+      &::before {
+        content: "";
+        background: kthStyleUrl("/icons/arrow-expand-black.svg");
+        transform: rotate(180deg);
+        width: .8rem;
+        height: 1.3rem;
+      }
     }
   }
 }
