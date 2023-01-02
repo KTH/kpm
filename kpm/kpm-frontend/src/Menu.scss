@@ -120,6 +120,8 @@
     }
   }
 
+
+
   body #kpm-6cf53 > .kpm-menu {
     height: 88px;
     overflow: hidden;
@@ -184,6 +186,7 @@
     & > li,
     & > li.kpm-profile-item,
     & > li.kpm-schedule-item {
+      display: unset;
       font-size: 3em;
       padding: 0;
 
