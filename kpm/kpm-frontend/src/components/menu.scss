@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .KpmModalBackdropAnim {
   &-enter {
     opacity: 0;
@@ -81,6 +83,27 @@
       flex-flow: row wrap;
       align-items: center;
       gap: $rowGap $colGap;
+    }
+  }
+}
+
+// Menu panes
+@media #{$mblBreakpoint} {
+  body #kpm-6cf53 > .kpm-modal-backdrop {
+    display: none;
+  }
+
+  body #kpm-6cf53 > .kpm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translateX(100vw);
+    transition: transform 0.3s ease-out;
+
+    &.active {
+      transform: translateX(0);
     }
   }
 }
