@@ -185,7 +185,8 @@
 
     & > li,
     & > li.kpm-profile-item,
-    & > li.kpm-schedule-item {
+    & > li.kpm-schedule-item,
+    & > li.kpm-mobile-logout {
       display: unset;
       font-size: 3em;
       padding: 0;
