@@ -1,3 +1,5 @@
+@import "../vars";
+
 @keyframes kpmRotation {
   0% {
     transform: rotate(0deg);
@@ -26,6 +28,12 @@
   color: var(--kpmPaneTextMuted);
   font-size: 1.2em;
   font-weight: bold;
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-empty-placeholder {
+    font-size: 2em;
+  }
 }
 
 #kpm-6cf53 .kpm-loading-placeholder {
@@ -63,6 +71,22 @@
   }
 }
 
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-loading-placeholder {
+    font-size: 2em;
+
+    .kpm-loader {
+      width: 96px;
+      height: 96px;
+    }
+
+    .kpm-loader::after {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}
+
 #kpm-6cf53 .kpm-error-message {
   display: flex;
   min-height: 20rem;
@@ -92,5 +116,11 @@
   .kpm-login-widget {
     padding: calc(3 * var(--kpmPad)) calc(4 * var(--kpmPad));
     padding-left: 0;
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-error-message {
+    font-size: 2em;
   }
 }

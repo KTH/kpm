@@ -1,0 +1,13 @@
+@import "../vars";
+
+#kpm-6cf53 svg.icon.star {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 svg.icon.star {
+    width: 2.5rem;
+    height: 2.5rem;
+  }  
+}

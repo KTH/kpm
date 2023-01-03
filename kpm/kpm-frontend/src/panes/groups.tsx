@@ -164,6 +164,7 @@ export function Groups() {
         <ul>
           {filteredGroups?.map((group) => (
             <StarableItem
+              className="kpm-groups-item"
               key={`kpm-group-${group.slug}`}
               starred={group.starred}
               onToggle={() => setStar(group.slug, !group.starred)}

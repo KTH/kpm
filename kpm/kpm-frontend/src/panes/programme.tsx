@@ -164,6 +164,7 @@ export function Programme() {
         <ul>
           {filteredProgrammes?.map((programme) => (
             <StarableItem
+              className="kpm-programme-item"
               key={`kpm-program-${programme.slug}`}
               starred={programme.starred}
               onToggle={() => setStar(programme.slug, !programme.starred)}

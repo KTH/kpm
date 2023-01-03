@@ -1,6 +1,6 @@
 import React from "react";
 import { i18n } from "../i18n/i18n";
-import { createApiUri } from "../panes/utils";
+import "./icons.scss";
 
 type TLinkIconProps = {
   href: string;
@@ -120,17 +120,27 @@ export type TStarProps = {
 };
 
 export function StarableItem({
+  className,
   starred,
   children,
   onToggle,
 }: {
+  className?: string | null | undefined;
   starred: boolean;
   children: any;
   onToggle(): void;
 }) {
+  let cls = "starrable";
+  if (starred) {
+    cls += " active";
+  }
+  if (className) {
+    cls = `${className} ${cls}`;
+  }
+
   return (
     // TODO: Do we really need CSS class active?
-    <li className={starred ? "starrable active" : "starrable"}>
+    <li className={cls}>
       <IconStar starred={starred} onClick={() => onToggle()} />
       {children}
     </li>
@@ -150,8 +160,6 @@ export function IconStar({
       className={starred ? "icon star active" : "icon star"}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 880 880"
-      width="1em"
-      height="1em"
     >
       <path
         d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"

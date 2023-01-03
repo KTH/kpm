@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .kpm-groups {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
@@ -11,7 +13,7 @@
     align-items: flex-start;
     width: 100%;
 
-    & > li {
+    & > .kpm-groups-item {
       display: flex;
       align-items: center;
       width: $colWidth;
@@ -30,4 +32,11 @@
       }
     }
   }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-groups > ul > .kpm-groups-item {
+    flex-basis: 100%;
+    font-size: 2em;
+  }  
 }

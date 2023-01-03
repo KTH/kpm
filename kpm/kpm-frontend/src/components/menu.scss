@@ -109,10 +109,13 @@
     .kpm-modal-back-button.kpm-mobile {
       position: sticky;
       display: inline-flex;
+      top: 0;
+      width: 100%;
       padding: calc(2 * var(--kpmPad));
       font-size: 2em;
       align-items: center;
       gap: var(--kpmGap);
+      background-color: var(--kpmPaneBg);
 
       &::before {
         content: "";
@@ -121,6 +124,11 @@
         width: .8rem;
         height: 1.3rem;
       }
+    }
+
+    .kpm-modal-content-header {
+      font-size: 2em;
+      margin-bottom: 0.5em;
     }
   }
 }
