@@ -4,8 +4,14 @@ exports[`<Profile /> Can be rendered 1`] = `
 <dialog
   className="kpm-modal"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
-    className="kpm-modal-content"
+    className="kpm-modal-content kpm-profile"
   >
     <header
       className="kpm-modal-content-header"

@@ -10,7 +10,7 @@ export function Profile() {
   const [currentUser] = useAuthState();
 
   return (
-    <MenuPane>
+    <MenuPane className="kpm-profile">
       <MenuPaneHeader
         title={`${formatDisplayName(currentUser?.display_name)} - ${i18n(
           "Settings"

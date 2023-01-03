@@ -82,3 +82,15 @@
     transform: translateY(-50%) rotate(90deg);
   }
 }
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-dropdownmenu-group {
+    flex-basis: 100%;
+    font-size: 1em;
+
+    & > summary:first-of-type::after {
+      width: 0.9rem;
+      height: 1.5rem;
+    }
+  }
+}

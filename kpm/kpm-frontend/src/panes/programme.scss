@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .kpm-programmes {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
@@ -29,5 +31,12 @@
         }
       }
     }
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-programmes .kpm-programme-item {
+    flex-basis: 100%;
+    font-size: 2em;
   }
 }

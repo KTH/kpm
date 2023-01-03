@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 div.kpm-services {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
@@ -34,5 +36,17 @@
   .kpm-empty-placeholder,
   .kpm-loading-placeholder {
     min-height: 5rem;
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 div.kpm-services .kpm-col.kpm-services-links {
+    .kpm-col-header {
+      font-size: 2.34em; // Bugfix, can't figure out why this is half size
+    }
+
+    & > ul > li {
+      flex-basis: 100%;
+    }
   }
 }

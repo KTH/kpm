@@ -55,7 +55,8 @@
   // Use for profile image and icons
   $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
 
-  .kpm-profile-item a {
+  .kpm-mobile-menu > a,
+  .kpm-profile-item > a {
     $rowGap: calc(2 * var(--kpmGap));
     $colGap: $rowGap;
 
@@ -99,6 +100,114 @@
       height: 100%;
       vertical-align: middle;
       width: auto;
+    }
+  }
+}
+
+#kpm-6cf53 {
+  .kpm-mobile-menu.kpm-mobile,
+  .kpm-profile-item.kpm-mobile,
+  .kpm-mobile-logout.kpm-mobile {
+    display: none;
+  }
+}
+
+// Menu
+@media #{$mblBreakpoint} {
+  body #kpm-6cf53 > .kpm-menu {
+    height: 88px;
+    overflow: hidden;
+    transition: height 0.2s ease-out;
+
+    &.active {
+      height: 100vh;
+
+      .kpm-mobile-menu {
+        & > a {
+          background-color: var(--kpmMenuHoverBg);
+          color: var(--kpmMenuHoverText);
+
+          &::after {
+            background: kthStyleUrl("/icons/arrow-expand-black.svg");
+          }
+        }
+      }
+    }
+  }
+
+  body #kpm-6cf53 > .kpm-menu > ul {
+    flex-direction: column;
+
+    & > .kpm-mobile-menu {
+      display: inline-flex;
+
+      & > a {
+        width: unset;
+        padding-right: 1.5em;
+        background-color: var(--kpmMenuBg);
+        color: var(--kpmMenuText);
+      }
+
+      & > a::after {
+        width: 0.8rem;
+        height: 1.3rem;
+        right: 1.3rem;
+        transform: translate(-50%, -50%) rotate(90deg);
+        background: kthStyleUrl("/icons/arrow-expand-white.svg");
+      }
+    }
+
+    & > .kpm-menu-shotcuts {
+      position: fixed;
+      top: 0;
+      right: 0;
+      font-size: 2.5em;
+    }
+
+    .kpm-profile-item {
+      // Hide profile image
+      img {
+        display: none;
+      }
+    }
+
+    .kpm-mobile-logout {
+      &:after {
+        // TODO: Add proper logout icon
+      }
+    }
+
+    & > li,
+    & > li.kpm-profile-item,
+    & > li.kpm-schedule-item,
+    & > li.kpm-mobile-logout {
+      display: unset;
+      font-size: 3em;
+      padding: 0;
+
+      & > a {
+        width: 100%;
+        padding: 1em 0.75em;
+        background-color: var(--kpmMenuHoverBg);
+        color: var(--kpmMenuHoverText);
+
+        &:hover {
+          color: var(--kpmMenuText);
+          background-color: var(--kpmMenuBg);
+
+          // &::after {
+          //   background: kthStyleUrl("/icons/arrow-expand-black.svg");
+          // }
+        }
+      }
+
+      & > a::after {
+        width: 1.2rem;
+        height: 2rem;
+        transform: translate(-50%, -50%);
+        right: 2.5rem;
+        background: kthStyleUrl("/icons/arrow-expand-black.svg");
+      }
     }
   }
 }

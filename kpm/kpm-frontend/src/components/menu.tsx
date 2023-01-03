@@ -1,7 +1,8 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { NavigateFunction } from "react-router";
+import { NavLink } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { i18n } from "../i18n/i18n";
 import { useAuthState } from "../state/authState";
@@ -113,12 +114,7 @@ export function MenuPane({
   }
 
   let navigate: NavigateFunction;
-  try {
-    navigate = useNavigate();
-  } catch (err: any) {
-    // For smokescreen tests we don't want to be required to mount panes
-    // in a router so then we want to accept that useNavigate isn't available.
-  }
+  navigate = useNavigate();
   const [currentUser] = useAuthState();
 
   return (
@@ -142,11 +138,33 @@ export function MenuPane({
 }
 
 export function MenuPaneWrapper({ nodeRef, className, children }: any) {
+  const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
+  // Simple animation on enter
+  useEffect(() => {
+    setIsActive(true);
+  }, []);
+
   let cls = "kpm-modal";
   if (className) cls += " " + className;
+  if (isActive) cls += " active";
 
   return (
     <dialog ref={nodeRef} className={cls}>
+      <a
+        className="kpm-modal-back-button kpm-mobile"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsActive(false);
+          // NOTE: This should really listen to transitionEnd
+          // but this is okay and doubles as fallback
+          setTimeout(() => {
+            navigate("/");
+          }, 310);
+        }}
+      >
+        {i18n("Tillbaka till personliga menyn")}
+      </a>
       {children}
     </dialog>
   );

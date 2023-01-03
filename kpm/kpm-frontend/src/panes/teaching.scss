@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .kpm-teaching {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(5 * var(--kpmGap));
@@ -67,5 +69,12 @@
         gap: $rowGap $colGap;
       }
     }
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-teaching .kpm-teaching-course {
+    flex-basis: 100%;
+    font-size: 2em;
   }
 }

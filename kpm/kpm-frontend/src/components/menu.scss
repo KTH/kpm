@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .KpmModalBackdropAnim {
   &-enter {
     opacity: 0;
@@ -81,6 +83,52 @@
       flex-flow: row wrap;
       align-items: center;
       gap: $rowGap $colGap;
+    }
+  }
+}
+
+// Menu panes
+@media #{$mblBreakpoint} {
+  body #kpm-6cf53 > .kpm-modal-backdrop {
+    display: none;
+  }
+
+  body #kpm-6cf53 > .kpm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translateX(100vw);
+    transition: transform 0.3s ease-out;
+
+    &.active {
+      transform: translateX(0);
+    }
+
+    .kpm-modal-back-button.kpm-mobile {
+      position: sticky;
+      display: inline-flex;
+      top: 0;
+      width: 100%;
+      padding: calc(2 * var(--kpmPad));
+      font-size: 2em;
+      align-items: center;
+      gap: var(--kpmGap);
+      background-color: var(--kpmPaneBg);
+
+      &::before {
+        content: "";
+        background: kthStyleUrl("/icons/arrow-expand-black.svg");
+        transform: rotate(180deg);
+        width: 0.8rem;
+        height: 1.3rem;
+      }
+    }
+
+    .kpm-modal-content-header {
+      font-size: 2em;
+      margin-bottom: 0.5em;
     }
   }
 }

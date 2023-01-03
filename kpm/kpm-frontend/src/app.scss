@@ -1,6 +1,8 @@
 @use "./stylesVars.scss";
 @use "./stylesReset.scss";
 @use "./stylesCanvas.scss";
+@use "./stylesMobile.scss";
+@import "./vars";
 
 #kpm-6cf53 {
   pointer-events: none;
@@ -50,6 +52,13 @@
     font-weight: bold;
     border-bottom: 1px solid var(--kpmPaneSepatorFg);
     margin-bottom: var(--kpmMargin);
+  }
+}
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-col {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    flex-basis: 100%;
   }
 }
 

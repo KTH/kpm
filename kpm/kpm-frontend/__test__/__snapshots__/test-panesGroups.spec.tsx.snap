@@ -4,6 +4,12 @@ exports[`<Groups /> Can be rendered 1`] = `
 <dialog
   className="kpm-modal"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
     className="kpm-modal-content kpm-groups"
   >
@@ -80,8 +86,14 @@ exports[`<Groups /> Can be rendered 1`] = `
 
 exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
     className="kpm-modal-content kpm-groups"
   >
@@ -146,14 +158,12 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
     </nav>
     <ul>
       <li
-        className="starrable"
+        className="kpm-groups-item starrable"
       >
         <svg
           className="icon star"
-          height="1em"
           onClick={[Function]}
           viewBox="0 0 880 880"
-          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -170,14 +180,12 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
         </a>
       </li>
       <li
-        className="starrable"
+        className="kpm-groups-item starrable"
       >
         <svg
           className="icon star"
-          height="1em"
           onClick={[Function]}
           viewBox="0 0 880 880"
-          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -200,8 +208,14 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 
 exports[`<Groups /> Can be rendered with data and one starred 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
     className="kpm-modal-content kpm-groups"
   >
@@ -266,14 +280,12 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
     </nav>
     <ul>
       <li
-        className="starrable active"
+        className="kpm-groups-item starrable active"
       >
         <svg
           className="icon star active"
-          height="1em"
           onClick={[Function]}
           viewBox="0 0 880 880"
-          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path

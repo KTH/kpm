@@ -1,3 +1,5 @@
+@import "../vars";
+
 #kpm-6cf53 .kpm-tab-filter {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
@@ -22,5 +24,11 @@
       border-bottom: 4px solid var(--kpmLink);
       margin-bottom: calc(var(--kpmGap) - 4px);
     }
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-tab-filter {
+    font-size: 2em;
   }
 }

@@ -1,4 +1,6 @@
-#kpm-6cf53 .kpm-profile-link {
+@import "../vars";
+
+#kpm-6cf53 .kpm-profile .kpm-profile-link {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: $rowGap;
 
@@ -10,5 +12,13 @@
   img {
     height: 3em;
     width: 3em;
+  }
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53 .kpm-profile {
+    & > .kpm-col {
+      font-size: 2em;
+    }
   }
 }

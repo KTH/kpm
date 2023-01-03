@@ -12,7 +12,7 @@ import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { LoginModal, useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
@@ -31,6 +31,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
   // Update CSS --kpm-bar-height
   useSetKpmBarHeight(menuRef);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [showLogin, setShowLogin] = useLogin();
   const [currentUser] = useAuthState();
 
@@ -38,12 +39,32 @@ export function Menu({ hasStudies, hasTeaching }: any) {
     (route) => route.path === location.pathname
   );
 
+  let cls = "kpm-menu";
+  if (isOpen) {
+    cls += " active";
+  }
+
   return (
     <React.Fragment>
       <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
-      <nav ref={menuRef} className="kpm-menu">
+      <nav ref={menuRef} className={cls}>
         <ul>
-          <li className="kpm-profile-item">
+          <li className="kpm-mobile-menu kpm-mobile">
+            <a
+              onClick={(e: any) => {
+                e.preventDefault();
+                setIsOpen(!isOpen);
+              }}
+            >
+              <img
+                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                alt="Profile Image"
+                className="kpm-profile-image"
+              />
+              {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+            </a>
+          </li>
+          <li className="kpm-profile-item kpm-desktop">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
                 src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
@@ -101,6 +122,19 @@ export function Menu({ hasStudies, hasTeaching }: any) {
               <IconNotifications href={KTH_SOCIAL_NOTIFICATIONS_URI} />
             </li>
           </div>
+          <li className="kpm-profile-item kpm-mobile">
+            <ToggleNavLink to="profile" className={linkClassName}>
+              <img
+                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                alt="Profile Image"
+                className="kpm-profile-image"
+              />
+              {i18n("Profile")}
+            </ToggleNavLink>
+          </li>
+          <li className="kpm-mobile-logout kpm-mobile">
+            <a href="#logout">{i18n("Logout")}</a>
+          </li>
         </ul>
         <LoadingIndicator isLoading={navigation.state === "loading"} />
       </nav>

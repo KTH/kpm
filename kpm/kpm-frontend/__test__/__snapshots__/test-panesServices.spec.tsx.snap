@@ -4,6 +4,12 @@ exports[`<Services /> Can be rendered 1`] = `
 <dialog
   className="kpm-modal"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
     className="kpm-modal-content kpm-services"
   >
@@ -135,8 +141,14 @@ exports[`<Services /> Can be rendered 1`] = `
 
 exports[`<Services /> Can be rendered with data 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
+  <a
+    className="kpm-modal-back-button kpm-mobile"
+    onClick={[Function]}
+  >
+    Tillbaka till personliga menyn
+  </a>
   <div
     className="kpm-modal-content kpm-services"
   >

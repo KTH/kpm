@@ -6,7 +6,21 @@ exports[`<App /> Can be rendered 1`] = `
 >
   <ul>
     <li
-      className="kpm-profile-item"
+      className="kpm-mobile-menu kpm-mobile"
+    >
+      <a
+        onClick={[Function]}
+      >
+        <img
+          alt="Profile Image"
+          className="kpm-profile-image"
+          src="https://www.kth.se/files/thumbnail/jhsware"
+        />
+        Dr.LocalDev
+      </a>
+    </li>
+    <li
+      className="kpm-profile-item kpm-desktop"
     >
       <a
         className=""
@@ -147,6 +161,31 @@ exports[`<App /> Can be rendered 1`] = `
         </a>
       </li>
     </div>
+    <li
+      className="kpm-profile-item kpm-mobile"
+    >
+      <a
+        className=""
+        href="#/profile"
+        onClick={[Function]}
+      >
+        <img
+          alt="Profile Image"
+          className="kpm-profile-image"
+          src="https://www.kth.se/files/thumbnail/jhsware"
+        />
+        Profile
+      </a>
+    </li>
+    <li
+      className="kpm-mobile-logout kpm-mobile"
+    >
+      <a
+        href="#logout"
+      >
+        Logout
+      </a>
+    </li>
   </ul>
   <div
     className="kpm-loading-indicator"
