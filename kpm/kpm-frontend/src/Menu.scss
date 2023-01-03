@@ -87,8 +87,8 @@
     a {
       display: flex;
       flex-grow: 1;
-      height: calc(.75em + 2 * var(--kpmPad));
-      width: calc(.75em + 2 * var(--kpmPad));
+      height: calc(0.75em + 2 * var(--kpmPad));
+      width: calc(0.75em + 2 * var(--kpmPad));
       // height: $fullMenuHeight;
       // width: $fullMenuHeight;
       padding: calc(var(--kpmPad));
@@ -151,9 +151,9 @@
       }
 
       & > a::after {
-        width: .4rem;
-        height: .65rem;
-        right: .5rem;
+        width: 0.4rem;
+        height: 0.65rem;
+        right: 0.5rem;
         transform: translate(-50%, -50%) rotate(90deg);
         background: kthStyleUrl("/icons/arrow-expand-white.svg");
       }
@@ -204,7 +204,7 @@
       }
 
       & > a::after {
-        width: .6rem;
+        width: 0.6rem;
         height: 1rem;
         transform: translate(-50%, -50%);
         right: 1rem;
