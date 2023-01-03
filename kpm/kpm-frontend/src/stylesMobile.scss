@@ -1,1 +1,13 @@
 @import "./vars";
+
+@media #{$desktopBreakpoint} {
+  .kpm-mobile {
+    display: none!important;
+  }
+}
+
+@media #{$mblBreakpoint} {
+  .kpm-desktop {
+    display: none!important;
+  }
+}

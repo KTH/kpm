@@ -114,14 +114,6 @@
 
 // Menu
 @media #{$mblBreakpoint} {
-  #kpm-6cf53 {
-    .kpm-profile-item.kpm-desktop {
-      display: none;
-    }
-  }
-
-
-
   body #kpm-6cf53 > .kpm-menu {
     height: 88px;
     overflow: hidden;
@@ -148,10 +140,12 @@
 
     & > .kpm-mobile-menu {
       display: inline-flex;
-
+      
       & > a {
         width: unset;
         padding-right: 1.5em;
+        background-color: var(--kpmMenuBg);
+        color: var(--kpmMenuText);
       }
       
       & > a::after {

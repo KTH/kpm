@@ -1,4 +1,8 @@
+// TODO: We need to go through these breakpoints,
+// also check headers on site for mobile pixel size
 $mblBreakpoint: "screen and (max-width: 980px)";
+$desktopBreakpoint: "screen and (min-width: 981px)";
+
 $prod: "https://app.kth.se/style/static/kth-style/img/kth-style";
 $ref: "https://app-r.referens.sys.kth.se/style/static/kth-style/img/kth-style";
 

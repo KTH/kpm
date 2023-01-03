@@ -48,10 +48,6 @@
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 
-  .kpm-mobile {
-    display: none;
-  }
-
   a {
     color: var(--kpmLink);
     text-decoration: none;
@@ -105,10 +101,6 @@
     height: 100vh;
     transform: translateX(100vw);
     transition: transform 0.3s ease-out;
-
-    .kpm-mobile {
-      display: unset;
-    }
 
     &.active {
       transform: translateX(0);
