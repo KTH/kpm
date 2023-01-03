@@ -66,6 +66,10 @@
     list-style: none; // We use our own icon
   }
 
+  & > summary::before {
+    display: none;
+  }
+
   & > summary:first-of-type::after {
     content: "";
     background: kthStyleUrl("/icons/arrow-expand-black.svg");
@@ -88,9 +92,13 @@
     flex-basis: 100%;
     font-size: 1em;
 
+    & > summary {
+      font-size: 1em;
+    }
+
     & > summary:first-of-type::after {
-      width: 0.9rem;
-      height: 1.5rem;
+      width: 0.4rem;
+      height: .65rem;
     }
   }
 }

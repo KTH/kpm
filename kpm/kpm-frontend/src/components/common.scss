@@ -32,7 +32,7 @@
 
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-empty-placeholder {
-    font-size: 2em;
+    font-size: 1.1em;
   }
 }
 
@@ -73,7 +73,7 @@
 
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-loading-placeholder {
-    font-size: 2em;
+    font-size: 1.1em;
 
     .kpm-loader {
       width: 96px;
@@ -121,6 +121,6 @@
 
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-error-message {
-    font-size: 2em;
+    font-size: 1.1em;
   }
 }
