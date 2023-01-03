@@ -117,7 +117,7 @@
   body #kpm-6cf53 > .kpm-menu {
     height: 88px;
     overflow: hidden;
-    transition: height .2s ease-out;
+    transition: height 0.2s ease-out;
 
     &.active {
       height: 100vh;
@@ -140,16 +140,16 @@
 
     & > .kpm-mobile-menu {
       display: inline-flex;
-      
+
       & > a {
         width: unset;
         padding-right: 1.5em;
         background-color: var(--kpmMenuBg);
         color: var(--kpmMenuText);
       }
-      
+
       & > a::after {
-        width: .8rem;
+        width: 0.8rem;
         height: 1.3rem;
         right: 1.3rem;
         transform: translate(-50%, -50%) rotate(90deg);
@@ -168,7 +168,7 @@
       // Hide profile image
       img {
         display: none;
-      }      
+      }
     }
 
     .kpm-mobile-logout {
@@ -187,11 +187,10 @@
 
       & > a {
         width: 100%;
-        padding: 1em .75em;
+        padding: 1em 0.75em;
         background-color: var(--kpmMenuHoverBg);
         color: var(--kpmMenuHoverText);
-  
-        
+
         &:hover {
           color: var(--kpmMenuText);
           background-color: var(--kpmMenuBg);
