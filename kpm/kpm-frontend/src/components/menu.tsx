@@ -114,12 +114,7 @@ export function MenuPane({
   }
 
   let navigate: NavigateFunction;
-  try {
-    navigate = useNavigate();
-  } catch (err: any) {
-    // For smokescreen tests we don't want to be required to mount panes
-    // in a router so then we want to accept that useNavigate isn't available.
-  }
+  navigate = useNavigate();
   const [currentUser] = useAuthState();
 
   return (
@@ -147,7 +142,7 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
   const navigate = useNavigate();
   // Simple animation on enter
   useEffect(() => {
-    requestAnimationFrame(() => setIsActive(true));
+    setIsActive(true);
   }, []);
 
   let cls = "kpm-modal";

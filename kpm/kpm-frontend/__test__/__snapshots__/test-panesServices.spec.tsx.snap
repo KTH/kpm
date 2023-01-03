@@ -141,7 +141,7 @@ exports[`<Services /> Can be rendered 1`] = `
 
 exports[`<Services /> Can be rendered with data 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
   <a
     className="kpm-modal-back-button kpm-mobile"

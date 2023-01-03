@@ -86,7 +86,7 @@ exports[`<Groups /> Can be rendered 1`] = `
 
 exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
   <a
     className="kpm-modal-back-button kpm-mobile"
@@ -208,7 +208,7 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 
 exports[`<Groups /> Can be rendered with data and one starred 1`] = `
 <dialog
-  className="kpm-modal"
+  className="kpm-modal active"
 >
   <a
     className="kpm-modal-back-button kpm-mobile"
