@@ -112,7 +112,7 @@
       top: 0;
       width: 100%;
       padding: calc(2 * var(--kpmPad));
-      font-size: 2em;
+      font-size: 1.1em;
       align-items: center;
       gap: var(--kpmGap);
       background-color: var(--kpmPaneBg);
@@ -121,13 +121,13 @@
         content: "";
         background: kthStyleUrl("/icons/arrow-expand-black.svg");
         transform: rotate(180deg);
-        width: 0.8rem;
-        height: 1.3rem;
+        width: 0.4rem;
+        height: 0.65rem;
       }
     }
 
     .kpm-modal-content-header {
-      font-size: 2em;
+      font-size: 1.1em;
       margin-bottom: 0.5em;
     }
   }
