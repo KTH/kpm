@@ -61,7 +61,9 @@ export function Menu({ hasStudies, hasTeaching }: any) {
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
-              {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+              <span className="kpm-profile-display-name">
+                {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+              </span>
             </a>
           </li>
           <li className="kpm-profile-item kpm-desktop">
@@ -71,7 +73,9 @@ export function Menu({ hasStudies, hasTeaching }: any) {
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
-              {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+              <span className="kpm-profile-display-name">
+                {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+              </span>
             </ToggleNavLink>
           </li>
           <li className="kpm-schedule-item">

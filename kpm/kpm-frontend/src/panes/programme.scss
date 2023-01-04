@@ -15,7 +15,7 @@
 
     & > li {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       width: $colWidth;
       margin-bottom: 0;
       padding: var(--kpmPad);

@@ -29,6 +29,7 @@
       text-decoration: none;
       padding: var(--kpmPad) calc(3.5 * var(--kpmPad)) var(--kpmPad)
         calc(2 * var(--kpmPad));
+      height: 103%; // Hack to fill menu on tablet. Should really fix underlying problem
 
       &::after {
         content: "";
@@ -83,6 +84,7 @@
     margin-left: auto;
     display: flex;
     flex-direction: row;
+    font-size: 2em;
 
     a {
       display: flex;
@@ -117,7 +119,7 @@
 // Menu
 @media #{$mblBreakpoint} {
   body #kpm-6cf53 > .kpm-menu {
-    height: 88px;
+    height: 2.6rem;
     overflow: hidden;
     transition: height 0.2s ease-out;
 
@@ -163,7 +165,7 @@
       position: fixed;
       top: 0;
       right: 0;
-      font-size: 2.5em;
+      font-size: 1.8em;
     }
 
     .kpm-profile-item {
@@ -210,6 +212,17 @@
         right: 1rem;
         background: kthStyleUrl("/icons/arrow-expand-black.svg");
       }
+    }
+  }
+}
+
+@media #{$desktopMediumBreakpoint} {
+  body #kpm-6cf53 > .kpm-menu {
+    font-size: 0.9em;
+    --kpmPad: 0.4rem;
+
+    .kpm-profile-display-name {
+      display: none;
     }
   }
 }
