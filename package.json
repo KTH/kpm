@@ -6,7 +6,7 @@
     "dev": "npm-run-all -l --parallel  dev:my-* dev:kpm-backend dev:kpm-frontend",
     "dev-activation": "npm-run-all -l --parallel dev:my-* dev:kpm-backend dev:kpm-frontend-activation",
     "dev-loader": "npm run build --workspace=kpm-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend",
-    "postinstall": "ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
+    "postinstall": "npm exec --workspaces -c 'rm -f package-lock.json' && ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm test --workspaces --if-present",
     "release": "ts-node --esm node_modules/.bin/cellus-release apis/my-canvas-rooms-api apis/my-studies-api apis/my-teaching-api kpm",
     "/* ----------- */": "",
