@@ -29,7 +29,6 @@
       text-decoration: none;
       padding: var(--kpmPad) calc(3.5 * var(--kpmPad)) var(--kpmPad)
         calc(2 * var(--kpmPad));
-      height: 103%; // Hack to fill menu on tablet. Should really fix underlying problem
 
       &::after {
         content: "";
