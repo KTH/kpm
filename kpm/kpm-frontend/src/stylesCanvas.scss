@@ -40,3 +40,13 @@ body.use-personal-menu .bcs__trigger {
     top: calc(58px + var(--kpm-bar-height, 2em));
   }
 }
+
+// Provide space at top of <body> for kpm on pages where this isn't done by
+// the hosting page CSS. Specifically for iFrames in Canvas (SpeedGrader)
+body {
+  border-top: none !important;
+  margin-top: calc(var(--kpm-bar-height) + 1px) !important;
+  padding-top: 0;
+  position: relative !important; 
+  scroll-padding-top: var(--kpm-bar-height);
+}
