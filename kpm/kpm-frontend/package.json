@@ -24,7 +24,7 @@
     "dev-activation": "parcel --target activation",
     "build": "npm run build:production && npm run build:activation",
     "build:production": "parcel build --target production --no-cache --dist-dir distProd --public-url ./",
-    "build:activation": "parcel build --target activation --no-cache --dist-dir distProd --public-url ./",
+    "build:activation": "parcel build --target activation --no-cache --dist-dir distProd --public-url /kpm",
     "test": "npm run test:type-checking && npm run test:regression",
     "test:type-checking": "tsc --noEmit",
     "test:regression": "jest",
