@@ -12,7 +12,7 @@ const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
 
-activation.get("/", (req, res) => {
+activation.get("", (req, res) => {
   // Check "login_success = false" to avoid infinite loops
   if (!isValidSession(req.session.user)) {
     const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=${publicUriBase}/`;
@@ -30,6 +30,10 @@ activation.get("/", (req, res) => {
       root: projectRoot,
     });
   }
+});
+
+activation.get("/", (req, res) => {
+  res.redirect(req.originalUrl.slice(0, req.originalUrl.length - 1));
 });
 
 export const widgetJsAssets = IS_DEV
