@@ -2,6 +2,7 @@ import express, { static as staticHandler } from "express";
 import log from "skog";
 import path from "path";
 import { isValidSession } from "./auth";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -11,6 +12,18 @@ const PORT = parseInt(process.env.PORT || "3000");
 const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
+
+(function () {
+  try {
+    const path = "./distActivation/index.html";
+    let data = readFileSync(path, "utf8");
+    data = data.replaceAll("https://app.kth.se", PROXY_HOST);
+    writeFileSync(path, data);
+  } catch (err) {
+    // NOTE: If path does not exist, this is fine for dev!
+    log.info({ details: err }, "Failed to patch activation page");
+  }
+})();
 
 activation.get("", (req, res) => {
   // Check "login_success = false" to avoid infinite loops
