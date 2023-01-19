@@ -53,7 +53,7 @@ function KTHHeader() {
         <div className="container">
           <div className="header-container__top">
             <figure className="block figure defaultTheme mainLogo">
-              <a href="/">
+              <a href="https://www.kth.se/">
                 <img
                   loading="lazy"
                   src="https://www.kth.se/polopoly_fs/1.77257.1630589847!/KTH_Logotyp_RGB_2013-2.svg"
@@ -61,9 +61,7 @@ function KTHHeader() {
                 />
               </a>
             </figure>
-            <div className="block siteName">
-              <a href="/forskning">Forskning</a>
-            </div>
+            <div className="block siteName">Beta</div>
             <div className="block list links secondaryMenu" lang="sv-SE">
               <nav aria-label="Sekundär toppmeny">
                 <ul>
@@ -71,7 +69,7 @@ function KTHHeader() {
                     <a href="https://www.kth.se/student">Student</a>
                   </li>
                   <li>
-                    <a href="/alumni">Alumn</a>
+                    <a href="https://www.kth.se/alumni">Alumn</a>
                   </li>
                   <li>
                     <a href="https://intra.kth.se/">Anställd</a>
@@ -99,7 +97,7 @@ function KTHHeader() {
                     data-id="id-8e28f4e2-f453-43c0-8914-653287645cdd"
                   >
                     <div className="headerItem showLabel">
-                      <a className="nav-link" href="/">
+                      <a className="nav-link" href="https://www.kth.se/">
                         {" "}
                         Hem
                       </a>
@@ -111,7 +109,10 @@ function KTHHeader() {
                     data-id="id-7e185ef7-579b-40ae-a27f-93bd3e8b894b"
                   >
                     <div className="headerItem">
-                      <a className="nav-link" href="/utbildning">
+                      <a
+                        className="nav-link"
+                        href="https://www.kth.se/utbildning"
+                      >
                         {" "}
                         Utbildning
                       </a>
@@ -124,7 +125,10 @@ function KTHHeader() {
                     data-id="id-20f5055c-d417-46a6-bdce-38c53d830398"
                   >
                     <div className="headerItem">
-                      <a className="nav-link" href="/samverkan">
+                      <a
+                        className="nav-link"
+                        href="https://www.kth.se/samverkan"
+                      >
                         {" "}
                         Samverkan
                       </a>
@@ -136,7 +140,7 @@ function KTHHeader() {
                     data-id="id-cee66f5c-a5a0-496e-b8f3-49170868d42b"
                   >
                     <div className="headerItem">
-                      <a className="nav-link" href="/om">
+                      <a className="nav-link" href="https://www.kth.se/om">
                         {" "}
                         Om KTH
                       </a>
@@ -148,7 +152,10 @@ function KTHHeader() {
                     data-id="id-cbf032c6-6c37-4b30-8d54-3c467e79e6c9"
                   >
                     <div className="headerItem">
-                      <a className="nav-link" href="/biblioteket">
+                      <a
+                        className="nav-link"
+                        href="https://www.kth.se/biblioteket"
+                      >
                         {" "}
                         Bibliotek
                       </a>
@@ -175,22 +182,22 @@ function KTHFooter() {
 
             <ul>
               <li>
-                <a href="/utbildning">Utbildning</a>
+                <a href="https://www.kth.se/utbildning">Utbildning</a>
               </li>
               <li>
-                <a href="/forskning">Forskning</a>
+                <a href="https://www.kth.se/forskning">Forskning</a>
               </li>
               <li>
-                <a href="/samverkan">Samverkan</a>
+                <a href="https://www.kth.se/samverkan">Samverkan</a>
               </li>
               <li>
-                <a href="/om">Om KTH</a>
+                <a href="https://www.kth.se/om">Om KTH</a>
               </li>
               <li>
                 <a href="https://www.kth.se/student">Student på KTH</a>
               </li>
               <li>
-                <a href="/alumni">Alumni</a>
+                <a href="https://www.kth.se/alumni">Alumni</a>
               </li>
               <li>
                 <a href="https://intra.kth.se/">KTH Intranät</a>
@@ -204,7 +211,7 @@ function KTHFooter() {
 
             <ul>
               <li>
-                <a href="/biblioteket">KTH Biblioteket</a>
+                <a href="https://www.kth.se/biblioteket">KTH Biblioteket</a>
               </li>
               <li>
                 <a href="https://intra.kth.se/styrning/kths-organisation/skolor/kth-s-skolor-1.3848">
@@ -212,10 +219,10 @@ function KTHFooter() {
                 </a>
               </li>
               <li>
-                <a href="/om/rektor">Rektor</a>
+                <a href="https://www.kth.se/om/rektor">Rektor</a>
               </li>
               <li>
-                <a href="/om/organisation/gvs-1.887371">
+                <a href="https://www.kth.se/om/organisation/gvs-1.887371">
                   Gemensamt verksamhetsstöd
                 </a>
               </li>
@@ -263,20 +270,20 @@ function KTHFooter() {
           <div className="block list links defaultTheme" lang="sv-SE">
             <ul>
               <li>
-                <a href="/om/kontakt">Kontakta KTH</a>
+                <a href="https://www.kth.se/om/kontakt">Kontakta KTH</a>
               </li>
               <li>
-                <a href="/om/work-at-kth?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=jobb">
+                <a href="https://www.kth.se/om/work-at-kth?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=jobb">
                   Jobba på KTH
                 </a>
               </li>
               <li>
-                <a href="/om/press?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=press">
+                <a href="https://www.kth.se/om/press?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=press">
                   Press och media
                 </a>
               </li>
               <li>
-                <a href="/om/kontakt/faktura-och-betalning-1.2317">
+                <a href="https://www.kth.se/om/kontakt/faktura-och-betalning-1.2317">
                   Faktura och betalning
                 </a>
               </li>
@@ -299,7 +306,7 @@ function KTHFooter() {
                 </a>
               </li>
               <li>
-                <a href="/gemensamt">Om KTH:s webbplats</a>
+                <a href="https://www.kth.se/gemensamt">Om KTH:s webbplats</a>
               </li>
             </ul>
           </div>
