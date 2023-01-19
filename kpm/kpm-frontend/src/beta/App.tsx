@@ -65,8 +65,10 @@ export function App() {
           If you are missing something or have found a bug or anything else that
           isn’t working as intended, please send a screenshot and an explanation
           of the problem to{" "}
-          <a href="mailto:it-support@kth.se">it-support@kth.se</a>. Thank you
-          for participating in the beta development!
+          <a href="mailto:it-support@kth.se?subject='KTH Personliga Meny BETA -- Feedback'">
+            it-support@kth.se
+          </a>
+          . Thank you for participating in the beta development!
         </p>
       </div>
       {isActive ? (
