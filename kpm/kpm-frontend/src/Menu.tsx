@@ -116,7 +116,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
             </ToggleNavLink>
           </li>
           <div className="kpm-menu-shotcuts">
-            <li class="kpm-try">
+            <li className="kpm-try">
               <a
                 href="{{kpm_link}}"
                 title="Give us feedback or disable the beta"
