@@ -116,6 +116,14 @@ export function Menu({ hasStudies, hasTeaching }: any) {
             </ToggleNavLink>
           </li>
           <div className="kpm-menu-shotcuts">
+            <li class="kpm-try">
+              <a
+                href="{{kpm_link}}"
+                title="Give us feedback or disable the beta"
+              >
+                <span>‽</span>
+              </a>
+            </li>
             <li>
               <IconMail href={KTH_MAIL_URI} />
             </li>

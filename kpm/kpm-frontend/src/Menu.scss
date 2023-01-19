@@ -50,6 +50,14 @@
         background: kthStyleUrl("/icons/arrow-expand-black.svg");
       }
     }
+    &.kpm-try span {
+      background: $white;
+      border-radius: 50%;
+      color: $grey;
+      display: inline-block;
+      line-height: 1.2;
+      padding: 0 0.4em;
+    }
   }
 
   // Use for profile image and icons
