@@ -101,6 +101,18 @@ exports[`<App /> Can be rendered 1`] = `
     <div
       className="kpm-menu-shotcuts"
     >
+      <li
+        className="kpm-try"
+      >
+        <a
+          href="{{kpm_link}}"
+          title="Give us feedback or disable the beta"
+        >
+          <span>
+            ‽
+          </span>
+        </a>
+      </li>
       <li>
         <a
           href="https://webmail.kth.se/"
