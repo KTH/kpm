@@ -1,0 +1,6 @@
+kaj:
+export CANVAS_API_TOKEN='8779~p7Bklf1kTugjw82DA3e7mLqOJ3GcAmFQDOCb45oBvLZWSiN4BQU2Wm29SnjWRtL1' 
+
+
+curl -v -H "authorization: Bearer $CANVAS_API_TOKEN" http://localhost:3000/kpm/canvas-rooms/mine | jq .
+

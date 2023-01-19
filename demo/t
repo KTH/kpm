@@ -1,0 +1,9 @@
+# kaj:
+export CANVAS_API_TOKEN='8779~p7Bklf1kTugjw82DA3e7mLqOJ3GcAmFQDOCb45oBvLZWSiN4BQU2Wm29SnjWRtL1' 
+export AUTH="authorization: Bearer $CANVAS_API_TOKEN"
+export FOR_OTHER_USER=https://app-r.referens.sys.kth.se/my-canvas-rooms-api/user/u1i6bme8
+
+echo 'export AUTH="authorization: Bearer $CANVAS_API_TOKEN"'
+echo
+echo 'curl -H "$AUTH" https://app-r.referens.sys.kth.se/my-canvas-rooms-api/mine'
+echo 'curl -H "$AUTH" "$FOR_OTHER_USER" | jq .rooms.DD1362'
