@@ -117,10 +117,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
           </li>
           <div className="kpm-menu-shotcuts">
             <li className="kpm-try">
-              <a
-                href="https://app.kth.se/kpm/"
-                title={i18n("BetaTooltip")}
-              >
+              <a href="https://app.kth.se/kpm/" title={i18n("BetaTooltip")}>
                 <span>‽</span>
               </a>
             </li>
