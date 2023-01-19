@@ -105,7 +105,7 @@ exports[`<App /> Can be rendered 1`] = `
         className="kpm-try"
       >
         <a
-          href="{{kpm_link}}"
+          href="https://app.kth.se/kpm/"
           title="Give us feedback or disable the beta"
         >
           <span>

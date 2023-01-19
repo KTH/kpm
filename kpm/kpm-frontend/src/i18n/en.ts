@@ -2,6 +2,7 @@ export const en: Record<string, string> = {
   Groups: "Groups",
   Profile: "Profile",
   Logout: "Logout",
+  BetaTooltip: "Give us feedback or disable the beta",
   Programme: "Programme",
   Schedule: "Schedule",
   Services: "Services",

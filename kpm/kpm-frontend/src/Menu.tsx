@@ -118,8 +118,8 @@ export function Menu({ hasStudies, hasTeaching }: any) {
           <div className="kpm-menu-shotcuts">
             <li className="kpm-try">
               <a
-                href="{{kpm_link}}"
-                title="Give us feedback or disable the beta"
+                href="https://app.kth.se/kpm/"
+                title={i18n("BetaTooltip")}
               >
                 <span>‽</span>
               </a>

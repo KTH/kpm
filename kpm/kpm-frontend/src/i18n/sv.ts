@@ -2,6 +2,7 @@ export const sv: Record<string, string> = {
   Groups: "Grupper",
   Profile: "Profil",
   Logout: "Logga ut",
+  BetaTooltip: "Ge oss feedback eller lämna betan",
   Programme: "Program",
   Schedule: "Schema",
   Services: "Tjänster",
