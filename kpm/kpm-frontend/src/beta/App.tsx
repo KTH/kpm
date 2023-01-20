@@ -51,24 +51,28 @@ export function App() {
         </p>
         <ol>
           <li>
-            <a href="https://intra.kth.se/en/it/intro/personliga-menyn/utvecklingsprojekt-nya-personliga-menyn-1.1207009">
-              Read more about the project
+            <a href="https://intra.kth.se/en/utbildning/systemstod/nyheter/nya-personliga-menyn-lanseras-i-tre-steg-1.1221268">
+              The new Personal menu is launched in three steps
             </a>
           </li>
           <li>
-            <a href="https://intra.kth.se/en/utbildning/systemstod/nyheter/vi-soker-larare-som-vill-testa-nya-personliga-menyn-1.1211986">
-              Read more about the beta test
+            <a href="https://intra.kth.se/en/it/intro/personliga-menyn/utvecklingsprojekt-nya-personliga-menyn-1.1207009">
+              Development Project - New Personal menu
             </a>
           </li>
         </ol>
         <p>
           If you are missing something or have found a bug or anything else that
           isn’t working as intended, please send a screenshot and an explanation
-          of the problem to{" "}
+          of the problem to . Thank you for participating in the beta
+          development! If you are missing something or have found a bug or
+          anything else that isn’t working as intended, please send a screenshot
+          and an explanation of the problem to{" "}
           <a href="mailto:it-support@kth.se?subject='KTH Personliga Meny BETA -- Feedback'">
             it-support@kth.se
           </a>
-          . Thank you for participating in the beta development!
+          . Please note that you might need to reactivate the beta during the
+          testing. Thank you for participating in the beta development!
         </p>
       </div>
       {isActive ? (
