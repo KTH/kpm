@@ -104,6 +104,26 @@ export function Services() {
               <p>{i18n("Apply for degree certificate")}</p>
             </li>
           </ul>
+          {showStudentLinksWidget && (
+            <Fragment>
+              <h3 className="kpm-col-header">
+                {i18n("Services for Students")}
+              </h3>
+              {loading && <LoadingPlaceholder />}
+              {error && <ErrorMessage error={error} />}
+              {hasStudentlinks && (
+                <ul>
+                  {studentlinks?.map((links) => (
+                    <li key={links.url}>
+                      <h4>
+                        <a href={links.url}>{i18n(links.name)}</a>
+                      </h4>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Fragment>
+          )}
         </div>
         <div className="kpm-col kpm-services-links">
           <h3 className="kpm-col-header">{i18n("Other Selected Services")}</h3>
@@ -126,24 +146,6 @@ export function Services() {
             </ul>
           )}
         </div>
-        {showStudentLinksWidget && (
-          <div className="kpm-col">
-            <h3 className="kpm-col-header">{i18n("Services for Students")}</h3>
-            {loading && <LoadingPlaceholder />}
-            {error && <ErrorMessage error={error} />}
-            {hasStudentlinks && (
-              <ul>
-                {studentlinks?.map((links) => (
-                  <li key={links.url}>
-                    <h4>
-                      <a href={links.url}>{i18n(links.name)}</a>
-                    </h4>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
       </Fragment>
     </MenuPane>
   );
