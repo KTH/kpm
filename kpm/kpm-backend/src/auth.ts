@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { AuthError } from "kpm-api-common/src/errors";
 import { APIAuthErrType, TSessionUser } from "kpm-backend-interface";
 import { SESSION_MAX_AGE_MS } from "./session";
+import log from "skog";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -128,6 +129,12 @@ function openIdErr(err: any) {
     // Trigger login
     if (err.error === "login_required") throw err;
     // TODO: Any other error types we need to handle?
+    // This log is temporary, the err thrown below is also logged.
+    const { response, state, error_uri, error_description } = err;
+    log.error(
+      { response, state, error_uri, error_description },
+      "Unknown OpenID error"
+    );
   } else if (err instanceof errors.RPError) {
     throw new AuthError<APIAuthErrType>({
       type: "ClientResponseError",

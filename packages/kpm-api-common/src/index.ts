@@ -39,15 +39,17 @@ export function errorHandler(
     message = err.message;
     details = err.details;
     errId = err.errId;
-    log.error({
-      name,
-      type,
-      statusCode,
-      message,
-      details,
-      errId,
-      err: err.err,
-    });
+    log.error(
+      {
+        name,
+        type,
+        statusCode,
+        details,
+        errId,
+        err: err.err,
+      },
+      message
+    );
   } else if (err instanceof RecoverableError) {
     // This is an acceptable error IN OUR CODE so we treat it more relaxed.
     // It has been caught and repackaged by a try/catch or similar.
@@ -57,7 +59,7 @@ export function errorHandler(
     statusCode = 500;
     message = err.message;
     errId = err.errId;
-    log.error({ name, type, statusCode, message, errId, err: err.err });
+    log.error({ name, type, statusCode, errId, err: err.err }, message);
   } else {
     // This is an unhandled error and should be considered a bug, we need to log the actual error
     // for debugging. Use Error.captureStackTrace for improved stacktraces in async calls.
@@ -65,7 +67,7 @@ export function errorHandler(
     statusCode = 500;
     errId = uuid();
     message = `We encountered an unexpected error! (errId: ${errId})`;
-    log.error({ statusCode, message, err, errId });
+    log.error({ statusCode, err, errId }, message);
     // QUESTION: Should we perform a graceful shutdown?
   }
 
