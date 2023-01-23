@@ -5,7 +5,7 @@ export function ToggleNavLink({ children, to, onClick, ...props }: any) {
   const navigate = useNavigate();
   const location = useLocation();
   const thisIsOpen = `/${to}` === location.pathname;
-  const isInRoot = "/" === location.pathname;
+  const isInRoot = "/" === location.pathname || "" === location.pathname;
 
   return (
     <NavLink
@@ -13,7 +13,7 @@ export function ToggleNavLink({ children, to, onClick, ...props }: any) {
       onClick={(e) => {
         e.preventDefault();
         if (thisIsOpen) {
-          navigate("/", { replace: true });
+          navigate(-1);
           return;
         }
         // Another pane is open so we replace nav history
