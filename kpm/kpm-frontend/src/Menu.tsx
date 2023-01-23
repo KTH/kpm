@@ -80,7 +80,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
           </li>
           <li className="kpm-schedule-item">
             <a href="https://www.kth.se/social/home/calendar/">
-              {i18n("Schedule")}…
+              {i18n("Schedule")}
             </a>
             {/* <ToggleNavLink to="schedule" className={linkClassName}>
               {i18n("Schedule")}

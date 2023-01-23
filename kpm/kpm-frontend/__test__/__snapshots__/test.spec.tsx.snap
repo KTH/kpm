@@ -50,7 +50,6 @@ exports[`<App /> Can be rendered 1`] = `
         href="https://www.kth.se/social/home/calendar/"
       >
         Schedule
-        …
       </a>
     </li>
     <li>
