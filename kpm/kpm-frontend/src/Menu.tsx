@@ -46,7 +46,7 @@ export function Menu({ hasStudies, hasTeaching }: any) {
 
   return (
     <React.Fragment>
-      <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate("/")} />
+      <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
       <nav ref={menuRef} className={cls}>
         <ul>
           <li className="kpm-mobile-menu kpm-mobile">

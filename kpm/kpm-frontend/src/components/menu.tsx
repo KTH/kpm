@@ -127,7 +127,7 @@ export function MenuPane({
             <h2>{i18n("Your session has expired")}</h2>
             <LoginWidget
               onDismiss={() => {
-                navigate("/");
+                navigate(-1);
               }}
             />
           </div>
@@ -159,7 +159,7 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
           // NOTE: This should really listen to transitionEnd
           // but this is okay and doubles as fallback
           setTimeout(() => {
-            navigate("/");
+            navigate(-1);
           }, 310);
         }}
       >

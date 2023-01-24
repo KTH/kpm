@@ -4,15 +4,20 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 export function ToggleNavLink({ children, to, onClick, ...props }: any) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isOpen = `/${to}` === location.pathname;
+  const thisIsOpen = `/${to}` === location.pathname;
+  const isInRoot = "/" === location.pathname || "" === location.pathname;
 
   return (
     <NavLink
       to={to}
       onClick={(e) => {
-        if (!isOpen) return;
         e.preventDefault();
-        navigate("/");
+        if (thisIsOpen) {
+          navigate(-1);
+          return;
+        }
+        // Another pane is open so we replace nav history
+        navigate(to, { replace: !isInRoot });
       }}
       {...props}
     >
