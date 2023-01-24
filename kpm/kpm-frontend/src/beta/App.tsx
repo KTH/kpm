@@ -60,11 +60,6 @@ export function App() {
               Development Project - New Personal menu
             </a>
           </li>
-          <li>
-            <a href="https://www.economist.com/the-economist-explains/2014/10/01/the-rise-and-fall-of-the-interrobang">
-              About The Interrobang Glyf in the Beta Icon
-            </a>
-          </li>
         </ol>
         <p>
           If you are missing something or have found a bug or anything else that
