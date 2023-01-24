@@ -64,10 +64,7 @@ export function App() {
         <p>
           If you are missing something or have found a bug or anything else that
           isn’t working as intended, please send a screenshot and an explanation
-          of the problem to . Thank you for participating in the beta
-          development! If you are missing something or have found a bug or
-          anything else that isn’t working as intended, please send a screenshot
-          and an explanation of the problem to{" "}
+          of the problem to{" "}
           <a href="mailto:it-support@kth.se?subject='KTH Personliga Meny BETA -- Feedback'">
             it-support@kth.se
           </a>
