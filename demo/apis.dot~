@@ -1,6 +1,0 @@
-digraph {
-  KPM -> my-canvas-rooms-api -> canvas
-  KPM -> my-teaching-api -> ug
-  KPM -> my-studies-api -> ug
-  Ladok -> ug
-}
