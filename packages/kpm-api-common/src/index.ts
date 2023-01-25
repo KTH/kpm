@@ -1,6 +1,10 @@
 import { Response, Request, NextFunction } from "express";
 import { v4 as uuid } from "uuid";
-import { OperationalError, RecoverableError } from "./errors";
+import {
+  OperationalError,
+  RecoverableError,
+  MutedOperationalError,
+} from "./errors";
 
 import log from "skog";
 
@@ -39,17 +43,21 @@ export function errorHandler(
     message = err.message;
     details = err.details;
     errId = err.errId;
-    log.error(
-      {
-        name,
-        type,
-        statusCode,
-        details,
-        errId,
-        err: err.err,
-      },
-      message
-    );
+
+    const errorParams = {
+      name,
+      type,
+      statusCode,
+      details,
+      errId,
+      err: err.err,
+    };
+    // A MutedOperationalError is logged as a warning others as an error.
+    if (err instanceof MutedOperationalError) {
+      log.warn(errorParams, message);
+    } else {
+      log.error(errorParams, message);
+    }
   } else if (err instanceof RecoverableError) {
     // This is an acceptable error IN OUR CODE so we treat it more relaxed.
     // It has been caught and repackaged by a try/catch or similar.

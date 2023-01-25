@@ -127,10 +127,12 @@ export type TService = {
   info?: string;
 };
 
-export type APIAuthErrType =
+export type APIAuthErrType = "ClientResponseError" | "TypeError";
+
+export type APIMutedAuthErrType =
+  | "LoginRequired"
   | "SessionExpired"
   | "SessionStoreError"
-  | "ClientResponseError"
-  | "TypeError";
+  | "AuthServiceMiscError";
 
 export * from "./errors";

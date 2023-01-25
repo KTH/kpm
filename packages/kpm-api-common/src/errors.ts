@@ -40,6 +40,29 @@ export abstract class OperationalError<ErrType> extends Error {
   }
 }
 
+// Log MutedOperationalError as a warning to avoid alerts
+export abstract class MutedOperationalError<
+  ErrType
+> extends OperationalError<ErrType> {
+  constructor({
+    name,
+    statusCode,
+    type,
+    message,
+    details,
+    err,
+  }: TOperationalError<ErrType>) {
+    super({
+      name,
+      statusCode,
+      type,
+      message,
+      details,
+      err,
+    });
+  }
+}
+
 /**
  * All errors of type EndpointError must be handled by the API-consumer.
  * These include data validation and failing calls to external APIs.
@@ -84,6 +107,18 @@ type TAuthError<ErrType> = {
 };
 export class AuthError<ErrType> extends OperationalError<ErrType> {
   constructor({ type, message, details, err }: TAuthError<ErrType>) {
+    super({ name: "AuthError", statusCode: 401, type, message, details, err });
+  }
+}
+
+type TMutedAuthError<ErrType> = {
+  type: ErrType;
+  message: string;
+  details?: any | undefined;
+  err?: Error | undefined;
+};
+export class MutedAuthError<ErrType> extends MutedOperationalError<ErrType> {
+  constructor({ type, message, details, err }: TMutedAuthError<ErrType>) {
     super({ name: "AuthError", statusCode: 401, type, message, details, err });
   }
 }
