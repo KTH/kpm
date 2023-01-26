@@ -4,10 +4,10 @@ import type { TCanvasRoom } from "kpm-backend-interface";
 import "./courseComponents.scss";
 
 type TExamRoomListProps = {
-  rooms: TCanvasRoom[];
+  rooms?: TCanvasRoom[];
   title: string;
 };
-export function ExamRoomList({ rooms, title }: TExamRoomListProps) {
+export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
   // Only show this if rooms is array with length > 0
   if (!rooms?.length) return null;
 

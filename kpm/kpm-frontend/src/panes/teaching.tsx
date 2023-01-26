@@ -1,5 +1,9 @@
 import React from "react";
-import type { APITeaching, TCanvasRoom } from "kpm-backend-interface";
+import type {
+  APITeaching,
+  TCanvasRoom,
+  TTeachingCourse,
+} from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { fetchApi, formatTerm, useDataFecther } from "./utils";
@@ -50,7 +54,7 @@ export function Teaching() {
       {courses && (
         <div className="kpm-teaching">
           {Object.entries(courses).map(([code, course]) => {
-            return <Course key={[code]} courseCode={code} course={course} />;
+            return <Course key={code} courseCode={code} course={course} />;
           })}
         </div>
       )}
@@ -58,7 +62,12 @@ export function Teaching() {
   );
 }
 
-function Course({ courseCode, course }: any) {
+type TCourseProps = {
+  courseCode: string;
+  course: TTeachingCourse;
+};
+
+function Course({ courseCode, course }: TCourseProps) {
   const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
   const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
@@ -86,6 +95,9 @@ function Course({ courseCode, course }: any) {
               {i18n("Canvas is silent, try later...")}
             </p>
           )}
+          {course.rooms?.length === 0 && (
+            <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
+          )}
           <CanvasRoomShortList rooms={current} />
           <CanvasRoomExpandedList
             rooms={[...current, ...other]}
@@ -104,23 +116,25 @@ type TCanvasRoomShortListProps = {
 };
 
 function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
+  const roomsToShow = rooms.filter((room: TCanvasRoom) => room.type !== "rapp");
+
+  if (roomsToShow.length === 0) return null;
+
   return (
     <ul className="kpm-teaching-course-rooms">
-      {rooms
-        .filter((room: TCanvasRoom) => room.type !== "rapp")
-        .map((room: TCanvasRoom) => {
-          const key = `${room.registrationCode}-${room.startTerm}`;
-          return (
-            <li key={key}>
-              <CanvasRoomLink
-                url={room.url}
-                type={room.type}
-                code={room.registrationCode}
-                startTerm={room.startTerm!}
-              />
-            </li>
-          );
-        })}
+      {roomsToShow.map((room: TCanvasRoom) => {
+        const key = `${room.registrationCode}-${room.startTerm}`;
+        return (
+          <li key={key}>
+            <CanvasRoomLink
+              url={room.url}
+              type={room.type}
+              code={room.registrationCode}
+              startTerm={room.startTerm!}
+            />
+          </li>
+        );
+      })}
     </ul>
   );
 }

@@ -66,7 +66,7 @@ export async function teachingApiHandler(
         credits: kopps?.credits,
         creditUnitAbbr: kopps?.creditUnitAbbr,
         roles: roles,
-        rooms: rooms?.[course_code] || null,
+        rooms: rooms ? rooms?.[course_code] || [] : null,
       };
     }
 
