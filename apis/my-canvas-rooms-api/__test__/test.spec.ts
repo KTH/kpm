@@ -55,6 +55,31 @@ describe("Known room formats data can be parsed", () => {
     `);
   });
 
+  test("examroom old format", () => {
+    expect(
+      // Mock data does not include favorites
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":30654,"name":"Tentamen för DD1362 TEN1/DD1361 TEN2: 2021-06-08","account_id":110,"uuid":"C7LVRFLspuGJqm25v43lQTT1mUGgHBNPedF20rlB","start_at":"2021-06-03T11:01:08Z","grading_standard_id":1371,"is_public":false,"created_at":"2021-05-11T06:54:04Z","course_code":"Tentamen för DD1362 TEN1/DD1361 TEN2: 2021-06-08","default_view":"wiki","root_account_id":1,"enrollment_term_id":1,"license":"private","grade_passback_setting":null,"end_at":null,"public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"apply_assignment_group_weights":false,"sections":[{"id":37095,"name":"Omtentamen för DD1361 TEN2: 2021-06-08 - Section 1","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"},{"id":37097,"name":"Omtentamen för DD1361 TEN2: 2021-06-08 - Section 2","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"}],"is_favorite":false,"locale":"en","calendar":{"ics":"https://canvas.kth.se/feeds/calendars/course_C7LVRFLspuGJqm25v43lQTT1mUGgHBNPedF20rlB.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"AKT.7676a535-a655-11eb-863b-62bcffd242dd","sis_import_id":982240,"integration_id":null,"enrollments":[{"type":"teacher","role":"Examiner","role_id":10,"user_id":3342,"enrollment_state":"active","limit_privileges_to_course_section":false},{"type":"teacher","role":"Examiner","role_id":10,"user_id":3342,"enrollment_state":"active","limit_privileges_to_course_section":false}],"hide_final_grades":false,"workflow_state":"available","restrict_enrollments_to_course_dates":false,"overridden_course_visibility":""}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "DD1361",
+        },
+        "link": {
+          "examDate": "2021-06-08",
+          "favorite": false,
+          "name": "Tentamen för DD1362 TEN1/DD1361 TEN2: 2021-06-08",
+          "state": "available",
+          "type": "exam",
+          "url": "https://mock.kth.se/courses/30654",
+        },
+      }
+    `);
+  });
+
   test("rapp", () => {
     expect(
       // Mock data does not include favorites

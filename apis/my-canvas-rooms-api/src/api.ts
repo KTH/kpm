@@ -107,6 +107,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     getRoomsByNewFormat(canvas_data) ||
     getRoomsByOldFormat(canvas_data) ||
     getExamRoomByNewFormat(canvas_data) ||
+    getExamRoomByOldFormat(canvas_data) ||
     getRoomsFallback(canvas_data);
   return {
     course_codes,
@@ -162,7 +163,7 @@ function getRoomsByNewFormat(
       link_meta_data.startTerm = convertStartTerm(startTerm);
       link_meta_data.registrationCode = registrationCode;
     } else {
-      // console.log(`Room ${room_id} Section "${section}" in "${canvas_data.name}"; no match.`)
+      // console.log(`Room ${canvas_data.id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
   }
 
@@ -265,6 +266,41 @@ function getExamRoomByNewFormat(
     }
   }
 
+  return { course_codes, link_meta_data };
+}
+
+function getExamRoomByOldFormat(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
+  const course_codes = new Set<string>();
+  const link_meta_data: TLinkMetaData = {
+    type: "exam",
+  };
+
+  const sections = canvas_data.sections.map((s) => s.name);
+
+  const nameRegex = /^AKT\./;
+  const sectionRegex = /^\w+ för ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10}) /i;
+
+  const matchName = canvas_data.sis_course_id?.match(nameRegex);
+  if (!matchName) {
+    // This is not an exam room AFAIK
+    return undefined;
+  }
+  //console.log("AKT room", canvas_data.id, ":", canvas_data.name)
+
+  for (const section of sections) {
+    //console.log(" - section:", section);
+    const match = section.match(sectionRegex);
+    if (match) {
+      const [_, courseCode, examDate] = match;
+      course_codes.add(courseCode);
+      link_meta_data.examDate = examDate;
+      //console.log("   is", courseCode, examDate);
+      //} else {
+      //  console.log("   no match");
+    }
+  }
   return { course_codes, link_meta_data };
 }
 
