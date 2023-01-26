@@ -47,7 +47,7 @@ body.use-personal-menu .bcs__trigger {
 // enough.
 // There are classes on the elements involved, but all of them seem randomized.
 body > span > span {
-    margin-top: calc(-1 * var(--kpm-bar-height));
+  margin-top: calc(-1 * var(--kpm-bar-height));
 }
 
 // Provide space at top of <body> for kpm on pages where this isn't done by
