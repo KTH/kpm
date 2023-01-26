@@ -2,6 +2,7 @@ import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
+import { ErrorBoundary } from "./error";
 
 import "./app.scss";
 
@@ -38,6 +39,7 @@ function createRouter({ ...props }: TCreateRouterProps) {
     {
       path: "/",
       element: <Menu {...props} />,
+      errorElement: <Menu {...props} />,
       children: getRoutes({ ...props }).map((route) => ({
         index: route.path === "/",
         path: route.path === "/" ? undefined : route.path,
@@ -50,8 +52,10 @@ function createRouter({ ...props }: TCreateRouterProps) {
 
 export function App() {
   return (
-    <RouterProvider
-      router={createRouter({ hasStudies: true, hasTeaching: true })}
-    />
+    <ErrorBoundary>
+      <RouterProvider
+        router={createRouter({ hasStudies: true, hasTeaching: true })}
+      />
+    </ErrorBoundary>
   );
 }
