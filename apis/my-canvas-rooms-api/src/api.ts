@@ -148,7 +148,7 @@ function getRoomsByNewFormat(
   const sections = canvas_data.sections.map((s) => s.name);
 
   const section_name_format =
-    /^([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \((\d+)\)/i;
+    /^([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(([^\)]+)\)/i;
 
   for (const section of sections) {
     const match = section.match(section_name_format);
