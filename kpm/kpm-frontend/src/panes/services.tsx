@@ -113,11 +113,12 @@ export function Services() {
               {error && <ErrorMessage error={error} />}
               {hasStudentlinks && (
                 <ul>
-                  {studentlinks?.map((links) => (
-                    <li key={links.url}>
+                  {studentlinks?.map((link) => (
+                    <li key={link.url}>
                       <h4>
-                        <a href={links.url}>{i18n(links.name)}</a>
+                        <a href={link.url}>{i18n(link.name)}</a>
                       </h4>
+                      {link.info && (<p>{link.name}</p>)}
                     </li>
                   ))}
                 </ul>

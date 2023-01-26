@@ -124,6 +124,7 @@ export type APIServices = {
 export type TService = {
   name: string;
   url: string;
+  info?: string;
 };
 
 export type APIAuthErrType =
