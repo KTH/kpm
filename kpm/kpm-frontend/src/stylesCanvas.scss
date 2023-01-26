@@ -41,6 +41,15 @@ body.use-personal-menu .bcs__trigger {
   }
 }
 
+// Tooltips gets auto positioned by canvas js, but that puts them too low.
+// Normally there is no span elements directly under body, but that is
+// what canvas uses for tooltips, so here's hoping this is specific
+// enough.
+// There are classes on the elements involved, but all of them seem randomized.
+body > span > span {
+    margin-top: calc(-1 * var(--kpm-bar-height));
+}
+
 // Provide space at top of <body> for kpm on pages where this isn't done by
 // the hosting page CSS. Specifically for iFrames in Canvas (SpeedGrader)
 body {
