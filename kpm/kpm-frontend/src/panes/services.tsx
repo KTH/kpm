@@ -118,7 +118,7 @@ export function Services() {
                       <h4>
                         <a href={link.url}>{i18n(link.name)}</a>
                       </h4>
-                      {link.info && <p>{link.name}</p>}
+                      {link.info && <p>{link.info}</p>}
                     </li>
                   ))}
                 </ul>
