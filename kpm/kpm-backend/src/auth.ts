@@ -1,10 +1,13 @@
 import { Router } from "express";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
-import { AuthError } from "kpm-api-common/src/errors";
-import { APIAuthErrType, TSessionUser } from "kpm-backend-interface";
+import { AuthError, MutedAuthError } from "kpm-api-common/src/errors";
+import {
+  APIAuthErrType,
+  APIMutedAuthErrType,
+  TSessionUser,
+} from "kpm-backend-interface";
 import { SESSION_MAX_AGE_MS } from "./session";
-import log from "skog";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -126,25 +129,32 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
 function openIdErr(err: any) {
   // https://github.com/panva/node-openid-client/blob/main/docs/README.md#errors
   if (err instanceof errors.OPError) {
-    // Trigger login
-    if (err.error === "login_required") throw err;
-    // TODO: Any other error types we need to handle?
-    // This log is temporary, the err thrown below is also logged.
-    const { response, state, error_uri, error_description } = err;
-    log.error(
-      { response, state, error_uri, error_description },
-      "Unknown OpenID error"
-    );
+    // Trigger login (logged as warning)
+    if (err.error === "login_required")
+      throw new MutedAuthError<APIMutedAuthErrType>({
+        type: "LoginRequired",
+        message: "Login required",
+        err,
+      });
+
+    // We get weird misc errors from auth server that don't appear to be severe (logged as warning)
+    throw new MutedAuthError<APIMutedAuthErrType>({
+      type: "AuthServiceMiscError",
+      message: "Misc auth service error, check err property for details",
+      err,
+    });
   } else if (err instanceof errors.RPError) {
+    // This is a setup error with our auth service and should be logged as a proper error
     throw new AuthError<APIAuthErrType>({
       type: "ClientResponseError",
       message: "Login failed due to invalid response",
       details: err,
     });
   } else if (err instanceof TypeError) {
+    // This is a programmer error and should be logged as a proper error
     throw new AuthError<APIAuthErrType>({
       type: "TypeError",
-      message: "Login failed due to invalid response",
+      message: "Login failed due to unexpected argument types",
       details: err,
     });
   }
@@ -183,7 +193,7 @@ export function requiresValidSessionUser(
 
 export function throwIfNotValidSession(user?: TSessionUser): void {
   if (user === undefined) {
-    throw new AuthError<APIAuthErrType>({
+    throw new MutedAuthError<APIMutedAuthErrType>({
       type: "SessionStoreError",
       message: "No logged in user found",
     });
@@ -191,7 +201,7 @@ export function throwIfNotValidSession(user?: TSessionUser): void {
 
   // TODO: Clear session if not valid
   if (!isValidSession(user)) {
-    throw new AuthError<APIAuthErrType>({
+    throw new MutedAuthError<APIMutedAuthErrType>({
       type: "SessionExpired",
       message: "Your session has expired",
       details: user,

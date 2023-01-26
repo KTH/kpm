@@ -15,6 +15,19 @@ const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
 
 (function () {
   try {
+    // For local development
+    if (IS_DEV) {
+      const path = "../kpm-frontend/distProd/activation/index.html";
+      let data = readFileSync(path, "utf8");
+      data = data.replaceAll(
+        "https://app.kth.se/kpm/kpm.js",
+        `${PROXY_HOST}/kpm/kpm.js`
+      );
+      writeFileSync(path, data);
+      return;
+    }
+
+    // For prod and stage
     const path = "./distActivation/index.html";
     let data = readFileSync(path, "utf8");
     data = data.replaceAll("https://app.kth.se", PROXY_HOST);
