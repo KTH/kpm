@@ -8,6 +8,7 @@ import CanvasAPI, {
   minimalErrorHandler,
 } from "@kth/canvas-api";
 import { Request } from "express";
+import { MutedOperationalError } from "kpm-api-common/src/errors";
 
 export { CanvasApiError } from "@kth/canvas-api";
 
@@ -30,9 +31,20 @@ function getToken(token = "") {
     return token.substring(7);
   }
 
-  throw new Error(
-    "Unauthorized. You must access this endpoint either with a session or an authorization header"
-  );
+  throw new AuthTokenMissing();
+}
+
+class AuthTokenMissing extends MutedOperationalError<String> {
+  constructor() {
+    super({
+      name: "AuthError",
+      statusCode: 401,
+      type: "Unauthorized",
+      message:
+        "You must access this endpoint either with a session or an authorization header",
+      details: undefined,
+    });
+  }
 }
 
 export default class CanvasClient {

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import CanvasClient, { CanvasRoom, CanvasApiError } from "./canvasApi";
 import log from "skog";
+import { MutedOperationalError } from "kpm-api-common/src/errors";
 
 export const api = express.Router();
 
@@ -19,11 +20,27 @@ api.get(
     try {
       const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
       res.send({ rooms: result });
-    } catch (err) {
-      next(err);
+    } catch (err: any) {
+      if (err?.name == "CanvasApiError" && err?.code == 404) {
+        next(new UserMissing());
+      } else {
+        next(err);
+      }
     }
   }
 );
+
+class UserMissing extends MutedOperationalError<String> {
+  constructor() {
+    super({
+      name: "EndpointError",
+      statusCode: 404,
+      type: "Not found",
+      message: "Not found in Canvas.",
+      details: undefined,
+    });
+  }
+}
 
 async function do_getRooms(
   req: Request,
