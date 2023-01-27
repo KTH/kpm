@@ -338,7 +338,15 @@ function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
 
   // No known kind of room, log some details in case it is something
   // we _should_ recognize.
-  log.info({ room_id: canvas_data.id, room_name: canvas_data.name, sis_corse_id: canvas_data.sis_course_id, sections }, "Unmatched canvas room");
+  log.info(
+    {
+      room_id: canvas_data.id,
+      room_name: canvas_data.name,
+      sis_corse_id: canvas_data.sis_course_id,
+      sections,
+    },
+    "Unmatched canvas room"
+  );
 
   const link_meta_data: TLinkMetaData = {
     name: canvas_data.name,
