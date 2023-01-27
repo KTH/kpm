@@ -37,6 +37,10 @@
       margin-top: auto; // Push dropdown to bottom of box
     }
 
+    & > ul {
+      margin-bottom: auto;
+    }
+
     h2 {
       font-size: 1em;
       margin: 0;
