@@ -183,6 +183,12 @@ function Course({ courseCode, course }: TCourseProps) {
           {i18n("Canvas is silent, try later...")}
         </p>
       )}
+      {course.rooms?.length === 0 && (
+        <p className="kpm-muted-text">
+          {/* Show friendly warning if Canvas isn't responding */}
+          {i18n("No rooms found in Canvas")}
+        </p>
+      )}
     </div>
   );
 }

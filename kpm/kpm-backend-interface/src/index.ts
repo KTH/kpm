@@ -72,7 +72,7 @@ export type TStudiesCourse = {
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
   completed: boolean;
   rounds: TStudiesCourseRound[]; // any rounds that are current comes first.
-  rooms: TCanvasRoom[];
+  rooms: TCanvasRoom[] | null;
 };
 export type TStudiesCourseRound = {
   status: "antagna" | "registrerade";

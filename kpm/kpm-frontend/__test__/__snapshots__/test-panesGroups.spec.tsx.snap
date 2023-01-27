@@ -8,7 +8,7 @@ exports[`<Groups /> Can be rendered 1`] = `
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
-    Tillbaka till personliga menyn
+    Back to Personal Menu
   </a>
   <div
     className="kpm-modal-content kpm-groups"
@@ -92,7 +92,7 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
-    Tillbaka till personliga menyn
+    Back to Personal Menu
   </a>
   <div
     className="kpm-modal-content kpm-groups"
@@ -214,7 +214,7 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
-    Tillbaka till personliga menyn
+    Back to Personal Menu
   </a>
   <div
     className="kpm-modal-content kpm-groups"

@@ -100,4 +100,6 @@ export const en: Record<string, string> = {
   "You don't belong to any groups.": "You don't belong to any group.",
   "You aren't studying any courses.": "You aren't studying any course.",
   "You aren't teaching any courses.": "You aren't teaching any course.",
+  "Tillbaka till personliga menyn": "Back to Personal Menu",
+  Examinationsrum: "Exam Room",
 };

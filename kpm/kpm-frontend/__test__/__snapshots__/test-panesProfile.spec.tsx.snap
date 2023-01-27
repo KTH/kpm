@@ -8,7 +8,7 @@ exports[`<Profile /> Can be rendered 1`] = `
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
-    Tillbaka till personliga menyn
+    Back to Personal Menu
   </a>
   <div
     className="kpm-modal-content kpm-profile"

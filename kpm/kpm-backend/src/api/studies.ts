@@ -145,7 +145,7 @@ export async function studiesApiHandler(
           title: kopps.title,
           credits: kopps.credits,
           creditUnitAbbr: kopps.creditUnitAbbr,
-          rooms: rooms?.[course_code] || null,
+          rooms: rooms ? rooms?.[course_code] || [] : null,
           completed,
           rounds: [...current_rounds, ...other_rounds],
         };
