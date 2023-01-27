@@ -80,6 +80,32 @@ describe("Known room formats data can be parsed", () => {
     `);
   });
 
+  test("examroom old format, double", () => {
+    expect(
+      // Mock data does not include favorites
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":33550,"name":"Kontrollskrivning för DD1331 KONT & DD1332 TEN2: 2021-12-09","account_id":110,"uuid":"vljm7fPBHu3sU0YLmVD5g9aCj9CHyffP0fRoPM0E","start_at":"2021-12-09T09:12:09Z","grading_standard_id":1371,"is_public":false,"created_at":"2021-10-10T00:38:19Z","course_code":"Kontrollskrivning för DD1331 KONT & DD1332 TEN2: 2021-12-09","default_view":"wiki","root_account_id":1,"enrollment_term_id":1,"license":"private","grade_passback_setting":null,"end_at":null,"public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"apply_assignment_group_weights":false,"sections":[{"id":41180,"name":"Kontrollskrivning för DD1331 KONT & DD1332 TEN2: 2021-12-09 - Section 1","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"}],"is_favorite":false,"locale":"en-GB","calendar":{"ics":"https://canvas.kth.se/feeds/calendars/course_vljm7fPBHu3sU0YLmVD5g9aCj9CHyffP0fRoPM0E.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"AKT.2053eb53-2809-11ec-a60e-c0f64d1847cf","sis_import_id":1134241,"integration_id":null,"enrollments":[{"type":"teacher","role":"Examiner","role_id":10,"user_id":3342,"enrollment_state":"active","limit_privileges_to_course_section":false}],"hide_final_grades":false,"workflow_state":"available","restrict_enrollments_to_course_dates":false,"overridden_course_visibility":""}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "DD1331",
+          "DD1332",
+        },
+        "link": {
+          "examDate": "2021-12-09",
+          "favorite": false,
+          "name": "Kontrollskrivning för DD1331 KONT & DD1332 TEN2: 2021-12-09",
+          "state": "available",
+          "type": "exam",
+          "url": "https://mock.kth.se/courses/33550",
+        },
+      }
+    `);
+  });
+
   test("rapp", () => {
     expect(
       // Mock data does not include favorites

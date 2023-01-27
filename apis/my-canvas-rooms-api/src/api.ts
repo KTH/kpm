@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import CanvasClient, { CanvasRoom } from "./canvasApi";
+import log from "skog";
 
 export const api = express.Router();
 
@@ -280,7 +281,10 @@ function getExamRoomByOldFormat(
   const sections = canvas_data.sections.map((s) => s.name);
 
   const nameRegex = /^AKT\./;
-  const sectionRegex = /^\w+ för ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10}) /i;
+  const sectionRegex =
+    /^([\w -]+ för )?([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})( -.*)?/i;
+  const sectionDoubleRegex =
+    /^(:?[\w -]+ för) ([A-ZÅÄÖ0-9]{5,7}) \w+ . ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10}) /i;
 
   const matchName = canvas_data.sis_course_id?.match(nameRegex);
   if (!matchName) {
@@ -290,18 +294,39 @@ function getExamRoomByOldFormat(
   //console.log("AKT room", canvas_data.id, ":", canvas_data.name)
 
   for (const section of sections) {
-    //console.log(" - section:", section);
     const match = section.match(sectionRegex);
     if (match) {
-      const [_, courseCode, examDate] = match;
+      const [_whole, _ignore, courseCode, examDate] = match;
       course_codes.add(courseCode);
       link_meta_data.examDate = examDate;
-      //console.log("   is", courseCode, examDate);
-      //} else {
-      //  console.log("   no match");
+    } else {
+      const match = section.match(sectionDoubleRegex);
+      if (match) {
+        const [_whole, _ignore, courseCode1, courseCode2, examDate] = match;
+        course_codes.add(courseCode1);
+        course_codes.add(courseCode2);
+        link_meta_data.examDate = examDate;
+      }
     }
   }
-  return { course_codes, link_meta_data };
+  if (course_codes.size == 0) {
+    const oldNameRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})$/i;
+    const match = canvas_data.name.match(oldNameRegex);
+    if (match) {
+      const [_whole, courseCode, examDate] = match;
+      course_codes.add(courseCode);
+      link_meta_data.examDate = examDate;
+    }
+  }
+  if (course_codes.size > 0) {
+    return { course_codes, link_meta_data };
+  } else {
+    console.log(`Unmatched AKT room ${canvas_data.id}: ${canvas_data.name} `);
+    for (const section of sections) {
+      console.log("  -", section);
+    }
+    console.log(JSON.stringify(canvas_data));
+  }
 }
 
 function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
@@ -311,9 +336,10 @@ function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
   // requires further API calls.
   const sections = canvas_data.sections.map((s) => s.name);
 
-  // Not a "correct" sis id or high likelihood of xlisting;
-  // get some data to search for course codes.
-  // logger.debug("Full canvas data: %r", canvas_data)
+  // No known kind of room, log some details in case it is something
+  // we _should_ recognize.
+  log.info({ room_id: canvas_data.id, room_name: canvas_data.name, sis_corse_id: canvas_data.sis_course_id, sections }, "Unmatched canvas room");
+
   const link_meta_data: TLinkMetaData = {
     name: canvas_data.name,
     text: `${canvas_data.course_code} ${sections.join(" ")}`,
