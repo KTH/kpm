@@ -98,4 +98,6 @@ export const sv: Record<string, string> = {
   "You don't belong to any groups.": "Du följer ingen grupp.",
   "You aren't studying any courses.": "Du studerar inga kurser.",
   "You aren't teaching any courses.": "Du undervisar inga kurser.",
+  "Tillbaka till personliga menyn": "Tillbaka till personliga menyn",
+  Examinationsrum: "Examinationsrum",
 };
