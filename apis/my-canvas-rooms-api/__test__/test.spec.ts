@@ -106,6 +106,55 @@ describe("Known room formats data can be parsed", () => {
     `);
   });
 
+  test("examroom old format, swedish in name", () => {
+    expect(
+      // Mock data does not include favorites
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":29190,"name":"Extra examinationstillfälle för EI1110 TEN1: 2021-02-25","account_id":110,"uuid":"jSt8gaLkZ83sxSw6vHF4DR4w1mqHN3lyVOVV7KIO","start_at":null,"grading_standard_id":1371,"is_public":false,"created_at":"2021-02-03T11:58:00Z","course_code":"Extra examinationstillfälle för EI1110 TEN1: 2021-02-25","default_view":"wiki","root_account_id":1,"enrollment_term_id":1,"license":"private","grade_passback_setting":null,"end_at":null,"public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"apply_assignment_group_weights":false,"sections":[{"id":34263,"name":"Extra examinationstillfälle för EI1110 TEN1: 2021-02-25 - Section 1","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"},{"id":34264,"name":"Extra examinationstillfälle för EI1110 TEN1: 2021-02-25 - Section 2","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"}],"is_favorite":false,"locale":"en","calendar":{"ics":"https://canvas.kth.se/feeds/calendars/course_jSt8gaLkZ83sxSw6vHF4DR4w1mqHN3lyVOVV7KIO.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"AKT.2debcff6-6614-11eb-8aa3-7ac7eafb4b13","sis_import_id":946452,"integration_id":null,"enrollments":[{"type":"teacher","role":"Examiner","role_id":10,"user_id":6001,"enrollment_state":"active","limit_privileges_to_course_section":false},{"type":"teacher","role":"Examiner","role_id":10,"user_id":6001,"enrollment_state":"active","limit_privileges_to_course_section":false}],"hide_final_grades":false,"workflow_state":"unpublished","restrict_enrollments_to_course_dates":false,"overridden_course_visibility":""}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "EI1110",
+        },
+        "link": {
+          "examDate": "2021-02-25",
+          "favorite": false,
+          "name": "Extra examinationstillfälle för EI1110 TEN1: 2021-02-25",
+          "state": "unpublished",
+          "type": "exam",
+          "url": "https://mock.kth.se/courses/29190",
+        },
+      }
+    `);
+  });
+  test("examroom old format, room name fallback double", () => {
+    expect(
+      // Mock data does not include favorites
+      get_rooms_courses_and_link(
+        JSON.parse(
+          '{"id":23554,"name":"EI2402 TEN1 & EI2402 PRO1: 2020-06-03","account_id":110,"uuid":"ppUEQ4VRvdSSWoIIlOgFiMZNvDDBAC3mWiaQtuve","start_at":"2020-05-29T13:05:04Z","grading_standard_id":null,"is_public":false,"created_at":"2020-05-07T14:55:26Z","course_code":"EI2402 TEN1 & EI2402 PRO1: 2020-06-03","default_view":"wiki","root_account_id":1,"enrollment_term_id":1,"license":"private","grade_passback_setting":null,"end_at":null,"public_syllabus":false,"public_syllabus_to_auth":false,"storage_quota_mb":2000,"is_public_to_auth_users":false,"homeroom_course":false,"course_color":null,"friendly_name":null,"apply_assignment_group_weights":false,"sections":[{"id":25615,"name":"Section 1","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"},{"id":25619,"name":"Section 2","start_at":null,"end_at":null,"enrollment_role":"TeacherEnrollment"}],"is_favorite":false,"locale":"en","calendar":{"ics":"https://canvas.kth.se/feeds/calendars/course_ppUEQ4VRvdSSWoIIlOgFiMZNvDDBAC3mWiaQtuve.ics"},"time_zone":"Europe/Stockholm","blueprint":false,"template":false,"sis_course_id":"AKT.3c7f10c7-9038-11ea-9c20-5fe648ca4e77.2020-06-03","sis_import_id":713579,"integration_id":null,"enrollments":[{"type":"teacher","role":"Examiner","role_id":10,"user_id":6001,"enrollment_state":"active","limit_privileges_to_course_section":false},{"type":"teacher","role":"Examiner","role_id":10,"user_id":6001,"enrollment_state":"active","limit_privileges_to_course_section":false}],"hide_final_grades":false,"workflow_state":"available","restrict_enrollments_to_course_dates":false,"overridden_course_visibility":""}'
+        )
+      )
+    ).toMatchInlineSnapshot(`
+      {
+        "course_codes": Set {
+          "EI2402",
+        },
+        "link": {
+          "examDate": "2020-06-03",
+          "favorite": false,
+          "name": "EI2402 TEN1 & EI2402 PRO1: 2020-06-03",
+          "state": "available",
+          "type": "exam",
+          "url": "https://mock.kth.se/courses/23554",
+        },
+      }
+    `);
+  });
+
   test("rapp", () => {
     expect(
       // Mock data does not include favorites

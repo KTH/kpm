@@ -126,7 +126,7 @@ function getRoomsByRapp(
 
   // Rapp courses may not be the most common or important, but we can
   // identify them based on only course name and ignore sections.
-  const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/);
+  const rapp = canvas_data.name.match(/^RAPP_([A-ZÅÄÖ0-9]{5,7}):/u);
   if (rapp) {
     course_codes.add(rapp[1]);
 
@@ -150,7 +150,7 @@ function getRoomsByNewFormat(
   const sections = canvas_data.sections.map((s) => s.name);
 
   const section_name_format =
-    /^([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(([^\)]+)\)/i;
+    /^([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(([^\)]+)\)/iu;
 
   for (const section of sections) {
     const match = section.match(section_name_format);
@@ -243,8 +243,8 @@ function getExamRoomByNewFormat(
   // requires further API calls.
   const sections = canvas_data.sections.map((s) => s.name);
 
-  const nameRegex = /^([A-ZÅÄÖ0-9]{5,7}) (\w+) \[([0-9-]{10})\]/i;
-  const sectionRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+ -/i;
+  const nameRegex = /^([A-ZÅÄÖ0-9]{5,7}) (\w+) \[([0-9-]{10})\]/iu;
+  const sectionRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+ -/iu;
 
   const matchName = canvas_data.name.match(nameRegex);
   if (!matchName) {
@@ -280,13 +280,13 @@ function getExamRoomByOldFormat(
 
   const sections = canvas_data.sections.map((s) => s.name);
 
-  const nameRegex = /^AKT\./;
+  const sisidRegex = /^AKT\./;
   const sectionRegex =
-    /^([\w -]+ för )?([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})( -.*)?/i;
+    /^([\w åäö-]+ för )?([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})( -.*)?/iu;
   const sectionDoubleRegex =
-    /^(:?[\w -]+ för) ([A-ZÅÄÖ0-9]{5,7}) \w+ . ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10}) /i;
+    /^(:?[\w åäö-]+ för) ([A-ZÅÄÖ0-9]{5,7}) \w+ . ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10}) /iu;
 
-  const matchName = canvas_data.sis_course_id?.match(nameRegex);
+  const matchName = canvas_data.sis_course_id?.match(sisidRegex);
   if (!matchName) {
     // This is not an exam room AFAIK
     return undefined;
@@ -310,12 +310,22 @@ function getExamRoomByOldFormat(
     }
   }
   if (course_codes.size == 0) {
-    const oldNameRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})$/i;
+    const oldNameRegex = /^([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})$/iu;
+    const oldNameRegex2 =
+      /^([A-ZÅÄÖ0-9]{5,7}) \w+ . ([A-ZÅÄÖ0-9]{5,7}) \w+: ([0-9-]{10})$/iu;
     const match = canvas_data.name.match(oldNameRegex);
     if (match) {
       const [_whole, courseCode, examDate] = match;
       course_codes.add(courseCode);
       link_meta_data.examDate = examDate;
+    } else {
+      const match2 = canvas_data.name.match(oldNameRegex2);
+      if (match2) {
+        const [_whole, courseCode, courseCode2, examDate] = match2;
+        course_codes.add(courseCode);
+        course_codes.add(courseCode2);
+        link_meta_data.examDate = examDate;
+      }
     }
   }
   if (course_codes.size > 0) {
