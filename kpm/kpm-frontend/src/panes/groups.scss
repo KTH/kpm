@@ -21,13 +21,8 @@
       gap: $rowGap $colGap;
 
       .icon.star {
-        color: var(--kpmIconStarBg);
         // Fix alignment error
         margin-bottom: 2px;
-
-        &.active {
-          color: var(--kpmIconStarActiveBg);
-        }
       }
     }
   }
