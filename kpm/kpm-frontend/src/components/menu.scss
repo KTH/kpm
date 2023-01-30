@@ -58,7 +58,7 @@
   }
 
   .kpm-modal-content {
-    padding: calc(2 * var(--kpmPad));
+    padding: calc(4 * var(--kpmPad));
     accent-color: var(--kpmPaneFg);
     display: flex;
     flex-flow: row wrap;
