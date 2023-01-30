@@ -21,7 +21,7 @@
 }
 
 #kpm-6cf53 .kpm-modal {
-  $rowGap: calc(2 * var(--kpmGap));
+  $rowGap: calc(4 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
 
   // z-index: -1;
