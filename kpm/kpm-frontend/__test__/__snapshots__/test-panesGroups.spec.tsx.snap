@@ -61,12 +61,14 @@ exports[`<Groups /> Can be rendered 1`] = `
       <ul>
         <li
           onClick={[Function]}
+          tabIndex={0}
         >
           Favourites
         </li>
         <li
           className="active"
           onClick={[Function]}
+          tabIndex={0}
         >
           All Subscriptions
         </li>
@@ -145,12 +147,14 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
       <ul>
         <li
           onClick={[Function]}
+          tabIndex={0}
         >
           Favourites
         </li>
         <li
           className="active"
           onClick={[Function]}
+          tabIndex={0}
         >
           All Subscriptions
         </li>
@@ -163,14 +167,12 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
         <svg
           className="icon star"
           onClick={[Function]}
-          viewBox="0 0 880 880"
+          viewBox="0 0 20 19"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            d="M10,13.39l-3.76,2.27,.99-4.28-3.32-2.88,4.38-.37,1.71-4.04,1.71,4.04,4.38,.37-3.32,2.88,.99,4.28m6.24-8.42l-7.19-.61L10,0l-2.81,6.63L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73,6.18,3.73-1.64-7.03s5.46-4.73,5.46-4.73Z"
             fill="currentColor"
-            stroke="#7d5c0c"
-            strokeWidth="10"
           />
         </svg>
         <a
@@ -185,14 +187,12 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
         <svg
           className="icon star"
           onClick={[Function]}
-          viewBox="0 0 880 880"
+          viewBox="0 0 20 19"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            d="M10,13.39l-3.76,2.27,.99-4.28-3.32-2.88,4.38-.37,1.71-4.04,1.71,4.04,4.38,.37-3.32,2.88,.99,4.28m6.24-8.42l-7.19-.61L10,0l-2.81,6.63L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73,6.18,3.73-1.64-7.03s5.46-4.73,5.46-4.73Z"
             fill="currentColor"
-            stroke="#7d5c0c"
-            strokeWidth="10"
           />
         </svg>
         <a
@@ -268,11 +268,13 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
         <li
           className="active"
           onClick={[Function]}
+          tabIndex={0}
         >
           Favourites
         </li>
         <li
           onClick={[Function]}
+          tabIndex={0}
         >
           All Subscriptions
         </li>
@@ -285,14 +287,12 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
         <svg
           className="icon star active"
           onClick={[Function]}
-          viewBox="0 0 880 880"
+          viewBox="0 0 20 19"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M440 0l120 336h320L618 532l94 348-272-208-272 208 94-348L0 336h320z"
+            d="M10,15.27l6.18,3.73-1.64-7.03,5.46-4.73-7.19-.62L10,0l-2.81,6.62L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73Z"
             fill="currentColor"
-            stroke="#7d5c0c"
-            strokeWidth="10"
           />
         </svg>
         <a
