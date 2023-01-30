@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import CanvasClient, { CanvasRoom, CanvasApiError } from "./canvasApi";
 import log from "skog";
-import { MutedOperationalError } from "kpm-api-common/src/errors";
+import { APIUserErrType, APIUser, Link } from "./interface";
+import { EndpointError } from "kpm-api-common/src/errors";
 
 export const api = express.Router();
 
@@ -16,13 +17,13 @@ api.get("/mine", async (req: Request, res: Response, next: NextFunction) => {
 
 api.get(
   "/user/:user",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response<APIUser>, next: NextFunction) => {
     try {
       const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
       res.send({ rooms: result });
     } catch (err: any) {
       if (err?.name == "CanvasApiError" && err?.code == 404) {
-        next(new UserMissing());
+        next(new UserMissingEndpointError({ err, sisUserId: req.params.user }));
       } else {
         next(err);
       }
@@ -30,14 +31,14 @@ api.get(
   }
 );
 
-class UserMissing extends MutedOperationalError<String> {
-  constructor() {
+class UserMissingEndpointError extends EndpointError<APIUserErrType> {
+  constructor({ err, sisUserId }: { err: any; sisUserId: string }) {
     super({
-      name: "EndpointError",
+      type: "NotFound",
       statusCode: 404,
-      type: "Not found",
-      message: "Not found in Canvas.",
-      details: undefined,
+      message: "User not found in Canvas.",
+      details: { sisUserId },
+      err,
     });
   }
 }
@@ -74,18 +75,6 @@ async function do_getRooms(
   }
   return result;
 }
-
-type Link = {
-  url: URL;
-  name: string;
-  state: "unpublished" | "available" | "completed" | "deleted";
-  text?: string;
-  type: "course" | "exam" | "rapp" | undefined;
-  startTerm?: string; // YYYYn (n = 1 | 2)
-  examDate?: string; // YYYY-mm-dd
-  registrationCode?: string; // Often a five-digit number, but may vary.
-  favorite: boolean;
-};
 
 type TLinkMetaData = {
   type: Link["type"];
