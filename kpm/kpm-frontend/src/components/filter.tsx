@@ -24,6 +24,7 @@ export function FilterOption<T = any>({
 }: TOptionProps<T>) {
   return (
     <li
+      tabindex="0"
       className={filter === value ? "active" : undefined}
       onClick={() => onSelect(value)}
     >

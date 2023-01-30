@@ -13,6 +13,7 @@
 
   & > ul > li {
     margin-bottom: var(--kpmGap);
+    cursor: pointer;
 
     &.active {
       font-weight: bold;
