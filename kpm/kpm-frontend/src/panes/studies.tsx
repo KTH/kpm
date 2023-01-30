@@ -164,11 +164,6 @@ function Course({ courseCode, course }: TCourseProps) {
         </h3>
       )}
       <ul>
-        {status == "antagna" && (
-          <li>
-            <a href={getRegisterUrl(courseCode)}>{i18n("Registrera dig")}</a>
-          </li>
-        )}
         <li>
           <a href={getCourseInfoUrl(courseCode, roundToShow)}>
             {i18n("Kurs-PM")}
@@ -191,10 +186,6 @@ function Course({ courseCode, course }: TCourseProps) {
       )}
     </div>
   );
-}
-
-function getRegisterUrl(code: string) {
-  return `#${code}`;
 }
 
 function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {

@@ -60,7 +60,6 @@ export const sv: Record<string, string> = {
   "Export My schedule (e.g. to your mobile phone)":
     "Exporter mitt schema (iCal)",
   "Kurs-PM": "Kurs-PM",
-  "Registrera dig": "Registrera dig",
   "i Canvas": "i Canvas",
   VT: "VT",
   HT: "HT",

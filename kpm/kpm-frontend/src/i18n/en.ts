@@ -63,7 +63,6 @@ export const en: Record<string, string> = {
     "Export My schedule (e.g. to your mobile phone)",
 
   "Kurs-PM": "Course Description",
-  "Registrera dig": "Register",
   "i Canvas": "in Canvas",
   VT: "VT",
   HT: "HT",
