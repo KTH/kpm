@@ -5,6 +5,9 @@ export type TSessionUser = {
   display_name: string;
   email?: string;
   username?: string;
+  hasEduCourses?: boolean;
+  hasLadokCourses?: boolean;
+  hasLadokProgrammes?: boolean;
   expires: number;
 };
 export type APISession = {

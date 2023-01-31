@@ -12,6 +12,9 @@ export const currentUser: TCurrentUser =
     display_name: "Dr.LocalDev Server",
     email: "test@email.com",
     username: "jhsware",
+    hasEduCourses: true,
+    hasLadokCourses: true,
+    hasLadokProgrammes: true,
     exp: 1668683814,
   }) ||
   undefined;
@@ -47,7 +50,7 @@ export function useAuthState() {
     return () => authState.unsubscribe(callback);
   }, []);
 
-  return [currentUser];
+  return [currentUser as TCurrentUser];
 }
 
 /**

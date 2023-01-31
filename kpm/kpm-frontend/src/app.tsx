@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
+import { useAuthState } from "./state/authState";
 import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
@@ -14,6 +15,9 @@ export type TCurrentUser =
       display_name: string;
       email: string;
       username: string;
+      hasEduCourses?: boolean;
+      hasLadokCourses?: boolean;
+      hasLadokProgrammes?: boolean;
       exp: number;
     }
   | undefined;
@@ -32,6 +36,7 @@ declare global {
 export type TCreateRouterProps = {
   hasStudies: boolean;
   hasTeaching: boolean;
+  hasProgramme: boolean;
 };
 
 function createRouter({ ...props }: TCreateRouterProps) {
@@ -51,10 +56,16 @@ function createRouter({ ...props }: TCreateRouterProps) {
 }
 
 export function App() {
+  const [currentUser] = useAuthState();
+
   return (
     <ErrorBoundary>
       <RouterProvider
-        router={createRouter({ hasStudies: true, hasTeaching: true })}
+        router={createRouter({
+          hasStudies: currentUser?.hasLadokCourses ?? false,
+          hasTeaching: currentUser?.hasEduCourses ?? false,
+          hasProgramme: currentUser?.hasLadokProgrammes ?? false,
+        })}
       />
     </ErrorBoundary>
   );

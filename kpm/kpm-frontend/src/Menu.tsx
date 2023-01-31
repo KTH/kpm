@@ -23,7 +23,7 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/home/personal-menu/notifications/";
 
-export function Menu({ hasStudies, hasTeaching }: any) {
+export function Menu({ hasStudies, hasTeaching, hasProgramme }: any) {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -100,11 +100,13 @@ export function Menu({ hasStudies, hasTeaching }: any) {
               </ToggleNavLink>
             </li>
           )}
-          <li>
-            <ToggleNavLink to="programme" className={linkClassName}>
-              {i18n("Programme")}
-            </ToggleNavLink>
-          </li>
+          {hasProgramme && (
+            <li>
+              <ToggleNavLink to="programme" className={linkClassName}>
+                {i18n("Programme")}
+              </ToggleNavLink>
+            </li>
+          )}
           <li>
             <ToggleNavLink to="groups" className={linkClassName}>
               {i18n("Groups")}
