@@ -10,7 +10,7 @@ export type TSessionUser = {
   expires: number;
 };
 export type APISession = {
-  user: TSessionUser;
+  user?: TSessionUser;
 };
 
 export type APICanvasRoomsErrType = TGotErrType | "ValueError";

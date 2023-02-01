@@ -1,11 +1,11 @@
+import { TSessionUser } from "kpm-backend-interface";
 import { useEffect, useState } from "react";
-import { TCurrentUser } from "../app";
 import { fetchApi } from "../panes/utils";
 import { PubSub, TPubSubEvent } from "./PubSub";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
-export const currentUser: TCurrentUser =
+export const currentUser: TSessionUser | undefined =
   window.__kpmCurrentUser__ ||
   (IS_DEV && {
     kthid: "u19t0qf2",
@@ -14,7 +14,7 @@ export const currentUser: TCurrentUser =
     username: "jhsware",
     hasEduCourses: true,
     hasLadokCourses: true,
-    exp: 1668683814,
+    expires: 1668683814,
   }) ||
   undefined;
 
@@ -49,7 +49,7 @@ export function useAuthState() {
     return () => authState.unsubscribe(callback);
   }, []);
 
-  return [currentUser as TCurrentUser];
+  return [currentUser as TSessionUser];
 }
 
 /**

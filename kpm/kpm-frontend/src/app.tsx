@@ -6,20 +6,9 @@ import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
 
 import "./app.scss";
+import { TSessionUser } from "kpm-backend-interface";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
-
-export type TCurrentUser =
-  | {
-      kthid: string;
-      display_name: string;
-      email: string;
-      username: string;
-      hasEduCourses?: boolean;
-      hasLadokCourses?: boolean;
-      exp: number;
-    }
-  | undefined;
 
 type TSettings = {
   lang?: string;
@@ -27,7 +16,7 @@ type TSettings = {
 
 declare global {
   interface Window {
-    __kpmCurrentUser__: TCurrentUser;
+    __kpmCurrentUser__: TSessionUser | undefined;
     __kpmSettings__: TSettings;
   }
 }
