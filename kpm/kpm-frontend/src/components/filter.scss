@@ -3,11 +3,6 @@
 #kpm-6cf53 .kpm-tab-filter {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
-
-  // font-size: 1.17em;
-  // font-weight: bold;
-  border-bottom: 1px solid var(--kpmPaneSepatorFg);
-  margin-bottom: var(--kpmMargin);
   width: 100%;
 
   & > ul {
@@ -18,6 +13,7 @@
 
   & > ul > li {
     margin-bottom: var(--kpmGap);
+    cursor: pointer;
 
     &.active {
       font-weight: bold;

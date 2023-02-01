@@ -1,7 +1,7 @@
 @import "../vars";
 
 #kpm-6cf53 .kpm-studies {
-  $rowGap: calc(2 * var(--kpmGap));
+  $rowGap: calc(4 * var(--kpmGap));
   $colGap: $rowGap;
   $colCount: 4;
 

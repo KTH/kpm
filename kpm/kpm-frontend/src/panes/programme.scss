@@ -18,17 +18,11 @@
       align-items: flex-start;
       width: $colWidth;
       margin-bottom: 0;
-      padding: var(--kpmPad);
-      gap: $rowGap $colGap;
+      gap: $rowGap;
 
       .icon.star {
-        color: var(--kpmIconStarBg);
         // Fix alignment error
         margin-bottom: 2px;
-
-        &.active {
-          color: var(--kpmIconStarActiveBg);
-        }
       }
     }
   }
