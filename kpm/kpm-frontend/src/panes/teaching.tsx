@@ -52,7 +52,7 @@ export function Teaching() {
         </EmptyPlaceholder>
       )}
       {courses && (
-        <div className="kpm-teaching">
+        <div className="teaching-courses">
           {Object.entries(courses).map(([code, course]) => {
             return <Course key={code} courseCode={code} course={course} />;
           })}
@@ -79,26 +79,31 @@ function Course({ courseCode, course }: TCourseProps) {
   const currentTerm = "HT2022";
 
   return (
-    <div className="kpm-teaching-course">
-      <h2 className="kpm-teaching-course-code">{courseCode}</h2>
-      <div className="kpm-row">
-        <p className="kpm-teaching-course-name">{courseName}</p>
+    <section className="course">
+      <h2>
+        <span className="course-code">{courseCode}</span>
+        <span>{courseName}</span>
+      </h2>
+      <div className="shortucts">
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}
           currentTerm={currentTerm}
         />
-        <div className="kpm-row">
-          <h3>{i18n("Canvas:")}</h3>
-          {course.rooms === null && (
-            <p className="kpm-muted-text">
-              {i18n("Canvas is silent, try later...")}
-            </p>
-          )}
-          {course.rooms?.length === 0 && (
-            <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
-          )}
-          <CanvasRoomShortList rooms={current} />
+      </div>
+      <div className="canvas">
+        <h3>{i18n("Canvas:")}</h3>
+        {course.rooms === null && (
+          <p className="kpm-muted-text">
+            {i18n("Canvas is silent, try later...")}
+          </p>
+        )}
+        {course.rooms?.length === 0 && (
+          <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
+        )}
+        <CanvasRoomShortList rooms={current} />
+
+        <div className="more-courses">
           <CanvasRoomExpandedList
             rooms={[...current, ...other]}
             title={i18n("Alla kursrum")}
@@ -106,7 +111,7 @@ function Course({ courseCode, course }: TCourseProps) {
           <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 // <CanvasRoomExpandedList rooms={other} />
@@ -121,7 +126,7 @@ function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
   if (roomsToShow.length === 0) return null;
 
   return (
-    <ul className="kpm-teaching-course-rooms">
+    <ul>
       {roomsToShow.map((room: TCanvasRoom) => {
         const key = `${room.registrationCode}-${room.startTerm}`;
         return (

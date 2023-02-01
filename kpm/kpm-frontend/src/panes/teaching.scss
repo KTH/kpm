@@ -1,80 +1,104 @@
 @import "../vars";
 
-#kpm-6cf53 .kpm-teaching {
-  $rowGap: calc(2 * var(--kpmGap));
-  $colGap: calc(5 * var(--kpmGap));
-  $colCount: 3;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+#kpm-6cf53 .teaching-courses {
+  margin: 1rem 2rem;
+}
 
-  display: flex;
-  flex-flow: column nowrap;
-  width: 100%;
+#kpm-6cf53 .teaching-courses .course {
+  padding: 0 0 1rem 0;
+  margin: 0 0 1rem 0;
 
-  .kpm-teaching-course {
-    display: flex;
-    flex-flow: row wrap;
-    gap: $rowGap $colGap;
+  h2 {
+    padding: 0;
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
 
-    align-items: flex-start;
-    padding: calc(2 * var(--kpmPad)) 0;
-    border-bottom: 1px solid var(--kpmPaneSepatorFg);
+    span {
+      margin: 0 0 0.25rem 0;
+    }
+  }
 
-    h2 {
-      flex: auto 0 0;
-      font-size: 1em;
-      margin: 0;
+  h3 {
+    padding: 0;
+    margin: 0.5rem 1rem 0 0;
+    font-size: 1rem;
+  }
+
+  .shortcuts {
+    a {
+      padding: 0.25rem 0;
+      margin: 0 1rem 0 0;
+      display: inline-block;
+    }
+  }
+
+  .canvas {
+    ul {
+      list-style-type: none;
       padding: 0;
-    }
-    > .kpm-row {
-      flex: 15em 1 1;
-      > p {
-        flex: auto 1 1;
-      }
-    }
+      margin: 0 1rem 0 0;
+      display: inline;
 
-    & > a {
-      margin-right: calc(3 * var(--kpmGap));
-    }
-
-    .kpm-teaching-course-code,
-    .kpm-teaching-course-name {
-      font-weight: 600;
-    }
-
-    .kpm-row {
-      gap: $rowGap $colGap;
-    }
-
-    .kpm-teaching-course-admin-dropdown {
-      margin-left: auto; // Right align on wrap, but no effect when no-wrap because flex-grow has presedence
-    }
-
-    ul.kpm-teaching-course-rooms {
-      display: flex;
-      flex-flow: row wrap;
-      gap: $rowGap $colGap;
       li {
-        margin: 0;
+        display: inline-block;
+        padding: 0;
+        margin: 0 1rem 0 0;
+      }
+
+      a {
+        padding: 0.25rem 0;
+        display: block;
       }
     }
-    .kpm-link-list {
-      min-height: 50px;
-      min-width: 30ch;
 
-      ul {
-        $rowGap: calc(3 * var(--kpmGap));
-        $colGap: $rowGap;
-        display: flex;
-        flex-direction: column;
-        gap: $rowGap $colGap;
-      }
+    .more-courses {
+      display: inline-block;
     }
   }
 }
 
-@media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-teaching .kpm-teaching-course {
-    flex-basis: 100%;
-    font-size: 1.1em;
+@media screen and (min-width: 40rem) {
+  .courses {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+
+    .course {
+      // Replace this with `subgrid` when available for Chrome!
+      display: contents;
+
+      h2 {
+        // Replace this with `subgrid` when available for Chrome!
+        display: contents;
+
+        span {
+          margin: 0.25rem 0 0.5rem 0;
+        }
+
+        .course-code {
+          padding-right: 1rem;
+        }
+      }
+
+      h3 {
+        margin: 0 1rem 0 0;
+        display: inline-block;
+        font-weight: normal;
+      }
+
+      .canvas {
+        grid-column: 1 / 4;
+        @media screen and (min-width: 60rem) {
+          grid-column: 2 / 4;
+        }
+      }
+    }
+
+    hr {
+      grid-column: 1 / 4;
+      width: 100%;
+      margin: 1rem 0;
+      border: none;
+      border-bottom: 1px solid --kpmPaneSeparatorFg;
+    }
   }
 }
