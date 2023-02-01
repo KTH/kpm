@@ -172,7 +172,6 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       username: "testuser",
       hasEduCourses: true,
       hasLadokCourses: true,
-      hasLadokProgrammes: true,
       expires: new Date().getTime() + SESSION_MAX_AGE_MS,
     };
 }
@@ -225,9 +224,6 @@ function createValidSesisonUser(claim: any): TSessionUser {
   const hasLadokCourses = claim.memberOf?.some((group: string) =>
     group.startsWith("ladok2.kurser")
   );
-  const hasLadokProgrammes = claim.memberOf?.some((group: string) =>
-    group.startsWith("ladok2.program")
-  );
   const hasEduCourses = claim.memberOf?.some((group: string) =>
     group.startsWith("edu.courses")
   );
@@ -238,7 +234,6 @@ function createValidSesisonUser(claim: any): TSessionUser {
     username: claim.username,
     hasEduCourses,
     hasLadokCourses,
-    hasLadokProgrammes,
     expires: new Date().getTime() + SESSION_MAX_AGE_MS,
   };
 }

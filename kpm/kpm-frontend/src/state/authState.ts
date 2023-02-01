@@ -14,7 +14,6 @@ export const currentUser: TCurrentUser =
     username: "jhsware",
     hasEduCourses: true,
     hasLadokCourses: true,
-    hasLadokProgrammes: true,
     exp: 1668683814,
   }) ||
   undefined;

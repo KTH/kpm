@@ -17,7 +17,6 @@ export type TCurrentUser =
       username: string;
       hasEduCourses?: boolean;
       hasLadokCourses?: boolean;
-      hasLadokProgrammes?: boolean;
       exp: number;
     }
   | undefined;
@@ -36,7 +35,6 @@ declare global {
 export type TCreateRouterProps = {
   hasStudies: boolean;
   hasTeaching: boolean;
-  hasProgramme: boolean;
 };
 
 function createRouter({ ...props }: TCreateRouterProps) {
@@ -64,7 +62,6 @@ export function App() {
         router={createRouter({
           hasStudies: currentUser?.hasLadokCourses ?? false,
           hasTeaching: currentUser?.hasEduCourses ?? false,
-          hasProgramme: currentUser?.hasLadokProgrammes ?? false,
         })}
       />
     </ErrorBoundary>

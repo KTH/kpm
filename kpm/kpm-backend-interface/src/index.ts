@@ -7,7 +7,6 @@ export type TSessionUser = {
   username?: string;
   hasEduCourses?: boolean;
   hasLadokCourses?: boolean;
-  hasLadokProgrammes?: boolean;
   expires: number;
 };
 export type APISession = {

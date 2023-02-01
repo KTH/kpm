@@ -11,12 +11,10 @@ import { Groups } from "./panes/groups";
 const getRoutesDefaults = {
   hasTeaching: true,
   hasStudies: true,
-  hasProgramme: true,
 };
 export function getRoutes({
   hasTeaching,
   hasStudies,
-  hasProgramme,
 } = getRoutesDefaults): RouteObject[] {
   const routes = [
     {
@@ -38,7 +36,7 @@ export function getRoutes({
       element: <Teaching />,
       // loader: loaderTeaching,
     },
-    hasProgramme && {
+    {
       path: "/programme",
       element: <Programme />,
     },

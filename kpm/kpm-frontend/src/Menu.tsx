@@ -100,13 +100,11 @@ export function Menu({ hasStudies, hasTeaching, hasProgramme }: any) {
               </ToggleNavLink>
             </li>
           )}
-          {hasProgramme && (
-            <li>
-              <ToggleNavLink to="programme" className={linkClassName}>
-                {i18n("Programme")}
-              </ToggleNavLink>
-            </li>
-          )}
+          <li>
+            <ToggleNavLink to="programme" className={linkClassName}>
+              {i18n("Programme")}
+            </ToggleNavLink>
+          </li>
           <li>
             <ToggleNavLink to="groups" className={linkClassName}>
               {i18n("Groups")}
