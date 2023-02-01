@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { useAuthState } from "./state/authState";
-import { getRoutes } from "./routes";
+import { getRoutes, TRouterProps } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
 
@@ -32,12 +32,7 @@ declare global {
   }
 }
 
-export type TCreateRouterProps = {
-  hasStudies: boolean;
-  hasTeaching: boolean;
-};
-
-function createRouter({ ...props }: TCreateRouterProps) {
+function createRouter({ ...props }: TRouterProps) {
   return createHashRouter([
     {
       path: "/",
