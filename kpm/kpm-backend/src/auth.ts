@@ -222,20 +222,14 @@ export function isValidSession(user?: TSessionUser): boolean {
 
 function createValidSesisonUser(claim: any): TSessionUser {
   // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
-  const hasLadokCourses = claim.memberOf?.reduce(
-    (prev: boolean, curr: string) =>
-      curr.startsWith("ladok2.kurser") ? true : prev,
-    false
+  const hasLadokCourses = claim.memberOf?.some((group: string) =>
+    group.startsWith("ladok2.kurser")
   );
-  const hasLadokProgrammes = claim.memberOf?.reduce(
-    (prev: boolean, curr: string) =>
-      curr.startsWith("ladok2.program") ? true : prev,
-    false
+  const hasLadokProgrammes = claim.memberOf?.some((group: string) =>
+    group.startsWith("ladok2.program")
   );
-  const hasEduCourses = claim.memberOf?.reduce(
-    (prev: boolean, curr: string) =>
-      curr.startsWith("edu.courses") ? true : prev,
-    false
+  const hasEduCourses = claim.memberOf?.some((group: string) =>
+    group.startsWith("edu.courses")
   );
   return {
     kthid: claim.kthid,
