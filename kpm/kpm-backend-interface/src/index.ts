@@ -5,10 +5,12 @@ export type TSessionUser = {
   display_name: string;
   email?: string;
   username?: string;
+  hasEduCourses?: boolean;
+  hasLadokCourses?: boolean;
   expires: number;
 };
 export type APISession = {
-  user: TSessionUser;
+  user?: TSessionUser;
 };
 
 export type APICanvasRoomsErrType = TGotErrType | "ValueError";

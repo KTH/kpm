@@ -1,22 +1,14 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { getRoutes } from "./routes";
+import { useAuthState } from "./state/authState";
+import { getRoutes, TRouterProps } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
 
 import "./app.scss";
+import { TSessionUser } from "kpm-backend-interface";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
-
-export type TCurrentUser =
-  | {
-      kthid: string;
-      display_name: string;
-      email: string;
-      username: string;
-      exp: number;
-    }
-  | undefined;
 
 type TSettings = {
   lang?: string;
@@ -24,17 +16,12 @@ type TSettings = {
 
 declare global {
   interface Window {
-    __kpmCurrentUser__: TCurrentUser;
+    __kpmCurrentUser__: TSessionUser | undefined;
     __kpmSettings__: TSettings;
   }
 }
 
-export type TCreateRouterProps = {
-  hasStudies: boolean;
-  hasTeaching: boolean;
-};
-
-function createRouter({ ...props }: TCreateRouterProps) {
+function createRouter({ ...props }: TRouterProps) {
   return createHashRouter([
     {
       path: "/",
@@ -51,10 +38,15 @@ function createRouter({ ...props }: TCreateRouterProps) {
 }
 
 export function App() {
+  const [currentUser] = useAuthState();
+
   return (
     <ErrorBoundary>
       <RouterProvider
-        router={createRouter({ hasStudies: true, hasTeaching: true })}
+        router={createRouter({
+          hasStudies: currentUser?.hasLadokCourses ?? false,
+          hasTeaching: currentUser?.hasEduCourses ?? false,
+        })}
       />
     </ErrorBoundary>
   );

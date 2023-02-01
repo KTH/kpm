@@ -170,6 +170,8 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       display_name: "Test Userson",
       email: "test@email.com",
       username: "testuser",
+      hasEduCourses: true,
+      hasLadokCourses: true,
       expires: new Date().getTime() + SESSION_MAX_AGE_MS,
     };
 }
@@ -219,11 +221,19 @@ export function isValidSession(user?: TSessionUser): boolean {
 
 function createValidSesisonUser(claim: any): TSessionUser {
   // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
+  const hasLadokCourses = claim.memberOf?.some((group: string) =>
+    group.startsWith("ladok2.kurser")
+  );
+  const hasEduCourses = claim.memberOf?.some((group: string) =>
+    group.startsWith("edu.courses")
+  );
   return {
     kthid: claim.kthid,
     display_name: claim.unique_name[0],
     email: claim.email,
     username: claim.username,
+    hasEduCourses,
+    hasLadokCourses,
     expires: new Date().getTime() + SESSION_MAX_AGE_MS,
   };
 }

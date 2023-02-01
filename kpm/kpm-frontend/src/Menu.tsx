@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { formatDisplayName, linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
-import { getRoutes } from "./routes";
+import { getRoutes, TRouterProps } from "./routes";
 import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
@@ -23,7 +23,7 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/home/personal-menu/notifications/";
 
-export function Menu({ hasStudies, hasTeaching }: any) {
+export function Menu({ hasStudies, hasTeaching }: TRouterProps) {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();

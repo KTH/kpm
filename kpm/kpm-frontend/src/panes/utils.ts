@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { TCurrentUser } from "../app";
 import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import { authState } from "../state/authState";
