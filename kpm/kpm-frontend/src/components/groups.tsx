@@ -3,7 +3,7 @@ import React, {
   useState,
   useEffect,
   useRef,
-  MouseEvent,
+  MutableRefObject,
 } from "react";
 
 import "./groups.scss";
@@ -14,7 +14,7 @@ export function CollapsableGroup({
   defaultOpen = false,
 }: any) {
   return (
-    <details className="kpm-collapsable-group">
+    <details className="kpm-collapsable-group" open={defaultOpen}>
       <summary>{title}</summary>
       <ul className="kpm-link-list">{children}</ul>
     </details>
@@ -61,44 +61,20 @@ export function DropdownMenuGroup({
     }
   );
 
-  // TODO: Listen to onBlur and onFocus on summary element
+  const eventListenersSetRef = useRef(null);
+  const isOpenRef = useRef(open);
+  isOpenRef.current = open;
+  useDropdownToggleListener(
+    detailsRef,
+    eventListenersSetRef,
+    isOpenRef,
+    setOpen
+  );
 
   let cls = "kpm-dropdownmenu-group";
   if (className !== undefined) {
     cls += ` ${className}`;
   }
-
-  const doToggleOnMouseDown = (e: MouseEvent) => {
-    if (summaryRef.current === e.target) {
-      const currentOpen = open;
-      setTimeout(() => {
-        setOpen(!currentOpen);
-      }, 100);
-    }
-  };
-
-  const doOpenOnFocus = (event: any) => {
-    const e = event as FocusEvent;
-    if (e.target === summaryRef.current) {
-      // Open on focus
-      if (!open) {
-        e.preventDefault();
-        setOpen(true);
-      }
-    }
-  };
-
-  const doCloseOnBlur = (event: any) => {
-    // Got type error when assigning (e: FocusEvent) => void to onBlur so using any for arg
-    const e = event as FocusEvent;
-    if (
-      open &&
-      !elementDescendentOf(e.relatedTarget as Node, detailsRef.current!)
-    ) {
-      e.preventDefault();
-      setOpen(false);
-    }
-  };
 
   const doCloseOnBackropClick = () => {
     setOpen(false);
@@ -110,31 +86,9 @@ export function DropdownMenuGroup({
     </div>
   );
 
-  const doSilenceDefaultDetailsOpen = (event: any) => {
-    // Silence event so browser doesn't cause dropdown to toggle
-    // state when onMouseDown toggle is performed. To avoid
-    // toggle open + toggle close = no change
-    const e = event as MouseEvent;
-    if (e.target === summaryRef.current) {
-      e.preventDefault();
-    }
-  };
-
   return (
-    <details
-      ref={detailsRef}
-      className={cls}
-      open={open}
-      onClick={doSilenceDefaultDetailsOpen}
-      onBlur={doCloseOnBlur}
-    >
-      <summary
-        ref={summaryRef}
-        onFocus={doOpenOnFocus}
-        onMouseDown={doToggleOnMouseDown}
-      >
-        {title}
-      </summary>
+    <details ref={detailsRef} className={cls} open={open}>
+      <summary ref={summaryRef}>{title}</summary>
       {modal ? (
         <ModalBackdrop onClose={doCloseOnBackropClick}>{_inner}</ModalBackdrop>
       ) : (
@@ -142,15 +96,6 @@ export function DropdownMenuGroup({
       )}
     </details>
   );
-}
-
-function elementDescendentOf(el: Node | null, parent: Node) {
-  let tmpEl = el?.parentNode;
-  while (tmpEl && (tmpEl as Element).tagName !== "body") {
-    if (tmpEl === parent) return true;
-    tmpEl = tmpEl.parentNode || null;
-  }
-  return false;
 }
 
 type TModalBackdropProps = {
@@ -202,19 +147,72 @@ export function GroupItem({ className, children }: any) {
   return <li className={cls}>{children}</li>;
 }
 
-const PADDING = 10;
+const KEY_ENTER = 13;
+const KEY_ESC = 27;
+
+function useDropdownToggleListener(
+  detailsRef: RefObject<HTMLElement | null>,
+  eventListenersSetRef: MutableRefObject<boolean | null>,
+  isOpenRef: RefObject<boolean>,
+  setOpen: Function
+) {
+  function didKeyDownDetails(e: any) {
+    // Always close on ESC if open
+    if (e.which === KEY_ESC && isOpenRef.current) {
+      e.preventDefault();
+      setOpen(false);
+    }
+
+    // Only open if ENTER is fired when focus is on or in <details>
+    if (detailsRef.current?.contains(e.target)) {
+      console.log("Key Down", e);
+
+      if (e.which === KEY_ENTER) {
+        e.preventDefault();
+        setOpen(!isOpenRef.current);
+      }
+    }
+  }
+
+  function didClick(e: any) {
+    if (
+      //detailsRef.current === e.target ||
+      detailsRef.current?.contains(e.target)
+    ) {
+      const currentOpen = isOpenRef.current;
+      setTimeout(() => {
+        e.preventDefault();
+        setOpen(!currentOpen);
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (eventListenersSetRef.current === null) {
+      document.body.addEventListener("keydown", didKeyDownDetails);
+      document.body.addEventListener("click", didClick);
+      eventListenersSetRef.current = true;
+    }
+    return () => {
+      document.body.removeEventListener("keydown", didKeyDownDetails);
+      document.body.removeEventListener("click", didClick);
+      eventListenersSetRef.current = false;
+    };
+  }, []);
+}
 
 /**
-  Adjust size of dropdown to avoid overflow and switch side (vertical only) to allow
-  best use of available screen realestate.
-
-  We do this continuosly on animation frame becuase there are lots of layout changes
-  that can affect the placement and don't generate events.
-
-  Currently we aren't aware of the menubar so the popup needs to be layered on top to make
-  sure we don't hide it with the menubar. This looks wierd if we aren't in modal mode
-  (default) but not worth pursuing a fix for now.
+ Adjust size of dropdown to avoid overflow and switch side (vertical only) to allow
+ best use of available screen realestate.
+ 
+ We do this continuosly on animation frame becuase there are lots of layout changes
+ that can affect the placement and don't generate events.
+ 
+ Currently we aren't aware of the menubar so the popup needs to be layered on top to make
+ sure we don't hide it with the menubar. This looks wierd if we aren't in modal mode
+ (default) but not worth pursuing a fix for now.
  */
+const PADDING = 10;
 function usePositionDropdown(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
