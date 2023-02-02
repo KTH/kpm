@@ -64,6 +64,7 @@ export function DropdownMenuGroup({
   isOpenRef.current = open;
   useDropdownToggleListener(
     detailsRef,
+    summaryRef,
     eventListenersSetRef,
     isOpenRef,
     setOpen
@@ -114,6 +115,7 @@ const KEY_ESC = 27;
 
 function useDropdownToggleListener(
   detailsRef: RefObject<HTMLElement | null>,
+  summaryRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
   setOpen: Function
@@ -125,11 +127,19 @@ function useDropdownToggleListener(
       setOpen(false);
     }
 
-    // Only open if ENTER is fired when focus is on or in <details>
-    if (detailsRef.current?.contains(e.target)) {
-      console.log("Key Down", e);
+    // Close on ENTER outside dropdown if open
+    if (
+      e.which === KEY_ENTER &&
+      isOpenRef.current &&
+      !detailsRef.current?.contains(e.target)
+    ) {
+      e.preventDefault();
+      setOpen(false);
+    }
 
-      if (e.which === KEY_ENTER) {
+    // Only toggle if ENTER is fired when on or in <summary>
+    if (e.which === KEY_ENTER) {
+      if (summaryRef.current?.contains(e.target)) {
         e.preventDefault();
         setOpen(!isOpenRef.current);
       }
@@ -137,15 +147,20 @@ function useDropdownToggleListener(
   }
 
   function didClick(e: any) {
-    if (
-      //detailsRef.current === e.target ||
-      detailsRef.current?.contains(e.target)
-    ) {
+    // Toggle when clicking summary
+    if (summaryRef.current?.contains(e.target)) {
       const currentOpen = isOpenRef.current;
+      // Click triggers <detail> open so we need the setTimeout workaround
       setTimeout(() => {
         e.preventDefault();
         setOpen(!currentOpen);
       });
+    }
+
+    // Close if open and clicking somewhere else than dropdown
+    if (isOpenRef.current && !detailsRef.current?.contains(e.target)) {
+      e.preventDefault();
+      setOpen(false);
     }
   }
 
