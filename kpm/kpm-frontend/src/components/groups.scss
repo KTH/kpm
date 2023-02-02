@@ -108,11 +108,11 @@
       position: fixed;
       max-width: unset;
       max-height: unset;
-      width: 100%!important;
-      height: 100vh!important;
+      width: 100% !important;
+      height: 100vh !important;
       top: 0;
       left: 0;
-      transform: translate(100%, 0)!important;
+      transform: translate(100%, 0) !important;
       transition: transform 0.25s ease-in-out;
 
       & > ul {
@@ -120,10 +120,10 @@
       }
     }
   }
-  
+
   #kpm-6cf53 [open].kpm-dropdownmenu-group {
     .kpm-link-list.open {
-      transform: translate(0, 0)!important;
+      transform: translate(0, 0) !important;
     }
   }
 }
