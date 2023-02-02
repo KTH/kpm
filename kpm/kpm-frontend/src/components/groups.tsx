@@ -5,6 +5,7 @@ import React, {
   useRef,
   MutableRefObject,
 } from "react";
+import { i18n } from "../i18n/i18n";
 
 import "./groups.scss";
 
@@ -41,6 +42,7 @@ export function DropdownMenuGroup({
   defaultOpen = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const [visiblyOpen, setVisiblyOpen] = useState(defaultOpen);
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
     useState(undefined);
 
@@ -70,19 +72,40 @@ export function DropdownMenuGroup({
     setOpen
   );
 
+  useEffect(() => {
+    if (!open) {
+      // Wait until animation has completed, NOTE! Hardcoded duration
+      setTimeout(() => {
+        setVisiblyOpen(false);
+      }, 300);
+    }
+
+    if (open) {
+      // Wait a tick to trigger animation
+      requestAnimationFrame(() => {
+        setVisiblyOpen(true);
+      });
+    }
+  }, [open]);
+
+  let innerCls = "kpm-link-list";
+  if (open && visiblyOpen) {
+    innerCls += " open";
+  }
+  const _inner = (
+    <div style={dropdownStyle} className={innerCls}>
+      <DropdownMobileHeader onBack={() => setOpen(false)} />
+      <ul ref={dropdownRef}>{children}</ul>
+    </div>
+  );
+
   let cls = "kpm-dropdownmenu-group";
   if (className !== undefined) {
     cls += ` ${className}`;
   }
 
-  const _inner = (
-    <div style={dropdownStyle} className="kpm-link-list">
-      <ul ref={dropdownRef}>{children}</ul>
-    </div>
-  );
-
   return (
-    <details ref={detailsRef} className={cls} open={open}>
+    <details ref={detailsRef} className={cls} open={open || visiblyOpen}>
       <summary ref={summaryRef}>{title}</summary>
       {_inner}
     </details>
@@ -108,6 +131,24 @@ export function GroupItem({ className, children }: any) {
     cls += ` ${className}`;
   }
   return <li className={cls}>{children}</li>;
+}
+
+type TDropdownMobileHeaderProps = {
+  onBack: () => void;
+};
+
+function DropdownMobileHeader({ onBack }: TDropdownMobileHeaderProps) {
+  return (
+    <a
+      className="kpm-modal-back-button kpm-mobile"
+      onClick={(e) => {
+        e.preventDefault();
+        onBack();
+      }}
+    >
+      {i18n("Tillbaka")}
+    </a>
+  );
 }
 
 const KEY_ENTER = 13;

@@ -99,4 +99,5 @@ export const sv: Record<string, string> = {
   "You aren't teaching any courses.": "Du undervisar inga kurser.",
   "Tillbaka till personliga menyn": "Tillbaka till personliga menyn",
   Examinationsrum: "Examinationsrum",
+  Tillbaka: "Tillbaka",
 };
