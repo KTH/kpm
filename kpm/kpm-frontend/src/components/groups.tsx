@@ -30,7 +30,6 @@ type TDropdownMenuGroupProps = {
   revealUp?: boolean;
   alignRight?: boolean;
   defaultOpen?: boolean;
-  modal?: boolean; // Will not allow other interactions until closed
 };
 
 export function DropdownMenuGroup({
@@ -40,7 +39,6 @@ export function DropdownMenuGroup({
   revealUp = false,
   alignRight = false,
   defaultOpen = false,
-  modal = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
@@ -76,10 +74,6 @@ export function DropdownMenuGroup({
     cls += ` ${className}`;
   }
 
-  const doCloseOnBackropClick = () => {
-    setOpen(false);
-  };
-
   const _inner = (
     <div style={dropdownStyle} className="kpm-link-list">
       <ul ref={dropdownRef}>{children}</ul>
@@ -89,40 +83,8 @@ export function DropdownMenuGroup({
   return (
     <details ref={detailsRef} className={cls} open={open}>
       <summary ref={summaryRef}>{title}</summary>
-      {modal ? (
-        <ModalBackdrop onClose={doCloseOnBackropClick}>{_inner}</ModalBackdrop>
-      ) : (
-        _inner
-      )}
+      {_inner}
     </details>
-  );
-}
-
-type TModalBackdropProps = {
-  children?: JSX.Element;
-  onClose?: () => void;
-};
-function ModalBackdrop({ children, onClose }: TModalBackdropProps) {
-  const [oldOverflow, setOldOverflow] = useState("");
-
-  useEffect(() => {
-    setOldOverflow(document.body.style.overflow);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = oldOverflow;
-    };
-  }, []);
-
-  return (
-    <div
-      className="kpm-dropdown-backdrop"
-      tabIndex={-1}
-      onClick={() => {
-        onClose && onClose();
-      }}
-    >
-      {children}
-    </div>
   );
 }
 
