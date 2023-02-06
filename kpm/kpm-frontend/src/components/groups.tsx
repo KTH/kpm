@@ -5,6 +5,7 @@ import React, {
   useRef,
   MutableRefObject,
 } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { i18n } from "../i18n/i18n";
 
 import "./groups.scss";
@@ -42,6 +43,8 @@ export function DropdownMenuGroup({
   defaultOpen = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const navigate = useNavigate();
+
   const [visiblyOpen, setVisiblyOpen] = useState(defaultOpen);
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
     useState(undefined);
@@ -94,7 +97,7 @@ export function DropdownMenuGroup({
   }
   const _inner = (
     <div style={dropdownStyle} className={innerCls}>
-      <DropdownMobileHeader onBack={() => setOpen(false)} />
+      <DropdownMobileHeader onBack={() => navigate(-1)} />
       <ul ref={dropdownRef}>{children}</ul>
     </div>
   );
@@ -160,12 +163,31 @@ function useDropdownToggleListener(
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
   setOpen: Function
+  // setSearchParams: Function
 ) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const _setOpen = (nextState: boolean) => {
+    if (isOpenRef.current && !nextState) {
+      // Closing, do pop if query param "open" exists
+      if (searchParams.has("open")) {
+        navigate(-1);
+        return;
+      }
+    }
+    if (!isOpenRef.current && nextState) {
+      // Opening, do push
+      setSearchParams("ddo");
+    }
+    setOpen(nextState);
+  };
+
   function didKeyDownDetails(e: any) {
     // Always close on ESC if open
     if (e.which === KEY_ESC && isOpenRef.current) {
       e.preventDefault();
-      setOpen(false);
+      _setOpen(false);
     }
 
     // Close on ENTER outside dropdown if open
@@ -175,14 +197,14 @@ function useDropdownToggleListener(
       !detailsRef.current?.contains(e.target)
     ) {
       e.preventDefault();
-      setOpen(false);
+      _setOpen(false);
     }
 
     // Only toggle if ENTER is fired when on or in <summary>
     if (e.which === KEY_ENTER) {
       if (summaryRef.current?.contains(e.target)) {
         e.preventDefault();
-        setOpen(!isOpenRef.current);
+        _setOpen(!isOpenRef.current);
       }
     }
   }
@@ -194,14 +216,14 @@ function useDropdownToggleListener(
       // Click triggers <detail> open so we need the setTimeout workaround
       setTimeout(() => {
         e.preventDefault();
-        setOpen(!currentOpen);
+        _setOpen(!currentOpen);
       });
     }
 
     // Close if open and clicking somewhere else than dropdown
     if (isOpenRef.current && !detailsRef.current?.contains(e.target)) {
       e.preventDefault();
-      setOpen(false);
+      _setOpen(false);
     }
   }
 
@@ -217,6 +239,14 @@ function useDropdownToggleListener(
       eventListenersSetRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    // Close on navigation (listens to changes of navigation)
+    if (isOpenRef.current && !searchParams.has("open")) {
+      setOpen(false);
+    }
+    return () => {};
+  }, [location]);
 }
 
 /**
