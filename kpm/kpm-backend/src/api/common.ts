@@ -6,6 +6,7 @@ import got from "got";
 import { getFakeUserForDevelopment } from "../auth";
 import {
   APICanvasRooms,
+  APIMutedAuthErrType,
   TCourseCode,
   TLocalizedString,
   TSessionUser,
@@ -28,7 +29,7 @@ export function sessionUser(session: SessionData): TSessionUser {
   const user = optSessionUser(session);
   assert(
     user !== undefined,
-    new MutedAuthError({
+    new MutedAuthError<APIMutedAuthErrType>({
       type: "NoSessionUser",
       message: "Missing user object",
     })
