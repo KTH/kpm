@@ -65,8 +65,7 @@ export async function sessionApiHandler(
     res.send({ user });
   } catch (err: any) {
     if (err instanceof MutedAuthError) {
-      const _err: MutedAuthError<APIMutedAuthErrType> = err;
-      if (_err.type === "NoSessionUser") {
+      if (err.type === "NoSessionUser") {
         res.send({ user: undefined });
         return;
       }
