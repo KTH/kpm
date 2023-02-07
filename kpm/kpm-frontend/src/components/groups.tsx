@@ -173,11 +173,13 @@ function useDropdownToggleListener(
       // Closing, do pop if query param "open" exists
       if (searchParams.has("open")) {
         navigate(-1);
+        // TODO: Remove position fix for mobile after animation is complete
         return;
       }
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
+      // TODO: Add position fix for mobile before animation starts
       setSearchParams("ddo");
     }
     setOpen(nextState);
@@ -243,6 +245,7 @@ function useDropdownToggleListener(
   useEffect(() => {
     // Close on navigation (listens to changes of navigation)
     if (isOpenRef.current && !searchParams.has("open")) {
+      // TODO: Remove position fix for mobile after animation is complete
       setOpen(false);
     }
     return () => {};
