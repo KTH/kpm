@@ -27,9 +27,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
 
   if (loggedIn) {
     // *** LOGGED IN ***
-    const { display_name, email, kthid, expires, username } = req.session
-      .user as TSessionUser;
-    const userToFrontend = { display_name, email, kthid, expires, username };
+    const userToFrontend: TSessionUser = req.session.user!;
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
