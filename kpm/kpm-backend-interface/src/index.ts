@@ -135,6 +135,7 @@ export type APIMutedAuthErrType =
   | "LoginRequired"
   | "SessionExpired"
   | "SessionStoreError"
-  | "AuthServiceMiscError";
+  | "AuthServiceMiscError"
+  | "NoSessionUser";
 
 export * from "./errors";

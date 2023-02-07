@@ -2,9 +2,10 @@ import expressSession from "express-session";
 import cookieParser from "cookie-parser";
 import connectRedis, { RedisStore } from "connect-redis";
 import { getRedisClient } from "./redisClient";
-import { APISession } from "kpm-backend-interface";
+import { APIMutedAuthErrType, APISession } from "kpm-backend-interface";
 import { Request, Response, NextFunction } from "express";
 import { sessionUser } from "./api/common";
+import { MutedAuthError } from "kpm-api-common/src/errors";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
@@ -62,7 +63,14 @@ export async function sessionApiHandler(
   try {
     const user = sessionUser(req.session);
     res.send({ user });
-  } catch (err) {
+  } catch (err: any) {
+    if (err instanceof MutedAuthError) {
+      if (err.type === "NoSessionUser") {
+        res.send({ user: undefined });
+        return;
+      }
+    }
+
     next(err);
   }
 }

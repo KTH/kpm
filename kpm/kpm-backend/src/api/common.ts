@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import { SessionData } from "express-session";
 import NodeCache from "node-cache";
 import got from "got";
@@ -6,10 +6,12 @@ import got from "got";
 import { getFakeUserForDevelopment } from "../auth";
 import {
   APICanvasRooms,
+  APIMutedAuthErrType,
   TCourseCode,
   TLocalizedString,
   TSessionUser,
 } from "kpm-backend-interface";
+import { MutedAuthError } from "kpm-api-common/src/errors";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
@@ -25,7 +27,13 @@ function optSessionUser(session: SessionData): TSessionUser | undefined {
 export function sessionUser(session: SessionData): TSessionUser {
   // TODO: Throw AuthError
   const user = optSessionUser(session);
-  assert(user !== undefined, "Mising user object");
+  assert(
+    user !== undefined,
+    new MutedAuthError<APIMutedAuthErrType>({
+      type: "NoSessionUser",
+      message: "Missing user object",
+    })
+  );
   assert(
     user?.kthid !== undefined,
     "User object missing required property kthid"
