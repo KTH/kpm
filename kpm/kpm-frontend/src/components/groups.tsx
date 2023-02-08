@@ -173,8 +173,12 @@ function freezeParentModal(el: HTMLElement | null): number | null {
   if (el && isKpmModal) {
     el.classList.add("freeze");
 
-    // TODO: Only return scrollTop if we have overflow: hidden
-    return el.scrollTop;
+    // Only return scrollTop if we have overflow: hidden
+    // which only happens on mobile
+    const cs = window.getComputedStyle(el);
+    if (cs.getPropertyValue("overflow") === "hidden") {
+      return el.scrollTop;
+    }
   }
 
   return null;
