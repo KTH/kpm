@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import CanvasClient, { CanvasRoom } from "./canvasApi";
+import CanvasClient, { CanvasRoom, CanvasApiError } from "./canvasApi";
 import log from "skog";
 
 export const api = express.Router();
@@ -46,16 +46,16 @@ async function do_getRooms(
         }
       }
     }
-  } catch (e) {
-    getRoomsErrorHandler(e);
+  } catch (err) {
+    if (err instanceof CanvasApiError && err.code == 404) {
+      log.warn({ canvasUser: user }, "User not found in canvas; no rooms.");
+      return {};
+    } else {
+      Error.captureStackTrace(err as any);
+      throw err;
+    }
   }
   return result;
-}
-
-function getRoomsErrorHandler(err: any) {
-  // TODO: Add API specific error handling
-  Error.captureStackTrace(err, getRoomsErrorHandler);
-  throw err;
 }
 
 type Link = {
