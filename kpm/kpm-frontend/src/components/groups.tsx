@@ -349,8 +349,6 @@ function usePositionDropdown(
     const elBottom = Math.round(rect.bottom);
     const elLeft = Math.round(rect.left);
     const elRight = Math.round(rect.right);
-    const elHeight = Math.round(rect.height);
-    const elWidth = Math.round(rect.width);
 
     const dropdownWidth = dropdown.scrollWidth;
     const dropdownHeight = dropdown.scrollHeight;
@@ -361,21 +359,23 @@ function usePositionDropdown(
     const spaceLeft = elRight;
     const spaceRight = pageWidth - elLeft;
 
-    const cs = window.getComputedStyle(dropdown);
-    const minHeight = getLargestCssValue(cs, ["min-height", "height"]) || 200;
-    const minWidth = getLargestCssValue(cs, ["min-width", "width"]) || elWidth;
-
     // Should the dropdown open up or down? Depends on setting but also available space
     let placeTop;
     if (toTop) {
-      if (spaceTop < minHeight + PADDING && spaceBottom > minHeight + PADDING) {
+      if (
+        spaceTop < dropdownHeight + PADDING &&
+        spaceBottom > dropdownHeight + PADDING
+      ) {
         // Flip to bottom because more space
         placeTop = false;
       } else {
         placeTop = true;
       }
     } else {
-      if (spaceBottom < minHeight + PADDING && spaceTop > minHeight + PADDING) {
+      if (
+        spaceBottom < dropdownHeight + PADDING &&
+        spaceTop > dropdownHeight + PADDING
+      ) {
         // Flip to top beacuase more space
         placeTop = true;
       } else {
@@ -384,38 +384,29 @@ function usePositionDropdown(
     }
 
     let deltaY; // may depend on actual height of dropdown
-    let height = dropdownHeight;
-
-    // Adjust size of dropdown if no space
     if (placeTop) {
-      // Adjust space and placing for top position
-      if (spaceTop < minHeight + PADDING) {
-        height = minHeight;
-      } else if (spaceTop < dropdownHeight + PADDING) {
-        height = spaceTop - PADDING;
-      }
-      deltaY = elTop - height;
+      deltaY = elTop - dropdownHeight;
     } else {
-      // Adjust space and placing for bottom position
-      if (spaceBottom < minHeight + PADDING) {
-        height = minHeight;
-      } else if (spaceBottom < dropdownHeight + PADDING) {
-        height = spaceBottom - PADDING;
-      }
       deltaY = elBottom;
     }
 
     // Nudge placement on X axis depending on available space
     let placeRight;
     if (toRight) {
-      if (spaceLeft < minWidth + PADDING && spaceRight > minWidth + PADDING) {
+      if (
+        spaceLeft < dropdownWidth + PADDING &&
+        spaceRight > dropdownWidth + PADDING
+      ) {
         // Flip to left aligned because more space
         placeRight = false;
       } else {
         placeRight = true;
       }
     } else {
-      if (spaceRight < minWidth + PADDING && spaceLeft > minWidth + PADDING) {
+      if (
+        spaceRight < dropdownWidth + PADDING &&
+        spaceLeft > dropdownWidth + PADDING
+      ) {
         // Flip to right aligned because more space
         placeRight = true;
       } else {
@@ -424,7 +415,6 @@ function usePositionDropdown(
     }
 
     let deltaX = placeRight ? elRight - dropdownWidth : elLeft;
-    let width = minWidth;
     if (toRight) {
       if (deltaX < 0) {
         deltaX = elRight >= 0 ? 0 : elRight; // perhaps we shouldn't let nudge so far
@@ -453,12 +443,6 @@ function usePositionDropdown(
       visibility: "visible",
       opacity: "1",
     };
-    if (width !== undefined) {
-      newTransform["width"] = `${width}px`;
-    }
-    if (height !== undefined) {
-      newTransform["height"] = `${height}px`;
-    }
     callback(newTransform);
     requestRef.current = requestAnimationFrame(calculate);
   };
@@ -468,14 +452,4 @@ function usePositionDropdown(
     requestRef.current = requestAnimationFrame(calculate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []);
-}
-
-// Utils
-function getLargestCssValue(cs: CSSStyleDeclaration, props: string[]) {
-  let outp = 0;
-  for (const p of props) {
-    const tmp = parseFloat(cs.getPropertyValue(p)) || 0;
-    outp = tmp > outp ? tmp : outp;
-  }
-  return outp;
 }
