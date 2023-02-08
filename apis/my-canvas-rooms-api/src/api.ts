@@ -51,7 +51,7 @@ async function do_getRooms(
       log.warn({ canvasUser: user }, "User not found in canvas; no rooms.");
       return {};
     } else {
-      Error.captureStackTrace(err as any, do_getRooms);
+      Error.captureStackTrace(err as any);
       throw err;
     }
   }
