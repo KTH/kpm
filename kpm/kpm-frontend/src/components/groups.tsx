@@ -75,6 +75,8 @@ export function DropdownMenuGroup({
     setScrollOffset
   );
 
+  // This allows dropdown page to be animated on mobile with CSS
+  // by manipulating visiblyOpen state
   useEffect(() => {
     if (!open) {
       // Wait until animation has completed, NOTE! Hardcoded duration
