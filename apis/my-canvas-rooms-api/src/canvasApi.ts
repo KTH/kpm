@@ -9,6 +9,8 @@ import CanvasAPI, {
 } from "@kth/canvas-api";
 import { Request } from "express";
 
+export { CanvasApiError } from "@kth/canvas-api";
+
 export interface CanvasRoom {
   id: number;
   workflow_state: "unpublished" | "available" | "completed" | "deleted";

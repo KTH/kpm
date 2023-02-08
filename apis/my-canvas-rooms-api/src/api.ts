@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
-import CanvasClient, { CanvasRoom } from "./canvasApi";
+import CanvasClient, { CanvasRoom, CanvasApiError } from "./canvasApi";
 import log from "skog";
-import { CanvasApiError, ExtendedGenerator } from "@kth/canvas-api";
 
 export const api = express.Router();
 
