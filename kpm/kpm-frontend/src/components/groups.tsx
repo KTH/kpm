@@ -83,6 +83,7 @@ export function DropdownMenuGroup({
   useEffect(() => {
     if (!open) {
       // Wait until animation has completed, NOTE! Hardcoded duration
+      // TODO: This should only be done on mobile
       setTimeout(() => {
         setVisiblyOpen(false);
       }, 300);
@@ -207,12 +208,12 @@ function useDropdownToggleListener(
   // setSearchParams: Function
 ) {
   const location = useLocation();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const _setOpen = (nextState: boolean) => {
     if (isOpenRef.current && !nextState) {
       // Closing
-      navigate(-1);
+      // I initially used navigate(-1) but this fires more than once
+      setSearchParams("", { replace: true });
       unfreezeParentModal(detailsRef.current);
       setTimeout(() => setScrollOffset(null), 300);
       return;
@@ -285,8 +286,7 @@ function useDropdownToggleListener(
 
   useEffect(() => {
     // Close on navigation (listens to changes of navigation)
-    if (isOpenRef.current && !searchParams.has("ddo")) {
-      // TODO: Remove position fix for mobile after animation is complete
+    if (isOpenRef.current) {
       setOpen(false);
       unfreezeParentModal(detailsRef.current);
     }
