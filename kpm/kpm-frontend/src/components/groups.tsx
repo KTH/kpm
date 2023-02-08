@@ -43,6 +43,10 @@ export function DropdownMenuGroup({
   defaultOpen = false,
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const isOpenRef = useRef(open);
+  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
+  const scrollOffsetRef = useRef(scrollOffset);
+  scrollOffsetRef.current = scrollOffset;
   const navigate = useNavigate();
 
   const [visiblyOpen, setVisiblyOpen] = useState(defaultOpen);
@@ -56,6 +60,7 @@ export function DropdownMenuGroup({
     detailsRef,
     summaryRef,
     dropdownRef,
+    scrollOffsetRef,
     revealUp,
     alignRight,
     (newStyle: TStyle) => {
@@ -65,14 +70,14 @@ export function DropdownMenuGroup({
   );
 
   const eventListenersSetRef = useRef(null);
-  const isOpenRef = useRef(open);
   isOpenRef.current = open;
   useDropdownToggleListener(
     detailsRef,
     summaryRef,
     eventListenersSetRef,
     isOpenRef,
-    setOpen
+    setOpen,
+    setScrollOffset
   );
 
   useEffect(() => {
@@ -157,12 +162,44 @@ function DropdownMobileHeader({ onBack }: TDropdownMobileHeaderProps) {
 const KEY_ENTER = 13;
 const KEY_ESC = 27;
 
+function freezeParentModal(el: HTMLElement | null): number | null {
+  let isKpmModal = false;
+  while (el && el !== document.body) {
+    isKpmModal = el.classList.contains("kpm-modal");
+    if (isKpmModal) break;
+    el = el.parentElement;
+  }
+
+  if (el && isKpmModal) {
+    el.classList.add("freeze");
+
+    // TODO: Only return scrollTop if we have overflow: hidden
+    return el.scrollTop;
+  }
+
+  return null;
+}
+
+function unfreezeParentModal(el: HTMLElement | null) {
+  let isKpmModal = false;
+  while (el && el !== document.body) {
+    isKpmModal = el.classList.contains("kpm-modal");
+    if (isKpmModal) break;
+    el = el.parentElement;
+  }
+
+  if (el && isKpmModal) {
+    el.classList.remove("freeze");
+  }
+}
+
 function useDropdownToggleListener(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
-  setOpen: Function
+  setOpen: Function,
+  setScrollOffset: Function
   // setSearchParams: Function
 ) {
   const location = useLocation();
@@ -170,16 +207,16 @@ function useDropdownToggleListener(
   const [searchParams, setSearchParams] = useSearchParams();
   const _setOpen = (nextState: boolean) => {
     if (isOpenRef.current && !nextState) {
-      // Closing, do pop if query param "open" exists
-      if (searchParams.has("open")) {
-        navigate(-1);
-        // TODO: Remove position fix for mobile after animation is complete
-        return;
-      }
+      // Closing
+      navigate(-1);
+      unfreezeParentModal(detailsRef.current);
+      setTimeout(() => setScrollOffset(null), 300);
+      return;
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
-      // TODO: Add position fix for mobile before animation starts
+      const scrollOffset = freezeParentModal(detailsRef.current);
+      setScrollOffset(scrollOffset);
       setSearchParams("ddo");
     }
     setOpen(nextState);
@@ -244,9 +281,10 @@ function useDropdownToggleListener(
 
   useEffect(() => {
     // Close on navigation (listens to changes of navigation)
-    if (isOpenRef.current && !searchParams.has("open")) {
+    if (isOpenRef.current && !searchParams.has("ddo")) {
       // TODO: Remove position fix for mobile after animation is complete
       setOpen(false);
+      unfreezeParentModal(detailsRef.current);
     }
     return () => {};
   }, [location]);
@@ -268,6 +306,7 @@ function usePositionDropdown(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,
+  scrollOffsetRef: RefObject<number | null>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
@@ -275,6 +314,16 @@ function usePositionDropdown(
   const requestRef = useRef(0);
 
   const calculate = () => {
+    if (typeof scrollOffsetRef.current === "number") {
+      // We have a scrollTop value which means we are in fullscreen
+      // mobile mode
+      callback({
+        top: `${scrollOffsetRef.current}px`,
+        visibility: "visible",
+        opacity: "1",
+      });
+      return (requestRef.current = requestAnimationFrame(calculate));
+    }
     // Stop if unmounted
     const isOpen =
       (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;

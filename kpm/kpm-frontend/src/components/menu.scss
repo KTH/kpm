@@ -106,6 +106,10 @@
       transform: translateX(0);
     }
 
+    &.freeze {
+      overflow: hidden!important;
+    }
+
     .kpm-modal-back-button.kpm-mobile {
       position: sticky;
       display: inline-flex;
