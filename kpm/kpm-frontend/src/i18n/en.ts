@@ -102,4 +102,6 @@ export const en: Record<string, string> = {
   "Tillbaka till personliga menyn": "Back to Personal Menu",
   Examinationsrum: "Exam Room",
   Tillbaka: "Back",
+  "Alla examinationsrum": "All exam rooms",
+  "No rooms found in Canvas": "No rooms found in Canvas",
 };
