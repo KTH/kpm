@@ -221,12 +221,20 @@ export function isValidSession(user?: TSessionUser): boolean {
 
 function createValidSesisonUser(claim: any): TSessionUser {
   // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
-  const hasLadokCourses = claim.memberOf?.some((group: string) =>
-    group.startsWith("ladok2.kurser")
-  );
-  const hasEduCourses = claim.memberOf?.some((group: string) =>
-    group.startsWith("edu.courses")
-  );
+  if (!Array.isArray(claim.memberOf)) {
+    console.error(
+      `Unexpected value [claim.memberOf: ${claim.memberOf}] for username ${claim.username} (${claim.kthid})`
+    );
+  }
+
+  const hasLadokCourses =
+    claim.memberOf?.some?.((group: string) =>
+      group.startsWith("ladok2.kurser")
+    ) ?? false;
+  const hasEduCourses =
+    claim.memberOf?.some?.((group: string) =>
+      group.startsWith("edu.courses")
+    ) ?? false;
   return {
     kthid: claim.kthid,
     display_name: claim.unique_name[0],
