@@ -5,13 +5,22 @@
 }
 
 #kpm-6cf53 .kpm-teaching-courses .kpm-teaching-course {
-  padding: 0 0 1rem 0;
+  // padding: 0 0 1rem 0;
   margin: 0 0 1rem 0;
+
+  .kpm-dropdownmenu-group {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin: 0 1.5rem 0 0;
+    }
+  }
 
   h2 {
     padding: 0;
     margin: 0 0 0.25rem 0;
     font-size: 1rem;
+    font-weight: 600;
 
     span {
       margin: 0 0 0.25rem 0;
@@ -19,6 +28,7 @@
   }
 
   h3 {
+    font-weight: 600;
     padding: 0;
     margin: 0.5rem 1rem 0 0;
     font-size: 1rem;
@@ -51,7 +61,7 @@
       }
     }
 
-    .more-courses {
+    .kpm-more-courses {
       display: inline-block;
     }
   }
@@ -61,6 +71,7 @@
   #kpm-6cf53 .kpm-teaching-courses {
     display: grid;
     grid-template-columns: auto 1fr auto;
+    gap: 0.25rem 0.5rem;
 
     .kpm-teaching-course {
       // Replace this with `subgrid` when available for Chrome!
@@ -71,7 +82,10 @@
         display: contents;
 
         span {
-          margin: 0.25rem 0 0.5rem 0;
+          margin: 0.25rem 0 0.25rem 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .kpm-teaching-course-code {
@@ -85,6 +99,10 @@
         font-weight: normal;
       }
 
+      .kpm-muted-text {
+        display: inline-block;
+      }
+
       .kpm-teaching-canvas {
         grid-column: 1 / 4;
         @media screen and (min-width: 60rem) {
@@ -96,9 +114,9 @@
     hr {
       grid-column: 1 / 4;
       width: 100%;
-      margin: 1rem 0;
+      margin: 0.25rem 0;
       border: none;
-      border-bottom: 1px solid --kpmPaneSeparatorFg;
+      border-bottom: 1px solid var(--kpmPaneSepatorFg);
     }
   }
 }

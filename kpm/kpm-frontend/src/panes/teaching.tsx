@@ -81,10 +81,10 @@ function Course({ courseCode, course }: TCourseProps) {
   return (
     <section className="kpm-teaching-course">
       <h2>
-        <span className="kpm-teaching-course-code">{courseCode}</span>
+        <span className="kpm-teaching-course-code">{courseCode} </span>
         <span>{courseName}</span>
       </h2>
-      <div className="kpm-teaching-shortucts">
+      <div className="kpm-teaching-shortcuts">
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}
@@ -103,7 +103,7 @@ function Course({ courseCode, course }: TCourseProps) {
         )}
         <CanvasRoomShortList rooms={current} />
 
-        <div className="more-courses">
+        <div className="kpm-more-courses">
           <CanvasRoomExpandedList
             rooms={[...current, ...other]}
             title={i18n("Alla kursrum")}
@@ -111,6 +111,7 @@ function Course({ courseCode, course }: TCourseProps) {
           <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
         </div>
       </div>
+      <hr />
     </section>
   );
 }
