@@ -100,4 +100,6 @@ export const sv: Record<string, string> = {
   "Tillbaka till personliga menyn": "Tillbaka till personliga menyn",
   Examinationsrum: "Examinationsrum",
   Tillbaka: "Tillbaka",
+  "Alla examinationsrum": "Alla examinationsrum",
+  "No rooms found in Canvas": "Inga tillhörande rum finns i Canvas",
 };
