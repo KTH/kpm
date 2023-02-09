@@ -52,7 +52,7 @@ export function Teaching() {
         </EmptyPlaceholder>
       )}
       {courses && (
-        <div className="teaching-courses">
+        <div className="kpm-teaching-courses">
           {Object.entries(courses).map(([code, course]) => {
             return <Course key={code} courseCode={code} course={course} />;
           })}
@@ -79,19 +79,19 @@ function Course({ courseCode, course }: TCourseProps) {
   const currentTerm = "HT2022";
 
   return (
-    <section className="course">
+    <section className="kpm-teaching-course">
       <h2>
-        <span className="course-code">{courseCode}</span>
+        <span className="kpm-teaching-course-code">{courseCode}</span>
         <span>{courseName}</span>
       </h2>
-      <div className="shortucts">
+      <div className="kpm-teaching-shortucts">
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}
           currentTerm={currentTerm}
         />
       </div>
-      <div className="canvas">
+      <div className="kpm-teaching-canvas">
         <h3>{i18n("Canvas:")}</h3>
         {course.rooms === null && (
           <p className="kpm-muted-text">

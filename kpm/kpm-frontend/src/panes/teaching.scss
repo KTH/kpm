@@ -1,10 +1,10 @@
 @import "../vars";
 
-#kpm-6cf53 .teaching-courses {
+#kpm-6cf53 .kpm-teaching-courses {
   margin: 1rem 2rem;
 }
 
-#kpm-6cf53 .teaching-courses .course {
+#kpm-6cf53 .kpm-teaching-courses .kpm-teaching-course {
   padding: 0 0 1rem 0;
   margin: 0 0 1rem 0;
 
@@ -24,7 +24,7 @@
     font-size: 1rem;
   }
 
-  .shortcuts {
+  .kpm-teaching-shortcuts {
     a {
       padding: 0.25rem 0;
       margin: 0 1rem 0 0;
@@ -32,7 +32,7 @@
     }
   }
 
-  .canvas {
+  .kpm-teaching-canvas {
     ul {
       list-style-type: none;
       padding: 0;
@@ -58,11 +58,11 @@
 }
 
 @media screen and (min-width: 40rem) {
-  .courses {
+  #kpm-6cf53 .kpm-teaching-courses {
     display: grid;
     grid-template-columns: auto 1fr auto;
 
-    .course {
+    .kpm-teaching-course {
       // Replace this with `subgrid` when available for Chrome!
       display: contents;
 
@@ -74,7 +74,7 @@
           margin: 0.25rem 0 0.5rem 0;
         }
 
-        .course-code {
+        .kpm-teaching-course-code {
           padding-right: 1rem;
         }
       }
@@ -85,7 +85,7 @@
         font-weight: normal;
       }
 
-      .canvas {
+      .kpm-teaching-canvas {
         grid-column: 1 / 4;
         @media screen and (min-width: 60rem) {
           grid-column: 2 / 4;
