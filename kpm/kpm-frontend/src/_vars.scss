@@ -8,6 +8,6 @@ $desktopLargeBreakpoint: "screen and (min-width: 929px)";
 $prod: "https://app.kth.se/style/static/kth-style/img/kth-style";
 $ref: "https://app-r.referens.sys.kth.se/style/static/kth-style/img/kth-style";
 
-@function kthStyleUrl($path) {
-  @return url($prod + $path), url($ref + $path);
+@function kthStyleUrl($path, $suffix: "") {
+  @return url($prod + $path) $suffix, url($ref + $path) $suffix;
 }
