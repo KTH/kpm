@@ -106,11 +106,16 @@
       transform: translateX(0);
     }
 
+    &.freeze {
+      overflow: hidden !important;
+    }
+
     .kpm-modal-back-button.kpm-mobile {
       position: sticky;
       display: inline-flex;
       top: 0;
       width: 100%;
+      z-index: 1; // Make sure dropdowns to float above back bar
       padding: calc(2 * var(--kpmPad));
       font-size: 1.1em;
       align-items: center;

@@ -3,7 +3,6 @@
 #kpm-6cf53 .kpm-collapsable-group {
   .kpm-link-list {
     margin: 0;
-    overflow-y: hidden;
 
     li {
       margin: 0;
@@ -91,8 +90,9 @@
 
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-dropdownmenu-group {
+    position: unset;
     flex-basis: 100%;
-    font-size: 1em;
+    font-size: 1rem;
 
     & > summary {
       font-size: 1em;
@@ -101,6 +101,28 @@
     & > summary:first-of-type::after {
       width: 0.4rem;
       height: 0.65rem;
+    }
+
+    .kpm-link-list {
+      position: fixed;
+      max-width: unset;
+      max-height: unset;
+      width: 100% !important;
+      height: 100vh !important;
+      top: 0;
+      left: 0;
+      transform: translate(100%, 0) !important;
+      transition: transform 0.25s ease-in-out;
+
+      & > ul {
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  #kpm-6cf53 [open].kpm-dropdownmenu-group {
+    .kpm-link-list.open {
+      transform: translate(0, 0) !important;
     }
   }
 }
