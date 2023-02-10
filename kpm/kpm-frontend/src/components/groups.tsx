@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { i18n } from "../i18n/i18n";
 
 import "./groups.scss";
-import { useDropdownToggleListener, usePositionDropdown } from "./groupsUtils";
+import {
+  isOnMobileBp,
+  useDropdownToggleListener,
+  usePositionDropdown,
+} from "./groupsUtils";
 
 export function CollapsableGroup({
   title,
@@ -79,11 +83,15 @@ export function DropdownMenuGroup({
   // by manipulating visiblyOpen state
   useEffect(() => {
     if (!open) {
-      // Wait until animation has completed, NOTE! Hardcoded duration
-      // TODO: This should only be done on mobile
-      setTimeout(() => {
+      // Wait until animation has completed on mobile
+      // NOTE! Hardcoded duration
+      if (isOnMobileBp()) {
+        setTimeout(() => {
+          setVisiblyOpen(false);
+        }, 300);
+      } else {
         setVisiblyOpen(false);
-      }, 300);
+      }
     }
 
     if (open) {

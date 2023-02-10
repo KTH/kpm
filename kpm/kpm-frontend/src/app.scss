@@ -137,3 +137,26 @@
     font-size: 0.9em;
   }
 }
+
+
+// This is used to detect css-breakpoints from TS-code
+// See function isOnMobileBp()
+#kpm-6cf53:before {
+  content: "desktop";
+  visibility: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+@media #{$mblBreakpoint} {
+  #kpm-6cf53:before {
+    content: "mobile";
+  }
+}
+
+@media #{$desktopLargeBreakpoint} {
+  #kpm-6cf53:before {
+    content: "desktop-large";
+  }
+}

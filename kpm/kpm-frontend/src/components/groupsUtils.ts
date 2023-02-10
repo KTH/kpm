@@ -4,22 +4,40 @@ import { useLocation, useSearchParams } from "react-router-dom";
 const KEY_ENTER = 13;
 const KEY_ESC = 27;
 
-function freezeParentModal(el: HTMLElement | null): number | null {
-  let isKpmModal = false;
+function getKpmModal(el: HTMLElement | null): HTMLElement | null {
   while (el && el !== document.body) {
-    isKpmModal = el.classList.contains("kpm-modal");
-    if (isKpmModal) break;
+    if (el.classList.contains("kpm-modal")) {
+      return el;
+    }
     el = el.parentElement;
   }
 
-  if (el && isKpmModal) {
-    el.classList.add("freeze");
+  return null;
+}
 
+let _isOnMobileBp: boolean | undefined;
+export function isOnMobileBp(): boolean | undefined {
+  if (_isOnMobileBp === undefined) {
+    const el = document.getElementById("kpm-6cf53");
+    if (el !== null) {
+      const tmp = window.getComputedStyle(el, ":before").content;
+      _isOnMobileBp = tmp === '"mobile"';
+    }
+  }
+  requestAnimationFrame(() => (_isOnMobileBp = undefined));
+  return _isOnMobileBp;
+}
+
+function freezeParentModal(el: HTMLElement | null): number | null {
+  const kpmModalEl = getKpmModal(el);
+
+  if (kpmModalEl) {
     // Only return scrollTop if we have overflow: hidden
-    // which only happens on mobile
-    const cs = window.getComputedStyle(el);
-    if (cs.getPropertyValue("overflow") === "hidden") {
-      return el.scrollTop;
+    // which only happens on mobile when .freeze is set
+    kpmModalEl.classList.add("freeze");
+
+    if (isOnMobileBp()) {
+      return kpmModalEl.scrollTop;
     }
   }
 
@@ -27,15 +45,10 @@ function freezeParentModal(el: HTMLElement | null): number | null {
 }
 
 function unfreezeParentModal(el: HTMLElement | null) {
-  let isKpmModal = false;
-  while (el && el !== document.body) {
-    isKpmModal = el.classList.contains("kpm-modal");
-    if (isKpmModal) break;
-    el = el.parentElement;
-  }
+  const kpmModalEl = getKpmModal(el);
 
-  if (el && isKpmModal) {
-    el.classList.remove("freeze");
+  if (kpmModalEl) {
+    kpmModalEl.classList.remove("freeze");
   }
 }
 
@@ -56,7 +69,15 @@ export function useDropdownToggleListener(
       // I initially used navigate(-1) but this fires more than once
       setSearchParams("", { replace: true });
       unfreezeParentModal(detailsRef.current);
-      setTimeout(() => setScrollOffset(null), 300);
+
+      // On mobile we want a short delay to allow animation to play out
+      // NOTE: We should really trigger this on completed CSS-transition,
+      // or use it to calc delay, but skipping for now for simplicity
+      if (isOnMobileBp()) {
+        setTimeout(() => setScrollOffset(null), 300);
+      } else {
+        setScrollOffset(null);
+      }
       return;
     }
     if (!isOpenRef.current && nextState) {
