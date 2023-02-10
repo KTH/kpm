@@ -43,9 +43,6 @@ export function DropdownMenuGroup({
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const isOpenRef = useRef(open);
-  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
-  const scrollOffsetRef = useRef(scrollOffset);
-  scrollOffsetRef.current = scrollOffset;
   const navigate = useNavigate();
 
   const [visiblyOpen, setVisiblyOpen] = useState(defaultOpen);
@@ -59,7 +56,6 @@ export function DropdownMenuGroup({
     detailsRef,
     summaryRef,
     dropdownRef,
-    scrollOffsetRef,
     revealUp,
     alignRight,
     (newStyle: TStyle) => {
@@ -75,8 +71,7 @@ export function DropdownMenuGroup({
     summaryRef,
     eventListenersSetRef,
     isOpenRef,
-    setOpen,
-    setScrollOffset
+    setOpen
   );
 
   // This allows dropdown page to be animated on mobile with CSS

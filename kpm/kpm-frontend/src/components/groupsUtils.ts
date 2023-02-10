@@ -28,20 +28,14 @@ export function isOnMobileBp(): boolean | undefined {
   return _isOnMobileBp;
 }
 
-function freezeParentModal(el: HTMLElement | null): number | null {
+function freezeParentModal(el: HTMLElement | null) {
   const kpmModalEl = getKpmModal(el);
 
   if (kpmModalEl) {
     // Only return scrollTop if we have overflow: hidden
     // which only happens on mobile when .freeze is set
     kpmModalEl.classList.add("freeze");
-
-    if (isOnMobileBp()) {
-      return kpmModalEl.scrollTop;
-    }
   }
-
-  return null;
 }
 
 function unfreezeParentModal(el: HTMLElement | null) {
@@ -57,8 +51,7 @@ export function useDropdownToggleListener(
   summaryRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
-  setOpen: Function,
-  setScrollOffset: Function
+  setOpen: Function
   // setSearchParams: Function
 ) {
   const location = useLocation();
@@ -69,21 +62,10 @@ export function useDropdownToggleListener(
       // I initially used navigate(-1) but this fires more than once
       setSearchParams("", { replace: true });
       unfreezeParentModal(detailsRef.current);
-
-      // On mobile we want a short delay to allow animation to play out
-      // NOTE: We should really trigger this on completed CSS-transition,
-      // or use it to calc delay, but skipping for now for simplicity
-      if (isOnMobileBp()) {
-        setTimeout(() => setScrollOffset(null), 300);
-      } else {
-        setScrollOffset(null);
-      }
-      return;
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
-      const scrollOffset = freezeParentModal(detailsRef.current);
-      setScrollOffset(scrollOffset);
+      freezeParentModal(detailsRef.current);
       setSearchParams("ddo");
     }
     setOpen(nextState);
@@ -172,7 +154,6 @@ export function usePositionDropdown(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,
-  scrollOffsetRef: RefObject<number | null>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
@@ -180,16 +161,22 @@ export function usePositionDropdown(
   const requestRef = useRef(0);
 
   const calculate = () => {
-    if (typeof scrollOffsetRef.current === "number") {
+    if (isOnMobileBp()) {
       // We have a scrollTop value which means we are in fullscreen
       // mobile mode
+      let scrollOffset = 0;
+      const kpmModalEl = getKpmModal(detailsRef.current);
+      if (kpmModalEl) {
+        scrollOffset = kpmModalEl.scrollTop;
+      }
       callback({
-        top: `${scrollOffsetRef.current}px`,
+        top: `${scrollOffset}px`,
         visibility: "visible",
         opacity: "1",
       });
       return (requestRef.current = requestAnimationFrame(calculate));
     }
+
     // Stop if unmounted
     const isOpen =
       (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
