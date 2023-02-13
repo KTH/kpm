@@ -15,7 +15,14 @@ const useRedis = !!process.env.REDIS_HOST;
 
 let redisClient: RedisClientType | undefined = undefined;
 
-export function getRedisClient(): RedisClientType | undefined {
+export enum REDIS_DB_NAMES {
+  SESSION = 0,
+  KOPPS = 1,
+}
+
+export function getRedisClient(
+  databaseName = REDIS_DB_NAMES.SESSION
+): RedisClientType | undefined {
   if (useRedis) {
     if (redisClient) return redisClient;
 
@@ -31,6 +38,7 @@ export function getRedisClient(): RedisClientType | undefined {
         connectTimeout: REDIS_CONNECT_TIMEOUT,
       },
       password: REDIS_PASSWORD,
+      database: databaseName, // We use the db for session (0) and kopps cache (1)
       // Notes on legacy mode: https://github.com/tj/connect-redis/pull/337
       legacyMode: true,
     });

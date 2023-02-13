@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { SessionData } from "express-session";
 import NodeCache from "node-cache";
+import { getRedisClient, REDIS_DB_NAMES } from "../redisClient";
 import got from "got";
 
 import { getFakeUserForDevelopment } from "../auth";
@@ -20,6 +21,7 @@ const MY_CANVAS_ROOMS_API_URI =
   "http://localhost:3001/kpm/canvas-rooms";
 const SOCIAL_USER_API = process.env.SOCIAL_USER_URI;
 const SOCIAL_KEY = process.env.SOCIAL_KEY;
+const hasRedis = !!process.env.REDIS_HOST;
 
 function optSessionUser(session: SessionData): TSessionUser | undefined {
   return session.user || getFakeUserForDevelopment();
@@ -91,7 +93,12 @@ export async function get_canvas_rooms(user: string): Promise<APICanvasRooms> {
 // The standard ttl is given in seconds, I guess anything between 12
 // and 48 hours should be ok, maybe avoid purging stuff at the same
 // time every day by using 40 hours.
-const kopps_cache = new NodeCache({ stdTTL: 40 * 3600, useClones: false });
+const KOPPS_CACHE_TTL_SECS = 40 * 3600;
+const redisClient = hasRedis ? getRedisClient(REDIS_DB_NAMES.KOPPS) : null;
+
+const kopps_cache = hasRedis
+  ? null
+  : new NodeCache({ stdTTL: KOPPS_CACHE_TTL_SECS, useClones: false });
 
 /// This is the kopps info we cache, a middle ground between what we
 /// get from kopps and what we want to deliver in the studies and
@@ -133,10 +140,20 @@ export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
   try {
-    const result = kopps_cache.get<TKoppsCourseInfo>(course_code);
+    let result: TKoppsCourseInfo | undefined;
+    if (hasRedis) {
+      const tmp = await redisClient?.get(course_code);
+      if (typeof tmp === "string") {
+        result = JSON.parse(tmp);
+      }
+    } else {
+      result = kopps_cache?.get<TKoppsCourseInfo>(course_code);
+    }
+
     if (result) {
       return result;
     }
+
     const reply = await got
       .get<TKoppsCourseRoundTerms>(
         `${KOPPS_API}/course/${course_code}/courseroundterms`,
@@ -159,7 +176,13 @@ export async function getCourseInfo(
       info.rounds[term] = rounds;
     }
 
-    kopps_cache.set(course_code, info);
+    if (hasRedis) {
+      await redisClient?.set(course_code, JSON.stringify(info), {
+        EX: KOPPS_CACHE_TTL_SECS,
+      }); // TODO: Do we need to set expiration?
+    } else {
+      kopps_cache?.set(course_code, info);
+    }
     return info;
   } catch (err: any) {
     // TODO: We should create EndpointError and let frontend handle fallback
