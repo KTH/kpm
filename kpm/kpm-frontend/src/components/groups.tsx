@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { i18n } from "../i18n/i18n";
 
 import "./groups.scss";
-import { useDropdownToggleListener, usePositionDropdown } from "./groupsUtils";
+import {
+  isOnMobileBp,
+  useDropdownToggleListener,
+  usePositionDropdown,
+} from "./groupsUtils";
 
 export function CollapsableGroup({
   title,
@@ -39,9 +43,6 @@ export function DropdownMenuGroup({
 }: TDropdownMenuGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const isOpenRef = useRef(open);
-  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
-  const scrollOffsetRef = useRef(scrollOffset);
-  scrollOffsetRef.current = scrollOffset;
   const navigate = useNavigate();
 
   const [visiblyOpen, setVisiblyOpen] = useState(defaultOpen);
@@ -55,7 +56,6 @@ export function DropdownMenuGroup({
     detailsRef,
     summaryRef,
     dropdownRef,
-    scrollOffsetRef,
     revealUp,
     alignRight,
     (newStyle: TStyle) => {
@@ -71,19 +71,22 @@ export function DropdownMenuGroup({
     summaryRef,
     eventListenersSetRef,
     isOpenRef,
-    setOpen,
-    setScrollOffset
+    setOpen
   );
 
   // This allows dropdown page to be animated on mobile with CSS
   // by manipulating visiblyOpen state
   useEffect(() => {
     if (!open) {
-      // Wait until animation has completed, NOTE! Hardcoded duration
-      // TODO: This should only be done on mobile
-      setTimeout(() => {
+      // Wait until animation has completed on mobile
+      // NOTE! Hardcoded duration
+      if (isOnMobileBp()) {
+        setTimeout(() => {
+          setVisiblyOpen(false);
+        }, 300);
+      } else {
         setVisiblyOpen(false);
-      }, 300);
+      }
     }
 
     if (open) {

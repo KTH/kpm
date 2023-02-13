@@ -4,38 +4,45 @@ import { useLocation, useSearchParams } from "react-router-dom";
 const KEY_ENTER = 13;
 const KEY_ESC = 27;
 
-function freezeParentModal(el: HTMLElement | null): number | null {
-  let isKpmModal = false;
+function getKpmModal(el: HTMLElement | null): HTMLElement | null {
   while (el && el !== document.body) {
-    isKpmModal = el.classList.contains("kpm-modal");
-    if (isKpmModal) break;
-    el = el.parentElement;
-  }
-
-  if (el && isKpmModal) {
-    el.classList.add("freeze");
-
-    // Only return scrollTop if we have overflow: hidden
-    // which only happens on mobile
-    const cs = window.getComputedStyle(el);
-    if (cs.getPropertyValue("overflow") === "hidden") {
-      return el.scrollTop;
+    if (el.classList.contains("kpm-modal")) {
+      return el;
     }
+    el = el.parentElement;
   }
 
   return null;
 }
 
-function unfreezeParentModal(el: HTMLElement | null) {
-  let isKpmModal = false;
-  while (el && el !== document.body) {
-    isKpmModal = el.classList.contains("kpm-modal");
-    if (isKpmModal) break;
-    el = el.parentElement;
+let _isOnMobileBp: boolean | undefined;
+export function isOnMobileBp(): boolean | undefined {
+  if (_isOnMobileBp === undefined) {
+    const el = document.getElementById("kpm-6cf53");
+    if (el !== null) {
+      const tmp = window.getComputedStyle(el, ":before").content;
+      _isOnMobileBp = tmp === '"mobile"';
+    }
   }
+  requestAnimationFrame(() => (_isOnMobileBp = undefined));
+  return _isOnMobileBp;
+}
 
-  if (el && isKpmModal) {
-    el.classList.remove("freeze");
+function freezeParentModal(el: HTMLElement | null) {
+  const kpmModalEl = getKpmModal(el);
+
+  if (kpmModalEl) {
+    // Only return scrollTop if we have overflow: hidden
+    // which only happens on mobile when .freeze is set
+    kpmModalEl.classList.add("freeze");
+  }
+}
+
+function unfreezeParentModal(el: HTMLElement | null) {
+  const kpmModalEl = getKpmModal(el);
+
+  if (kpmModalEl) {
+    kpmModalEl.classList.remove("freeze");
   }
 }
 
@@ -44,8 +51,7 @@ export function useDropdownToggleListener(
   summaryRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
-  setOpen: Function,
-  setScrollOffset: Function
+  setOpen: Function
   // setSearchParams: Function
 ) {
   const location = useLocation();
@@ -56,13 +62,10 @@ export function useDropdownToggleListener(
       // I initially used navigate(-1) but this fires more than once
       setSearchParams("", { replace: true });
       unfreezeParentModal(detailsRef.current);
-      setTimeout(() => setScrollOffset(null), 300);
-      return;
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
-      const scrollOffset = freezeParentModal(detailsRef.current);
-      setScrollOffset(scrollOffset);
+      freezeParentModal(detailsRef.current);
       setSearchParams("ddo");
     }
     setOpen(nextState);
@@ -151,7 +154,6 @@ export function usePositionDropdown(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,
-  scrollOffsetRef: RefObject<number | null>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
@@ -159,16 +161,22 @@ export function usePositionDropdown(
   const requestRef = useRef(0);
 
   const calculate = () => {
-    if (typeof scrollOffsetRef.current === "number") {
+    if (isOnMobileBp()) {
       // We have a scrollTop value which means we are in fullscreen
       // mobile mode
+      let scrollOffset = 0;
+      const kpmModalEl = getKpmModal(detailsRef.current);
+      if (kpmModalEl) {
+        scrollOffset = kpmModalEl.scrollTop;
+      }
       callback({
-        top: `${scrollOffsetRef.current}px`,
+        top: `${scrollOffset}px`,
         visibility: "visible",
         opacity: "1",
       });
       return (requestRef.current = requestAnimationFrame(calculate));
     }
+
     // Stop if unmounted
     const isOpen =
       (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
