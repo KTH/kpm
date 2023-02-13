@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { i18n } from "../i18n/i18n";
 import "./icons.scss";
 
@@ -6,6 +6,10 @@ type TLinkIconProps = {
   href: string;
   target?: string | undefined;
   title?: string | undefined;
+};
+type TNotificationIconProps = {
+  href: string;
+  nNew: number;
 };
 
 type TIconProps = {
@@ -62,13 +66,10 @@ export function IconNewsfeed({
   );
 }
 
-export function IconNotifications({
-  href,
-  target = undefined,
-  title = undefined,
-}: TLinkIconProps) {
+export function IconNotifications({ href, nNew }: TNotificationIconProps) {
+  const has_new = nNew > 0 ? "icon kpm-has-new-notices" : undefined;
   return (
-    <a className="icon" href={href} target={target}>
+    <a className={has_new || "icon"} href={href}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1"
@@ -82,6 +83,12 @@ export function IconNotifications({
           d="M792 202q58 138 67 258t-39 140q-28 12-61-3t-65-40q-32-25-99-41t-149-8q-28 4-42 19t-6 37q22 56 46 108 4 10 24 22t24 20q14 34-22 46-50 22-102 40-30 10-54-42-32-76-58-132-6-12-34-17t-46-31l-38 14q-34 12-74-12t-54-60q-17-32-5-79t43-61q126-52 213-108t124-103q37-47 59-92t25-78q3-33 15-59t36-36q48-20 130 70t142 228zm-28 300q8-4 10-38t-11-98q-13-64-41-128-28-66-67-123t-67-84Q560 4 552 8t-10 42q-2 38 10 105t40 133q28 66 68 119t68 76q28 23 36 19z"
         ></path>
       </svg>
+      {has_new && (
+        <Fragment>
+          <span className="kpm-notice-new">{nNew}</span>
+          <span className="kpm-notice-new-trail">{i18n("dn-new")}</span>
+        </Fragment>
+      )}
     </a>
   );
 }

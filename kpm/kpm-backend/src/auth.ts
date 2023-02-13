@@ -172,6 +172,7 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       username: "testuser",
       hasEduCourses: true,
       hasLadokCourses: true,
+      numNewNotifications: 0,
       expires: new Date().getTime() + SESSION_MAX_AGE_MS,
     };
 }
@@ -242,6 +243,7 @@ function createValidSesisonUser(claim: any): TSessionUser {
     username: claim.username,
     hasEduCourses,
     hasLadokCourses,
+    numNewNotifications: 0,
     expires: new Date().getTime() + SESSION_MAX_AGE_MS,
   };
 }

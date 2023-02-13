@@ -47,6 +47,7 @@ export const sv: Record<string, string> = {
   "News from your courses, groups and programmes":
     "Nyheter om kurser, grupper och program",
   "Direct notifications": "Notiser",
+  "dn-new": "nya",
   "Change password": "Byt lösenord",
   "Wireless network": "Trådlöst nätverk (WiFi)",
   Settings: "Inställningar",
