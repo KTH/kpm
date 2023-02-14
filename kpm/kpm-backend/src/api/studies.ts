@@ -101,7 +101,7 @@ export async function studiesApiHandler(
             mytermrounds[term] = {};
           }
           if (!mytermrounds[term][role.round]) {
-            const round = kopps.rounds[term].find(
+            const round = kopps.rounds[term]?.find(
               (value) => value.ladokRoundId == role.round
             );
             mytermrounds[term][role.round] = {
