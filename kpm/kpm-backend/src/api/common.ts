@@ -177,9 +177,11 @@ export async function getCourseInfo(
     }
 
     if (hasRedis) {
-      await redisClient?.set(course_code, JSON.stringify(info), {
-        EX: KOPPS_CACHE_TTL_SECS,
-      }); // TODO: Do we need to set expiration?
+      await redisClient
+        ?.multi()
+        .set(course_code, JSON.stringify(info))
+        .expire(course_code, KOPPS_CACHE_TTL_SECS)
+        .exec();
     } else {
       kopps_cache?.set(course_code, info);
     }
