@@ -136,32 +136,56 @@ export type TKoppsRoundInTerm = {
   lastTuitionDate: string; // "YYYY-MM-DD"
 };
 
+const __EMPTY_MATCH__ = {
+  title: { sv: "-", en: "-" },
+  credits: 0,
+  creditUnitAbbr: { sv: "-", en: "-" },
+  rounds: {},
+};
+
 export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
   try {
-    let result: TKoppsCourseInfo | undefined;
+    let reply: TKoppsCourseRoundTerms | undefined;
     if (hasRedis) {
+      // const exists = await redisClient?.exists(course_code);
+      // if (!exists) {
+      //   console.log(`${course_code} is missing`);
+      // }
       const tmp = await redisClient?.get(course_code);
       if (typeof tmp === "string") {
-        result = JSON.parse(tmp);
+        reply = JSON.parse(tmp);
       }
     } else {
-      result = kopps_cache?.get<TKoppsCourseInfo>(course_code);
+      reply = kopps_cache?.get<TKoppsCourseRoundTerms>(course_code);
     }
 
-    if (result) {
-      return result;
+    if (reply === undefined) {
+      reply = await got
+        .get<TKoppsCourseRoundTerms>(
+          `${KOPPS_API}/course/${course_code}/courseroundterms`,
+          {
+            responseType: "json",
+          }
+        )
+        .then((r) => r.body);
+
+      if (hasRedis && reply !== undefined) {
+        await redisClient
+          ?.multi()
+          .set(course_code, JSON.stringify(reply))
+          .expire(course_code, KOPPS_CACHE_TTL_SECS)
+          .exec();
+        console.log(`${course_code} is written`);
+      } else {
+        kopps_cache?.set(course_code, reply);
+      }
     }
 
-    const reply = await got
-      .get<TKoppsCourseRoundTerms>(
-        `${KOPPS_API}/course/${course_code}/courseroundterms`,
-        {
-          responseType: "json",
-        }
-      )
-      .then((r) => r.body);
+    if (reply === undefined) {
+      return __EMPTY_MATCH__;
+    }
 
     const { title, credits, creditUnitAbbr } = reply.course;
     const info: TKoppsCourseInfo = {
@@ -176,15 +200,6 @@ export async function getCourseInfo(
       info.rounds[term] = rounds;
     }
 
-    if (hasRedis) {
-      await redisClient
-        ?.multi()
-        .set(course_code, JSON.stringify(info))
-        .expire(course_code, KOPPS_CACHE_TTL_SECS)
-        .exec();
-    } else {
-      kopps_cache?.set(course_code, info);
-    }
     return info;
   } catch (err: any) {
     // TODO: We should create EndpointError and let frontend handle fallback
@@ -193,11 +208,6 @@ export async function getCourseInfo(
     // Ugly but type-correct fallback, so things don't crash.
     // This is not cached!  Or should we cache it for a few minutes to
     // give kopps a chance to start if it's broken?
-    return {
-      title: { sv: "-", en: "-" },
-      credits: 0,
-      creditUnitAbbr: { sv: "-", en: "-" },
-      rounds: {},
-    };
+    return __EMPTY_MATCH__;
   }
 }
