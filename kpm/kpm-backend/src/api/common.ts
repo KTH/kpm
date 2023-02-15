@@ -147,60 +147,29 @@ export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
   try {
-    let reply: TKoppsCourseRoundTerms | undefined;
-    if (hasRedis) {
-      // const exists = await redisClient?.exists(course_code);
-      // if (!exists) {
-      //   console.log(`${course_code} is missing`);
-      // }
-      const tmp = await redisClient?.get(course_code);
-      if (typeof tmp === "string") {
-        reply = JSON.parse(tmp);
-      }
-    } else {
-      reply = kopps_cache?.get<TKoppsCourseRoundTerms>(course_code);
-    }
+    const cachedValue: TKoppsCourseInfo | string | null | undefined = hasRedis
+      ? await redisClient?.get(course_code)
+      : kopps_cache?.get<TKoppsCourseInfo>(course_code);
 
-    if (reply === undefined) {
-      reply = await got
-        .get<TKoppsCourseRoundTerms>(
-          `${KOPPS_API}/course/${course_code}/courseroundterms`,
-          {
-            responseType: "json",
-          }
-        )
-        .then((r) => r.body);
-
-      if (hasRedis && reply !== undefined) {
-        await redisClient
-          ?.multi()
-          .set(course_code, JSON.stringify(reply))
-          .expire(course_code, KOPPS_CACHE_TTL_SECS)
-          .exec();
-        console.log(`${course_code} is written`);
+    if (cachedValue) {
+      if (typeof cachedValue === "string") {
+        return JSON.parse(cachedValue);
       } else {
-        kopps_cache?.set(course_code, reply);
+        return cachedValue;
       }
     }
 
-    if (reply === undefined) {
-      return __EMPTY_MATCH__;
+    const newValue = await fetchInfoObjectFromKopps(course_code);
+
+    if (hasRedis) {
+      redisClient?.set(course_code, JSON.stringify(newValue), {
+        EX: KOPPS_CACHE_TTL_SECS,
+      });
+    } else {
+      kopps_cache?.set(course_code, newValue);
     }
 
-    const { title, credits, creditUnitAbbr } = reply.course;
-    const info: TKoppsCourseInfo = {
-      title,
-      credits,
-      creditUnitAbbr,
-      rounds: {},
-    };
-
-    for (let { term, rounds } of reply.termsWithCourseRounds) {
-      // TODO: Shave off unused parts of rounds?
-      info.rounds[term] = rounds;
-    }
-
-    return info;
+    return newValue;
   } catch (err: any) {
     // TODO: We should create EndpointError and let frontend handle fallback
     //  log.error(err, `Failed to get kopps data for ${course_code}`);
@@ -210,4 +179,35 @@ export async function getCourseInfo(
     // give kopps a chance to start if it's broken?
     return __EMPTY_MATCH__;
   }
+}
+
+async function fetchInfoObjectFromKopps(courseCode: string) {
+  const koppsData: TKoppsCourseRoundTerms | undefined = await got
+    .get<TKoppsCourseRoundTerms>(
+      `${KOPPS_API}/course/${courseCode}/courseroundterms`,
+      {
+        responseType: "json",
+      }
+    )
+    .then((r) => r.body);
+
+  if (koppsData === undefined) {
+    return __EMPTY_MATCH__;
+  }
+
+  const { title, credits, creditUnitAbbr } = koppsData.course;
+
+  const info: TKoppsCourseInfo = {
+    title,
+    credits,
+    creditUnitAbbr,
+    rounds: {},
+  };
+
+  for (let { term, rounds } of koppsData.termsWithCourseRounds) {
+    // TODO: Shave off unused parts of rounds?
+    info.rounds[term] = rounds;
+  }
+
+  return info;
 }

@@ -20,12 +20,24 @@ export enum REDIS_DB_NAMES {
   KOPPS = 1,
 }
 
-export function getRedisClient(
-  databaseName = REDIS_DB_NAMES.SESSION
+export function getRedisClientForConnect(databaseName: REDIS_DB_NAMES) {
+  // connect-redis currently only supports v3 of Redis
+  // so it is compatible with ioredis. If this changes
+  // you can get the v4 Redis client by skipping legacy
+  // mode. https://github.com/tj/connect-redis/pull/337
+  return _getRedisClient(databaseName, true);
+}
+
+export function getRedisClient(databaseName: REDIS_DB_NAMES) {
+  // Return the v4 node-redis client
+  return _getRedisClient(databaseName, false);
+}
+
+function _getRedisClient(
+  databaseName: REDIS_DB_NAMES,
+  legacyMode: boolean
 ): RedisClientType | undefined {
   if (useRedis) {
-    if (redisClient) return redisClient;
-
     redisClient = createClient({
       socket: {
         port: REDIS_PORT,
@@ -40,8 +52,9 @@ export function getRedisClient(
       password: REDIS_PASSWORD,
       database: databaseName, // We use the db for session (0) and kopps cache (1)
       // Notes on legacy mode: https://github.com/tj/connect-redis/pull/337
-      legacyMode: true,
+      legacyMode,
     });
+
     redisClient.connect().catch((err) => {
       log.error(err, "Redis client connection error");
     });
