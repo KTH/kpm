@@ -14,12 +14,12 @@ export async function __CACHED_VALUE__<T extends TCacheable>(
   ttlSecs: number,
   fn: () => Promise<T | undefined>
 ): Promise<T | undefined> {
-  const cachedValue = _getCachedValue<T>(key);
-  if (cachedValue) return cachedValue;
+  const cachedValue = await _getCachedValue<T>(key);
+  if (cachedValue !== undefined) return cachedValue;
 
   const newValue = await fn();
 
-  if (newValue) _setCachedValue(key, newValue, ttlSecs);
+  if (newValue !== undefined) _setCachedValue(key, newValue, ttlSecs);
 
   return newValue;
 }
