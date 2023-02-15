@@ -243,7 +243,6 @@ function createValidSesisonUser(claim: any): TSessionUser {
     username: claim.username,
     hasEduCourses,
     hasLadokCourses,
-    numNewNotifications: 0,
     expires: new Date().getTime() + SESSION_MAX_AGE_MS,
   };
 }

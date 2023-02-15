@@ -7,7 +7,7 @@ export type TSessionUser = {
   username?: string;
   hasEduCourses?: boolean;
   hasLadokCourses?: boolean;
-  numNewNotifications: number;
+  numNewNotifications?: number;
   expires: number;
 };
 export type APISession = {

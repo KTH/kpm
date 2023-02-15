@@ -11,7 +11,7 @@ import { Groups } from "./panes/groups";
 export type TRouterProps = {
   hasStudies: boolean;
   hasTeaching: boolean;
-  numNewNotifications: number;
+  numNewNotifications?: number;
 };
 
 const getRoutesDefaults = {

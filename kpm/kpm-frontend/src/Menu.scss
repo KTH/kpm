@@ -114,6 +114,10 @@
       width: auto;
     }
 
+    .kpm-loading {
+      opacity: 0.8;
+      filter: blur(1px);
+    }
     .kpm-has-new-notices {
       .kpm-notice-new {
         background: var(--kpmAlertBg);

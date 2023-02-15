@@ -9,7 +9,7 @@ type TLinkIconProps = {
 };
 type TNotificationIconProps = {
   href: string;
-  nNew: number;
+  nNew?: number;
 };
 
 type TIconProps = {
@@ -67,9 +67,15 @@ export function IconNewsfeed({
 }
 
 export function IconNotifications({ href, nNew }: TNotificationIconProps) {
-  const has_new = nNew > 0 ? "icon kpm-has-new-notices" : undefined;
+  const has_new = nNew && nNew > 0 ? "icon kpm-has-new-notices" : undefined;
+  const className =
+    nNew === undefined
+      ? "icon kpm-loading"
+      : has_new
+      ? "icon kpm-has-new-notices"
+      : "icon";
   return (
-    <a className={has_new || "icon"} href={href}>
+    <a className={className} href={href}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1"

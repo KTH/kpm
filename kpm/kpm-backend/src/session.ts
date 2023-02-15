@@ -69,9 +69,7 @@ export async function sessionApiHandler(
         socialErr
       );
       logger.info({ notes, kthid: user.kthid }, "Notes according to social");
-      if (notes) {
-        user.numNewNotifications = notes.new;
-      }
+      user.numNewNotifications = notes?.new;
     }
     res.send({ user });
   } catch (err: any) {
@@ -86,9 +84,9 @@ export async function sessionApiHandler(
   }
 }
 
-function socialErr(error: any): NumNotes {
+function socialErr(error: any): undefined {
   logger.error({ error }, "Failed to contact social, showing no notifications");
-  return { new: 0 };
+  return undefined;
 }
 
 type NumNotes = {
