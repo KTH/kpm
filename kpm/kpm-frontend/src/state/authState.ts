@@ -14,6 +14,7 @@ export const currentUser: TSessionUser | undefined =
     username: "jhsware",
     hasEduCourses: true,
     hasLadokCourses: true,
+    numNewNotifications: 3,
     expires: 1668683814,
   }) ||
   undefined;
@@ -74,7 +75,10 @@ async function checkValidSession() {
   authState.send({ name: "CurrentUser", value: undefined });
 }
 
-document.addEventListener("visibilitychange", checkValidSession);
+export function initSessionCheck() {
+  document.addEventListener("visibilitychange", checkValidSession);
+  setTimeout(checkValidSession); // Once on startup, without delaying first paint
+}
 
 // Check if session is valid for at least 30 mins every 15 mins
 setInterval(() => {

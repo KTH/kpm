@@ -21,9 +21,13 @@ const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
   "https://www.kth.se/social/home/subscriptions/";
 const KTH_SOCIAL_NOTIFICATIONS_URI =
-  "https://www.kth.se/social/home/personal-menu/notifications/";
+  "https://www.kth.se/social/notifications/notice_list/";
 
-export function Menu({ hasStudies, hasTeaching }: TRouterProps) {
+export function Menu({
+  hasStudies,
+  hasTeaching,
+  numNewNotifications,
+}: TRouterProps) {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -128,7 +132,10 @@ export function Menu({ hasStudies, hasTeaching }: TRouterProps) {
               <IconNewsfeed href={KTH_SOCIAL_SUBSCRIPTIONS_URI} />
             </li>
             <li>
-              <IconNotifications href={KTH_SOCIAL_NOTIFICATIONS_URI} />
+              <IconNotifications
+                href={KTH_SOCIAL_NOTIFICATIONS_URI}
+                nNew={numNewNotifications}
+              />
             </li>
           </div>
           <li className="kpm-profile-item kpm-mobile">

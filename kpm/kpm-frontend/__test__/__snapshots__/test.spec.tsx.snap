@@ -159,8 +159,8 @@ exports[`<App /> Can be rendered 1`] = `
       </li>
       <li>
         <a
-          className="icon"
-          href="https://www.kth.se/social/home/personal-menu/notifications/"
+          className="icon kpm-has-new-notices"
+          href="https://www.kth.se/social/notifications/notice_list/"
         >
           <svg
             height="1em"
@@ -177,6 +177,16 @@ exports[`<App /> Can be rendered 1`] = `
               fill="currentColor"
             />
           </svg>
+          <span
+            className="kpm-notice-new"
+          >
+            3
+          </span>
+          <span
+            className="kpm-notice-new-trail"
+          >
+            new
+          </span>
         </a>
       </li>
     </div>

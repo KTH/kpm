@@ -48,6 +48,7 @@ export const en: Record<string, string> = {
   "News from your courses, groups and programmes":
     "News from your courses, groups and programmes",
   "Direct notifications": "Direct notifications",
+  "dn-new": "new",
   "Change password": "Change password",
   "Wireless network": "Wireless network",
 

@@ -6,6 +6,8 @@ import { APIMutedAuthErrType, APISession } from "kpm-backend-interface";
 import { Request, Response, NextFunction } from "express";
 import { sessionUser } from "./api/common";
 import { MutedAuthError } from "kpm-api-common/src/errors";
+import { getSocial } from "./api/common";
+import logger from "skog";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
@@ -62,6 +64,13 @@ export async function sessionApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
+    if (user) {
+      let notes = await getSocial<NumNotes>(user, "notifications/count").catch(
+        socialErr
+      );
+      logger.info({ notes, kthid: user.kthid }, "Notes according to social");
+      user.numNewNotifications = notes?.new;
+    }
     res.send({ user });
   } catch (err: any) {
     if (err instanceof MutedAuthError) {
@@ -74,3 +83,12 @@ export async function sessionApiHandler(
     next(err);
   }
 }
+
+function socialErr(error: any): undefined {
+  logger.error({ error }, "Failed to contact social, showing no notifications");
+  return undefined;
+}
+
+type NumNotes = {
+  new: number;
+};

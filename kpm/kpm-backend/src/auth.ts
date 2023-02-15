@@ -172,6 +172,7 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       username: "testuser",
       hasEduCourses: true,
       hasLadokCourses: true,
+      numNewNotifications: 0,
       expires: new Date().getTime() + SESSION_MAX_AGE_MS,
     };
 }

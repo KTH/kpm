@@ -113,6 +113,30 @@
       vertical-align: middle;
       width: auto;
     }
+
+    .kpm-loading {
+      opacity: 0.8;
+      filter: blur(1px);
+    }
+    .kpm-has-new-notices {
+      .kpm-notice-new {
+        background: var(--kpmAlertBg);
+        border-radius: 0.6em;
+        color: var(--kpmMenuHoverText);
+        display: block;
+        font-size: 0.4em;
+        line-height: 100%;
+        min-width: 1.4em;
+        padding: 0.2em;
+        position: absolute;
+        right: -0.3em;
+        text-align: center;
+        top: 0;
+      }
+      .kpm-notice-new-trail {
+        display: none;
+      }
+    }
   }
 }
 
