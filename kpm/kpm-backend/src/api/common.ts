@@ -122,7 +122,7 @@ export type TKoppsRoundInTerm = {
   lastTuitionDate: string; // "YYYY-MM-DD"
 };
 
-const __EMPTY_MATCH__ = {
+const __EMPTY_MATCH__: TKoppsCourseInfo = {
   title: { sv: "-", en: "-" },
   credits: 0,
   creditUnitAbbr: { sv: "-", en: "-" },
@@ -133,14 +133,42 @@ export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
   try {
-    const cachedValue = getCachedValue<TKoppsCourseInfo>(course_code);
-    if (cachedValue) return cachedValue;
+    const val = await __CACHED_VALUE__<TKoppsCourseInfo>(
+      course_code,
+      async () => {
+        // If there is a cache miss, we fetch the data from source
+        const koppsData: TKoppsCourseRoundTerms | undefined = await got
+          .get<TKoppsCourseRoundTerms>(
+            `${KOPPS_API}/course/${course_code}/courseroundterms`,
+            {
+              responseType: "json",
+            }
+          )
+          .then((r) => r.body);
 
-    const newValue = await fetchInfoObjectFromKopps(course_code);
+        if (koppsData === undefined) {
+          return undefined;
+        }
 
-    if (newValue) setCachedValue(course_code, newValue);
+        const { title, credits, creditUnitAbbr } = koppsData.course;
 
-    return newValue;
+        const info: TKoppsCourseInfo = {
+          title,
+          credits,
+          creditUnitAbbr,
+          rounds: {},
+        };
+
+        for (let { term, rounds } of koppsData.termsWithCourseRounds) {
+          // TODO: Shave off unused parts of rounds?
+          info.rounds[term] = rounds;
+        }
+
+        return info;
+      }
+    );
+
+    return val ?? __EMPTY_MATCH__;
   } catch (err: any) {
     // TODO: We should create EndpointError and let frontend handle fallback
     //  log.error(err, `Failed to get kopps data for ${course_code}`);
@@ -150,37 +178,6 @@ export async function getCourseInfo(
     // give kopps a chance to start if it's broken?
     return __EMPTY_MATCH__;
   }
-}
-
-async function fetchInfoObjectFromKopps(courseCode: string) {
-  const koppsData: TKoppsCourseRoundTerms | undefined = await got
-    .get<TKoppsCourseRoundTerms>(
-      `${KOPPS_API}/course/${courseCode}/courseroundterms`,
-      {
-        responseType: "json",
-      }
-    )
-    .then((r) => r.body);
-
-  if (koppsData === undefined) {
-    return __EMPTY_MATCH__;
-  }
-
-  const { title, credits, creditUnitAbbr } = koppsData.course;
-
-  const info: TKoppsCourseInfo = {
-    title,
-    credits,
-    creditUnitAbbr,
-    rounds: {},
-  };
-
-  for (let { term, rounds } of koppsData.termsWithCourseRounds) {
-    // TODO: Shave off unused parts of rounds?
-    info.rounds[term] = rounds;
-  }
-
-  return info;
 }
 
 /**
@@ -202,7 +199,22 @@ const kopps_cache = hasRedis
   : new NodeCache({ stdTTL: KOPPS_CACHE_TTL_SECS, useClones: false });
 
 type TCacheable = object | string;
-async function setCachedValue<T extends TCacheable>(key: string, value: T) {
+
+async function __CACHED_VALUE__<T extends TCacheable>(
+  key: string,
+  fn: () => Promise<T | undefined>
+): Promise<T | undefined> {
+  const cachedValue = _getCachedValue<T>(key);
+  if (cachedValue) return cachedValue;
+
+  const newValue = await fn();
+
+  if (newValue) _setCachedValue(key, newValue);
+
+  return newValue;
+}
+
+async function _setCachedValue<T extends TCacheable>(key: string, value: T) {
   if (hasRedis) {
     await redisClient?.set(key, JSON.stringify(value), {
       EX: KOPPS_CACHE_TTL_SECS,
@@ -212,7 +224,9 @@ async function setCachedValue<T extends TCacheable>(key: string, value: T) {
   }
 }
 
-async function getCachedValue<T extends TCacheable>(key: string) {
+async function _getCachedValue<T extends TCacheable>(
+  key: string
+): Promise<T | undefined> {
   const cachedValue: T | string | null | undefined = hasRedis
     ? await redisClient?.get(key)
     : kopps_cache?.get<T>(key);
