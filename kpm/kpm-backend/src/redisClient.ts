@@ -20,6 +20,12 @@ export enum REDIS_DB_NAMES {
   KOPPS = 1,
 }
 
+/**
+ * Fetch a node-redis Client compatible with connect-redis. Uses node-redis v4
+ * because connect-redis requires legacy v3 support at the moment.
+ * @param databaseName
+ * @returns RedisClientType
+ */
 export function getRedisClientForConnect(databaseName: REDIS_DB_NAMES) {
   // connect-redis currently only supports v3 of Redis
   // so it is compatible with ioredis. If this changes
@@ -28,6 +34,11 @@ export function getRedisClientForConnect(databaseName: REDIS_DB_NAMES) {
   return _getRedisClient(databaseName, true);
 }
 
+/**
+ * Fetch a general Redis Client with promise support. Uses node-redis v4.
+ * @param databaseName
+ * @returns RedisClientType
+ */
 export function getRedisClient(databaseName: REDIS_DB_NAMES) {
   // Return the v4 node-redis client
   return _getRedisClient(databaseName, false);
