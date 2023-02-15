@@ -131,6 +131,9 @@ export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
   try {
+    // The standard ttl is given in seconds, I guess anything between 12
+    // and 48 hours should be ok, maybe avoid purging stuff at the same
+    // time every day by using 40 hours.
     const val = await __CACHED_VALUE__<TKoppsCourseInfo>(
       course_code,
       KOPPS_CACHE_TTL_SECS,
