@@ -19,6 +19,7 @@ const MY_CANVAS_ROOMS_API_URI =
   "http://localhost:3001/kpm/canvas-rooms";
 const SOCIAL_USER_API = process.env.SOCIAL_USER_URI;
 const SOCIAL_KEY = process.env.SOCIAL_KEY;
+const KOPPS_CACHE_TTL_SECS = 40 * 3600;
 
 function optSessionUser(session: SessionData): TSessionUser | undefined {
   return session.user || getFakeUserForDevelopment();
@@ -132,6 +133,7 @@ export async function getCourseInfo(
   try {
     const val = await __CACHED_VALUE__<TKoppsCourseInfo>(
       course_code,
+      KOPPS_CACHE_TTL_SECS,
       async () => {
         // If there is a cache miss, we fetch the data from source
         const koppsData: TKoppsCourseRoundTerms | undefined = await got
