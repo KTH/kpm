@@ -10,7 +10,7 @@ import {
   TSessionUser,
 } from "kpm-backend-interface";
 import { MutedAuthError } from "kpm-api-common/src/errors";
-import { StringKeyCache } from "./commonCache";
+import { memoized } from "./commonCache";
 import { REDIS_DB_NAMES } from "../redisClient";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
@@ -128,7 +128,7 @@ const __EMPTY_MATCH__: TKoppsCourseInfo = {
   rounds: {},
 };
 
-const _memoizedGetCourseInfo = new StringKeyCache<TKoppsCourseInfo>({
+export const getCourseInfo = memoized<TKoppsCourseInfo>({
   dbName: REDIS_DB_NAMES.KOPPS,
   ttlSecs: KOPPS_CACHE_TTL_SECS,
   fallbackValue: __EMPTY_MATCH__,
@@ -164,5 +164,3 @@ const _memoizedGetCourseInfo = new StringKeyCache<TKoppsCourseInfo>({
     return info;
   },
 });
-
-export const getCourseInfo = _memoizedGetCourseInfo.cached;

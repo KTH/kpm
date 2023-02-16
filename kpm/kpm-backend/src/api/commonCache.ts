@@ -20,83 +20,83 @@ const nodeCacheInstances: Record<number, NodeCache> = {};
  * values in Redis if env var REDIS_HOST is set, otherwise uses
  * in memory storage NodeCache.
  */
-export class StringKeyCache<T extends TCacheable> {
-  _dbName: number;
-  _ttlSecs: number;
-  _fallbackValue: T | undefined;
-  _isRedis?: boolean;
-  _redisClient: RedisClientType | undefined;
-  _nodeCache: NodeCache | undefined;
-  _fn: (key: string) => Promise<T | null | undefined>;
+/**
+ * Create a key/val cache to memoize expensive calls.
+ * @param dbName Choose one of enum REDIS_DB_NAMES
+ * @param ttlSecs TTL in seconds
+ * @param fallbackValue a value to return if we don't get a result
+ * @param fn async function to create a new value on cache miss
+ */
+export function memoized<T extends TCacheable>({
+  dbName,
+  ttlSecs,
+  fallbackValue = undefined,
+  fn,
+}: TStringKeyCacheProps<T>) {
+  let redisClient: RedisClientType | undefined;
+  let nodeCache: NodeCache | undefined;
 
-  /**
-   * Create a key/val cache to memoize expensive calls.
-   * @param dbName Choose one of enum REDIS_DB_NAMES
-   * @param ttlSecs TTL in seconds
-   */
-  constructor({
-    dbName,
-    ttlSecs,
-    fallbackValue = undefined,
-    fn,
-  }: TStringKeyCacheProps<T>) {
-    this._dbName = dbName;
-    this._ttlSecs = ttlSecs;
-    this._fallbackValue = fallbackValue;
-    this._isRedis = hasRedis;
-    this._fn = fn;
-
-    if (hasRedis) {
-      if (redisClientInstances[dbName] === undefined) {
-        const tmp = getRedisClient(dbName);
-        if (tmp !== undefined) {
-          redisClientInstances[dbName] = tmp;
-        }
+  // Initialize
+  if (hasRedis) {
+    if (redisClientInstances[dbName] === undefined) {
+      const tmp = getRedisClient(dbName);
+      if (tmp !== undefined) {
+        redisClientInstances[dbName] = tmp;
       }
-      this._redisClient = redisClientInstances[dbName];
     }
-
-    // Fall back to NodeCache in memory cache
-    if (this._redisClient === undefined) {
-      if (nodeCacheInstances[dbName] === undefined) {
-        nodeCacheInstances[dbName] = new NodeCache({ useClones: false });
-      }
-      this._nodeCache = nodeCacheInstances[dbName];
-    }
+    redisClient = redisClientInstances[dbName];
   }
 
-  async cached(key: string): Promise<T | null | undefined> {
-    const cachedValue = await this._getCachedValue<T>(key);
-    if (cachedValue !== undefined) return cachedValue;
+  // Fall back to NodeCache in memory cache
+  if (redisClient === undefined) {
+    if (nodeCacheInstances[dbName] === undefined) {
+      nodeCacheInstances[dbName] = new NodeCache({ useClones: false });
+    }
+    nodeCache = nodeCacheInstances[dbName];
+  }
+
+  // The getter function
+  return async (key: string): Promise<T | null | undefined> => {
+    const cachedValue = await _getCachedValue<T>(key, redisClient, nodeCache);
+    if (cachedValue !== undefined && cachedValue !== null) return cachedValue;
 
     // Cache miss, calculate value, store and return
-    let newValue;
+    let newValue: T | null | undefined;
     try {
-      newValue = await this._fn(key);
+      newValue = await fn(key);
     } catch (err) {
       // TODO: Should we throw an error instead?
     }
-    if (newValue !== undefined) this._setCachedValue(key, newValue);
-    return newValue ?? this._fallbackValue;
+    if (newValue !== undefined && newValue !== null)
+      _setCachedValue<T>(key, newValue, ttlSecs, redisClient, nodeCache);
+    return newValue ?? fallbackValue;
+  };
+}
+
+async function _setCachedValue<T extends TCacheable>(
+  key: string,
+  value: T | null,
+  ttlSecs: number,
+  redisClient: RedisClientType | undefined,
+  nodeCache: NodeCache | undefined
+) {
+  if (redisClient !== undefined) {
+    return await redisClient?.set(key, JSON.stringify(value), {
+      EX: ttlSecs,
+    });
   }
 
-  async _setCachedValue<T extends TCacheable>(key: string, value: T) {
-    if (this._isRedis) {
-      return await this._redisClient?.set(key, JSON.stringify(value), {
-        EX: this._ttlSecs,
-      });
-    }
+  nodeCache?.set(key, value, ttlSecs);
+}
 
-    this._nodeCache?.set(key, value, this._ttlSecs);
+async function _getCachedValue<T>(
+  key: string,
+  redisClient: RedisClientType | undefined,
+  nodeCache: NodeCache | undefined
+): Promise<T | null | undefined> {
+  if (redisClient !== undefined) {
+    const tmp = await redisClient?.get(key);
+    return typeof tmp === "string" ? JSON.parse(tmp) : tmp;
   }
-
-  async _getCachedValue<T extends TCacheable>(
-    key: string
-  ): Promise<T | null | undefined> {
-    if (this._isRedis) {
-      const tmp = await this._redisClient?.get(key);
-      return typeof tmp === "string" ? JSON.parse(tmp) : tmp;
-    }
-    return this._nodeCache?.get<T>(key);
-  }
+  return nodeCache?.get<T>(key);
 }
