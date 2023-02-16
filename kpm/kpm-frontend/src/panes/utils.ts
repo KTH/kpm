@@ -74,6 +74,23 @@ export function formatTerm(startTerm: string) {
   return `${termStr && i18n(termStr)}${shortYear}`;
 }
 
+export async function postApi(
+  path: string,
+  json: any,
+  options: RequestInit = {}
+): Promise<Response> {
+  const { headers, ...otherOptions } = options;
+  return await fetchApi(path, {
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    method: "post",
+    body: JSON.stringify(json),
+    ...otherOptions,
+  });
+}
+
 export async function fetchApi(
   path: string,
   options: RequestInit = {}

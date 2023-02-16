@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes } from "kpm-backend-interface";
-import { fetchApi, useDataFecther } from "./utils";
+import { fetchApi, postApi, useDataFecther } from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -73,13 +73,10 @@ export function useMutateProgrammes(res: APIProgrammes | undefined): {
     setProgrammes(newProgrammes);
 
     if (didChange) {
-      const res = await fetchApi("/api/star", {
-        method: "post",
-        body: JSON.stringify({
-          kind: "program",
-          slug,
-          starred: value,
-        }),
+      const res = await postApi("/api/star", {
+        kind: "program",
+        slug,
+        starred: value,
       }).catch((err: any) => {
         // Expose error and reset groups
         setErrorSetStar(err);
