@@ -5,6 +5,13 @@ const hasRedis = !!process.env.REDIS_HOST;
 
 type TCacheable = object | string | null;
 
+type TStringKeyCacheProps<T extends TCacheable> = {
+  dbName: number;
+  ttlSecs: number;
+  fallbackValue: T | undefined;
+  fn: (key: string) => Promise<T | null | undefined>;
+};
+
 const redisClientInstances: Record<number, RedisClientType> = {};
 const nodeCacheInstances: Record<number, NodeCache> = {};
 
@@ -13,22 +20,31 @@ const nodeCacheInstances: Record<number, NodeCache> = {};
  * values in Redis if env var REDIS_HOST is set, otherwise uses
  * in memory storage NodeCache.
  */
-export class StringKeyCache {
+export class StringKeyCache<T extends TCacheable> {
   _dbName: number;
   _ttlSecs: number;
+  _fallbackValue: T | undefined;
   _isRedis?: boolean;
   _redisClient: RedisClientType | undefined;
   _nodeCache: NodeCache | undefined;
+  _fn: (key: string) => Promise<T | null | undefined>;
 
   /**
    * Create a key/val cache to memoize expensive calls.
    * @param dbName Choose one of enum REDIS_DB_NAMES
    * @param ttlSecs TTL in seconds
    */
-  constructor(dbName: number, ttlSecs: number) {
+  constructor({
+    dbName,
+    ttlSecs,
+    fallbackValue = undefined,
+    fn,
+  }: TStringKeyCacheProps<T>) {
     this._dbName = dbName;
     this._ttlSecs = ttlSecs;
+    this._fallbackValue = fallbackValue;
     this._isRedis = hasRedis;
+    this._fn = fn;
 
     if (hasRedis) {
       if (redisClientInstances[dbName] === undefined) {
@@ -49,17 +65,19 @@ export class StringKeyCache {
     }
   }
 
-  async cache<T extends TCacheable>(
-    key: string,
-    fn: () => Promise<T | null | undefined>
-  ): Promise<T | null | undefined> {
+  async cached(key: string): Promise<T | null | undefined> {
     const cachedValue = await this._getCachedValue<T>(key);
     if (cachedValue !== undefined) return cachedValue;
 
     // Cache miss, calculate value, store and return
-    const newValue = await fn();
+    let newValue;
+    try {
+      newValue = await this._fn(key);
+    } catch (err) {
+      // TODO: Should we throw an error instead?
+    }
     if (newValue !== undefined) this._setCachedValue(key, newValue);
-    return newValue;
+    return newValue ?? this._fallbackValue;
   }
 
   async _setCachedValue<T extends TCacheable>(key: string, value: T) {

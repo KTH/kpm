@@ -128,58 +128,41 @@ const __EMPTY_MATCH__: TKoppsCourseInfo = {
   rounds: {},
 };
 
-const memoizer = new StringKeyCache(REDIS_DB_NAMES.KOPPS, KOPPS_CACHE_TTL_SECS);
-
-export async function getCourseInfo(
-  course_code: TCourseCode
-): Promise<TKoppsCourseInfo> {
-  try {
-    // The standard ttl is given in seconds, I guess anything between 12
-    // and 48 hours should be ok, maybe avoid purging stuff at the same
-    // time every day by using 40 hours.
-    const val = await memoizer.cache<TKoppsCourseInfo>(
-      course_code,
-      async () => {
-        // If there is a cache miss, we fetch the data from source
-        const koppsData: TKoppsCourseRoundTerms | undefined = await got
-          .get<TKoppsCourseRoundTerms>(
-            `${KOPPS_API}/course/${course_code}/courseroundterms`,
-            {
-              responseType: "json",
-            }
-          )
-          .then((r) => r.body);
-
-        if (koppsData === undefined) {
-          return undefined;
+const _memoizedGetCourseInfo = new StringKeyCache<TKoppsCourseInfo>({
+  dbName: REDIS_DB_NAMES.KOPPS,
+  ttlSecs: KOPPS_CACHE_TTL_SECS,
+  fallbackValue: __EMPTY_MATCH__,
+  async fn(course_code: string) {
+    // If there is a cache miss, we fetch the data from source
+    const koppsData: TKoppsCourseRoundTerms | undefined = await got
+      .get<TKoppsCourseRoundTerms>(
+        `${KOPPS_API}/course/${course_code}/courseroundterms`,
+        {
+          responseType: "json",
         }
+      )
+      .then((r) => r.body);
 
-        const { title, credits, creditUnitAbbr } = koppsData.course;
+    if (koppsData === undefined) {
+      return undefined;
+    }
 
-        const info: TKoppsCourseInfo = {
-          title,
-          credits,
-          creditUnitAbbr,
-          rounds: {},
-        };
+    const { title, credits, creditUnitAbbr } = koppsData.course;
 
-        for (let { term, rounds } of koppsData.termsWithCourseRounds) {
-          // TODO: Shave off unused parts of rounds?
-          info.rounds[term] = rounds;
-        }
+    const info: TKoppsCourseInfo = {
+      title,
+      credits,
+      creditUnitAbbr,
+      rounds: {},
+    };
 
-        return info;
-      }
-    );
+    for (let { term, rounds } of koppsData.termsWithCourseRounds) {
+      // TODO: Shave off unused parts of rounds?
+      info.rounds[term] = rounds;
+    }
 
-    return val ?? __EMPTY_MATCH__;
-  } catch (err: any) {
-    // TODO: We should create EndpointError and let frontend handle fallback
-    //  log.error(err, `Failed to get kopps data for ${course_code}`);
+    return info;
+  },
+});
 
-    // Ugly but type-correct fallback, so things don't crash.
-    // This is not cached!  Or should we cache it for a few minutes to
-    // give kopps a chance to start if it's broken?
-    return __EMPTY_MATCH__;
-  }
-}
+export const getCourseInfo = _memoizedGetCourseInfo.cached;
