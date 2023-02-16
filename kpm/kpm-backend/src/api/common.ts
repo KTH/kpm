@@ -10,7 +10,8 @@ import {
   TSessionUser,
 } from "kpm-backend-interface";
 import { MutedAuthError } from "kpm-api-common/src/errors";
-import { __CACHED_VALUE__ } from "./commonCache";
+import { StringKeyCache } from "./commonCache";
+import { REDIS_DB_NAMES } from "../redisClient";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 const KOPPS_API = "https://api.kth.se/api/kopps/v2";
@@ -127,6 +128,8 @@ const __EMPTY_MATCH__: TKoppsCourseInfo = {
   rounds: {},
 };
 
+const memoizer = new StringKeyCache(REDIS_DB_NAMES.KOPPS, KOPPS_CACHE_TTL_SECS);
+
 export async function getCourseInfo(
   course_code: TCourseCode
 ): Promise<TKoppsCourseInfo> {
@@ -134,9 +137,8 @@ export async function getCourseInfo(
     // The standard ttl is given in seconds, I guess anything between 12
     // and 48 hours should be ok, maybe avoid purging stuff at the same
     // time every day by using 40 hours.
-    const val = await __CACHED_VALUE__<TKoppsCourseInfo>(
+    const val = await memoizer.cache<TKoppsCourseInfo>(
       course_code,
-      KOPPS_CACHE_TTL_SECS,
       async () => {
         // If there is a cache miss, we fetch the data from source
         const koppsData: TKoppsCourseRoundTerms | undefined = await got
