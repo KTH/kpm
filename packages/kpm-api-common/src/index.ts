@@ -27,7 +27,12 @@ export function errorHandler(
   next: NextFunction
 ) {
   let statusCode: number;
-  let name: "EndpointError" | "AuthError" | "RecoverableError" | "Error";
+  let name:
+    | "EndpointError"
+    | "AuthError"
+    | "RecoverableError"
+    | "CorsError"
+    | "Error";
   let type: string | undefined;
   let message: string;
   let details: string | null | undefined;
