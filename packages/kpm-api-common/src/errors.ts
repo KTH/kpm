@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
  *
  * Use generic T to define the different error types you have. This helps enforcing complete error handling.
  */
-type TErrorName = "EndpointError" | "AuthError";
+type TErrorName = "EndpointError" | "AuthError" | "CorsError";
 type TOperationalError<ErrType> = {
   name: TErrorName;
   statusCode: number;

@@ -13,6 +13,8 @@ import log from "skog";
 import { widgetJsHandler, widgetJsAssets, previewHandler } from "./widget.js";
 import cors from "cors";
 import { activation } from "./activation";
+import { MutedOperationalError } from "kpm-api-common/src/errors";
+import { TCorsError } from "kpm-backend-interface";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
@@ -26,6 +28,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 app.use(cookieParserMiddleware);
 app.use(loggingHandler);
+
+class CorsError extends MutedOperationalError<TCorsError> {
+  constructor({
+    message,
+    type,
+    details = undefined,
+    err = undefined,
+  }: {
+    message: string;
+    type: TCorsError;
+    details?: any;
+    err?: Error;
+  }) {
+    super({
+      name: "CorsError",
+      statusCode: 403,
+      type,
+      message,
+      details,
+      err,
+    });
+  }
+}
 
 let corsWhitelist: string[] = [];
 if (IS_STAGE) {
@@ -110,7 +135,13 @@ if (!IS_DEV) {
         if (!origin || corsWhitelist.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
-          callback(new Error(`Not allowed by CORS (origin: ${origin})`));
+          callback(
+            new CorsError({
+              message: `Not allowed by CORS (origin: ${origin})`,
+              type: "InvalidOrigin",
+              details: { origin },
+            })
+          );
         }
       },
       credentials: true,
