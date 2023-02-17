@@ -141,7 +141,10 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
           responseType: "json",
         }
       )
-      .then((r) => r.body);
+
+      .then((r) =>
+        r.statusCode >= 200 && r.statusCode < 300 ? r.body : undefined
+      );
 
     if (koppsData === undefined) {
       return undefined;
