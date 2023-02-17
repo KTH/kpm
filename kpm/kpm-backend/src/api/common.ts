@@ -146,7 +146,7 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
         r.statusCode >= 200 && r.statusCode < 300 ? r.body : undefined
       );
 
-    if (koppsData === undefined) {
+    if (koppsData === undefined || koppsData === null) {
       return undefined;
     }
 

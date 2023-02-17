@@ -4,13 +4,13 @@ import log from "skog-pino";
 import { getRedisClient, REDIS_DB_NAMES } from "../redisClient";
 const hasRedis = !!process.env.REDIS_HOST;
 
-type TCacheable = object | string | null;
+type TCacheable = object | string;
 
 type TStringKeyCacheProps<T extends TCacheable> = {
   dbName: number;
   ttlSecs: number;
   fallbackValue: T | undefined;
-  fn: (key: string) => Promise<T | null | undefined>;
+  fn: (key: string) => Promise<T | undefined>;
 };
 
 const redisClientInstances: Record<number, RedisClientType> = {};
@@ -57,19 +57,19 @@ export function memoized<T extends TCacheable>({
   }
 
   // The getter function
-  return async (key: string): Promise<T | null | undefined> => {
+  return async (key: string): Promise<T | undefined> => {
     const cachedValue = await _getCachedValue<T>(key, redisClient, nodeCache);
     if (cachedValue !== undefined && cachedValue !== null) return cachedValue;
 
     // Cache miss, calculate value, store and return
-    let newValue: T | null | undefined;
+    let newValue: T | undefined;
     try {
       newValue = await fn(key);
     } catch (err: any) {
       Error.captureStackTrace(err);
       log.error(err, "Missing error handling in memoized function");
     }
-    if (newValue !== undefined && newValue !== null)
+    if (newValue !== undefined)
       _setCachedValue<T>(key, newValue, ttlSecs, redisClient, nodeCache);
     return newValue ?? fallbackValue;
   };
@@ -77,7 +77,7 @@ export function memoized<T extends TCacheable>({
 
 async function _setCachedValue<T extends TCacheable>(
   key: string,
-  value: T | null,
+  value: T,
   ttlSecs: number,
   redisClient: RedisClientType | undefined,
   nodeCache: NodeCache | undefined
@@ -95,7 +95,7 @@ async function _getCachedValue<T>(
   key: string,
   redisClient: RedisClientType | undefined,
   nodeCache: NodeCache | undefined
-): Promise<T | null | undefined> {
+): Promise<T | undefined> {
   if (redisClient !== undefined) {
     const tmp = await redisClient?.get(key);
     return typeof tmp === "string" ? JSON.parse(tmp) : tmp;
