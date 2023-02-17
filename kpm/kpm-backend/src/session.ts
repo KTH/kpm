@@ -1,8 +1,8 @@
 import expressSession from "express-session";
 import cookieParser from "cookie-parser";
 import connectRedis, { RedisStore } from "connect-redis";
-import { getRedisClient } from "./redisClient";
-import { APIMutedAuthErrType, APISession } from "kpm-backend-interface";
+import { getRedisClientForConnect, REDIS_DB_NAMES } from "./redisClient";
+import { APISession } from "kpm-backend-interface";
 import { Request, Response, NextFunction } from "express";
 import { sessionUser } from "./api/common";
 import { MutedAuthError } from "kpm-api-common/src/errors";
@@ -15,7 +15,7 @@ const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const IS_HTTPS = PROXY_HOST.startsWith("https:");
 export const SESSION_MAX_AGE_MS = 14 * 24 * 3600 * 1000;
 
-const redisClient = getRedisClient();
+const redisClient = getRedisClientForConnect(REDIS_DB_NAMES.SESSION);
 let redisStore: RedisStore | undefined = undefined;
 if (redisClient) {
   // Initialize session store
