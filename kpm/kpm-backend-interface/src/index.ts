@@ -1,5 +1,7 @@
 export type TGotErrType = "NotAvailable" | "BadResponse" | "TimeoutError";
 
+export type TCorsError = "InvalidOrigin";
+
 export type TSessionUser = {
   kthid: string;
   display_name: string;
