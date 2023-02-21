@@ -1,4 +1,3 @@
-import { RecoverableError } from "kpm-api-common/src/errors";
 import NodeCache from "node-cache";
 import { RedisClientType } from "redis";
 import log from "skog-pino";
@@ -16,8 +15,6 @@ type TStringKeyCacheProps<T extends TCacheable> = {
 
 const redisClientInstances: Record<number, RedisClientType> = {};
 const nodeCacheInstances: Record<number, NodeCache> = {};
-
-export type TMemoizerError = "Unhandled";
 
 /**
  * Allow memoizing values with string as lookup key. Stores cached
@@ -65,19 +62,12 @@ export function memoized<T extends TCacheable>({
     if (cachedValue !== undefined && cachedValue !== null) return cachedValue;
 
     // Cache miss, calculate value, store and return
-    let newValue: T | undefined;
-    try {
-      newValue = await fn(key);
-    } catch (err: any) {
-      Error.captureStackTrace(err);
+    const newValue: T | undefined = await fn(key).catch((err: any) => {
       err.details = { key };
-      const newErr = new RecoverableError<TMemoizerError>({
-        message: "Missing error handling in memoized function",
-        type: "Unhandled",
-        err,
-      });
-      log.error(newErr);
-    }
+      log.error(err);
+      return undefined;
+    });
+
     if (newValue !== undefined)
       _setCachedValue<T>(key, newValue, ttlSecs, redisClient, nodeCache);
     return newValue ?? fallbackValue;
