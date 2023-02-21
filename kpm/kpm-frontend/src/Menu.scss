@@ -18,7 +18,7 @@
   }
 
   li {
-    display: inline-block;
+    display: block;
     list-style: none;
     cursor: pointer;
 
@@ -121,17 +121,18 @@
     .kpm-has-new-notices {
       .kpm-notice-new {
         background: var(--kpmAlertBg);
-        border-radius: 0.6em;
+        border-radius: 1em;
         color: var(--kpmMenuHoverText);
         display: block;
         font-size: 0.4em;
         line-height: 100%;
         min-width: 1.4em;
-        padding: 0.2em;
+        padding: 0.3em;
         position: absolute;
-        right: -0.1em;
+        right: 0.2em;
         text-align: center;
-        top: 0;
+        top: 0.2em;
+        box-shadow: rgb(0 0 0 / 60%) 0px 0px 4px; // To pop a bit
       }
       .kpm-notice-new-trail {
         display: none;
