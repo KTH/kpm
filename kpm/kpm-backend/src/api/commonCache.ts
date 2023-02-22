@@ -63,7 +63,7 @@ export function memoized<T extends TCacheable>({
 
     // Cache miss, calculate value, store and return
     const newValue: T | undefined = await fn(key).catch((err: any) => {
-      err.details = { key };
+      err.details = { ...err.details, memoized_key: key };
       log.error(err);
       return undefined;
     });
