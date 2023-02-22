@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
 import { RedisClientType } from "redis";
 import log from "skog-pino";
-import { getRedisClient, REDIS_DB_NAMES } from "../redisClient";
+import { getRedisClient } from "../redisClient";
 const hasRedis = !!process.env.REDIS_HOST;
 
 type TCacheable = object | string;
@@ -62,13 +62,12 @@ export function memoized<T extends TCacheable>({
     if (cachedValue !== undefined && cachedValue !== null) return cachedValue;
 
     // Cache miss, calculate value, store and return
-    let newValue: T | undefined;
-    try {
-      newValue = await fn(key);
-    } catch (err: any) {
-      Error.captureStackTrace(err);
-      log.error(err, "Missing error handling in memoized function");
-    }
+    const newValue: T | undefined = await fn(key).catch((err: any) => {
+      err.details = { ...err.details, memoized_key: key };
+      log.error(err);
+      return undefined;
+    });
+
     if (newValue !== undefined)
       _setCachedValue<T>(key, newValue, ttlSecs, redisClient, nodeCache);
     return newValue ?? fallbackValue;
