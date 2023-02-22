@@ -1,4 +1,5 @@
 import { Router } from "express";
+import log from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
 import { AuthError, MutedAuthError } from "kpm-api-common/src/errors";
@@ -223,7 +224,7 @@ export function isValidSession(user?: TSessionUser): boolean {
 function createValidSesisonUser(claim: any): TSessionUser {
   // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
   if (!Array.isArray(claim.memberOf)) {
-    console.error(
+    log.error(
       `Unexpected value [claim.memberOf: ${claim.memberOf}] for username ${claim.username} (${claim.kthid})`
     );
   }
