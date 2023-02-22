@@ -3,6 +3,7 @@ import express from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_TEST = process.env.NODE_ENV === "test";
 
 const OAUTH_SERVER_BASE_URI =
   process.env.OAUTH_SERVER_BASE_URI || "https://login.ref.ug.kth.se/adfs";
@@ -119,7 +120,10 @@ export function teachingResult(data: TUgGroup[]): {
     });
   let courses: { [index: string]: Array<Role> } = {};
   for (const { course_code, ...role } of result) {
-    console.log(`Got course ${course_code} with roles ${role}`);
+    !IS_TEST &&
+      console.debug(
+        `Got course ${course_code} with roles ${JSON.stringify(role)}`
+      );
     if (courses[course_code]) {
       courses[course_code].push(role);
     } else {
