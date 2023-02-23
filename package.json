@@ -9,8 +9,6 @@
     "build-frontend": "npm run build --workspace=kpm-frontend",
     "postinstall": "npm exec --workspaces -c 'rm -f package-lock.json' && ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
     "test": "npm --silent test --workspaces --if-present",
-    "test:regression": "npm --silent run test:regression --workspaces --if-present",
-    "test:type-checking": "npm --silent run test:type-checking --workspaces --if-present",
     "release": "ts-node --esm node_modules/.bin/cellus-release apis/my-canvas-rooms-api apis/my-studies-api apis/my-teaching-api kpm",
     "/* ----------- */": "",
     "dev:my-canvas-rooms-api": "FORCE_COLOR=1 PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
