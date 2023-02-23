@@ -64,7 +64,7 @@ api.get("/user/:user", async (req, res, next) => {
           `users?$filter=kthid eq '${userName}'&$expand=memberOf`
         )
         .catch(ugClientGetErrorHandler)) || {};
-    console.log(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
+    // console.debug(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
 
     if (json === undefined || statusCode !== 200) {
       if (IS_DEV) {
@@ -119,7 +119,6 @@ export function teachingResult(data: TUgGroup[]): {
     });
   let courses: { [index: string]: Array<Role> } = {};
   for (const { course_code, ...role } of result) {
-    console.log(`Got course ${course_code} with roles ${role}`);
     if (courses[course_code]) {
       courses[course_code].push(role);
     } else {

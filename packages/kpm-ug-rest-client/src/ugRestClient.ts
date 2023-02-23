@@ -97,7 +97,7 @@ export class UGRestClient {
       client_id: this._clientId,
       client_secret: this._clientSecret,
     });
-    console.log(`Time to create UGRestClient: ${Date.now() - perf1}ms`);
+    // console.debug(`Time to create UGRestClient: ${Date.now() - perf1}ms`);
 
     return this._client;
   }

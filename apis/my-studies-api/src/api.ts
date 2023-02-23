@@ -71,7 +71,7 @@ api.get(
             `users?$filter=kthid eq '${userName}'&$expand=memberOf`
           )
           .catch(ugClientGetErrorHandler)) || {};
-      console.log(`Exec time: ${Date.now() - perf1}ms`);
+      // console.debug(`Exec time: ${Date.now() - perf1}ms`);
 
       if (json === undefined || statusCode !== 200) {
         if (IS_DEV) {

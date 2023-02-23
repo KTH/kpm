@@ -336,12 +336,6 @@ function getExamRoomByOldFormat(
   }
   if (course_codes.size > 0) {
     return { course_codes, link_meta_data };
-  } else {
-    console.log(`Unmatched AKT room ${canvas_data.id}: ${canvas_data.name} `);
-    for (const section of sections) {
-      console.log("  -", section);
-    }
-    console.log(JSON.stringify(canvas_data));
   }
 }
 
