@@ -1,5 +1,5 @@
 import { Router } from "express";
-import log from "skog";
+import log, { runWithSkog } from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
 import { AuthError, MutedAuthError } from "kpm-api-common/src/errors";
@@ -189,7 +189,14 @@ export function requiresValidSessionUser(
 
     throwIfNotValidSession(req.session.user);
 
-    next();
+    // runWithSkog calls next()
+    runWithSkog(
+      {
+        username: req.session.user?.username,
+        kthid: req.session.user?.kthid,
+      },
+      next as () => unknown
+    );
   } catch (err) {
     return next(err);
   }
