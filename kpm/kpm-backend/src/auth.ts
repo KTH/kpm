@@ -229,8 +229,8 @@ export function isValidSession(user?: TSessionUser): boolean {
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
-  // TODO: Be a bit more picky and log detailed error if claim doesn't contain what we need
-  if (!Array.isArray(claim.memberOf)) {
+  // Undefined is a valid value for claim.memberOf if no memberships exist
+  if (claim.memberOf !== undefined && !Array.isArray(claim.memberOf)) {
     log.error(
       `Unexpected value [claim.memberOf: ${claim.memberOf}] for username ${claim.username} (${claim.kthid})`
     );
