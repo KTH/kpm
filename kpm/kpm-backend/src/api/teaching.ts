@@ -70,9 +70,9 @@ export async function teachingApiHandler(
       };
     }
 
-    // Sort courses alphabetically by course code
+    // Sort courses alphabetically by key (course_code)
     const tmp = Object.entries(courses).sort(
-      (a, b) => (a < b && -1) || (a > b && 1) || 0
+      ([a], [b]) => (a < b && -1) || (a > b && 1) || 0
     );
     courses = Object.fromEntries(tmp);
 
