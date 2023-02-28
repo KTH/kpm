@@ -70,6 +70,12 @@ export async function teachingApiHandler(
       };
     }
 
+    // Sort courses alphabetically by key (course_code)
+    const tmp = Object.entries(courses).sort(
+      ([a], [b]) => (a < b && -1) || (a > b && 1) || 0
+    );
+    courses = Object.fromEntries(tmp);
+
     res.send({ courses });
   } catch (err) {
     next(err);
