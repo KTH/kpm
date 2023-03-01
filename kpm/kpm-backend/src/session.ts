@@ -65,9 +65,12 @@ export async function sessionApiHandler(
   try {
     const user = sessionUser(req.session);
     if (user) {
-      let notes = await getSocial<NumNotes>(user, "notifications/count").catch(
-        socialErr
-      );
+      const lang = req.headers["accept-language"];
+      let notes = await getSocial<NumNotes>(
+        user,
+        "notifications/count",
+        lang
+      ).catch(socialErr);
       logger.info({ notes, kthid: user.kthid }, "Notes according to social");
       user.numNewNotifications = notes?.new;
     }

@@ -44,12 +44,14 @@ export function sessionUser(session: SessionData): TSessionUser {
 
 export async function getSocial<T>(
   user: TSessionUser,
-  endpoint: string
+  endpoint: string,
+  language: string | undefined
 ): Promise<T> {
   return await got
     .get<T>(`${SOCIAL_USER_API}/${user.kthid}/${endpoint}.json`, {
       headers: {
         authorization: SOCIAL_KEY,
+        "Accept-Language": language || "en",
       },
       responseType: "json",
     })

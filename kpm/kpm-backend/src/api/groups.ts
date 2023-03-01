@@ -10,7 +10,10 @@ export async function groupsApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<APIGroups>(user, "groups").catch(socialErr);
+    const lang = req.headers["accept-language"];
+    const data = await getSocial<APIGroups>(user, "groups", lang).catch(
+      socialErr
+    );
     res.send(data!);
   } catch (err) {
     next(err);
