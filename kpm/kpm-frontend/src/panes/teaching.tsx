@@ -76,7 +76,7 @@ function Course({ courseCode, course }: TCourseProps) {
     exams = [],
     other = [],
   } = course.rooms ? filterCanvasRooms(course.rooms) : {};
-  const currentTerm = "HT2022";
+  const currentTerm = getCurrentTerm();
 
   return (
     <div className="kpm-teaching-course">
@@ -256,6 +256,13 @@ export function CanvasRoomLink({
       {startTerm && formatTerm(startTerm)} {`(${code || type || "?"})`}
     </a>
   );
+}
+
+function getCurrentTerm() {
+  const today = new Date();
+  const term = today.getMonth() <= 6 /* July */ ? "VT" : "HT";
+  const year = today.getFullYear();
+  return term + year;
 }
 
 function filterCanvasRooms(rooms: TCanvasRoom[]): {
