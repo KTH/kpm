@@ -286,7 +286,7 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
   if (hasFavourite) {
     return {
       current: rooms.filter((c) => c.favorite),
-      other: rooms.filter((c) => !c.favorite),
+      other: courseRooms,
       exams,
     };
   }
@@ -309,7 +309,7 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
 
   return {
     current: courseRooms.slice(0, 3),
-    other: courseRooms.slice(3),
+    other: courseRooms,
     exams,
   };
 }
