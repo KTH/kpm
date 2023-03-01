@@ -263,6 +263,8 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
   other: TCanvasRoom[];
   exams: TCanvasRoom[];
 } {
+  const hasFavourite = rooms.some((p) => p.favorite);
+
   rooms.sort((a: TCanvasRoom, b: TCanvasRoom) => {
     const aVal = parseInt(a.startTerm || "0");
     const bVal = parseInt(b.startTerm || "0");
@@ -273,6 +275,14 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
 
   const exams = rooms.filter((c: TCanvasRoom) => c.type === "exam");
   const courseRooms = rooms.filter((c: TCanvasRoom) => c.type !== "exam");
+
+  if (hasFavourite) {
+    return {
+      current: rooms.filter((c) => c.favorite),
+      other: rooms.filter((c) => !c.favorite),
+      exams,
+    };
+  }
 
   if (courseRooms.length <= 4) {
     return {
