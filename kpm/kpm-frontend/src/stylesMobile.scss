@@ -1,4 +1,4 @@
-@import "./vars";
+@use "./vars" as *;
 
 @media #{$desktopBreakpoint} {
   #kpm-6cf53 .kpm-mobile {

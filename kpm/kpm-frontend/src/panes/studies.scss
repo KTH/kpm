@@ -1,4 +1,4 @@
-@import "../vars";
+@use "../vars" as *;
 
 #kpm-6cf53 .kpm-studies {
   $rowGap: calc(4 * var(--kpmGap));
