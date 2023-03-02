@@ -72,11 +72,11 @@ function Course({ courseCode, course }: TCourseProps) {
   const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
   const {
-    current = [],
+    shortList = [],
     exams = [],
-    other = [],
+    allCourseRooms = [],
   } = course.rooms ? filterCanvasRooms(course.rooms) : {};
-  const currentTerm = "HT2022";
+  const currentTerm = getCurrentTerm();
 
   return (
     <div className="kpm-teaching-course">
@@ -98,9 +98,9 @@ function Course({ courseCode, course }: TCourseProps) {
           {course.rooms?.length === 0 && (
             <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
           )}
-          <CanvasRoomShortList rooms={current} />
+          <CanvasRoomShortList rooms={shortList} />
           <CanvasRoomExpandedList
-            rooms={[...current, ...other]}
+            rooms={allCourseRooms}
             title={i18n("Alla kursrum")}
           />
           <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
@@ -258,11 +258,20 @@ export function CanvasRoomLink({
   );
 }
 
+function getCurrentTerm() {
+  const today = new Date();
+  const term = today.getMonth() <= 6 /* July */ ? "VT" : "HT";
+  const year = today.getFullYear();
+  return term + year;
+}
+
 function filterCanvasRooms(rooms: TCanvasRoom[]): {
-  current: TCanvasRoom[];
-  other: TCanvasRoom[];
+  shortList: TCanvasRoom[];
+  allCourseRooms: TCanvasRoom[];
   exams: TCanvasRoom[];
 } {
+  const hasFavourite = rooms.some((p) => p.favorite);
+
   rooms.sort((a: TCanvasRoom, b: TCanvasRoom) => {
     const aVal = parseInt(a.startTerm || "0");
     const bVal = parseInt(b.startTerm || "0");
@@ -274,25 +283,33 @@ function filterCanvasRooms(rooms: TCanvasRoom[]): {
   const exams = rooms.filter((c: TCanvasRoom) => c.type === "exam");
   const courseRooms = rooms.filter((c: TCanvasRoom) => c.type !== "exam");
 
+  if (hasFavourite) {
+    return {
+      shortList: rooms.filter((c) => c.favorite),
+      allCourseRooms: courseRooms,
+      exams,
+    };
+  }
+
   if (courseRooms.length <= 4) {
     return {
-      current: courseRooms,
-      other: [],
+      shortList: courseRooms,
+      allCourseRooms: [],
       exams,
     };
   }
 
   if (courseRooms.length === 0) {
     return {
-      current: [],
-      other: [],
+      shortList: [],
+      allCourseRooms: [],
       exams,
     };
   }
 
   return {
-    current: courseRooms.slice(0, 3),
-    other: courseRooms.slice(3),
+    shortList: courseRooms.slice(0, 3),
+    allCourseRooms: courseRooms,
     exams,
   };
 }
