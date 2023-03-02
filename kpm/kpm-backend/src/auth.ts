@@ -229,6 +229,11 @@ export function isValidSession(user?: TSessionUser): boolean {
 }
 
 function createValidSesisonUser(claim: any): TSessionUser {
+  // Single values are returned as a string but we expect an array
+  if (typeof claim.memberOf === "string") {
+    claim.memberOf = [claim.memberOf];
+  }
+
   // Undefined is a valid value for claim.memberOf if no memberships exist
   if (claim.memberOf !== undefined && !Array.isArray(claim.memberOf)) {
     log.error(
