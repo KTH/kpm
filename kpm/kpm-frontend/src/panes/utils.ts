@@ -100,6 +100,7 @@ export async function fetchApi(
     credentials: "include",
     headers: {
       Accept: "application/json",
+      "Accept-Language": window.__kpmSettings__?.["lang"] || "en",
       ...headers,
     },
     ...otherOptions,

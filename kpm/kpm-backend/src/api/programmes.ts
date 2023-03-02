@@ -10,7 +10,8 @@ export async function programmesApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
-    const data = await getSocial<APIProgrammes>(user, "programmes").catch(
+    const lang = req.headers["accept-language"];
+    const data = await getSocial<APIProgrammes>(user, "programmes", lang).catch(
       socialErr
     );
     res.send(data!);

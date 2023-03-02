@@ -116,7 +116,7 @@ export function Services() {
                   {studentlinks?.map((link) => (
                     <li key={link.url}>
                       <h4>
-                        <a href={link.url}>{i18n(link.name)}</a>
+                        <a href={link.url}>{link.name}</a>
                       </h4>
                       {link.info && <p>{link.info}</p>}
                     </li>
@@ -140,7 +140,7 @@ export function Services() {
               {servicelinks?.map((links) => (
                 <li key={links.url}>
                   <h4>
-                    <a href={links.url}>{i18n(links.name)}</a>
+                    <a href={links.url}>{links.name}</a>
                   </h4>
                 </li>
               ))}
