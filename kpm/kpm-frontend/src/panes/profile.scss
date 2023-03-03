@@ -1,4 +1,4 @@
-@import "../vars";
+@use "../vars" as *;
 
 #kpm-6cf53 .kpm-profile .kpm-profile-link {
   $rowGap: calc(2 * var(--kpmGap));

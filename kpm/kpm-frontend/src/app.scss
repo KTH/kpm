@@ -1,8 +1,8 @@
-@use "./stylesVars.scss";
-@use "./stylesReset.scss";
-@use "./stylesCanvas.scss";
-@use "./stylesMobile.scss";
-@import "./vars";
+@use "stylesVars";
+@use "stylesReset";
+@use "stylesCanvas";
+@use "stylesMobile";
+@use "vars" as *;
 
 #kpm-6cf53 {
   pointer-events: none;
