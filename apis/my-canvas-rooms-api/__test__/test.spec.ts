@@ -196,7 +196,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "favorite": false,
           "name": "DD1320/DD1325 HT21-1 Tillämpad datalogi",
-          "registrationCode": "50104",
+          "registrationCode": "50104/51218/52100",
           "startTerm": "20212",
           "state": "available",
           "type": "course",
@@ -223,7 +223,7 @@ describe("Known room formats data can be parsed", () => {
         "link": {
           "favorite": false,
           "name": "KH0022/KH0025 HT21/VT22 Fysik för basår I",
-          "registrationCode": "61340",
+          "registrationCode": "51732/61340",
           "startTerm": "20221",
           "state": "available",
           "type": "course",
