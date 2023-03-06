@@ -158,6 +158,7 @@ function getRoomsByNewFormat(
   const section_name_format =
     /^([A-ZÅÄÖ0-9]{5,7}) ([HV]T[0-9]{2,4}) \(([^\)]+)\)/iu;
 
+  const regCodes: Set<string> = new Set();
   for (const section of sections) {
     const match = section.match(section_name_format);
     if (match) {
@@ -168,13 +169,16 @@ function getRoomsByNewFormat(
 
       // INVESTIGATE: Which section determines startTerm? Right now last wins
       link_meta_data.startTerm = convertStartTerm(startTerm);
-      link_meta_data.registrationCode = registrationCode;
+      regCodes.add(registrationCode);
     } else {
       // console.log(`Room ${canvas_data.id} Section "${section}" in "${canvas_data.name}"; no match.`)
     }
   }
 
   if (course_codes.size > 0) {
+    if (regCodes.size) {
+      link_meta_data.registrationCode = Array.from(regCodes).sort().join("/");
+    }
     return { course_codes, link_meta_data };
   }
 }
