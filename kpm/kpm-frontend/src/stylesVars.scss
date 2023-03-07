@@ -1,22 +1,25 @@
+@use "kth-style/public/sass/variables/colors";
+// TODO: Remaining hex values here should probably be replace with kth-style values.
+
 html {
-  --kpmMenuBg: #65656c;
-  --kpmMenuText: white;
-  --kpmMenuHoverBg: white;
+  --kpmMenuBg: #{colors.$grey};
+  --kpmMenuText: #{colors.$white};
+  --kpmMenuHoverBg: #{colors.$white};
   --kpmMenuHoverText: #2d2d31;
-  --kpmAlertBg: #ffc107; // KTH Style yellow.
+  --kpmAlertBg: #{colors.$infoYellowIcon};
 
-  --kpmGroupBg: #f6f6f6;
-  --kpmGroupFg: #d4d4d4;
+  --kpmGroupBg: #{colors.$lightGrey};
+  --kpmGroupFg: #{colors.$borderGrey};
 
-  --kpmLink: #006cb7;
-  --kpmLinkHover: #006388;
+  --kpmLink: #{colors.$linkBlue};
+  --kpmLinkHover: #{colors.$blueHover};
 
-  --kpmPaneBg: white;
-  --kpmPaneFg: #006cb7;
-  --kpmPaneText: black;
+  --kpmPaneBg: #{colors.$white};
+  --kpmPaneFg: #{colors.$linkBlue};
+  --kpmPaneText: #{colors.$black};
   --kpmPaneTextSoft: #999;
   --kpmPaneTextMuted: #ccc;
-  --kpmPaneSepatorFg: #d4d4d4;
+  --kpmPaneSepatorFg: #{colors.$borderGrey};
 
   --kpmPad: 0.5rem;
   --kpmMargin: 0.75rem;
@@ -30,5 +33,5 @@ html {
   --kpmButtonHoverText: var(--kpmButtonBg);
   --kpmButtonRadius: 0.25em;
 
-  --kpmIconFg: #006cb7;
+  --kpmIconFg: #{colors.$linkBlue};
 }
