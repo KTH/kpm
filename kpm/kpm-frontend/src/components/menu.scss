@@ -124,7 +124,7 @@
 
       &::before {
         content: "";
-        background: kthStyleUrl("/icons/arrow-expand-black.svg", no-repeat);
+        background: $data-arrow-expand-black-svg no-repeat;
         transform: rotate(180deg);
         width: 0.4rem;
         height: 0.65rem;
