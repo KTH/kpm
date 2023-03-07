@@ -9,7 +9,7 @@ const REDIS_PORT = parseInt(process.env.REDIS_PORT || "6379", 10);
 const REDIS_HOST = process.env.REDIS_HOST || "localhost";
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "";
 const REDIS_CONNECT_TIMEOUT = parseInt(
-  process.env.REDIS_CONNECT_TIMEOUT || "5000"
+  process.env.REDIS_CONNECT_TIMEOUT || "300"
 );
 const useRedis = !!process.env.REDIS_HOST;
 
