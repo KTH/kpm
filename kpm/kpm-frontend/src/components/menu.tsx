@@ -151,7 +151,7 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
 
   return (
     <dialog ref={nodeRef} className={cls}>
-      <a
+      <button
         className="kpm-modal-back-button kpm-mobile"
         onClick={(e) => {
           e.preventDefault();
@@ -164,7 +164,7 @@ export function MenuPaneWrapper({ nodeRef, className, children }: any) {
         }}
       >
         {i18n("Tillbaka till personliga menyn")}
-      </a>
+      </button>
       {children}
     </dialog>
   );

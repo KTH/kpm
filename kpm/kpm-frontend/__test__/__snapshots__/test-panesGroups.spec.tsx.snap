@@ -4,12 +4,12 @@ exports[`<Groups /> Can be rendered 1`] = `
 <dialog
   className="kpm-modal"
 >
-  <a
+  <button
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
     Back to Personal Menu
-  </a>
+  </button>
   <div
     className="kpm-modal-content kpm-groups"
   >
@@ -90,12 +90,12 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 <dialog
   className="kpm-modal active"
 >
-  <a
+  <button
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
     Back to Personal Menu
-  </a>
+  </button>
   <div
     className="kpm-modal-content kpm-groups"
   >
@@ -210,12 +210,12 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
 <dialog
   className="kpm-modal active"
 >
-  <a
+  <button
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
     Back to Personal Menu
-  </a>
+  </button>
   <div
     className="kpm-modal-content kpm-groups"
   >

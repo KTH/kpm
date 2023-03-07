@@ -4,12 +4,12 @@ exports[`<Profile /> Can be rendered 1`] = `
 <dialog
   className="kpm-modal"
 >
-  <a
+  <button
     className="kpm-modal-back-button kpm-mobile"
     onClick={[Function]}
   >
     Back to Personal Menu
-  </a>
+  </button>
   <div
     className="kpm-modal-content kpm-profile"
   >

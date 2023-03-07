@@ -47,12 +47,19 @@
 
     ul {
       padding: var(--kpmPad);
+
+      @media #{$mblBreakpoint} {
+        padding: 0;
+      }
     }
 
     li.item {
       margin: 0;
-      padding: 0;
-      padding-right: calc(2 * var(--kpmPad));
+      padding: 0 calc(2 * var(--kpmPad)) 0 0;
+
+      @media #{$mblBreakpoint} {
+        padding: calc(2 * var(--kpmPad)) calc(4 * var(--kpmPad));
+      }
     }
   }
 
