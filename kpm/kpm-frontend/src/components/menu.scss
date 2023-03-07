@@ -116,7 +116,7 @@
       top: 0;
       width: 100%;
       z-index: 1; // Make sure dropdowns to float above back bar
-      padding: calc(4 * var(--kpmPad));
+      padding: calc(2 * var(--kpmPad));
       font-size: 1.1em;
       align-items: center;
       gap: var(--kpmGap);
@@ -131,11 +131,6 @@
         transform: rotate(180deg);
         width: 0.4rem;
         height: 0.65rem;
-      }
-
-      & + .kpm-modal-content {
-        // Avoid extra space when back button is visible in mobile
-        padding-top: 0;
       }
     }
 

@@ -67,10 +67,6 @@
         display: flex;
         flex-direction: column;
         gap: $rowGap $colGap;
-
-        @media #{$mblBreakpoint} {
-          gap: 0 $colGap;
-        }
       }
     }
   }
