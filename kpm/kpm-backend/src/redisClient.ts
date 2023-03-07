@@ -11,6 +11,7 @@ const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "";
 const REDIS_CONNECT_TIMEOUT = parseInt(
   process.env.REDIS_CONNECT_TIMEOUT || "300"
 );
+const REDIS_PING_INTERVAL = parseInt(process.env.REDIS_PING_INTERVAL || "0");
 const useRedis = !!process.env.REDIS_HOST;
 
 let redisClient: RedisClientType | undefined = undefined;
@@ -64,6 +65,10 @@ function _getRedisClient(
       database: databaseName, // We use the db for session (0) and kopps cache (1)
       // Notes on legacy mode: https://github.com/tj/connect-redis/pull/337
       legacyMode,
+      // Setting interval to 0 turns off ping
+      // Used to avoid reconnections by Azure load balancer
+      // https://github.com/redis/node-redis/blob/master/docs/client-configuration.md#createclient-configuration
+      pingInterval: REDIS_PING_INTERVAL ? REDIS_PING_INTERVAL : undefined,
     });
 
     redisClient.connect().catch((err) => {
