@@ -122,9 +122,6 @@
       gap: var(--kpmGap);
       background-color: var(--kpmPaneBg);
 
-      color: var(--kpmLink);
-      border: none;
-
       &::before {
         content: "";
         background: kthStyleUrl("/icons/arrow-expand-black.svg", no-repeat);
