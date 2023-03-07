@@ -116,13 +116,11 @@ type TCanvasRoomShortListProps = {
 };
 
 function CanvasRoomShortList({ rooms }: TCanvasRoomShortListProps) {
-  const roomsToShow = rooms.filter((room: TCanvasRoom) => room.type !== "rapp");
-
-  if (roomsToShow.length === 0) return null;
+  if (rooms.length === 0) return null;
 
   return (
     <ul className="kpm-teaching-course-rooms">
-      {roomsToShow.map((room: TCanvasRoom) => {
+      {rooms.map((room: TCanvasRoom) => {
         const key = `${room.registrationCode}-${room.startTerm}`;
         return (
           <li key={key}>
