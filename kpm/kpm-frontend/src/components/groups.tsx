@@ -148,7 +148,7 @@ type TDropdownMobileHeaderProps = {
 
 function DropdownMobileHeader({ onBack }: TDropdownMobileHeaderProps) {
   return (
-    <a
+    <button
       className="kpm-modal-back-button kpm-mobile"
       onClick={(e) => {
         e.preventDefault();
@@ -156,6 +156,6 @@ function DropdownMobileHeader({ onBack }: TDropdownMobileHeaderProps) {
       }}
     >
       {i18n("Tillbaka")}
-    </a>
+    </button>
   );
 }
