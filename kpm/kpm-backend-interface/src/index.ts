@@ -59,6 +59,7 @@ export type TTeachingCourse = {
   title: TLocalizedString;
   credits: number;
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
+  established: boolean;
   roles: TTeachingRole[];
   rooms: TCanvasRoom[] | null;
 };

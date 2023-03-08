@@ -12,9 +12,10 @@ import {
 import { MutedAuthError } from "kpm-api-common/src/errors";
 import { memoized } from "./commonCache";
 import { REDIS_DB_NAMES } from "../redisClient";
+import log from "skog";
 
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
-const KOPPS_API = "https://api.kth.se/api/kopps/v2";
+const KOPPS_API = process.env.KOPPS_API || "https://api.kth.se/api/kopps/v2";
 const MY_CANVAS_ROOMS_API_URI =
   process.env.MY_CANVAS_ROOMS_API_URI ||
   "http://localhost:3001/kpm/canvas-rooms";
@@ -94,6 +95,7 @@ export type TKoppsCourseInfo = {
   title: TLocalizedString;
   credits: number;
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
+  established: boolean;
   rounds: Record<string, TKoppsRoundInTerm[]>; // key is term as "YYYYT"
 };
 
@@ -108,8 +110,14 @@ export type TCourseRound = {
 
 // This is the relevant parts of what we get from kopps courseroundterms endpoint.
 type TKoppsCourseRoundTerms = {
-  course: TKoppsCourseInfo;
+  course: TKoppsCourseData;
   termsWithCourseRounds: TKoppsTermWithCourseRounds[];
+};
+type TKoppsCourseData = {
+  title: TLocalizedString;
+  credits: number;
+  creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
+  state: string; // "ESTABLISHED", "CANCELLED", TODO: what more?
 };
 type TKoppsTermWithCourseRounds = {
   term: string;
@@ -128,6 +136,7 @@ const __EMPTY_MATCH__: TKoppsCourseInfo = {
   credits: 0,
   creditUnitAbbr: { sv: "-", en: "-" },
   rounds: {},
+  established: false,
 };
 
 export const getCourseInfo = memoized<TKoppsCourseInfo>({
@@ -136,13 +145,11 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
   fallbackValue: __EMPTY_MATCH__,
   async fn(course_code: string) {
     // If there is a cache miss, we fetch the data from source
+    const url = `${KOPPS_API}/course/${course_code}/courseroundterms`;
     const koppsData: TKoppsCourseRoundTerms | undefined = await got
-      .get<TKoppsCourseRoundTerms>(
-        `${KOPPS_API}/course/${course_code}/courseroundterms`,
-        {
-          responseType: "json",
-        }
-      )
+      .get<TKoppsCourseRoundTerms>(url, {
+        responseType: "json",
+      })
       .then((r) =>
         r.statusCode >= 200 && r.statusCode < 300 ? r.body : undefined
       );
@@ -151,12 +158,21 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
       return undefined;
     }
 
-    const { title, credits, creditUnitAbbr } = koppsData.course;
+    const { title, credits, creditUnitAbbr, state } = koppsData.course;
 
+    if (state !== "ESTABLISHED" && state !== "CANCELLED") {
+      /// This is not really a problem, I just want to use the
+      /// notifications to collect the possible states.
+      log.error(
+        { course_code, state, url },
+        "Unexepected course state (will handle as cancelled)"
+      );
+    }
     const info: TKoppsCourseInfo = {
       title,
       credits,
       creditUnitAbbr,
+      established: state === "ESTABLISHED",
       rounds: {},
     };
 
