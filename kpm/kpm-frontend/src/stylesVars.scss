@@ -14,7 +14,7 @@ html {
   --kpmPaneBg: #{colors.$white};
   --kpmPaneFg: #{colors.$linkBlue};
   --kpmPaneText: #{colors.$black};
-  --kpmPaneTextSoft: #{colors.$grey}; // Soft text on white background
+  --kpmPaneTextMuted: #{colors.$grey}; // Soft text on white background
   --kpmPaneSepatorFg: #{colors.$borderGrey};
 
   --kpmPad: 0.5rem;

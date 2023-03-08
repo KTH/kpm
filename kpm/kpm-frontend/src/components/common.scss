@@ -25,7 +25,7 @@
   justify-content: center;
   align-items: center;
 
-  color: var(--kpmPaneTextSoft);
+  color: var(--kpmPaneTextMuted);
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -109,7 +109,7 @@
   }
 
   p {
-    color: var(--kpmPaneTextSoft);
+    color: var(--kpmPaneTextMuted);
     max-width: 50ch;
   }
 
