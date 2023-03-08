@@ -68,7 +68,7 @@ function _getRedisClient(
       // Setting interval to 0 turns off ping
       // Used to avoid reconnections by Azure load balancer
       // https://github.com/redis/node-redis/blob/master/docs/client-configuration.md#createclient-configuration
-      pingInterval: REDIS_PING_INTERVAL ? REDIS_PING_INTERVAL : undefined,
+      pingInterval: REDIS_PING_INTERVAL || undefined,
     });
 
     redisClient.connect().catch((err) => {
