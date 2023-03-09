@@ -68,14 +68,14 @@ export function Teaching() {
       <TabFilter>
         <FilterOption<TFilter>
           value="established"
-          filter={filter || "all"}
+          filter={filter || "established"}
           onSelect={setFilter}
         >
           {i18n("established")}
         </FilterOption>
         <FilterOption<TFilter>
           value="all"
-          filter={filter || "all"}
+          filter={filter || "established"}
           onSelect={setFilter}
         >
           {i18n("all_courses")}
