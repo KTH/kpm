@@ -48,7 +48,9 @@ export function Teaching() {
   const [filter, setFilter] = useState<TFilter>();
   useEffect(() => {
     if (filter === undefined && courses.length > 0) {
-      const hasEstablished = !!courses.find(([_cc, c]) => c.established);
+      const hasEstablished = !!courses.find(
+        ([_cc, c]) => c.state === "ESTABLISHED"
+      );
       setFilter(hasEstablished ? "established" : "all");
     }
   }, [courses]);
@@ -56,7 +58,7 @@ export function Teaching() {
   const filtered = courses.filter(([_key, course]) => {
     switch (filter) {
       case "established":
-        return course.established;
+        return course.state === "ESTABLISHED";
       default:
         return true;
     }
@@ -119,10 +121,10 @@ function Course({ courseCode, course }: TCourseProps) {
       <div className="kpm-row">
         <p className="kpm-teaching-course-name">
           {courseName}{" "}
-          {course.established ? (
+          {course.state === "ESTABLISHED" ? (
             ""
           ) : (
-            <i className="kpm-muted-text">{i18n("course_cancelled")}</i>
+            <i className="kpm-muted-text">{i18n("cstate_" + course.state)}</i>
           )}
         </p>
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>

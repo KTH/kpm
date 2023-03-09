@@ -59,7 +59,7 @@ export type TTeachingCourse = {
   title: TLocalizedString;
   credits: number;
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
-  established: boolean;
+  state: "ESTABLISHED" | "DEACTIVATED" | "CANCELLED";
   roles: TTeachingRole[];
   rooms: TCanvasRoom[] | null;
 };

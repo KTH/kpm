@@ -95,7 +95,7 @@ export type TKoppsCourseInfo = {
   title: TLocalizedString;
   credits: number;
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
-  established: boolean;
+  state: "ESTABLISHED" | "DEACTIVATED" | "CANCELLED";
   rounds: Record<string, TKoppsRoundInTerm[]>; // key is term as "YYYYT"
 };
 
@@ -117,7 +117,7 @@ type TKoppsCourseData = {
   title: TLocalizedString;
   credits: number;
   creditUnitAbbr: TLocalizedString; // usually "hp", check other values!
-  state: string; // "ESTABLISHED", "CANCELLED", TODO: what more?
+  state: string; // Should be "ESTABLISHED" | "DEACTIVATED" | "CANCELLED";
 };
 type TKoppsTermWithCourseRounds = {
   term: string;
@@ -136,7 +136,7 @@ const __EMPTY_MATCH__: TKoppsCourseInfo = {
   credits: 0,
   creditUnitAbbr: { sv: "-", en: "-" },
   rounds: {},
-  established: false,
+  state: "ESTABLISHED",
 };
 
 export const getCourseInfo = memoized<TKoppsCourseInfo>({
@@ -160,19 +160,11 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
 
     const { title, credits, creditUnitAbbr, state } = koppsData.course;
 
-    if (state !== "ESTABLISHED" && state !== "CANCELLED") {
-      /// This is not really a problem, I just want to use the
-      /// notifications to collect the possible states.
-      log.error(
-        { course_code, state, url },
-        "Unexepected course state (will handle as cancelled)"
-      );
-    }
     const info: TKoppsCourseInfo = {
       title,
       credits,
       creditUnitAbbr,
-      established: state === "ESTABLISHED",
+      state: checkState(state, course_code, url),
       rounds: {},
     };
 
@@ -184,3 +176,21 @@ export const getCourseInfo = memoized<TKoppsCourseInfo>({
     return info;
   },
 });
+
+function checkState(state: string, course_code: string, url: string) {
+  if (
+    state === "ESTABLISHED" ||
+    state === "DEACTIVATED" ||
+    state === "CANCELLED"
+  ) {
+    return state;
+  }
+
+  /// This is not really a problem, I just want to use the
+  /// notifications to collect the possible states.
+  log.error(
+    { course_code, state, url },
+    "Unexepected course state (assuming ESTABLISHED)"
+  );
+  return "ESTABLISHED";
+}
