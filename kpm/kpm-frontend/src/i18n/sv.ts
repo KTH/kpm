@@ -7,7 +7,7 @@ export const sv: Record<string, string> = {
   Schedule: "Schema",
   Services: "Tjänster",
   Studies: "Studier",
-  established: "Inrättade",
+  not_cancelled: "Aktiva",
   all_courses: "Alla kurser",
   cstate_CANCELLED: "Nedlagd kurs",
   cstate_DEACTIVATED: "Kurs under avveckling",

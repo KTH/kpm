@@ -37,7 +37,7 @@ export async function loaderTeaching({
   }
 }
 
-type TFilter = "established" | "all";
+type TFilter = "not_cancelled" | "all";
 
 export function Teaching() {
   const { res, loading, error } = useDataFecther<APITeaching>(loaderTeaching);
@@ -48,16 +48,16 @@ export function Teaching() {
   const [filter, setFilter] = useState<TFilter>();
   useEffect(() => {
     if (filter === undefined && courses.length > 0) {
-      const hasEstablished = !!courses.find(
-        ([_cc, c]) => c.state === "ESTABLISHED"
+      const hasNotCancelled = !!courses.find(
+        ([_cc, c]) => c.state === "ESTABLISHED" || c.state === "DEACTIVATED"
       );
-      setFilter(hasEstablished ? "established" : "all");
+      setFilter(hasNotCancelled ? "not_cancelled" : "all");
     }
   }, [courses]);
 
   const filtered = courses.filter(([_key, course]) => {
     switch (filter) {
-      case "established":
+      case "not_cancelled":
         return course.state === "ESTABLISHED";
       default:
         return true;
@@ -67,15 +67,15 @@ export function Teaching() {
     <MenuPane error={error}>
       <TabFilter>
         <FilterOption<TFilter>
-          value="established"
-          filter={filter || "established"}
+          value="not_cancelled"
+          filter={filter || "not_cancelled"}
           onSelect={setFilter}
         >
-          {i18n("established")}
+          {i18n("not_cancelled")}
         </FilterOption>
         <FilterOption<TFilter>
           value="all"
-          filter={filter || "established"}
+          filter={filter || "not_cancelled"}
           onSelect={setFilter}
         >
           {i18n("all_courses")}

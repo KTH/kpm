@@ -7,7 +7,7 @@ export const en: Record<string, string> = {
   Schedule: "Schedule",
   Services: "Services",
   Studies: "Studies",
-  established: "Established",
+  not_cancelled: "Active",
   all_courses: "All courses",
   cstate_CANCELLED: "Cancelled course",
   cstate_DEACTIVATED: "Deactivated course",
