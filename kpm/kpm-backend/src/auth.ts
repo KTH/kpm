@@ -30,7 +30,7 @@ const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
 
-const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
+export const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
   ? ({} as const)
   : ({
       domain: ".kth.se",

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
-import { createApiUri } from "./utils";
+import { createApiUri, postApi } from "./utils";
 import { useAuthState } from "../state/authState";
-import { i18n } from "../i18n/i18n";
+import { i18n, LANG } from "../i18n/i18n";
 import { formatDisplayName } from "../components/utils";
 import "./profile.scss";
 
@@ -16,6 +16,9 @@ export function Profile() {
           "Settings"
         )}`}
       >
+        <button className="kpm-button" onClick={changeLang}>
+          {i18n("lang_other")}
+        </button>
         <a className="kpm-button" href={createApiUri("/auth/logout")}>
           {i18n("Logout")}
         </a>
@@ -75,4 +78,15 @@ export function Profile() {
       </div>
     </MenuPane>
   );
+}
+
+async function changeLang() {
+  const res = await postApi("/api/lang", {
+    lang: LANG === "en" ? "sv" : "en",
+  }).catch((err: any) => {
+    // FIXME TODO: Handle the error!
+  });
+  if (res?.ok) {
+    location.reload();
+  }
 }

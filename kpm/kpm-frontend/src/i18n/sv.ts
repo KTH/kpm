@@ -1,4 +1,5 @@
 export const sv: Record<string, string> = {
+  lang_other: "In English",
   Groups: "Grupper",
   Profile: "Profil",
   Logout: "Logga ut",

@@ -6,6 +6,7 @@ import { canvasRoomsApiHandler } from "./canvasRooms";
 import { teachingApiHandler } from "./teaching";
 import { studiesApiHandler } from "./studies";
 import { starApiHandler } from "./star";
+import { langApiHandler } from "./lang";
 import { useBeta } from "./useBeta";
 
 export const api = express.Router();
@@ -24,6 +25,8 @@ api.get("/canvas-rooms", (req, res, next) => {
     next(e);
   }
 });
+
+api.post("/lang", langApiHandler);
 
 api.get("/teaching", teachingApiHandler);
 

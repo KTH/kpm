@@ -1,4 +1,5 @@
 export const en: Record<string, string> = {
+  lang_other: "På svenska",
   Groups: "Groups",
   Profile: "Profile",
   Logout: "Logout",
