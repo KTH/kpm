@@ -3,12 +3,14 @@ import log, { runWithSkog } from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
 import { AuthError, MutedAuthError } from "kpm-api-common/src/errors";
+import { getSocial } from "./api/common";
 import {
   APIAuthErrType,
   APIMutedAuthErrType,
   TSessionUser,
 } from "kpm-backend-interface";
 import { SESSION_MAX_AGE_MS } from "./session";
+import logger from "skog";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -27,6 +29,15 @@ const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
+
+const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
+  ? ({} as const)
+  : ({
+      domain: ".kth.se",
+      maxAge: 90 * 24 * 3600 * 1000,
+      sameSite: "none",
+      secure: true,
+    } as const);
 
 const redirectBaseUrl = new URL(`${PREFIX}/auth/callback`, PROXY_HOST);
 /**
@@ -114,7 +125,18 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
 
     throwIfNotValidSession(user);
 
+    let lang_resp = await getSocial<LangResponse>(
+      user!,
+      "lang",
+      undefined
+    ).catch(socialErr);
+    let lang = lang_resp.lang;
+    logger.info({ lang, kthid: user?.kthid }, "Language according to social");
+
     req.session.user = user;
+    if (lang) {
+      res.cookie("language", lang, LANG_COOKIE_OPTS);
+    }
     res.redirect(nextUrl);
   } catch (err) {
     if (err instanceof errors.OPError && err.error === "login_required") {
@@ -126,6 +148,15 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
     next(err);
   }
 });
+
+type LangResponse = {
+  lang: "sv" | "en" | null;
+};
+
+function socialErr(error: any): LangResponse {
+  logger.error({ error }, "Failed to contact social, language prefs unknown");
+  return { lang: null };
+}
 
 function openIdErr(err: any) {
   // https://github.com/panva/node-openid-client/blob/main/docs/README.md#errors
