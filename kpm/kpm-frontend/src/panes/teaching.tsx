@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import type {
   APITeaching,
   TCanvasRoom,
@@ -6,6 +7,8 @@ import type {
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
+import { FilterOption, TabFilter } from "../components/filter";
+import { ExamRoomList } from "../components/courseComponents";
 import { fetchApi, formatTerm, useDataFecther } from "./utils";
 import {
   AuthError,
@@ -16,7 +19,6 @@ import {
 import { i18n } from "../i18n/i18n";
 
 import "./teaching.scss";
-import { ExamRoomList } from "../components/courseComponents";
 
 export async function loaderTeaching({
   request,
@@ -35,15 +37,50 @@ export async function loaderTeaching({
   }
 }
 
+type TFilter = "not_cancelled" | "all";
+
 export function Teaching() {
   const { res, loading, error } = useDataFecther<APITeaching>(loaderTeaching);
-  const { courses } = res || {};
-  // const { courses } = useLoaderData() as APITeaching;
+  const courses = Object.entries(res?.courses || {});
 
-  const isEmpty = !loading && !error && Object.keys(courses || {}).length === 0;
+  const isEmpty = !loading && !error && courses.length === 0;
 
+  const [filter, setFilter] = useState<TFilter>();
+  useEffect(() => {
+    if (filter === undefined && courses.length > 0) {
+      const hasNotCancelled = !!courses.find(
+        ([_cc, c]) => c.state === "ESTABLISHED" || c.state === "DEACTIVATED"
+      );
+      setFilter(hasNotCancelled ? "not_cancelled" : "all");
+    }
+  }, [courses]);
+
+  const filtered = courses.filter(([_key, course]) => {
+    switch (filter) {
+      case "not_cancelled":
+        return course.state === "ESTABLISHED";
+      default:
+        return true;
+    }
+  });
   return (
     <MenuPane error={error}>
+      <TabFilter>
+        <FilterOption<TFilter>
+          value="not_cancelled"
+          filter={filter || "not_cancelled"}
+          onSelect={setFilter}
+        >
+          {i18n("not_cancelled")}
+        </FilterOption>
+        <FilterOption<TFilter>
+          value="all"
+          filter={filter || "not_cancelled"}
+          onSelect={setFilter}
+        >
+          {i18n("all_courses")}
+        </FilterOption>
+      </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {isEmpty && (
@@ -51,9 +88,9 @@ export function Teaching() {
           {i18n("You aren't teaching any courses.")}
         </EmptyPlaceholder>
       )}
-      {courses && (
+      {filtered && (
         <div className="kpm-teaching">
-          {Object.entries(courses).map(([code, course]) => {
+          {filtered.map(([code, course]) => {
             return <Course key={code} courseCode={code} course={course} />;
           })}
         </div>
@@ -82,7 +119,14 @@ function Course({ courseCode, course }: TCourseProps) {
     <div className="kpm-teaching-course">
       <h2 className="kpm-teaching-course-code">{courseCode}</h2>
       <div className="kpm-row">
-        <p className="kpm-teaching-course-name">{courseName}</p>
+        <p className="kpm-teaching-course-name">
+          {courseName}{" "}
+          {course.state === "ESTABLISHED" ? (
+            ""
+          ) : (
+            <i className="kpm-muted-text">{i18n("cstate_" + course.state)}</i>
+          )}
+        </p>
         <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
         <CourseAdminDropdown
           courseCode={courseCode}

@@ -18,7 +18,8 @@ let redisClient: RedisClientType | undefined = undefined;
 
 export enum REDIS_DB_NAMES {
   SESSION = 0,
-  KOPPS = 1,
+  KOPPS_OLD = 1, // Not in use, lacks course status.
+  KOPPS = 2,
 }
 
 /**

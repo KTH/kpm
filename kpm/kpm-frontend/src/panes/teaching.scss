@@ -39,6 +39,10 @@
     .kpm-teaching-course-code,
     .kpm-teaching-course-name {
       font-weight: 600;
+      i.kpm-muted-text {
+        font-weight: 300;
+        margin-inline-start: 1ch;
+      }
     }
 
     .kpm-row {
