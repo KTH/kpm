@@ -19,7 +19,11 @@ export function Profile() {
           "Settings"
         )}`}
       >
-        <button className="kpm-button" onClick={switchLang}>
+        <button
+          className="kpm-button"
+          lang={lang === "sv" ? "en" : "sv"}
+          onClick={switchLang}
+        >
           {i18n("lang_other")}
         </button>
         <a className="kpm-button" href={createApiUri("/auth/logout")}>
