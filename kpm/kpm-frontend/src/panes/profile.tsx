@@ -5,9 +5,12 @@ import { useAuthState } from "../state/authState";
 import { i18n, LANG } from "../i18n/i18n";
 import { formatDisplayName } from "../components/utils";
 import "./profile.scss";
+import { useState } from "react";
+import { ErrorMessage } from "../components/common";
 
 export function Profile() {
   const [currentUser] = useAuthState();
+  const { lang, switchLang, errorSwitchLang } = useLang();
 
   return (
     <MenuPane className="kpm-profile">
@@ -16,13 +19,14 @@ export function Profile() {
           "Settings"
         )}`}
       >
-        <button className="kpm-button" onClick={changeLang}>
+        <button className="kpm-button" onClick={switchLang}>
           {i18n("lang_other")}
         </button>
         <a className="kpm-button" href={createApiUri("/auth/logout")}>
           {i18n("Logout")}
         </a>
       </MenuPaneHeader>
+      {errorSwitchLang && <ErrorMessage error={errorSwitchLang} compact />}
       <div className="kpm-col">
         <h3 className="kpm-col-header">{i18n("About me")}</h3>
         <ul>
@@ -80,13 +84,31 @@ export function Profile() {
   );
 }
 
-async function changeLang() {
-  const res = await postApi("/api/lang", {
-    lang: LANG === "en" ? "sv" : "en",
-  }).catch((err: any) => {
-    // FIXME TODO: Handle the error!
-  });
-  if (res?.ok) {
-    location.reload();
-  }
+function useLang(): {
+  lang: string;
+  switchLang(): void;
+  errorSwitchLang?: Error;
+} {
+  const [errorSwitchLang, setSwitchLangError] = useState<Error>();
+
+  const switchLang = async () => {
+    const res = await postApi("/api/lang", {
+      lang: LANG === "en" ? "sv" : "en",
+    }).catch((err: any) => {
+      setSwitchLangError(err);
+      return;
+    });
+    if (res?.ok) {
+      location.reload();
+      return;
+    }
+
+    setSwitchLangError(new Error("Unexpected response from language API."));
+  };
+
+  return {
+    lang: LANG,
+    switchLang,
+    errorSwitchLang,
+  };
 }
