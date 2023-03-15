@@ -23,7 +23,7 @@ exports[`<Profile /> Can be rendered 1`] = `
         className="kpm-modal-content-header-actions"
       >
         <button
-          className="kpm-button"
+          className="kpm-button change-lang"
           lang="sv"
           onClick={[Function]}
         >

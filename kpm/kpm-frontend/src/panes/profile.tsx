@@ -21,7 +21,7 @@ export function Profile() {
         )}`}
       >
         <button
-          className="kpm-button"
+          className="kpm-button change-lang"
           lang={lang === "sv" ? "en" : "sv"}
           onClick={switchLang}
         >
