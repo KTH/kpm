@@ -24,6 +24,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       >
         <button
           className="kpm-button"
+          lang="sv"
           onClick={[Function]}
         >
           På svenska
