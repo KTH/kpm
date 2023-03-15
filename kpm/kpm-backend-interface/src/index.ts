@@ -16,6 +16,14 @@ export type APISession = {
   user?: TSessionUser;
 };
 
+export type APILangErrType = TGotErrType; // We currently don't have any endpoint specific errors, see kpm-backend/.../lang.ts
+export type APILang = {
+  lang: string | null;
+};
+export type APILangParams = {
+  lang: string | null;
+};
+
 export type APICanvasRoomsErrType = TGotErrType | "ValueError";
 export type APICanvasRooms = {
   rooms: { [index: TCourseCode]: TCanvasRoom[] };
