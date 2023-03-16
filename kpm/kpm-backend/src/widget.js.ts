@@ -33,9 +33,8 @@ var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53"; n.style = "";n.innerHtml = "";
-n.style.minHeight="calc(var(--kpm-bar-height,2em) + 1px)";
-n.style.backgroundColor="#65656c";
+let n = cr('div'); n.id = "kpm-6cf53";
+n.style.minHeight="calc(var(--kpm-bar-height,2em) + 1px)";n.style.backgroundColor="#65656c";
 document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
       publicUriBase
