@@ -1,4 +1,5 @@
 html #kpm-6cf53 {
+  button,
   div,
   dl,
   dt,
@@ -25,10 +26,11 @@ html #kpm-6cf53 {
   th,
   td {
     font-family: inherit;
-    font-size: 100%;
+    font-size: inherit;
     font-weight: normal;
     margin: 0;
     padding: 0;
+    line-height: inherit;
   }
 
   header {

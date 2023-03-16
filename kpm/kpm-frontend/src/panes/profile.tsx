@@ -1,13 +1,17 @@
 import * as React from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
-import { createApiUri } from "./utils";
+import { createApiUri, postApi } from "./utils";
 import { useAuthState } from "../state/authState";
-import { i18n } from "../i18n/i18n";
+import { i18n, LANG } from "../i18n/i18n";
 import { formatDisplayName } from "../components/utils";
 import "./profile.scss";
+import { useState } from "react";
+import { ErrorMessage } from "../components/common";
+import { APILangParams } from "kpm-backend-interface";
 
 export function Profile() {
   const [currentUser] = useAuthState();
+  const { lang, switchLang, errorSwitchLang } = useLang();
 
   return (
     <MenuPane className="kpm-profile">
@@ -16,10 +20,18 @@ export function Profile() {
           "Settings"
         )}`}
       >
+        <button
+          className="kpm-button change-lang"
+          lang={lang === "sv" ? "en" : "sv"}
+          onClick={switchLang}
+        >
+          {i18n("lang_other")}
+        </button>
         <a className="kpm-button" href={createApiUri("/auth/logout")}>
           {i18n("Logout")}
         </a>
       </MenuPaneHeader>
+      {errorSwitchLang && <ErrorMessage error={errorSwitchLang} compact />}
       <div className="kpm-col">
         <h3 className="kpm-col-header">{i18n("About me")}</h3>
         <ul>
@@ -75,4 +87,33 @@ export function Profile() {
       </div>
     </MenuPane>
   );
+}
+
+function useLang(): {
+  lang: string;
+  switchLang(): void;
+  errorSwitchLang?: Error;
+} {
+  const [errorSwitchLang, setSwitchLangError] = useState<Error>();
+
+  const switchLang = async () => {
+    const res = await postApi<APILangParams>("/api/lang", {
+      lang: LANG === "en" ? "sv" : "en",
+    }).catch((err: any) => {
+      setSwitchLangError(err);
+      return;
+    });
+    if (res?.ok) {
+      location.reload();
+      return;
+    }
+
+    setSwitchLangError(new Error("Unexpected response from language API."));
+  };
+
+  return {
+    lang: LANG,
+    switchLang,
+    errorSwitchLang,
+  };
 }

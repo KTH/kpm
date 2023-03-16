@@ -4,7 +4,7 @@ import { sv } from "./sv";
 const doCheckTranslations =
   process?.env.NODE_ENV !== "production" && process?.env.NODE_ENV !== "test";
 
-const LANG = window.__kpmSettings__?.["lang"] || "en";
+export const LANG = window.__kpmSettings__?.["lang"] || "en";
 
 export type TLang = "sv" | "en";
 

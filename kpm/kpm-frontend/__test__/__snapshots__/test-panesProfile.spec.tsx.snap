@@ -22,6 +22,13 @@ exports[`<Profile /> Can be rendered 1`] = `
       <aside
         className="kpm-modal-content-header-actions"
       >
+        <button
+          className="kpm-button change-lang"
+          lang="sv"
+          onClick={[Function]}
+        >
+          På svenska
+        </button>
         <a
           className="kpm-button"
           href="/kpm/auth/logout"
