@@ -41,7 +41,7 @@ window.__kpmPublicUriBase__ = "${
       // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
     }";
 window.__kpmCurrentUser__ = ${
-      // Inject some user data to allow rendering the menu properly
+      // Inject some user data to allow rendering the menu properly.
       JSON.stringify(userToFrontend)
     };
 window.__kpmSettings__ = ${JSON.stringify({ lang })};
