@@ -51,16 +51,24 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};
     // index.css contains Canvas CSS-fixes so we are passing it.
     res.type("text/javascript").send(`(function (js, css) {
 var cr = (t) => document.createElement(t),
-ap = (n) => document.head.appendChild(n);
+ap = (e) => document.head.appendChild(e);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53"; n.style = "pointer-events: all; inset: 0; position: sticky; display: flex; align-items: center; height: calc(var(--kpm-bar-height,2em) + 1px); padding: 0 1rem; justify-content: center; margin: 0 auto; background-color: #65656c;";
-n.innerHTML = "<div style='width: 100%; max-width: 1228px; display: flex; align-items: center;'><a href='${LOGIN_URL}?nextUrl=" + location.href + "' style='margin-left: auto; color: white;'>Login</a></div>"; document.body.prepend(n);
-      })("${publicUriBase}/assets/${
+let n = cr('div'); n.id = "kpm-6cf53";
+let s = n.style;s.pointerEvents="all";s.inset="0";s.position="sticky";s.display="flex";s.alignItems="center";s.height="calc(var(--kpm-bar-height,2em) + 1px)";s.padding="0 1rem";s.justifyContent="center";s.margin="0 auto";s.backgroundColor="#65656c";
+let nd = cr('div');
+s = nd.style;s.width="100%";s.maxWidth="1228px";s.display="flex";s.alignItems="center";
+let nda = cr('a');
+nda.append("Login");
+nda.href = '${LOGIN_URL}?nextUrl=' + location.href;
+s = nda.style;s.marginLeft="auto";s.color="white";
+nd.append(nda);n.append(nd)
+document.body.prepend(n);
+})("${publicUriBase}/assets/${
       assets["index.js"]?.fileName
     }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");
-    window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
+window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
   }
-
+  // TODO: What is this used for?:
   // Need to check
   // res.redirect("/check");
 }
