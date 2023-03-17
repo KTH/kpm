@@ -34,7 +34,6 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
-n.style.minHeight="calc(2em + 1px)";n.style.backgroundColor="#65656c";
 document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
       publicUriBase
@@ -56,7 +55,7 @@ var cr = (t) => document.createElement(t),
 ap = (e) => document.head.appendChild(e);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
-let s = n.style;s.pointerEvents="all";s.inset="0";s.position="sticky";s.display="flex";s.alignItems="center";s.height="calc(2em + 1px)";s.padding="0 1rem";s.justifyContent="center";s.margin="0 auto";
+let s = n.style;s.pointerEvents="all";s.inset="0";s.position="sticky";s.display="flex";s.alignItems="center";s.height="calc(2em + 1px)";s.padding="0 1rem";s.justifyContent="center";s.margin="0 auto";s.backgroundColor="#65656c";
 let nd = cr('div');
 s = nd.style;s.width="100%";s.maxWidth="1228px";s.display="flex";s.alignItems="center";
 let nda = cr('a');
