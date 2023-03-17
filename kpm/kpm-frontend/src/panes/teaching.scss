@@ -46,7 +46,7 @@
     }
 
     .kpm-row {
-      gap: $rowGap $colGap;
+      gap: calc(2 * var(--kpmPad)) $colGap;
     }
 
     .kpm-teaching-course-admin-dropdown {
