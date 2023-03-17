@@ -172,6 +172,7 @@ function KTHHeader() {
   );
 }
 
+// TODO: Load this from cortina?  Provide sv an en version!
 function KTHFooter() {
   return (
     <footer className="container">
