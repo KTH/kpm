@@ -29,6 +29,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
     // *** LOGGED IN ***
     const userToFrontend: TSessionUser = req.session.user!;
     res.type("text/javascript").send(`(function (js, css) {
+document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
@@ -52,6 +53,7 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};
     // *** NOT LOGGED IN ***
     // index.css contains Canvas CSS-fixes so we are passing it.
     res.type("text/javascript").send(`(function (js, css) {
+document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
 ap = (e) => document.head.appendChild(e);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
