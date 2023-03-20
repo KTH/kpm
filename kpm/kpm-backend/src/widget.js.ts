@@ -35,7 +35,7 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
-n.style.minHeight="calc(2em + 1px)";
+n.style.position="fixed";
 document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
       publicUriBase
