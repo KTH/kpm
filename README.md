@@ -23,17 +23,36 @@ The deployed image will be marked with the release tag.
 
 ## Development
 
-1. Clone the repos and enter
+1. Clone the repo and enter
 
 2. Run `npm i` from the root of the project
 
-3. Run `npm run dev` from the root of the project
+3. Create .env files for the APIs and backend:
+
+```sh
+(cd apis/my-canvas-rooms-api; cp .env.in .env)
+(cd apis/my-teaching-api; cp .env.in .env)
+(cd apis/my-studies-api; cp .env.in .env)
+(cd kpm/kpm-backend; cp .env.in .env)
+```
+
+4. Run `npm run dev` from the root of the project
 
 This starts all the applications in development mode including a frontend development server with hot module replacement (code in app updates automatically).
 
 Normally you reach the frontend at http://localhost:1234
 
 You can find our [development guidelines here](README_development.md).
+
+### IKEv2 VPN is required to reach external APIs
+
+You need to activate IKEv2 VPN to access certain APIs.
+
+### Setting a fake user
+
+Set the env-var `USE_FAKE_USER` in kpm-backend/.env to view data from that user in stage during local development. This can also be done in STAGE.
+
+NOTE: Newer users don't get the correct KTH ID in Canvas TEST due to the way the test-env is created. The solution is to change the KTH ID in Canvas TEST by editing that user.
 
 ### Developing the loader script
 
