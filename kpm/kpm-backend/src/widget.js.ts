@@ -36,6 +36,7 @@ let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
 n.style.position="fixed";
+document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
       publicUriBase
@@ -66,6 +67,7 @@ nda.append("Login");
 nda.href = '${LOGIN_URL}?nextUrl=' + location.href;
 s = nda.style;s.marginLeft="auto";s.color="white";
 nd.append(nda);n.append(nd)
+document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
 })("${publicUriBase}/assets/${
       assets["index.js"]?.fileName
