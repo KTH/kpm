@@ -18,11 +18,18 @@ class HelloWorldUser(HttpUser):
             self.sessionUser = None
 
 
-    @task(5)
+    @task(4)
     def teaching(self):
         if (self.sessionUser == None):
             self.getSession()
         res = self.client.get("/api/teaching")
+        res
+    
+    @task(4)
+    def studies(self):
+        if (self.sessionUser == None):
+            self.getSession()
+        res = self.client.get("/api/studies")
         res
     
     @task
