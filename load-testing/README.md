@@ -12,10 +12,15 @@ $ pip install -r requirements.txt
 
 ## Running Load Tests
 
-To run tests, go to the parent folder of this file (README.md). Create a .env file and run the tests:
+To run tests, go to the parent folder of this file (README.md).
+
+1. Create a .env file
+2. Create `test-users.txt` with one username per line
+3. Run the tests
 
 ```sh
 $ cp .env.in .env # Edit the .env file appropriately
+$ touch test-users.txt # Add one username per line
 $ locust
 ```
 
