@@ -18,6 +18,12 @@
   ladok2.kurser.ÅF.210v.godkand
 */
 export function getListOfCourseProgrammeNames(inp: string[]) {
+  if (inp === undefined)
+    return {
+      courseNames: [],
+      programmeNames: [],
+    };
+
   const splitRegex = /^ladok2\.(?<type>[^\.]*)\./i;
   const courseNames: string[] = [];
   const programmeNames: string[] = [];

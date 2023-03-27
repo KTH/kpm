@@ -75,7 +75,7 @@ api.get("/user/:user", async (req, res, next) => {
     } else if (json.length === 0) {
       res.status(statusCode || 200).send([]);
     } else {
-      const result = teachingResult(json[0].memberOf);
+      const result = teachingResult(json[0]?.memberOf);
       res.status(statusCode || 200).send(result);
     }
   } catch (e: any) {
@@ -94,6 +94,8 @@ export type Role = {
 export function teachingResult(data: TUgGroup[]): {
   [index: string]: Array<Role>;
 } {
+  if (data === undefined) return {};
+
   /* nameRegex regex test matches:
       Match: edu.courses.5B.5B1219.examiner
       No match: edu.courses.5B.5B1219.examiner.sdf

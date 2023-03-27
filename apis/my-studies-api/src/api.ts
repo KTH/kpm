@@ -80,7 +80,7 @@ api.get(
       }
 
       const { courseNames, programmeNames } = getListOfCourseProgrammeNames(
-        json![0].memberOf.map((o) => o.name)
+        json![0]?.memberOf.map((o) => o.name)
       );
 
       let courses: { [index: TCourseCode]: TUserCourse[] } = {};
