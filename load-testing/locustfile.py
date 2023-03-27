@@ -1,7 +1,7 @@
 import os
 from decouple import config
 from random import randint
-from locust import HttpUser, task, run_single_user
+from locust import HttpUser, task, run_single_user, between
 
 LOAD_TEST_TOKEN = os.environ.get('LOAD_TEST_TOKEN') if os.environ.get('LOAD_TEST_TOKEN') != None else config('LOAD_TEST_TOKEN')
 
@@ -16,8 +16,9 @@ if os.path.isfile(path):
 class HelloWorldUser(HttpUser):
     host = "http://127.0.0.1:3000/kpm"
     sessionUser = None
+    constant_pacing = 5
 
-    def getSession(self):
+    def on_start(self):
         userId = userNames[randint(0, len(userNames) - 1)]
         res = self.client.get("/auth/load-test-session-init",
                               params = { "id": userId},
@@ -30,25 +31,15 @@ class HelloWorldUser(HttpUser):
 
     @task(4)
     def teaching(self):
-        if (self.sessionUser == None):
-            self.getSession()
-        res = self.client.get("/api/teaching")
-        res
+        self.client.get("/api/teaching")
     
     @task(4)
     def studies(self):
-        if (self.sessionUser == None):
-            self.getSession()
-        res = self.client.get("/api/studies")
-        res
+        self.client.get("/api/studies")
     
     @task
     def lang(self):
-        if (self.sessionUser == None):
-            self.getSession()
-
-        res = self.client.post("/api/lang", json={ "lang": "sv"})
-        res
+        self.client.post("/api/lang", json={ "lang": "sv"})
 
 
 # if launched directly, e.g. "python3 debugging.py", not "locust -f debugging.py"
