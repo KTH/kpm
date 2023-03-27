@@ -40,6 +40,10 @@ class HelloWorldUser(HttpUser):
     @task
     def lang(self):
         self.client.post("/api/lang", json={ "lang": "sv"})
+    
+    # @task
+    # def getAsset(self):
+    #     self.client.get("/assets/index.js")
 
 
 # if launched directly, e.g. "python3 debugging.py", not "locust -f debugging.py"
