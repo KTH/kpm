@@ -29,6 +29,7 @@ const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
+const LOAD_TEST_TOKEN = process.env.LOAD_TEST_TOKEN;
 
 export const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
   ? ({} as const)
@@ -59,6 +60,45 @@ async function getOpenIdClient() {
   });
 
   return client;
+}
+
+/**
+ * The following endpoint allows us to perform load testing
+ * without logging in as each user which would require
+ * passwords and a complete OAuth2 login flow.
+ */
+if (IS_DEV || IS_STAGE) {
+  if (LOAD_TEST_TOKEN) {
+    log.warn("LOAD_TEST_TOKEN found -- ready for load testing!");
+  }
+  auth.get("/load-test-session-init", function initSession(req, res) {
+    if (!LOAD_TEST_TOKEN) {
+      // Don't allow this to be called unless a token is set
+      return res.status(403);
+    }
+
+    if (req.headers.authorization !== LOAD_TEST_TOKEN) {
+      return res.status(401).send("Invalid access token" as any);
+    }
+
+    log.info("session init");
+
+    const userId = req.query.id?.toString();
+    if (userId !== undefined) {
+      req.session.user = {
+        kthid: userId,
+        display_name: req.query.name?.toString() ?? "Test Userson",
+        email: req.query.email?.toString() ?? "test@email.com",
+        username: req.query.username?.toString() ?? "testuser",
+        hasEduCourses: true,
+        hasLadokCourses: true,
+        numNewNotifications: 0,
+        expires: new Date().getTime() + SESSION_MAX_AGE_MS,
+      };
+    }
+
+    res.send(req.session.user?.kthid);
+  });
 }
 
 // Example: /kpm/auth/login?nextUrl=https://kth.se&prompt=none

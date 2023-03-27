@@ -1,0 +1,2 @@
+locust==2.15.1
+python-decouple==3.8
