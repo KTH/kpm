@@ -8,3 +8,4 @@ packages/evolene-local-packages/package-lock.json
 *.DS_Store
 settings.json
 launch.json
+test-users.txt
