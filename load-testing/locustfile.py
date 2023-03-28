@@ -38,9 +38,9 @@ class HelloWorldUser(HttpUser):
     def studies(self):
         self.client.get("/api/studies")
 
-    @task
-    def lang(self):
-        self.client.post("/api/lang", json={"lang": "sv"})
+    # @task
+    # def lang(self):
+    #     self.client.post("/api/lang", json={"lang": "sv"})
 
     # @task
     # def getAsset(self):
