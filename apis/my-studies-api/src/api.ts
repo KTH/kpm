@@ -50,18 +50,18 @@ export type TUserStudies = {
   programmes: Record<TProgramCode, TUserProgram[]>;
 };
 
+const ugClient = new UGRestClient({
+  authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
+  resourceBaseURI: UG_REST_BASE_URI,
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
+});
+
 api.get(
   "/user/:user",
   async (req: Request, res: Response<TUserStudies>, next: NextFunction) => {
     try {
       const userName = req.params.user;
-
-      const ugClient = new UGRestClient({
-        authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
-        resourceBaseURI: UG_REST_BASE_URI,
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-      });
 
       const perf1 = Date.now();
 

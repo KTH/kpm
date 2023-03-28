@@ -36,16 +36,16 @@ export type TUgGroup = {
   name: string;
 };
 
+const ugClient = new UGRestClient({
+  authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
+  resourceBaseURI: UG_REST_BASE_URI,
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
+});
+
 api.get("/user/:user", async (req, res, next) => {
   try {
     const userName = req.params.user;
-
-    const ugClient = new UGRestClient({
-      authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
-      resourceBaseURI: UG_REST_BASE_URI,
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-    });
 
     // throw new Error("Test");
 
