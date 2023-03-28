@@ -62,6 +62,7 @@ export function memoized<T extends TCacheable>({
     if (cachedValue !== undefined && cachedValue !== null) return cachedValue;
 
     // Cache miss, calculate value, store and return
+    log.info(`Cache miss for key ${key}`);
     const newValue: T | undefined = await fn(key).catch((err: any) => {
       err.details = { ...err.details, memoized_key: key };
       log.error(err);
