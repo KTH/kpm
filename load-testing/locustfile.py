@@ -3,7 +3,8 @@ from decouple import config
 from random import randint
 from locust import HttpUser, task, run_single_user, between
 
-LOAD_TEST_TOKEN = os.environ.get('LOAD_TEST_TOKEN') if os.environ.get('LOAD_TEST_TOKEN') != None else config('LOAD_TEST_TOKEN')
+LOAD_TEST_TOKEN = os.environ.get('LOAD_TEST_TOKEN') if os.environ.get(
+    'LOAD_TEST_TOKEN') != None else config('LOAD_TEST_TOKEN')
 
 userNames = []
 path = os.getcwd() + "/test-users.txt"
@@ -13,6 +14,7 @@ if os.path.isfile(path):
     userNames = [n.strip() for n in userNames]
     file.close()
 
+
 class HelloWorldUser(HttpUser):
     host = "http://127.0.0.1:3000/kpm"
     sessionUser = None
@@ -21,26 +23,25 @@ class HelloWorldUser(HttpUser):
     def on_start(self):
         userId = userNames[randint(0, len(userNames) - 1)]
         res = self.client.get("/auth/load-test-session-init",
-                              params = { "id": userId},
-                              headers = { "authorization": LOAD_TEST_TOKEN })
+                              params={"id": userId},
+                              headers={"authorization": LOAD_TEST_TOKEN})
         if (res.status_code == 200):
-            self.sessionUser = { "id": res.content }    
+            self.sessionUser = {"id": res.content}
         else:
             self.sessionUser = None
-
 
     @task(4)
     def teaching(self):
         self.client.get("/api/teaching")
-    
+
     @task(4)
     def studies(self):
         self.client.get("/api/studies")
-    
+
     @task
     def lang(self):
-        self.client.post("/api/lang", json={ "lang": "sv"})
-    
+        self.client.post("/api/lang", json={"lang": "sv"})
+
     # @task
     # def getAsset(self):
     #     self.client.get("/assets/index.js")
