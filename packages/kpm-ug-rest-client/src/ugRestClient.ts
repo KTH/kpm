@@ -104,10 +104,11 @@ export class UGRestClient {
 
   private async getAccessToken(): Promise<string> {
     // Use cached value if available
+    // https://github.com/panva/node-openid-client/blob/main/docs/README.md#tokenset
     if (
       this._accessTokenSet &&
       (this._accessTokenSet.expires_at === undefined ||
-        this._accessTokenSet.expires_at > Date.now() + 1000)
+        this._accessTokenSet.expires_at * 1000 > Date.now() + 1000)
     ) {
       return this._accessTokenSet.access_token!;
     }
