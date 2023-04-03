@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import got from "got";
 import log from "skog";
-import { getCourseInfo, get_canvas_rooms, sessionUser } from "./common";
+import {
+  getCourseInfo,
+  getSocial,
+  get_canvas_rooms,
+  sessionUser,
+} from "./common";
 import {
   APITeaching,
   TCourseCode,
@@ -21,6 +26,7 @@ export async function teachingApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
+    const lang = req.headers["accept-language"];
 
     const perf1 = Date.now();
     const elapsed_ms = () => Date.now() - perf1;
@@ -38,6 +44,10 @@ export async function teachingApiHandler(
       .catch(myTeachingApiErr);
 
     const rooms_fut = get_canvas_rooms(user.kthid).catch(myCanvasRoomsApiErr);
+
+    const star_fut = getSocial<SocialCourses>(user, "courses", lang).catch(
+      socialErr
+    );
     log.debug({ elapsed_ms: elapsed_ms() }, "Initialized my-canvas-rooms-api");
 
     const teaching = await teaching_fut;
@@ -68,9 +78,15 @@ export async function teachingApiHandler(
         state: kopps?.state,
         roles: roles,
         rooms: rooms ? rooms?.[course_code] || [] : null,
+        starred: false,
       };
     }
-
+    const star_data = await star_fut;
+    for (let { slug, starred } of star_data.courses) {
+      if (starred && slug in courses) {
+        courses[slug].starred = true;
+      }
+    }
     // Sort courses alphabetically by key (course_code)
     const tmp = Object.entries(courses).sort(
       ([a], [b]) => (a < b && -1) || (a > b && 1) || 0
@@ -82,6 +98,14 @@ export async function teachingApiHandler(
     next(err);
   }
 }
+
+type SocialCourses = {
+  courses: [SocialCourse];
+};
+type SocialCourse = {
+  slug: TCourseCode;
+  starred: boolean;
+};
 
 function koppsErr(err: any) {
   handleCommonGotErrors(err);
@@ -106,4 +130,16 @@ function myCanvasRoomsApiErr(err: any) {
   // TODO: Add API specific error handling
   Error.captureStackTrace(err, myCanvasRoomsApiErr);
   throw err;
+}
+
+function socialErr(err: any) {
+  try {
+    handleCommonGotErrors(err);
+    // TODO: Add API specific error handling
+    Error.captureStackTrace(err, socialErr);
+    throw err;
+  } catch (error) {
+    log.error({ error }, "Failed to get social course stars");
+    return { courses: [] };
+  }
 }
