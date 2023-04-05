@@ -73,6 +73,20 @@
         }
       }
     }
+    @media ${$desktopMediumBreakpoint} {
+        .kpm-teaching-course-name {
+            grid-column: 3/6;
+        }
+        > a {
+            grid-column: 2/4;
+        }
+        > .kpm-row {
+            grid-column: 2 / 6;
+        }
+      .kpm-teaching-course-admin-dropdown {
+        margin-left: 0;
+      }
+    }
     @media #{$mblBreakpoint} {
       & {
         font-size: 1.1em;
