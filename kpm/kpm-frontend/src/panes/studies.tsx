@@ -136,7 +136,7 @@ function Course({ courseCode, course }: TCourseProps) {
   const status = course.completed ? "godkand" : roundToShow?.status;
   const exams = course.rooms?.filter((c) => c.type === "exam");
   return (
-    <div className={`kpm-studies-course kpm-${status}`}>
+    <section className={`kpm-studies-course kpm-${status}`}>
       <h2>
         {courseCode} <CourseStatus status={status} />
       </h2>
@@ -184,7 +184,7 @@ function Course({ courseCode, course }: TCourseProps) {
           {i18n("No rooms found in Canvas")}
         </p>
       )}
-    </div>
+    </section>
   );
 }
 
