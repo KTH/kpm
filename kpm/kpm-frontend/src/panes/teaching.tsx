@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import type {
   APITeaching,
   TCanvasRoom,
+  TCourseCode,
   TTeachingCourse,
 } from "kpm-backend-interface";
+import { IconStar } from "../components/icons";
 import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { FilterOption, TabFilter } from "../components/filter";
 import { ExamRoomList } from "../components/courseComponents";
-import { fetchApi, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, postApi, formatTerm, useDataFecther } from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -37,26 +39,35 @@ export async function loaderTeaching({
   }
 }
 
-type TFilter = "not_cancelled" | "all";
+type TFilter = "favs" | "not_cancelled" | "all";
 
 export function Teaching() {
   const { res, loading, error } = useDataFecther<APITeaching>(loaderTeaching);
-  const courses = Object.entries(res?.courses || {});
+  const { courses, setStar, errorSetStar } = useMutateCourses(res);
 
   const isEmpty = !loading && !error && courses.length === 0;
 
   const [filter, setFilter] = useState<TFilter>();
   useEffect(() => {
     if (filter === undefined && courses.length > 0) {
-      const hasNotCancelled = !!courses.find(
-        ([_cc, c]) => c.state === "ESTABLISHED" || c.state === "DEACTIVATED"
-      );
-      setFilter(hasNotCancelled ? "not_cancelled" : "all");
+      if (courses?.find(([_cc, c]) => c.starred)) {
+        setFilter("favs");
+      } else if (
+        courses.find(
+          ([_cc, c]) => c.state === "ESTABLISHED" || c.state === "DEACTIVATED"
+        )
+      ) {
+        setFilter("not_cancelled");
+      } else {
+        setFilter("all");
+      }
     }
   }, [courses]);
 
   const filtered = courses.filter(([_key, course]) => {
     switch (filter) {
+      case "favs":
+        return course.starred;
       case "not_cancelled":
         return course.state === "ESTABLISHED";
       default:
@@ -67,15 +78,22 @@ export function Teaching() {
     <MenuPane error={error}>
       <TabFilter>
         <FilterOption<TFilter>
+          value="favs"
+          filter={filter || "favs"}
+          onSelect={setFilter}
+        >
+          {i18n("Favourites")}
+        </FilterOption>
+        <FilterOption<TFilter>
           value="not_cancelled"
-          filter={filter || "not_cancelled"}
+          filter={filter || "favs"}
           onSelect={setFilter}
         >
           {i18n("not_cancelled")}
         </FilterOption>
         <FilterOption<TFilter>
           value="all"
-          filter={filter || "not_cancelled"}
+          filter={filter || "favs"}
           onSelect={setFilter}
         >
           {i18n("all_courses")}
@@ -83,6 +101,7 @@ export function Teaching() {
       </TabFilter>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
+      {errorSetStar && <ErrorMessage error={errorSetStar} compact />}
       {isEmpty && (
         <EmptyPlaceholder>
           {i18n("You aren't teaching any courses.")}
@@ -91,7 +110,14 @@ export function Teaching() {
       {filtered && (
         <div className="kpm-teaching">
           {filtered.map(([code, course]) => {
-            return <Course key={code} courseCode={code} course={course} />;
+            return (
+              <Course
+                key={code}
+                courseCode={code}
+                course={course}
+                setStar={setStar}
+              />
+            );
           })}
         </div>
       )}
@@ -99,12 +125,69 @@ export function Teaching() {
   );
 }
 
+export function useMutateCourses(res: APITeaching | undefined): {
+  courses: [TCourseCode, TTeachingCourse][];
+  setStar(slug: string, value: boolean): void;
+  errorSetStar: Error | undefined;
+} {
+  const [courses, setCourses] = useState<APITeaching["courses"]>();
+  const [errorSetStar, setErrorSetStar] = useState<Error>();
+
+  // Update state on res change (loaded/updated)
+  useEffect(() => {
+    if (res) {
+      const { courses } = res;
+      setCourses(courses);
+      setErrorSetStar(undefined);
+    }
+  }, [res]);
+
+  // ******************************************************
+  // Allow widget to mutate the star property
+  const setStar = async (slug: string, value: boolean) => {
+    // Store to reset if call to API fails
+    const oldGroups = { ...courses };
+    // Clear error due to new interaction
+    setErrorSetStar(undefined);
+
+    let didChange = false;
+    const newGroups = { ...courses };
+    if (slug in newGroups) {
+      if (newGroups[slug].starred !== value) {
+        newGroups[slug].starred = value;
+        didChange = true;
+      }
+    }
+    // Store change locally for quick feedback in UI
+    setCourses(newGroups);
+
+    if (didChange) {
+      const res = await postApi("/api/star", {
+        kind: "course",
+        slug,
+        starred: value,
+      }).catch((err: any) => {
+        // Expose error and reset groups
+        setErrorSetStar(err);
+        setCourses(oldGroups);
+      });
+    }
+  };
+
+  return {
+    courses: Object.entries(courses || {}),
+    setStar,
+    errorSetStar,
+  };
+}
+
 type TCourseProps = {
   courseCode: string;
   course: TTeachingCourse;
+  setStar(slug: string, value: boolean): void;
 };
 
-function Course({ courseCode, course }: TCourseProps) {
+function Course({ courseCode, course, setStar }: TCourseProps) {
   const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
   const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
   // TODO: These should be changed to course rooms, check backend
@@ -118,37 +201,36 @@ function Course({ courseCode, course }: TCourseProps) {
   return (
     <div className="kpm-teaching-course">
       <h2 className="kpm-teaching-course-code">{courseCode}</h2>
+      <IconStar
+        starred={course.starred}
+        onClick={() => setStar(courseCode, !course.starred)}
+      />
+      <p className="kpm-teaching-course-name">
+        {courseName}{" "}
+        {course.state === "ESTABLISHED" ? (
+          ""
+        ) : (
+          <i className="kpm-muted-text">{i18n("cstate_" + course.state)}</i>
+        )}
+      </p>
+      <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
+      <CourseAdminDropdown courseCode={courseCode} currentTerm={currentTerm} />
       <div className="kpm-row">
-        <p className="kpm-teaching-course-name">
-          {courseName}{" "}
-          {course.state === "ESTABLISHED" ? (
-            ""
-          ) : (
-            <i className="kpm-muted-text">{i18n("cstate_" + course.state)}</i>
-          )}
-        </p>
-        <a href={aboutCourseUrl}>{i18n("Om kursen (kurs-PM m.m.)")}</a>
-        <CourseAdminDropdown
-          courseCode={courseCode}
-          currentTerm={currentTerm}
+        <h3>{i18n("Canvas:")}</h3>
+        {course.rooms === null && (
+          <p className="kpm-muted-text">
+            {i18n("Canvas is silent, try later...")}
+          </p>
+        )}
+        {course.rooms?.length === 0 && (
+          <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
+        )}
+        <CanvasRoomShortList rooms={shortList} />
+        <CanvasRoomExpandedList
+          rooms={allCourseRooms}
+          title={i18n("Alla kursrum")}
         />
-        <div className="kpm-row">
-          <h3>{i18n("Canvas:")}</h3>
-          {course.rooms === null && (
-            <p className="kpm-muted-text">
-              {i18n("Canvas is silent, try later...")}
-            </p>
-          )}
-          {course.rooms?.length === 0 && (
-            <p className="kpm-muted-text">{i18n("No rooms found in Canvas")}</p>
-          )}
-          <CanvasRoomShortList rooms={shortList} />
-          <CanvasRoomExpandedList
-            rooms={allCourseRooms}
-            title={i18n("Alla kursrum")}
-          />
-          <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
-        </div>
+        <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 @use "../vars" as *;
 
 #kpm-6cf53 .kpm-teaching {
-  $rowGap: calc(4 * var(--kpmGap));
-  $colGap: $rowGap;
+  $rowGap: calc(2 * var(--kpmGap));
+  $colGap: calc(2 * $rowGap);
   $colCount: 3;
   $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
 
@@ -11,8 +11,8 @@
   width: 100%;
 
   .kpm-teaching-course {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto auto;
     gap: $rowGap $colGap;
 
     align-items: flex-start;
@@ -20,20 +20,16 @@
     border-bottom: 1px solid var(--kpmPaneSepatorFg);
 
     h2 {
-      flex: auto 0 0;
+      grid-column: 2;
       font-size: 1em;
       margin: 0;
       padding: 0;
     }
-    > .kpm-row {
-      flex: 15em 1 1;
-      > p {
-        flex: auto 1 1;
-      }
+    .icon.star {
+      grid-row: 1;
     }
-
-    & > a {
-      margin-right: calc(3 * var(--kpmGap));
+    > .kpm-row {
+      grid-column: 3 / 6;
     }
 
     .kpm-teaching-course-code,
@@ -77,12 +73,14 @@
         }
       }
     }
-  }
-}
-
-@media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-teaching .kpm-teaching-course {
-    flex-basis: 100%;
-    font-size: 1.1em;
+    @media #{$mblBreakpoint} {
+      & {
+        // TODO: Maybe keep grid, but change template columns,
+        // ... and column properties of some children?
+        display: flex;
+        flex-flow: column;
+        font-size: 1.1em;
+      }
+    }
   }
 }

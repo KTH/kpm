@@ -70,6 +70,7 @@ export type TTeachingCourse = {
   state: "ESTABLISHED" | "DEACTIVATED" | "CANCELLED";
   roles: TTeachingRole[];
   rooms: TCanvasRoom[] | null;
+  starred: boolean;
 };
 
 export type TTeachingRole = {
