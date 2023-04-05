@@ -73,12 +73,14 @@
         }
       }
     }
-  }
-}
-
-@media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-teaching .kpm-teaching-course {
-    flex-basis: 100%;
-    font-size: 1.1em;
+    @media #{$mblBreakpoint} {
+      & {
+        // TODO: Maybe keep grid, but change template columns,
+        // ... and column properties of some children?
+        display: flex;
+        flex-flow: column;
+        font-size: 1.1em;
+      }
+    }
   }
 }

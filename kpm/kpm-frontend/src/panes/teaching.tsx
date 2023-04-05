@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type {
   APITeaching,
   TCanvasRoom,
+  TCourseCode,
   TTeachingCourse,
 } from "kpm-backend-interface";
 import { IconStar } from "../components/icons";
@@ -42,12 +43,9 @@ type TFilter = "favs" | "not_cancelled" | "all";
 
 export function Teaching() {
   const { res, loading, error } = useDataFecther<APITeaching>(loaderTeaching);
-  const mutate = useMutateCourses(res);
-  const courses = Object.entries(mutate.courses || {});
-  const setStar = mutate.setStar;
-  const errorSetStar = mutate.errorSetStar;
+  const { courses, setStar, errorSetStar } = useMutateCourses(res);
 
-  const isEmpty = !loading && !error && Object.keys(courses).length === 0;
+  const isEmpty = !loading && !error && courses.length === 0;
 
   const [filter, setFilter] = useState<TFilter>();
   useEffect(() => {
@@ -61,7 +59,7 @@ export function Teaching() {
       ) {
         setFilter("not_cancelled");
       } else {
-        setFilter("not_cancelled");
+        setFilter("all");
       }
     }
   }, [courses]);
@@ -128,7 +126,7 @@ export function Teaching() {
 }
 
 export function useMutateCourses(res: APITeaching | undefined): {
-  courses: APITeaching["courses"] | undefined;
+  courses: [TCourseCode, TTeachingCourse][];
   setStar(slug: string, value: boolean): void;
   errorSetStar: Error | undefined;
 } {
@@ -177,7 +175,7 @@ export function useMutateCourses(res: APITeaching | undefined): {
   };
 
   return {
-    courses,
+    courses: Object.entries(courses || {}),
     setStar,
     errorSetStar,
   };
@@ -186,7 +184,7 @@ export function useMutateCourses(res: APITeaching | undefined): {
 type TCourseProps = {
   courseCode: string;
   course: TTeachingCourse;
-  setStar: any;
+  setStar(slug: string, value: boolean): void;
 };
 
 function Course({ courseCode, course, setStar }: TCourseProps) {
