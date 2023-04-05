@@ -199,7 +199,7 @@ function Course({ courseCode, course, setStar }: TCourseProps) {
   const currentTerm = getCurrentTerm();
 
   return (
-    <div className="kpm-teaching-course">
+    <section className="kpm-teaching-course">
       <h2 className="kpm-teaching-course-code">{courseCode}</h2>
       <IconStar
         starred={course.starred}
@@ -232,7 +232,7 @@ function Course({ courseCode, course, setStar }: TCourseProps) {
         />
         <ExamRoomList rooms={exams} title={i18n("Alla examinationsrum")} />
       </div>
-    </div>
+    </section>
   );
 }
 // <CanvasRoomExpandedList rooms={other} />
