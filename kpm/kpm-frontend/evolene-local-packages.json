@@ -1,4 +1,5 @@
 {
   "kpm-backend-interface": { "path": "kpm/kpm-backend-interface" },
-  "fetch-for-jest": { "path": "packages/fetch-for-jest" }
+  "fetch-for-jest": { "path": "packages/fetch-for-jest" },
+  "parcel-namer-force-hash": { "path": "packages/parcel-namer-force-hash" }
 }
