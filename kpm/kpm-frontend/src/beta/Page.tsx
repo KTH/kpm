@@ -1,16 +1,19 @@
 import React from "react";
+import { i18n } from "./i18n";
 
 export function Page({
   id = undefined,
+  lang = "sv",
   children,
 }: {
   id?: string;
+  lang?: string;
   children: any;
 }) {
   const pageId = id;
   return (
     <div className="KTHPage">
-      <KTHHeader />
+      <KTHHeader lang={lang} />
       <div id="kpm-activation" className="container main">
         <KTHBreadCrumbs
           path={[
@@ -24,7 +27,7 @@ export function Page({
           </article>
         </main>
       </div>
-      <KTHFooter />
+      <KTHFooter lang={lang} />
     </div>
   );
 }
@@ -46,7 +49,7 @@ function KTHBreadCrumbs({ path }: TKTHBreadCrumbs) {
   );
 }
 
-function KTHHeader() {
+function KTHHeader({ lang = "sv" }) {
   return (
     <header className="KTHPageHeader">
       <div className="container-fluid">
@@ -62,21 +65,28 @@ function KTHHeader() {
               </a>
             </figure>
             <div className="block siteName">Beta</div>
-            <div className="block list links secondaryMenu" lang="sv-SE">
+            <div
+              className="block list links secondaryMenu"
+              lang={i18n(lang, "sv-SE")}
+            >
               <nav aria-label="Sekundär toppmeny">
                 <ul>
                   <li>
-                    <a href="https://www.kth.se/student">Student</a>
+                    <a href="https://www.kth.se/student">
+                      {i18n(lang, "Student")}
+                    </a>
                   </li>
                   <li>
-                    <a href="https://www.kth.se/alumni">Alumn</a>
+                    <a href="https://www.kth.se/alumni">
+                      {i18n(lang, "Alumn")}
+                    </a>
                   </li>
                   <li>
-                    <a href="https://intra.kth.se/">Anställd</a>
+                    <a href="https://intra.kth.se/">{i18n(lang, "Anställd")}</a>
                   </li>
                   <li>
                     <a lang="en-GB" href="https://www.kth.se/en">
-                      International website
+                      {i18n(lang, "International website")}
                     </a>
                   </li>
                 </ul>
@@ -99,7 +109,7 @@ function KTHHeader() {
                     <div className="headerItem showLabel">
                       <a className="nav-link" href="https://www.kth.se/">
                         {" "}
-                        Hem
+                        {i18n(lang, "Hem")}
                       </a>
                     </div>
                   </li>
@@ -114,7 +124,7 @@ function KTHHeader() {
                         href="https://www.kth.se/utbildning"
                       >
                         {" "}
-                        Utbildning
+                        {i18n(lang, "Utbildning")}
                       </a>
                     </div>
                   </li>
@@ -130,7 +140,7 @@ function KTHHeader() {
                         href="https://www.kth.se/samverkan"
                       >
                         {" "}
-                        Samverkan
+                        {i18n(lang, "Samverkan")}
                       </a>
                     </div>
                   </li>
@@ -142,7 +152,7 @@ function KTHHeader() {
                     <div className="headerItem">
                       <a className="nav-link" href="https://www.kth.se/om">
                         {" "}
-                        Om KTH
+                        {i18n(lang, "Om KTH")}
                       </a>
                     </div>
                   </li>
@@ -157,7 +167,7 @@ function KTHHeader() {
                         href="https://www.kth.se/biblioteket"
                       >
                         {" "}
-                        Bibliotek
+                        {i18n(lang, "Bibliotek")}
                       </a>
                     </div>
                   </li>
@@ -173,89 +183,120 @@ function KTHHeader() {
 }
 
 // TODO: Load this from cortina?  Provide sv an en version!
-function KTHFooter() {
+function KTHFooter({ lang = "sv" }) {
   return (
     <footer className="container">
-      <div className="block columnSplitter row using4Columns" lang="sv-SE">
+      <div
+        className="block columnSplitter row using4Columns"
+        lang={i18n(lang, "sv-SE")}
+      >
         <div className="col c1">
-          <div className="block list links defaultTheme" lang="sv-SE">
+          <div
+            className="block list links defaultTheme"
+            lang={i18n(lang, "sv-SE")}
+          >
             <h2>KTH</h2>
 
             <ul>
               <li>
-                <a href="https://www.kth.se/utbildning">Utbildning</a>
+                <a href="https://www.kth.se/utbildning">
+                  {i18n(lang, "Utbildning")}
+                </a>
               </li>
               <li>
-                <a href="https://www.kth.se/forskning">Forskning</a>
+                <a href="https://www.kth.se/forskning">
+                  {i18n(lang, "Forskning")}
+                </a>
               </li>
               <li>
-                <a href="https://www.kth.se/samverkan">Samverkan</a>
+                <a href="https://www.kth.se/samverkan">
+                  {i18n(lang, "Samverkan")}
+                </a>
               </li>
               <li>
-                <a href="https://www.kth.se/om">Om KTH</a>
+                <a href="https://www.kth.se/om">{i18n(lang, "Om KTH")}</a>
               </li>
               <li>
-                <a href="https://www.kth.se/student">Student på KTH</a>
+                <a href="https://www.kth.se/student">
+                  {i18n(lang, "Student på KTH")}
+                </a>
               </li>
               <li>
-                <a href="https://www.kth.se/alumni">Alumni</a>
+                <a href="https://www.kth.se/alumni">{i18n(lang, "Alumni")}</a>
               </li>
               <li>
-                <a href="https://intra.kth.se/">KTH Intranät</a>
+                <a href="https://intra.kth.se/">{i18n(lang, "KTH Intranät")}</a>
               </li>
             </ul>
           </div>
         </div>
         <div className="col c2">
-          <div className="block list links defaultTheme" lang="sv-SE">
-            <h2>Organisation</h2>
+          <div
+            className="block list links defaultTheme"
+            lang={i18n(lang, "sv-SE")}
+          >
+            <h2>{i18n(lang, "Organisation")}</h2>
 
             <ul>
               <li>
-                <a href="https://www.kth.se/biblioteket">KTH Biblioteket</a>
-              </li>
-              <li>
-                <a href="https://intra.kth.se/styrning/kths-organisation/skolor/kth-s-skolor-1.3848">
-                  KTH:s skolor
+                <a href="https://www.kth.se/biblioteket">
+                  {i18n(lang, "KTH Biblioteket")}
                 </a>
               </li>
               <li>
-                <a href="https://www.kth.se/om/rektor">Rektor</a>
+                <a href="https://intra.kth.se/styrning/kths-organisation/skolor/kth-s-skolor-1.3848">
+                  {i18n(lang, "KTH:s skolor")}
+                </a>
+              </li>
+              <li>
+                <a href="https://www.kth.se/om/rektor">
+                  {i18n(lang, "Rektor")}
+                </a>
               </li>
               <li>
                 <a href="https://www.kth.se/om/organisation/gvs-1.887371">
-                  Gemensamt verksamhetsstöd
+                  {i18n(lang, "Gemensamt verksamhetsstöd")}
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="col c3">
-          <div className="block list links defaultTheme" lang="sv-SE">
-            <h2>Tjänster</h2>
+          <div
+            className="block list links defaultTheme"
+            lang={i18n(lang, "sv-SE")}
+          >
+            <h2>{i18n(lang, "Tjänster")}</h2>
 
             <ul>
               <li>
-                <a href="https://www.kth.se/student/studier/schema">Schema</a>
-              </li>
-              <li>
-                <a href="https://www.kth.se/social/">
-                  Kurs-, program- och gruppwebbar
+                <a href="https://www.kth.se/student/studier/schema">
+                  {i18n(lang, "Schema")}
                 </a>
               </li>
               <li>
-                <a href="https://canvas.kth.se">Lärplattformen Canvas</a>
+                <a href="https://www.kth.se/social/">
+                  {i18n(lang, "Kurs-, program- och gruppwebbar")}
+                </a>
               </li>
               <li>
-                <a href="https://webmail.kth.se">Webbmejl</a>
+                <a href="https://canvas.kth.se">
+                  {i18n(lang, "Lärplattformen Canvas")}
+                </a>
+              </li>
+              <li>
+                <a href="https://webmail.kth.se">{i18n(lang, "Webbmejl")}</a>
               </li>
             </ul>
           </div>
         </div>
         <div className="col c4">
-          <article className="block teaser top white" lang="sv-SE">
+          <article
+            className="block teaser top white"
+            lang={i18n(lang, "sv-SE")}
+          >
             <div className="teaserBody">
-              <h2 className="teaserHeading">Kontakt</h2>
+              <h2 className="teaserHeading">{i18n(lang, "Kontakt")}</h2>
               <div className="lead">
                 <p>
                   <strong>KTH</strong>
@@ -268,53 +309,62 @@ function KTHFooter() {
               </div>
             </div>
           </article>
-          <div className="block list links defaultTheme" lang="sv-SE">
+          <div
+            className="block list links defaultTheme"
+            lang={i18n(lang, "sv-SE")}
+          >
             <ul>
               <li>
-                <a href="https://www.kth.se/om/kontakt">Kontakta KTH</a>
+                <a href="https://www.kth.se/om/kontakt">
+                  {i18n(lang, "Kontakta KTH")}
+                </a>
               </li>
               <li>
                 <a href="https://www.kth.se/om/work-at-kth?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=jobb">
-                  Jobba på KTH
+                  {i18n(lang, "Jobba på KTH")}
                 </a>
               </li>
               <li>
                 <a href="https://www.kth.se/om/press?utm_source=footer&amp;utm_medium=web&amp;utm_campaign=press">
-                  Press och media
+                  {i18n(lang, "Press och media")}
                 </a>
               </li>
               <li>
                 <a href="https://www.kth.se/om/kontakt/faktura-och-betalning-1.2317">
-                  Faktura och betalning
+                  {i18n(lang, "Faktura och betalning")}
                 </a>
               </li>
               <li>
                 <a href="https://www.facebook.com/KTHuniversitet/">
-                  KTH på Facebook
+                  {i18n(lang, "KTH på Facebook")}
                 </a>
               </li>
               <li>
                 <a href="https://www.linkedin.com/school/kth">
-                  KTH på Linkedin
+                  {i18n(lang, "KTH på Linkedin")}
                 </a>
               </li>
               <li>
-                <a href="https://twitter.com/KTHuniversity">KTH på Twitter</a>
+                <a href="https://twitter.com/KTHuniversity">
+                  {i18n(lang, "KTH på Twitter")}
+                </a>
               </li>
               <li>
                 <a href="https://intra.kth.se/administration/kommunikation/webb/om/webbansvariga-1.23113">
-                  Kontakta webbansvarig
+                  {i18n(lang, "Kontakta webbansvarig")}
                 </a>
               </li>
               <li>
-                <a href="https://www.kth.se/gemensamt">Om KTH:s webbplats</a>
+                <a href="https://www.kth.se/gemensamt">
+                  {i18n(lang, "Om KTH:s webbplats")}
+                </a>
               </li>
             </ul>
           </div>
         </div>
       </div>
       <div id="back-to-top" role="link" className="show">
-        Till sidans topp
+        {i18n(lang, "Till sidans topp")}
       </div>
     </footer>
   );
