@@ -94,7 +94,6 @@ function getLatestDistFileNames() {
 
 function getLatestDistFileNamesFromDisk() {
   const manifestJson = readFileSync(path.join(distProdPath, "manifest.json"));
-  // QUESTION: Should we check that we get the latest version of each file?
   return JSON.parse(manifestJson.toString()) as Record<
     string,
     { fileName?: string }
