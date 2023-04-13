@@ -87,7 +87,7 @@ function KTHHeader({ lang = "sv" }) {
                   <li>
                     <a
                       lang={lang === "en" ? "sv-SE" : "en-GB"}
-                      href={`https://www.kth.se/${lang === "en" ? "en" : ""}`}
+                      href={`https://www.kth.se/${lang === "sv" ? "en" : ""}`}
                     >
                       {i18n(lang, "International website")}
                     </a>
