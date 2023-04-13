@@ -30,8 +30,17 @@ function isMenuActive() {
   );
 }
 
+function getLanguage(): "en" | "sv" | undefined {
+  const lang = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("language"));
+  if (lang) {
+    return lang.split("=")[1] as any;
+  }
+}
+
 export function App() {
-  const lang = "en";
+  const lang = getLanguage() ?? "en";
   const [feedbackMsg, setFeedbackMsg] = React.useState<string>();
   const isActive = isMenuActive();
   if (lang === "en") {
