@@ -1,0 +1,20 @@
+{
+  "name": "parcel-reporter-manifest",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Parcel plugin that creates manifest file after bundling.",
+  "main": "lib/index.js",
+  "engines": {
+    "parcel": ">=2.0.0"
+  },
+  "keywords": [
+    "parcel",
+    "plugin",
+    "manifest"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@parcel/plugin": "^2.5.0",
+    "parcel": "^2.5.0"
+  }
+}

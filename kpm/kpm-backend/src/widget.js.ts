@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+import path from "path";
 import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
 import { isValidSession } from "./auth";
@@ -8,6 +10,10 @@ const PORT = parseInt(process.env.PORT || "3000");
 const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
+
+const distProdPath = IS_DEV
+  ? "../kpm-frontend/distProd/production"
+  : "./distProd";
 
 /**
  * Responds with the initial javascript file that holds the entire personal menu
@@ -79,21 +85,23 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
   // res.redirect("/check");
 }
 
+let latestDistFileNames: Record<string, { fileName?: string }> | null = null;
 function getLatestDistFileNames() {
-  return {
-    "index.js": {
-      fileName: "index.js",
-    },
-    "index.css": {
-      fileName: "index.css",
-    },
-  };
+  if (latestDistFileNames) return latestDistFileNames;
+  latestDistFileNames = getLatestDistFileNamesFromDisk();
+  return latestDistFileNames;
+}
+
+function getLatestDistFileNamesFromDisk() {
+  const manifestJson = readFileSync(path.join(distProdPath, "manifest.json"));
+  return JSON.parse(manifestJson.toString()) as Record<
+    string,
+    { fileName?: string }
+  >;
 }
 
 // Mount paths appear to be relative to project root
-export const widgetJsAssets = IS_DEV
-  ? staticHandler("../kpm-frontend/distProd/production")
-  : staticHandler("./distProd");
+export const widgetJsAssets = staticHandler(distProdPath);
 
 export function previewHandler(req: Request, res: Response) {
   const { ext } = req.params;
