@@ -44,6 +44,7 @@
     "kth-style": "^8.0.29",
     "parcel": "^2.7.0",
     "parcel-namer-force-hash": "^0.1.0",
+    "parcel-reporter-manifest": "^0.1.0",
     "prettier": "^2.7.1",
     "process": "^0.11.10",
     "react-test-renderer": "^18.2.0",
