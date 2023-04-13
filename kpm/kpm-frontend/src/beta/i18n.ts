@@ -5,6 +5,7 @@ const langDictEn: Record<string, string> = {
   Anställd: "Staff",
   Alumn: "Alumni",
   Student: "Student",
+  "International website": "KTH på svenska",
   Hem: "Home",
   Biblioteket: "Library",
   Utbildning: "Studies",
@@ -35,7 +36,7 @@ const langDictEn: Record<string, string> = {
   "Kontakta webbansvarig": "Contact web site administrators",
   "Om KTH:s webbplats": "About KTH website",
   "Till sidans topp": "To page top",
-  "sv-SE": "en-SE",
+  "sv-SE": "en-GB",
 };
 
 export function i18n(lang = "sv", key: string): string | undefined {
