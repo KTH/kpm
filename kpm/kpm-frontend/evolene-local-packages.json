@@ -1,5 +1,6 @@
 {
   "kpm-backend-interface": { "path": "kpm/kpm-backend-interface" },
   "fetch-for-jest": { "path": "packages/fetch-for-jest" },
-  "parcel-namer-force-hash": { "path": "packages/parcel-namer-force-hash" }
+  "parcel-namer-force-hash": { "path": "packages/parcel-namer-force-hash" },
+  "parcel-reporter-manifest": { "path": "packages/parcel-reporter-manifest" }
 }
