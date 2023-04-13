@@ -1,4 +1,5 @@
-import { readdirSync } from "fs";
+import { readFileSync } from "fs";
+import path from "path";
 import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
 import { isValidSession } from "./auth";
@@ -92,16 +93,12 @@ function getLatestDistFileNames() {
 }
 
 function getLatestDistFileNamesFromDisk() {
-  const files = readdirSync(distProdPath);
+  const manifestJson = readFileSync(path.join(distProdPath, "manifest.json"));
   // QUESTION: Should we check that we get the latest version of each file?
-  return {
-    "index.js": {
-      fileName: files.find((f) => f.endsWith(".js")),
-    },
-    "index.css": {
-      fileName: files.find((f) => f.endsWith(".css")),
-    },
-  };
+  return JSON.parse(manifestJson.toString()) as Record<
+    string,
+    { fileName?: string }
+  >;
 }
 
 // Mount paths appear to be relative to project root
