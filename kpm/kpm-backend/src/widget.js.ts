@@ -101,7 +101,11 @@ function getLatestDistFileNamesFromDisk() {
 }
 
 // Mount paths appear to be relative to project root
-export const widgetJsAssets = staticHandler(distProdPath);
+export const widgetJsAssets = staticHandler(distProdPath, {
+  immutable: true,
+  index: false,
+  maxAge: "180 days",
+});
 
 export function previewHandler(req: Request, res: Response) {
   const { ext } = req.params;
