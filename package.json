@@ -8,7 +8,6 @@
     "build-frontend": "npm run build --workspace=kpm-frontend",
     "postinstall": "npm exec --workspaces -c 'rm -f package-lock.json'",
     "test": "npm --silent test --workspaces --if-present",
-    "release": "ts-node --esm node_modules/.bin/cellus-release apis/my-canvas-rooms-api apis/my-studies-api apis/my-teaching-api kpm",
     "/* ----------- */": "",
     "dev:my-canvas-rooms-api": "FORCE_COLOR=1 PORT=3001 npm run dev --workspace=my-canvas-rooms-api",
     "dev:my-teaching-api": "FORCE_COLOR=1 PORT=3002 npm run dev --workspace=my-teaching-api",
@@ -32,7 +31,6 @@
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
-    "cellus-release": "^0.1.0",
     "lightningcss": "^1.16.0"
   },
   "workspaces": [
