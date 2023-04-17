@@ -6,7 +6,7 @@
     "dev": "npm-run-all -l --parallel  dev:my-* dev:kpm-backend dev:kpm-frontend",
     "dev-loader": "npm run build-frontend && npm-run-all -l --parallel dev:my-* dev:kpm-backend dev:kpm-frontend-activation",
     "build-frontend": "npm run build --workspace=kpm-frontend",
-    "postinstall": "npm exec --workspaces -c 'rm -f package-lock.json' && ts-node --esm node_modules/.bin/evolene-local-packages && prettier -w **/evolene-local-packages.json",
+    "postinstall": "npm exec --workspaces -c 'rm -f package-lock.json'",
     "test": "npm --silent test --workspaces --if-present",
     "release": "ts-node --esm node_modules/.bin/cellus-release apis/my-canvas-rooms-api apis/my-studies-api apis/my-teaching-api kpm",
     "/* ----------- */": "",
@@ -32,7 +32,6 @@
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
-    "evolene-local-packages": "^0.1.0",
     "cellus-release": "^0.1.0",
     "lightningcss": "^1.16.0"
   },
