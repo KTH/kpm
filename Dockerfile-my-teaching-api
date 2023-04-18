@@ -1,0 +1,14 @@
+FROM node:16-alpine
+WORKDIR /usr/src/app
+
+COPY package.json .
+COPY package-lock.json .
+COPY packages .
+COPY apis .
+
+RUN node -v
+# RUN cd commonPackages/kpm-api-common && npm ci --omit=dev
+RUN npm ci --omit=dev --workspace=my-teaching-api
+
+EXPOSE 3000
+CMD cd apis/my-teaching-api && npm start
