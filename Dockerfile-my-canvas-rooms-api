@@ -14,8 +14,7 @@ RUN chown -R node:node /usr/src/app
 
 USER node
 
-RUN npm pkg delete scripts.prepare && \
-  npm ci --unsafe-perm && \
+RUN npm ci && \
   npm run build && \
   npm prune --production 
 
