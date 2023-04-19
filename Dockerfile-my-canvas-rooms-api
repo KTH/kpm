@@ -7,7 +7,7 @@ COPY packages .
 COPY apis .
 
 RUN node -v
-RUN npm ci --omit=dev --workspace=my-canvas-rooms-api
+RUN npm ci --omit=dev
 
 EXPOSE 3000
 CMD cd apis/my-canvas-rooms-api && npm start
