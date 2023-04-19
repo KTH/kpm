@@ -1,13 +1,23 @@
-FROM node:16-alpine
+FROM  kthregistry.azurecr.io/kth-nodejs-16:latest
 WORKDIR /usr/src/app
 
-COPY package.json .
-COPY package-lock.json .
-COPY packages .
-COPY apis .
+ENV NODE_PATH /usr/src/app
 
-RUN node -v
-RUN npm ci --omit=dev
+ENV TZ Europe/Stockholm
+
+COPY ["package.json", "package.json"]
+COPY ["package-lock.json", "package-lock.json"]
+COPY ["packages", "packages"]
+COPY ["apis", "apis"]
+
+RUN chown -R node:node /usr/src/app
+
+USER node
+
+RUN npm pkg delete scripts.prepare && \
+  npm ci --unsafe-perm && \
+  npm run build && \
+  npm prune --production 
 
 EXPOSE 3000
-CMD cd apis/my-canvas-rooms-api && npm start
+CMD ["cd apis/my-canvas-rooms-api && npm start"]
