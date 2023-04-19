@@ -15,7 +15,6 @@ RUN chown -R node:node /usr/src/app
 USER node
 
 RUN npm ci && \
-  npm run build && \
   npm prune --production 
 
 EXPOSE 3000
