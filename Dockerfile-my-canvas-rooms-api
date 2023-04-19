@@ -1,4 +1,5 @@
 FROM  kthregistry.azurecr.io/kth-nodejs-16:latest
+# FROM node:16-alpine # Use this for local development
 WORKDIR /usr/src/app
 
 ENV NODE_PATH /usr/src/app
@@ -14,8 +15,7 @@ RUN chown -R node:node /usr/src/app
 
 USER node
 
-RUN npm ci && \
-  npm prune --production 
+RUN npm ci --omit=dev --workspace=my-canvas-rooms-api
 
 EXPOSE 3000
 CMD ["cd apis/my-canvas-rooms-api && npm start"]
