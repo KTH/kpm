@@ -1,37 +1,50 @@
 # This Dockerfile uses multi-stage builds as recommended in
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md
 #
-FROM node:16-bullseye AS frontend
+FROM kthregistry.azurecr.io/kth-nodejs-16:latest AS frontend
+# FROM node:16-bullseye AS frontend
 WORKDIR /usr/src/app
 
-COPY package.json .
-COPY package-lock.json .
-COPY kpm .
-COPY packages .
+COPY ["package.json", "package.json"]
+COPY ["package-lock.json", "package-lock.json"]
+COPY ["packages", "packages"]
+COPY ["kpm", "kpm"]
 
+RUN chown -R node:node /usr/src/app
+USER node
 
 # See: https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
 RUN npm ci --development --workspace=kpm-frontend
-COPY kpm/kpm-frontend .
 RUN npm run build --workspace=kpm-frontend
 
-FROM node:16-alpine AS backend
+FROM kthregistry.azurecr.io/kth-nodejs-16:latest AS backend
+# FROM node:16-alpine AS backend
 WORKDIR /usr/src/app
 
-COPY package.json .
-COPY package-lock.json .
-COPY kpm .
-COPY packages .
+COPY ["package.json", "package.json"]
+COPY ["package-lock.json", "package-lock.json"]
+COPY ["packages", "packages"]
+COPY ["kpm", "kpm"]
+
+RUN chown -R node:node /usr/src/app
+USER node
 
 RUN npm ci --omit=dev --workspace=kpm-backend
 
-FROM node:16-alpine AS production
+FROM kthregistry.azurecr.io/kth-nodejs-16:latest AS production
+# FROM node:16-alpine AS production
 WORKDIR /usr/src/app
-COPY --from=backend /usr/src/app/node_modules .
-COPY --from=backend packages .
-COPY --from=backend kpm .
+
+ENV TZ Europe/Stockholm
+
+COPY --from=backend /usr/src/app/node_modules node_modules
+COPY --from=backend /usr/src/app/packages packages
+COPY --from=backend /usr/src/app/kpm kpm
 COPY --from=frontend /usr/src/app/kpm/kpm-frontend/distProd kpm/kpm-frontend/distProd
 
-EXPOSE 3000
+RUN chown -R node:node /usr/src/app
+USER node
 
-CMD cd kpm/kpm-backend && npm start
+WORKDIR /usr/src/app/kpm/kpm-backend
+EXPOSE 3000
+CMD ["npm", "start"]
