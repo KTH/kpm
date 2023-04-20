@@ -2,7 +2,7 @@
 
 Monorepos for KPM implemented in Typescript for Nodejs.
 
-## Release
+## Release (OUTDATED)
 
 KPM consists of multiple applications that should be released in sync. Follow this procedure:
 
