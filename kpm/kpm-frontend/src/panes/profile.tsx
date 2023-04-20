@@ -79,9 +79,7 @@ export function Profile() {
             </a>
           </li>
           <li>
-            <a href="https://login.kth.se/password/change">
-              {i18n("Change password")}
-            </a>
+            <a href="https://auth.id.kth.se/">{i18n("Change password")}</a>
           </li>
         </ul>
       </div>

@@ -108,7 +108,7 @@ exports[`<Profile /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            href="https://login.kth.se/password/change"
+            href="https://auth.id.kth.se/"
           >
             Change password
           </a>
