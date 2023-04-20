@@ -10,7 +10,6 @@ COPY ["packages", "packages"]
 COPY ["apis", "apis"]
 
 RUN chown -R node:node /usr/src/app
-
 USER node
 
 RUN npm ci --omit=dev --workspace=my-canvas-rooms-api
