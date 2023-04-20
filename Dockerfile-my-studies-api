@@ -1,4 +1,5 @@
-FROM node:16-alpine
+FROM  kthregistry.azurecr.io/kth-nodejs-16:latest
+# FROM node:16-alpine # Use this for local development
 WORKDIR /usr/src/app
 
 COPY package.json .
