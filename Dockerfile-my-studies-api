@@ -2,14 +2,19 @@ FROM  kthregistry.azurecr.io/kth-nodejs-16:latest
 # FROM node:16-alpine # Use this for local development
 WORKDIR /usr/src/app
 
-COPY package.json .
-COPY package-lock.json .
-COPY packages .
-COPY apis .
+ENV TZ Europe/Stockholm
 
-RUN node -v
-# RUN cd commonPackages/kpm-api-common && npm ci --omit=dev
+COPY ["package.json", "package.json"]
+COPY ["package-lock.json", "package-lock.json"]
+COPY ["packages", "packages"]
+COPY ["apis", "apis"]
+
+RUN chown -R node:node /usr/src/app
+
+USER node
+
 RUN npm ci --omit=dev --workspace=my-studies-apis
 
+WORKDIR /usr/src/app/apis/my-studies-apis
 EXPOSE 3000
-CMD cd apis/my-studies-api && npm start
+CMD ["npm", "start"]
