@@ -13,8 +13,8 @@ RUN chown -R node:node /usr/src/app
 
 USER node
 
-RUN npm ci --omit=dev --workspace=my-studies-apis
+RUN npm ci --omit=dev --workspace=my-studies-api
 
-WORKDIR /usr/src/app/apis/my-studies-apis
+WORKDIR /usr/src/app/apis/my-studies-api
 EXPOSE 3000
 CMD ["npm", "start"]
