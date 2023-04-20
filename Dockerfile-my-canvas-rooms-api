@@ -2,8 +2,6 @@ FROM  kthregistry.azurecr.io/kth-nodejs-16:latest
 # FROM node:16-alpine # Use this for local development
 WORKDIR /usr/src/app
 
-ENV NODE_PATH /usr/src/app
-
 ENV TZ Europe/Stockholm
 
 COPY ["package.json", "package.json"]
