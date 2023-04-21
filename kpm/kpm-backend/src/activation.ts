@@ -50,25 +50,21 @@ activation.get("", (req, res) => {
     return res.redirect(LOGIN_URL);
   }
 
-  if (IS_DEV) {
-    res.sendFile(path.join(distProdActivationPath, "index.html"), {
-      root: path.join(__dirname, "..", ".."),
-    });
-  } else {
-    const projectRoot = process.cwd();
-    log.info("Serving activation page from: " + projectRoot);
-    res.sendFile(path.join(distProdActivationPath, "index.html"), {
-      root: projectRoot,
-    });
-  }
+  const projectRoot = path.join(__dirname, "..", "..");
+  log.info("Serving activation page from: " + projectRoot);
+  res.sendFile(path.join(distProdActivationPath, "index.html"), {
+    root: projectRoot,
+  });
 });
 
 activation.get("/", (req, res) => {
   res.redirect(req.originalUrl.slice(0, req.originalUrl.length - 1));
 });
 
+const projectRoot = path.join(__dirname, "..", "..");
+
 export const widgetJsAssets = staticHandler(
-  path.join("..", distProdActivationPath)
+  path.join(projectRoot, distProdActivationPath)
 );
 
 activation.use("/", widgetJsAssets);
