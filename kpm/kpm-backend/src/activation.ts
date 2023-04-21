@@ -13,25 +13,30 @@ const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
 
+const distProdActivationPath = "./kpm-frontend/distProd/activation";
+
 (function () {
   try {
     // For local development
+    const pathToIndexFile = path.join(
+      "..",
+      distProdActivationPath,
+      "index.html"
+    );
     if (IS_DEV) {
-      const path = "../kpm-frontend/distProd/activation/index.html";
-      let data = readFileSync(path, "utf8");
+      let data = readFileSync(pathToIndexFile, "utf8");
       data = data.replaceAll(
         "https://app.kth.se/kpm/kpm.js",
         `${PROXY_HOST}/kpm/kpm.js`
       );
-      writeFileSync(path, data);
+      writeFileSync(pathToIndexFile, data);
       return;
     }
 
     // For prod and stage
-    const path = "./distActivation/index.html";
-    let data = readFileSync(path, "utf8");
+    let data = readFileSync(pathToIndexFile, "utf8");
     data = data.replaceAll("https://app.kth.se", PROXY_HOST);
-    writeFileSync(path, data);
+    writeFileSync(pathToIndexFile, data);
   } catch (err) {
     // NOTE: If path does not exist, this is fine for dev!
     log.info({ details: err }, "Failed to patch activation page");
@@ -46,13 +51,13 @@ activation.get("", (req, res) => {
   }
 
   if (IS_DEV) {
-    res.sendFile("./kpm-frontend/distProd/activation/index.html", {
+    res.sendFile(path.join(distProdActivationPath, "index.html"), {
       root: path.join(__dirname, "..", ".."),
     });
   } else {
     const projectRoot = process.cwd();
     log.info("Serving activation page from: " + projectRoot);
-    res.sendFile("./distActivation/index.html", {
+    res.sendFile(path.join(distProdActivationPath, "index.html"), {
       root: projectRoot,
     });
   }
@@ -62,8 +67,8 @@ activation.get("/", (req, res) => {
   res.redirect(req.originalUrl.slice(0, req.originalUrl.length - 1));
 });
 
-export const widgetJsAssets = IS_DEV
-  ? staticHandler("../kpm-frontend/distProd/activation")
-  : staticHandler("./distActivation");
+export const widgetJsAssets = staticHandler(
+  path.join("..", distProdActivationPath)
+);
 
 activation.use("/", widgetJsAssets);
