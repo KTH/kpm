@@ -13,12 +13,15 @@ if os.path.isfile(path):
     userNames = file.readlines()
     userNames = [n.strip() for n in userNames]
     file.close()
+else:
+    print("No test-users.txt file found in folder: " + os.getcwd())
 
 
 class HelloWorldUser(HttpUser):
-    host = "http://127.0.0.1:3000/kpm"
+    # host = "http://127.0.0.1:3000/kpm"
+    host = "https://app-r.referens.sys.kth.se/kpm"
     sessionUser = None
-    constant_pacing = 5
+    constant_pacing = 100
 
     def on_start(self):
         userId = userNames[randint(0, len(userNames) - 1)]
@@ -30,21 +33,37 @@ class HelloWorldUser(HttpUser):
         else:
             self.sessionUser = None
 
-    @task(4)
+    @task
     def teaching(self):
         self.client.get("/api/teaching")
 
-    @task(4)
+    @task
     def studies(self):
         self.client.get("/api/studies")
+
+    # @task(4)
+    # def programmes(self):
+    #     self.client.get("/api/programmes")
+
+    # @task(4)
+    # def groups(self):
+    #     self.client.get("/api/groups")
 
     # @task
     # def lang(self):
     #     self.client.post("/api/lang", json={"lang": "sv"})
 
-    # @task
-    # def getAsset(self):
-    #     self.client.get("/assets/index.js")
+    @task(20)
+    def getKpmLoader(self):
+        self.client.get("/kpm.js")
+
+    @task(2)
+    def getAssetJs(self):
+        self.client.get("/assets/index.0561e681.js")
+
+    @task(2)
+    def getAssetCss(self):
+        self.client.get("/assets/index.8de0246a.css")
 
 
 # if launched directly, e.g. "python3 debugging.py", not "locust -f debugging.py"
