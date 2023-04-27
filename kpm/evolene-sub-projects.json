@@ -1,8 +1,0 @@
-{
-  "kpm-backend": {
-    "path": "kpm-backend"
-  },
-  "kpm-frontend": {
-    "path": "kpm-frontend"
-  }
-}
