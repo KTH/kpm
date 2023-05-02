@@ -49,17 +49,17 @@ export function App() {
         <h1>New Personal Menu (Beta)</h1>
         <div className="lead">
           <p>
-            Welcome to the Beta test of the KTH Personal Menu. You can toggle
+            Welcome to the open Beta of the KTH Personal Menu. You can toggle
             the new menu on and off by visiting this page.
           </p>
         </div>
         <div className="paragraphs">
           <p>
-            Be aware that the project is under active development and you may
-            experience bugs and short outages. We will however be treating this
-            as a production deployment during the Beta phase and effort will be
-            made to keep it as smooth as possible. Please read more about the
-            project and the beta testing here:
+            The project is under active development and you may experience bugs
+            and short outages. We will however be treating this as a production
+            deployment during the Beta phase and effort will be made to keep it
+            as smooth as possible. Please read more about the project and the
+            beta testing here:
           </p>
           <ol>
             <li>
@@ -123,16 +123,16 @@ export function App() {
       <h1>Nya personliga menyn (Beta)</h1>
       <div className="lead">
         <p>
-          Välkommen till betatestet av den nya personliga menyn. Du kan växla
-          mellan nya och gamla menyn genom att besöka denna sida.
+          Välkommen till den öppna betan av den nya personliga menyn. Du kan
+          växla mellan nya och gamla menyn genom att besöka denna sida.
         </p>
       </div>
       <div className="paragraphs">
         <p>
-          Tänk på att projektet är under aktiv utveckling och att du kan uppleva
-          buggar och korta störningar. Vi kommer dock att behandla detta som en
-          produktionsmiljö under betatestfasen och vi kommer att göra vårt bästa
-          för att hålla det så smidigt som möjligt. Läs mer om projektet och
+          Projektet är under aktiv utveckling och att du kan uppleva buggar och
+          korta störningar. Vi kommer dock att behandla detta som en
+          produktionsmiljö under betafasen och vi kommer att göra vårt bästa för
+          att hålla det så smidigt som möjligt. Läs mer om projektet och
           betatestet här:
         </p>
         <ol>
