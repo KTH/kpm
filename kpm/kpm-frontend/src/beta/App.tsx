@@ -27,7 +27,7 @@ function isMenuActive() {
   const cookies = document.cookie.split(/;\s+/);
   // The cookie is 't' for active or 'f' for not active.
   // the default in absense of cookie is _active_ from 2023-05-03.
-  return !cookies.find((item) => item.trim() == "use_kpm=f");
+  return !cookies.some((item) => item.trim() === "use_kpm=f");
 }
 
 function getLanguage(): "en" | "sv" | undefined {
