@@ -17,21 +17,12 @@ export async function useBeta(
       { user, active },
       active ? "User activated kpm beta" : "User deactivated kpm beta"
     );
-    if (active) {
-      res.cookie("use_kpm", "t", {
-        domain: ".kth.se",
-        httpOnly: false,
-        secure: true,
-        sameSite: "none",
-      });
-    } else {
-      res.clearCookie("use_kpm", {
-        domain: ".kth.se",
-        httpOnly: false,
-        secure: true,
-        sameSite: "none",
-      });
-    }
+    res.cookie("use_kpm", active ? "t" : "f", {
+      domain: ".kth.se",
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+    });
     res.send({ ok: true, active });
   } catch (err) {
     next(err);
