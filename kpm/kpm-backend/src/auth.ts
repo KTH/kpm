@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Response } from "express";
 import log, { runWithSkog } from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
@@ -177,22 +177,10 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
     if (lang) {
       res.cookie("language", lang, LANG_COOKIE_OPTS);
     }
-    res.cookie("KTH_SSO_START", "t", {
-      domain: ".kth.se",
-      maxAge: 4 * 60 * 60,
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-    });
+    setSsoCookie(res);
     res.redirect(nextUrl);
   } catch (err) {
-    res.clearCookie("KTH_SSO_START", {
-      domain: ".kth.se",
-      maxAge: 4 * 60 * 60 * 1000,
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-    });
+    clearSsoCookie(res);
     if (err instanceof errors.OPError && err.error === "login_required") {
       // user is logged out
       res.redirect(`${nextUrl}?login_success=false`);
@@ -202,6 +190,21 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
     next(err);
   }
 });
+
+const SSO_COOKIE_OPTIONS = {
+  domain: ".kth.se",
+  maxAge: 4 * 60 * 60,
+  httpOnly: false,
+  secure: true,
+  sameSite: "none",
+} as const;
+
+export function setSsoCookie(res: Response) {
+  res.cookie("KTH_SSO_START", "t", SSO_COOKIE_OPTIONS);
+}
+export function clearSsoCookie(res: Response) {
+  res.clearCookie("KTH_SSO_START", SSO_COOKIE_OPTIONS);
+}
 
 type LangResponse = {
   lang: "sv" | "en" | null;
