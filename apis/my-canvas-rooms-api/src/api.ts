@@ -115,6 +115,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     getRoomsByOldFormat(canvas_data) ||
     getExamRoomByNewFormat(canvas_data) ||
     getExamRoomByOldFormat(canvas_data) ||
+    getRoomsByAltFormat(canvas_data) ||
     getRoomsFallback(canvas_data);
   return {
     course_codes,
@@ -163,6 +164,47 @@ function getRoomsByNewFormat(
     const match = section.match(section_name_format);
     if (match) {
       const [_, courseCode, startTerm, registrationCode] = match;
+
+      // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
+      course_codes.add(courseCode);
+
+      // INVESTIGATE: Which section determines startTerm? Right now last wins
+      link_meta_data.startTerm = convertStartTerm(startTerm);
+      regCodes.add(registrationCode);
+    } else {
+      // console.log(`Room ${canvas_data.id} Section "${section}" in "${canvas_data.name}"; no match.`)
+    }
+  }
+
+  if (course_codes.size > 0) {
+    if (regCodes.size) {
+      link_meta_data.registrationCode = Array.from(regCodes).sort().join("/");
+    }
+    return { course_codes, link_meta_data };
+  }
+}
+
+// The alt format are used by DD1390/91 / prosam.  Maybe more?
+function getRoomsByAltFormat(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
+  const course_codes = new Set<string>();
+  const link_meta_data: TLinkMetaData = {
+    type: "course",
+  };
+
+  // Note; It would be nice if we got the sis id for the sections, but that
+  // requires further API calls.
+  const sections = canvas_data.sections.map((s) => s.name);
+
+  const section_name_format_alt =
+    /^([A-ZÅÄÖ0-9]{5,7}) ([a-z0-9]+) ([HV]T[0-9]{2,4})/iu;
+
+  const regCodes: Set<string> = new Set();
+  for (const section of sections) {
+    const match = section.match(section_name_format_alt);
+    if (match) {
+      const [_, courseCode, registrationCode, startTerm] = match;
 
       // logger.debug("Room %s Section %r match: %r", room_id, section, match[1])
       course_codes.add(courseCode);
