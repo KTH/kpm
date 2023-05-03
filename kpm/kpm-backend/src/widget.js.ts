@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import path from "path";
 import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
-import { isValidSession } from "./auth";
+import { isValidSession, setSsoCookie, clearSsoCookie } from "./auth";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
@@ -19,6 +19,7 @@ const distProdProductionPath = "./kpm-frontend/distProd/production";
 export async function widgetJsHandler(req: Request, res: Response) {
   // Check "login_success = false" to avoid infinite loops
   if (req.params.login_success === "false") {
+    clearSsoCookie(res);
     res.send("personal menu for logged out users");
     return;
   }
@@ -32,6 +33,7 @@ export async function widgetJsHandler(req: Request, res: Response) {
   if (loggedIn) {
     // *** LOGGED IN ***
     const userToFrontend: TSessionUser = req.session.user!;
+    setSsoCookie(res);
     res.type("text/javascript").send(`(function (js, css) {
 document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
@@ -57,6 +59,7 @@ window.__kpmSettings__ = ${JSON.stringify({ lang })};
   } else {
     // *** NOT LOGGED IN ***
     // index.css contains Canvas CSS-fixes so we are passing it.
+    clearSsoCookie(res);
     res.type("text/javascript").send(`(function (js, css) {
 document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
