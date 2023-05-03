@@ -177,8 +177,22 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
     if (lang) {
       res.cookie("language", lang, LANG_COOKIE_OPTS);
     }
+    res.cookie("KTH_SSO_START", "t", {
+      domain: ".kth.se",
+      maxAge: 4 * 60 * 60,
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+    });
     res.redirect(nextUrl);
   } catch (err) {
+    res.clearCookie("KTH_SSO_START", {
+      domain: ".kth.se",
+      maxAge: 4 * 60 * 60 * 1000,
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+    });
     if (err instanceof errors.OPError && err.error === "login_required") {
       // user is logged out
       res.redirect(`${nextUrl}?login_success=false`);
