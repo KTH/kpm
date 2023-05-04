@@ -11,7 +11,10 @@ const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
 
-const distProdProductionPath = "./kpm-frontend/distProd/production";
+const distProdProductionPath = path.join(
+  __dirname,
+  "../../kpm-frontend/distProd/production"
+);
 
 /**
  * Responds with the initial javascript file that holds the entire personal menu
@@ -95,7 +98,7 @@ function getLatestDistFileNames() {
 
 function getLatestDistFileNamesFromDisk() {
   const manifestJson = readFileSync(
-    path.join("..", distProdProductionPath, "manifest.json")
+    path.join(distProdProductionPath, "manifest.json")
   );
   return JSON.parse(manifestJson.toString()) as Record<
     string,
@@ -104,14 +107,11 @@ function getLatestDistFileNamesFromDisk() {
 }
 
 // Mount paths appear to be relative to project root
-export const widgetJsAssets = staticHandler(
-  path.join("..", distProdProductionPath),
-  {
-    immutable: true,
-    index: false,
-    maxAge: "180 days",
-  }
-);
+export const widgetJsAssets = staticHandler(distProdProductionPath, {
+  immutable: true,
+  index: false,
+  maxAge: "180 days",
+});
 
 export function previewHandler(req: Request, res: Response) {
   const { ext } = req.params;

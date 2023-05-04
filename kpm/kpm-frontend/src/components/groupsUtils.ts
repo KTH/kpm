@@ -149,7 +149,7 @@ export function useDropdownToggleListener(
  sure we don't hide it with the menubar. This looks wierd if we aren't in modal mode
  (default) but not worth pursuing a fix for now.
  */
-const PADDING = 10;
+const PADDING = 10; // This value is used in groups.scss, search for PADDING
 export function usePositionDropdown(
   detailsRef: RefObject<HTMLElement | null>,
   summaryRef: RefObject<HTMLElement | null>,
@@ -233,10 +233,19 @@ export function usePositionDropdown(
     }
 
     let deltaY; // may depend on actual height of dropdown
-    if (placeTop) {
+    if (spaceTop + spaceBottom < dropdownHeight + PADDING) {
+      // Not enough space on on either side, just center
+      // on page,
+      deltaY = PADDING;
+    } else if (placeTop) {
       deltaY = elTop - dropdownHeight;
     } else {
-      deltaY = elBottom;
+      if (spaceBottom < dropdownHeight + PADDING) {
+        // Move up to fit
+        deltaY = elBottom - dropdownHeight + spaceBottom - PADDING;
+      } else {
+        deltaY = elBottom;
+      }
     }
 
     // Nudge placement on X axis depending on available space
