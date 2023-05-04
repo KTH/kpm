@@ -96,11 +96,12 @@ setInterval(testExpiredSession, 15 * 60 * 1000);
 
 // Check session valid on wake up
 let lastTimeChecked = new Date().getTime();
+const checkIntervalMs = 2000;
 setInterval(function () {
   var currentTime = new Date().getTime();
-  if (currentTime > lastTimeChecked + 2000 * 2) {
+  if (currentTime > lastTimeChecked + checkIntervalMs * 2) {
     console.log("Computer woke up");
     testExpiredSession();
   }
   lastTimeChecked = currentTime;
-}, 2000);
+}, checkIntervalMs);
