@@ -80,8 +80,7 @@ export function initSessionCheck() {
   setTimeout(checkValidSession); // Once on startup, without delaying first paint
 }
 
-// Check if session is valid for at least 30 mins every 15 mins
-setInterval(() => {
+function testExpiredSession() {
   const user = authState.state("CurrentUser");
   const now = new Date().getTime();
   if (user.expires < now + 30 * 60 * 1000) {
@@ -90,4 +89,18 @@ setInterval(() => {
       value: undefined,
     });
   }
-}, 15 * 60 * 1000);
+}
+
+// Check if session is valid for at least 30 mins every 15 mins
+setInterval(testExpiredSession, 15 * 60 * 1000);
+
+// Check session valid on wake up
+let lastTimeChecked = new Date().getTime();
+setInterval(function () {
+  var currentTime = new Date().getTime();
+  if (currentTime > lastTimeChecked + 2000 * 2) {
+    console.log("Computer woke up");
+    testExpiredSession();
+  }
+  lastTimeChecked = currentTime;
+}, 2000);
