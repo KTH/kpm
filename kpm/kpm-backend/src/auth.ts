@@ -193,7 +193,7 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
 
 const SSO_COOKIE_OPTIONS = {
   domain: ".kth.se",
-  maxAge: 4 * 60 * 60,
+  maxAge: 4 * 60 * 60 * 1000,
   httpOnly: false,
   secure: true,
   sameSite: "none",
