@@ -133,10 +133,11 @@ function Course({ courseCode, course }: TCourseProps) {
   const [roundToShow, setRoundToShow] = React.useState(course.rounds?.[0]);
   const status = course.completed ? "godkand" : roundToShow?.status;
   const exams = course.rooms?.filter((c) => c.type === "exam");
-  const selTerm = `${roundToShow.year}${roundToShow.term}`;
+  const selTerm = roundToShow ? `${roundToShow.year}${roundToShow.term}` : null;
   // Show non-exams rooms for the selected term, but don't hide rooms w/o term.
   const filteredRooms = course.rooms?.filter(
-    (c) => c.type !== "exam" && (!c.startTerm || c.startTerm === selTerm)
+    (c) =>
+      c.type !== "exam" && (!c.startTerm || !selTerm || c.startTerm === selTerm)
   );
   return (
     <section className={`kpm-studies-course kpm-${status}`}>
