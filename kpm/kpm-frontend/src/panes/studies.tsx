@@ -131,10 +131,13 @@ function RoundDesc({ round }: { round: TStudiesCourseRound }) {
 
 function Course({ courseCode, course }: TCourseProps) {
   const [roundToShow, setRoundToShow] = React.useState(course.rounds?.[0]);
-  // TODO: Try to find relevant room for selected round?
-  const roomToShow = course.rooms?.[0] || undefined;
   const status = course.completed ? "godkand" : roundToShow?.status;
   const exams = course.rooms?.filter((c) => c.type === "exam");
+  const selTerm = `${roundToShow.year}${roundToShow.term}`;
+  // Show non-exams rooms for the selected term, but don't hide rooms w/o term.
+  const filteredRooms = course.rooms?.filter(
+    (c) => c.type !== "exam" && (!c.startTerm || c.startTerm === selTerm)
+  );
   return (
     <section className={`kpm-studies-course kpm-${status}`}>
       <h2>
@@ -169,7 +172,11 @@ function Course({ courseCode, course }: TCourseProps) {
             {i18n("Kurs-PM")}
           </a>
         </li>
-        <li>{roomToShow && <CanvasRoomLink {...roomToShow} />}</li>
+        {filteredRooms?.map((r) => (
+          <li>
+            <CanvasRoomLink {...r} />
+          </li>
+        ))}
       </ul>
       <ExamRoomList rooms={exams} title={i18n("Examinationsrum")} />
       {course.rooms === null && (
