@@ -134,6 +134,7 @@ function Course({ courseCode, course }: TCourseProps) {
   const status = course.completed ? "godkand" : roundToShow?.status;
   const exams = course.rooms?.filter((c) => c.type === "exam");
   const selTerm = `${roundToShow.year}${roundToShow.term}`;
+  // Show non-exams rooms for the selected term, but don't hide rooms w/o term.
   const filteredRooms = course.rooms?.filter(
     (c) => c.type !== "exam" && (!c.startTerm || c.startTerm === selTerm)
   );
