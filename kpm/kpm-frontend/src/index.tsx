@@ -15,14 +15,22 @@ function sendKpmLoaded(authorized: boolean) {
   );
 }
 
+function currentUserDidUpdate(event: TPubSubEvent<any>) {
+  if (event.name === "CurrentUser") {
+    sendKpmLoaded(!!event.value);
+  }
+}
+
 // Only mount menu in outermost frame
 if (window.frameElement === null) {
-  const root = ReactDOM.createRoot(document.getElementById("kpm-6cf53")!);
-  authState.subscribe((event: TPubSubEvent<any>) => {
-    if (event.name === "CurrentUser") {
-      sendKpmLoaded(!!event.value);
-    }
-  });
+  // Send global event kpmLoaded when the app is loaded and on auth state changes
+  authState.subscribe(currentUserDidUpdate);
+  sendKpmLoaded(!!authState.state("CurrentUser"));
+
+  // Perform internal check to see if the user is logged in
   initSessionCheck();
+
+  // Render the app
+  const root = ReactDOM.createRoot(document.getElementById("kpm-6cf53")!);
   root.render(<App />);
 }
