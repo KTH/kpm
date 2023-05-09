@@ -203,7 +203,10 @@ export function setSsoCookie(res: Response) {
   res.cookie("KTH_SSO_START", "t", SSO_COOKIE_OPTIONS);
 }
 export function clearSsoCookie(res: Response) {
-  res.clearCookie("KTH_SSO_START", SSO_COOKIE_OPTIONS);
+  const { maxAge, ...COOKIE_OPTIONS } = SSO_COOKIE_OPTIONS;
+  res.clearCookie("KTH_SSO_START", {
+    ...COOKIE_OPTIONS,
+  });
 }
 
 type LangResponse = {
