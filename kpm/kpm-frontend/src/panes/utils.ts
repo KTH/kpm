@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthError } from "../components/common";
-import { i18n } from "../i18n/i18n";
+import { i18n, LANG } from "../i18n/i18n";
 import { authState } from "../state/authState";
 
 declare global {
@@ -118,7 +118,7 @@ export async function fetchApi(
     credentials: "include",
     headers: {
       Accept: "application/json",
-      "Accept-Language": window.__kpmSettings__?.["lang"] || "en",
+      "Accept-Language": LANG,
       ...headers,
     },
     ...otherOptions,
