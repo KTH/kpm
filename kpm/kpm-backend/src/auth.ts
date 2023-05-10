@@ -203,6 +203,7 @@ export function setSsoCookie(res: Response) {
   res.cookie("KTH_SSO_START", "t", SSO_COOKIE_OPTIONS);
 }
 export function clearSsoCookie(res: Response) {
+  // Workaround for https://github.com/expressjs/express/issues/4851
   const { maxAge, ...COOKIE_OPTIONS } = SSO_COOKIE_OPTIONS;
   res.clearCookie("KTH_SSO_START", {
     ...COOKIE_OPTIONS,
