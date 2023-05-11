@@ -17,11 +17,17 @@ import "./Menu.scss";
 import { LoginModal, useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
 
+const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
   "https://www.kth.se/social/home/subscriptions/";
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/notifications/notice_list/";
+const filesUriBase =
+  IS_DEV || IS_STAGE
+    ? "https://www-r.referens.sys.kth.se/files"
+    : "https://www.kth.se/files";
 
 export function Menu({
   hasStudies,
@@ -61,7 +67,7 @@ export function Menu({
               }}
             >
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={`${filesUriBase}/thumbnail/${currentUser?.username}`}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
