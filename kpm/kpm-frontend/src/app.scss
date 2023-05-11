@@ -21,7 +21,12 @@
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+
+  @media print {
+    display: none;
+  }
 }
+
 
 // Global styling
 #kpm-6cf53 .kpm-modal {
