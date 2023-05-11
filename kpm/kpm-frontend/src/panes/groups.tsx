@@ -12,6 +12,7 @@ import { i18n } from "../i18n/i18n";
 import "./groups.scss";
 import { IconSettings, StarableItem } from "../components/icons";
 import { FilterOption, TabFilter } from "../components/filter";
+import { NavigationTabs, Tab } from "@kth/style";
 
 export async function loaderStudies({ request }: any = {}): Promise<APIGroups> {
   const res = await fetchApi("/api/groups", {
@@ -106,17 +107,6 @@ export function Groups() {
     }
   }, [groups]);
 
-  const filteredGroups = groups?.filter((group) => {
-    switch (filter) {
-      case "favs":
-        return group.starred;
-      case "all":
-        return true;
-    }
-  });
-
-  const isEmpty = !loading && !error && filteredGroups?.length === 0;
-
   return (
     <MenuPane className="kpm-groups" error={error}>
       <MenuPaneHeader title={i18n("My Groups")}>
@@ -131,46 +121,61 @@ export function Groups() {
         </a>
         <IconSettings href="https://www.kth.se/social/home/settings/groups" />
       </MenuPaneHeader>
-      <TabFilter>
-        <FilterOption<TFilter>
-          value="favs"
-          filter={filter || "all"}
-          onSelect={setFilter}
-        >
-          {i18n("Favourites")}
-        </FilterOption>
-        <FilterOption<TFilter>
-          value="all"
-          filter={filter || "all"}
-          onSelect={setFilter}
-        >
-          {i18n("All Subscriptions")}
-        </FilterOption>
-      </TabFilter>
+
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
       {errorSetStar && <ErrorMessage error={errorSetStar} compact />}
-      {isEmpty && (
-        <EmptyPlaceholder>
-          {filter === "favs"
-            ? i18n("You have no groups marked as favourites.")
-            : i18n("You don't belong to any groups.")}
-        </EmptyPlaceholder>
-      )}
-      {!isEmpty && (
-        <ul>
-          {filteredGroups?.map((group) => (
-            <StarableItem
-              className="kpm-groups-item"
-              key={`kpm-group-${group.slug}`}
-              starred={group.starred}
-              onToggle={() => setStar(group.slug, !group.starred)}
-            >
-              <a href={group.url}>{group.name}</a>
-            </StarableItem>
-          ))}
-        </ul>
+
+      {!loading && !error && (
+        <NavigationTabs id="filter" url="none" defaultValue="all">
+          <Tab id="favs" title={i18n("Favourites")}>
+            <Content groups={groups} filter="favs" onSetStar={setStar} />
+          </Tab>
+          <Tab id="all" title={i18n("All Subscriptions")}>
+            <Content groups={groups} filter="all" onSetStar={setStar} />
+          </Tab>
+        </NavigationTabs>
       )}
     </MenuPane>
+  );
+}
+
+function Content(props: { groups: any; filter: string; onSetStar: any }) {
+  const { groups, filter, onSetStar } = props;
+
+  const filteredGroups = groups?.filter((group: any) => {
+    switch (filter) {
+      case "favs":
+        return group.starred;
+      case "all":
+        return true;
+    }
+  });
+
+  const isEmpty = filteredGroups?.length === 0;
+
+  if (isEmpty) {
+    return (
+      <EmptyPlaceholder>
+        {filter === "favs"
+          ? i18n("You have no groups marked as favourites.")
+          : i18n("You don't belong to any groups.")}
+      </EmptyPlaceholder>
+    );
+  }
+
+  return (
+    <ul>
+      {filteredGroups?.map((group: any) => (
+        <StarableItem
+          className="kpm-groups-item"
+          key={`kpm-group-${group.slug}`}
+          starred={group.starred}
+          onToggle={() => onSetStar(group.slug, !group.starred)}
+        >
+          <a href={group.url}>{group.name}</a>
+        </StarableItem>
+      ))}
+    </ul>
   );
 }

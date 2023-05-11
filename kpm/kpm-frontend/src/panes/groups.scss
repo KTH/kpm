@@ -1,23 +1,21 @@
 @use "../vars" as *;
+@use "@kth/style/scss/components/navigation-tabs.scss";
 
 #kpm-6cf53 .kpm-groups {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
   $colCount: 3;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
+  flex-direction: column!important;
 
-  & > ul {
-    display: flex;
-    flex-flow: row wrap;
+  ul {
+    column-count: $colCount;
+    column-fill: balance;
     gap: $rowGap $colGap;
-    align-items: flex-start;
-    width: 100%;
 
     & > .kpm-groups-item {
       display: flex;
       align-items: start;
-      width: $colWidth;
-      margin-bottom: 0;
+      margin-bottom: $rowGap;
       gap: $rowGap $colGap;
 
       .icon.star {
@@ -28,8 +26,15 @@
   }
 }
 
+#kpm-6cf53 {
+  .kth-navigation-tabs__tablist {
+    align-items: start;
+    gap: calc(2 * var(--kpmGap)) calc(4 * var(--kpmGap));
+  }
+}
+
 @media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-groups > ul > .kpm-groups-item {
+  #kpm-6cf53 .kpm-groups ul > .kpm-groups-item {
     flex-basis: 100%;
     font-size: 1.1em;
   }
