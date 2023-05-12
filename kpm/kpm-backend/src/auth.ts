@@ -343,7 +343,7 @@ function createValidSesisonUser(claim: any): TSessionUser {
     ) ?? false;
   return {
     kthid: claim.kthid,
-    display_name: claim.unique_name[0],
+    display_name: claim.givenname,
     email: claim.email,
     username: claim.username,
     hasEduCourses,
