@@ -80,7 +80,6 @@ async function checkValidSession() {
 export function initSessionCheck() {
   document.addEventListener("visibilitychange", checkValidSession);
   setTimeout(checkValidSession); // Once on startup, without delaying first paint
-  setInterval(checkValidSession, 10 * 1000); // Every 10 seconds for testing
 }
 
 // Check if session is valid for at least 30 mins every 15 mins
