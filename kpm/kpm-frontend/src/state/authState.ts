@@ -69,7 +69,7 @@ async function checkValidSession() {
 
   if (res.ok && json.user) {
     authState.send({ name: "CurrentUser", value: json.user });
-    sendKpmLoaded(!!json.user);
+    sendKpmLoaded(true);
     return;
   }
 
