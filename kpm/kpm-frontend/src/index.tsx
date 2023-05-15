@@ -4,29 +4,8 @@ import { App } from "./app";
 import { authState, initSessionCheck } from "./state/authState";
 import { TPubSubEvent } from "./state/PubSub";
 
-function sendKpmLoaded(authorized: boolean) {
-  document.dispatchEvent(
-    new CustomEvent("kpmLoaded", {
-      detail: {
-        authorized,
-        lang: window.__kpmSettings__?.["lang"] || "en",
-      },
-    })
-  );
-}
-
-function currentUserDidUpdate(event: TPubSubEvent<any>) {
-  if (event.name === "CurrentUser") {
-    sendKpmLoaded(!!event.value);
-  }
-}
-
 // Only mount menu in outermost frame
 if (window.frameElement === null) {
-  // Send global event kpmLoaded when the app is loaded and on auth state changes
-  authState.subscribe(currentUserDidUpdate);
-  sendKpmLoaded(!!authState.state("CurrentUser"));
-
   // Perform internal check to see if the user is logged in
   initSessionCheck();
 
