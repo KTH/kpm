@@ -69,10 +69,12 @@ async function checkValidSession() {
 
   if (res.ok && json.user) {
     authState.send({ name: "CurrentUser", value: json.user });
+    sendKpmLoaded(true);
     return;
   }
 
   authState.send({ name: "CurrentUser", value: undefined });
+  sendKpmLoaded(false);
 }
 
 export function initSessionCheck() {
@@ -91,3 +93,22 @@ setInterval(() => {
     });
   }
 }, 15 * 60 * 1000);
+
+function sendKpmLoaded(authorized: boolean) {
+  // Only send this event when the page is visible
+  // to avoid multiple pages getting stuck on the
+  // login screen. Since checkValidSession() is
+  // called on visibilitychange, this event will
+  // be sent when the page is visible again.
+  if (!document.hidden) {
+    document.dispatchEvent(
+      new CustomEvent("kpmLoaded", {
+        detail: {
+          authorized,
+          lang: window.__kpmSettings__?.["lang"] || "en",
+          desc: "This event is fired when KPM is loaded and has checked SSO authorisation.",
+        },
+      })
+    );
+  }
+}
