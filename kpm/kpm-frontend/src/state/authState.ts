@@ -1,9 +1,14 @@
 import { TSessionUser } from "kpm-backend-interface";
 import { useEffect, useState } from "react";
-import { fetchApi } from "../panes/utils";
+import { fetchApi, fetchFilesWeb } from "../panes/utils";
 import { PubSub, TPubSubEvent } from "./PubSub";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_STAGE = process.env.DEPLOYMENT === "stage";
+const filesUriBase =
+  IS_DEV || IS_STAGE
+    ? "https://www-r.referens.sys.kth.se/files"
+    : "https://www.kth.se/files";
 
 export const currentUser: TSessionUser | undefined =
   window.__kpmCurrentUser__ ||
@@ -28,20 +33,26 @@ window.__kpmCurrentUser__ = undefined;
  * NOTE: This pattern can be used to store any global state
  * and expose it to React components.
  */
-export type TAuthStateEvents = "CurrentUser";
+export type TAuthStateEvents = "CurrentUser" | "FilesWebAuth";
 export const authState = new PubSub<TAuthStateEvents>({
   name: "CurrentUser",
   value: currentUser,
 });
 
-export function useAuthState() {
-  const [currentUser, setCurrentUser] = useState(
+export function useAuthState(): [TSessionUser, boolean] {
+  const [currentUser, setCurrentUser] = useState<TSessionUser>(
     authState.state("CurrentUser")
+  );
+  const [filesWebAuth, setFilesWebAuth] = useState<boolean>(
+    authState.state("FilesWebAuth") || false
   );
 
   const callback = (event: TPubSubEvent<any>) => {
     if (event.name === "CurrentUser") {
       setCurrentUser(event.value);
+    }
+    if (event.name === "FilesWebAuth") {
+      setFilesWebAuth(event.value);
     }
   };
 
@@ -50,7 +61,7 @@ export function useAuthState() {
     return () => authState.unsubscribe(callback);
   }, []);
 
-  return [currentUser as TSessionUser];
+  return [currentUser, filesWebAuth];
 }
 
 /**
@@ -64,6 +75,25 @@ async function checkValidSession() {
     return;
   }
 
+  fetchFilesWeb("/isauth")
+    .then(async (res) => {
+      if (res.ok) {
+        const json = await res.json();
+        authState.send({
+          name: "FilesWebAuth",
+          value: json.auth,
+        });
+
+        if (!json.auth) {
+          // Redirect to url with query param nextUrl=window.location.href
+          window.location.href = `${filesUriBase}/auth?nextUrl=${window.location.href}`;
+        }
+      }
+    })
+    .catch((e) => {
+      // Do nothing
+    });
+
   const res = await fetchApi("/api/session");
   const json = await res.json();
 
@@ -75,6 +105,10 @@ async function checkValidSession() {
 
   authState.send({ name: "CurrentUser", value: undefined });
   sendKpmLoaded(false);
+  authState.send({
+    name: "FilesWebAuth",
+    value: false,
+  });
 }
 
 export function initSessionCheck() {

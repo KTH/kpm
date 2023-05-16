@@ -43,7 +43,7 @@ export function Menu({
 
   const [isOpen, setIsOpen] = useState(false);
   const [showLogin, setShowLogin] = useLogin();
-  const [currentUser] = useAuthState();
+  const [currentUser, filesWebAuth] = useAuthState();
 
   const hasMatch: boolean = !!getRoutes().find(
     (route) => route.path === location.pathname
@@ -53,6 +53,10 @@ export function Menu({
   if (isOpen) {
     cls += " active";
   }
+
+  const profileThumbnailUrl = filesWebAuth
+    ? `${filesUriBase}/thumbnail/${currentUser?.username}`
+    : `${filesUriBase}/thumbnail/anonymous`;
 
   return (
     <React.Fragment>
@@ -67,7 +71,7 @@ export function Menu({
               }}
             >
               <img
-                src={`${filesUriBase}/thumbnail/${currentUser?.username}`}
+                src={profileThumbnailUrl}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
@@ -79,7 +83,7 @@ export function Menu({
           <li className="kpm-profile-item kpm-desktop">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={profileThumbnailUrl}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
