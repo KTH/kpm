@@ -5,7 +5,7 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
-import { formatDisplayName, linkClassName } from "./components/utils";
+import { linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
 import { getRoutes, TRouterProps } from "./routes";
 import { LoadingIndicator } from "./components/loading";
@@ -66,7 +66,7 @@ export function Menu({
                 className="kpm-profile-image"
               />
               <span className="kpm-profile-display-name">
-                {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+                {currentUser?.display_name ?? ""}
               </span>
             </a>
           </li>
@@ -78,7 +78,7 @@ export function Menu({
                 className="kpm-profile-image"
               />
               <span className="kpm-profile-display-name">
-                {currentUser ? formatDisplayName(currentUser.display_name) : ""}
+                {currentUser?.display_name ?? ""}
               </span>
             </ToggleNavLink>
           </li>

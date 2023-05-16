@@ -3,7 +3,6 @@ import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { createApiUri, postApi } from "./utils";
 import { useAuthState } from "../state/authState";
 import { i18n, LANG } from "../i18n/i18n";
-import { formatDisplayName } from "../components/utils";
 import "./profile.scss";
 import { useState } from "react";
 import { ErrorMessage } from "../components/common";
@@ -16,9 +15,7 @@ export function Profile() {
   return (
     <MenuPane className="kpm-profile">
       <MenuPaneHeader
-        title={`${formatDisplayName(currentUser?.display_name)} - ${i18n(
-          "Settings"
-        )}`}
+        title={`${currentUser?.display_name ?? ""} - ${i18n("Settings")}`}
       >
         <button
           className="kpm-button change-lang"
