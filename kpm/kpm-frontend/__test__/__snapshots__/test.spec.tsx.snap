@@ -14,7 +14,7 @@ exports[`<App /> Can be rendered 1`] = `
         <img
           alt="Profile Image"
           className="kpm-profile-image"
-          src="https://www.kth.se/files/thumbnail/jhsware"
+          src="https://www-r.referens.sys.kth.se/files/thumbnail/anonymous"
         />
         <span
           className="kpm-profile-display-name"
@@ -34,7 +34,7 @@ exports[`<App /> Can be rendered 1`] = `
         <img
           alt="Profile Image"
           className="kpm-profile-image"
-          src="https://www.kth.se/files/thumbnail/jhsware"
+          src="https://www-r.referens.sys.kth.se/files/thumbnail/anonymous"
         />
         <span
           className="kpm-profile-display-name"
