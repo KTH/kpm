@@ -1,14 +1,9 @@
 import { TSessionUser } from "kpm-backend-interface";
 import { useEffect, useState } from "react";
-import { fetchApi, fetchFilesWeb } from "../panes/utils";
+import { createFilesUri, fetchApi, fetchFilesWeb } from "../panes/utils";
 import { PubSub, TPubSubEvent } from "./PubSub";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
-const IS_STAGE = process.env.DEPLOYMENT === "stage";
-const filesUriBase =
-  IS_DEV || IS_STAGE
-    ? "https://www-r.referens.sys.kth.se/files"
-    : "https://www.kth.se/files";
 
 export const currentUser: TSessionUser | undefined =
   window.__kpmCurrentUser__ ||
@@ -86,7 +81,9 @@ async function checkValidSession() {
 
         if (!json.auth) {
           // Redirect to url with query param nextUrl=window.location.href
-          window.location.href = `${filesUriBase}/auth?nextUrl=${window.location.href}`;
+          window.location.href = createFilesUri(
+            `/auth?nextUrl=${window.location.href}`
+          );
         }
       }
     })
