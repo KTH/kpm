@@ -19,7 +19,7 @@ exports[`<App /> Can be rendered 1`] = `
         <span
           className="kpm-profile-display-name"
         >
-          Dr.LocalDev
+          Dr.LocalDev Server
         </span>
       </a>
     </li>
@@ -39,7 +39,7 @@ exports[`<App /> Can be rendered 1`] = `
         <span
           className="kpm-profile-display-name"
         >
-          Dr.LocalDev
+          Dr.LocalDev Server
         </span>
       </a>
     </li>

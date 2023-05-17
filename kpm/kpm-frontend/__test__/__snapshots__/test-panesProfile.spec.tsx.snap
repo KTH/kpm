@@ -17,7 +17,7 @@ exports[`<Profile /> Can be rendered 1`] = `
       className="kpm-modal-content-header"
     >
       <h2>
-        Dr.LocalDev - Settings
+        Dr.LocalDev Server - Settings
       </h2>
       <aside
         className="kpm-modal-content-header-actions"
