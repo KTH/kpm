@@ -4,16 +4,10 @@ import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
 import { isValidSession, setSsoCookie, clearSsoCookie } from "./auth";
 
-const IS_DEV = process.env.NODE_ENV !== "production";
-const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const PORT = parseInt(process.env.PORT || "3000");
 const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";
 const publicUriBase = `${PROXY_HOST}${PROXY_PATH_PREFIX}`;
-const filesUriBase =
-  IS_DEV || IS_STAGE
-    ? "https://www-r.referens.sys.kth.se/files"
-    : "https://www.kth.se/files";
 
 const distProdProductionPath = path.join(
   __dirname,
@@ -51,7 +45,6 @@ let n = cr('div'); n.id = "kpm-6cf53";
 n.style.position="fixed";
 document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
-fetch("${filesUriBase}/auth", {mode: "no-cors", redirect: "follow"});
 window.__kpmPublicUriBase__ = "${
       publicUriBase
       // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
