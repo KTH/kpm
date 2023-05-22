@@ -37,8 +37,6 @@ function createRouter() {
 }
 
 export function App() {
-  const [currentUser] = useAuthState();
-
   return (
     <ErrorBoundary>
       <RouterProvider router={createRouter()} />
