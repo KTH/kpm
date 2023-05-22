@@ -45,7 +45,6 @@ export function App() {
         router={createRouter({
           hasStudies: currentUser?.hasLadokCourses ?? false,
           hasTeaching: currentUser?.hasEduCourses ?? false,
-          numNewNotifications: currentUser?.numNewNotifications,
         })}
       />
     </ErrorBoundary>
