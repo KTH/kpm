@@ -8,19 +8,7 @@ import { Schedule } from "./panes/schedule";
 import { Services } from "./panes/services";
 import { Groups } from "./panes/groups";
 
-export type TRouterProps = {
-  hasStudies: boolean;
-  hasTeaching: boolean;
-};
-
-const getRoutesDefaults = {
-  hasTeaching: true,
-  hasStudies: true,
-};
-export function getRoutes({
-  hasTeaching,
-  hasStudies,
-}: TRouterProps = getRoutesDefaults): RouteObject[] {
+export function getRoutes(): RouteObject[] {
   const routes = [
     {
       path: "/profile",
@@ -31,12 +19,12 @@ export function getRoutes({
       path: "/schedule",
       element: <Schedule />,
     },
-    hasStudies && {
+    {
       path: "/studies",
       element: <Studies />,
       // loader: loaderStudies,
     },
-    hasTeaching && {
+    {
       path: "/teaching",
       element: <Teaching />,
       // loader: loaderTeaching,
