@@ -24,8 +24,8 @@ declare global {
 function createRouter({ ...props }: TRouterProps) {
   return createHashRouter([
     {
-      element: <Menu {...props} />,
-      errorElement: <Menu {...props} />,
+      element: <Menu />,
+      errorElement: <Menu />,
       children: getRoutes({ ...props }).map((route) => ({
         index: route.path === "/",
         path: route.path === "/" ? undefined : route.path,
