@@ -7,14 +7,14 @@ import {
 } from "react-router-dom";
 import { linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
-import { getRoutes, TRouterProps } from "./routes";
+import { getRoutes } from "./routes";
 import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
-import { LoginModal, useLogin } from "./components/login";
+import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
@@ -23,11 +23,7 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/notifications/notice_list/";
 
-export function Menu({
-  hasStudies,
-  hasTeaching,
-  numNewNotifications,
-}: TRouterProps) {
+export function Menu() {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,6 +38,10 @@ export function Menu({
   const hasMatch: boolean = !!getRoutes().find(
     (route) => route.path === location.pathname
   );
+
+  const hasStudies = currentUser?.hasLadokCourses ?? false;
+  const hasTeaching = currentUser?.hasEduCourses ?? false;
+  const numNewNotifications = currentUser?.numNewNotifications;
 
   let cls = "kpm-menu";
   if (isOpen) {
