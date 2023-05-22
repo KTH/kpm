@@ -3,13 +3,6 @@ import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import { authState } from "../state/authState";
 
-const IS_DEV = process.env.NODE_ENV !== "production";
-const IS_STAGE = process.env.DEPLOYMENT === "stage";
-const filesUriBase =
-  IS_DEV || IS_STAGE
-    ? "https://www-r.referens.sys.kth.se/files"
-    : "https://www.kth.se/files";
-
 declare global {
   interface Window {
     // NOTE: This global variable is set in widget.js.ts
@@ -121,24 +114,6 @@ export async function fetchApi(
       value: undefined,
     });
   }
-
-  return res;
-}
-
-export async function fetchFilesWeb(
-  path: string,
-  options: RequestInit = {}
-): Promise<Response> {
-  const { headers, ...otherOptions } = options;
-  const fetchOptions: RequestInit = {
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...headers,
-    },
-    ...otherOptions,
-  };
-  const res = await fetch(`${filesUriBase}${path}`, fetchOptions);
 
   return res;
 }
