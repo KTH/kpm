@@ -3,11 +3,17 @@ import { AuthError } from "../components/common";
 import { i18n } from "../i18n/i18n";
 import { authState } from "../state/authState";
 
+const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_STAGE = process.env.DEPLOYMENT === "stage";
+const filesUriBase =
+  IS_DEV || IS_STAGE
+    ? "https://www-r.referens.sys.kth.se/files"
+    : "https://www.kth.se/files";
+
 declare global {
   interface Window {
     // NOTE: This global variable is set in widget.js.ts
     __kpmPublicUriBase__?: string;
-    __kpmFilesUriBase__?: string;
   }
 }
 
@@ -16,17 +22,6 @@ export function createApiUri(path: string) {
     return `${window.__kpmPublicUriBase__}${path}`;
   } else {
     return `/kpm${path}`;
-  }
-}
-
-export function createFilesUri(path: string) {
-  if (
-    typeof window.__kpmFilesUriBase__ === "string" &&
-    window.__kpmFilesUriBase__.startsWith("http://www.kth.se")
-  ) {
-    return `https://www.kth.se/files${path}`;
-  } else {
-    return `https://www-r.referens.sys.kth.se/files${path}`;
   }
 }
 
@@ -143,7 +138,7 @@ export async function fetchFilesWeb(
     },
     ...otherOptions,
   };
-  const res = await fetch(createFilesUri(path), fetchOptions);
+  const res = await fetch(`${filesUriBase}${path}`, fetchOptions);
 
   return res;
 }
