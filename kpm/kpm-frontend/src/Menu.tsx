@@ -16,6 +16,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
+import { createFilesUri } from "./panes/utils";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -61,7 +62,7 @@ export function Menu() {
               }}
             >
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
@@ -73,7 +74,7 @@ export function Menu() {
           <li className="kpm-profile-item kpm-desktop">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
@@ -141,7 +142,7 @@ export function Menu() {
           <li className="kpm-profile-item kpm-mobile">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />

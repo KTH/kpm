@@ -18,6 +18,16 @@ export function createApiUri(path: string) {
   }
 }
 
+export function createFilesUri(path: string) {
+  if (
+    typeof window.__kpmPublicUriBase__ === "string" &&
+    path.startsWith("https://app.kth.se/")
+  ) {
+    return `https://www.kth.se/files${path}`;
+  }
+  return `https://www-r.referens.sys.kth.se/files${path}`;
+}
+
 export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
   res: T | undefined;
   loading: boolean;
