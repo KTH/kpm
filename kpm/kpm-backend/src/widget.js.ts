@@ -51,7 +51,9 @@ let n = cr('div'); n.id = "kpm-6cf53";
 n.style.position="fixed";
 document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
-fetch("${filesUriBase}/auth", {mode: "no-cors", redirect: "follow"});
+fetch("${filesUriBase}/thumbnail/${
+      userToFrontend.username
+    }", {cors: "no-cors", redirect: "follow"});
 window.__kpmPublicUriBase__ = "${
       publicUriBase
       // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
