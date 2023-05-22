@@ -73,18 +73,18 @@ async function checkValidSession() {
   fetchFilesWeb("/isauth")
     .then(async (res) => {
       if (res.ok) {
-        // How slow is this?
         const json = await res.json();
+        authState.send({
+          name: "FilesWebAuth",
+          value: json.auth,
+        });
+
         if (!json.auth) {
           // Redirect to url with query param nextUrl=window.location.href
           window.location.href = createFilesUri(
             `/auth?nextUrl=${window.location.href}`
           );
         }
-        authState.send({
-          name: "FilesWebAuth",
-          value: json.auth,
-        });
       }
     })
     .catch((e) => {
