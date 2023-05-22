@@ -49,11 +49,11 @@ exports[`<Profile /> Can be rendered 1`] = `
         <li>
           <a
             className="kpm-profile-link"
-            href="https://www.kth.se/profile/jhsware/"
+            href="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
           >
             <img
               alt="Profile Image"
-              src="https://www.kth.se/files/thumbnail/jhsware"
+              src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
             />
             My Profile
           </a>

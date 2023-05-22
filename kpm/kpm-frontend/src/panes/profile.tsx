@@ -1,6 +1,6 @@
 import * as React from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
-import { createApiUri, postApi } from "./utils";
+import { createApiUri, createFilesUri, postApi } from "./utils";
 import { useAuthState } from "../state/authState";
 import { i18n, LANG } from "../i18n/i18n";
 import "./profile.scss";
@@ -35,10 +35,10 @@ export function Profile() {
           <li>
             <a
               className="kpm-profile-link"
-              href={`https://www.kth.se/profile/${currentUser?.username}/`}
+              href={createFilesUri(`/thumbnail/${currentUser?.username}`)}
             >
               <img
-                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt={i18n("Profile Image")}
               />
               {i18n("My Profile")}
