@@ -7,7 +7,6 @@ declare global {
   interface Window {
     // NOTE: This global variable is set in widget.js.ts
     __kpmPublicUriBase__?: string;
-    __kpmFilesUriBase__?: string;
   }
 }
 
@@ -16,17 +15,6 @@ export function createApiUri(path: string) {
     return `${window.__kpmPublicUriBase__}${path}`;
   } else {
     return `/kpm${path}`;
-  }
-}
-
-export function createFilesUri(path: string) {
-  if (
-    typeof window.__kpmFilesUriBase__ === "string" &&
-    window.__kpmFilesUriBase__.startsWith("http://www.kth.se")
-  ) {
-    return `https://www.kth.se/files${path}`;
-  } else {
-    return `https://www-r.referens.sys.kth.se/files${path}`;
   }
 }
 
@@ -126,24 +114,6 @@ export async function fetchApi(
       value: undefined,
     });
   }
-
-  return res;
-}
-
-export async function fetchFilesWeb(
-  path: string,
-  options: RequestInit = {}
-): Promise<Response> {
-  const { headers, ...otherOptions } = options;
-  const fetchOptions: RequestInit = {
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...headers,
-    },
-    ...otherOptions,
-  };
-  const res = await fetch(createFilesUri(path), fetchOptions);
 
   return res;
 }

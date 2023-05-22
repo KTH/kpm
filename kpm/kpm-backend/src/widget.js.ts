@@ -4,6 +4,8 @@ import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
 import { isValidSession, setSsoCookie, clearSsoCookie } from "./auth";
 
+const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const PORT = parseInt(process.env.PORT || "3000");
 const PROXY_HOST = process.env.PROXY_HOST || `//localhost:${PORT}`;
 const PROXY_PATH_PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm";

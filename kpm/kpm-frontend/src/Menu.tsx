@@ -16,7 +16,6 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { LoginModal, useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
-import { createFilesUri } from "./panes/utils";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -38,7 +37,7 @@ export function Menu({
 
   const [isOpen, setIsOpen] = useState(false);
   const [showLogin, setShowLogin] = useLogin();
-  const [currentUser, filesWebAuth] = useAuthState();
+  const [currentUser] = useAuthState();
 
   const hasMatch: boolean = !!getRoutes().find(
     (route) => route.path === location.pathname
@@ -48,10 +47,6 @@ export function Menu({
   if (isOpen) {
     cls += " active";
   }
-
-  const profileThumbnailUrl = filesWebAuth
-    ? createFilesUri(`/thumbnail/${currentUser?.username}`)
-    : createFilesUri(`/thumbnail/anonymous`);
 
   return (
     <React.Fragment>
@@ -66,7 +61,7 @@ export function Menu({
               }}
             >
               <img
-                src={profileThumbnailUrl}
+                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />
@@ -78,7 +73,7 @@ export function Menu({
           <li className="kpm-profile-item kpm-desktop">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
-                src={profileThumbnailUrl}
+                src={`https://www.kth.se/files/thumbnail/${currentUser?.username}`}
                 alt="Profile Image"
                 className="kpm-profile-image"
               />

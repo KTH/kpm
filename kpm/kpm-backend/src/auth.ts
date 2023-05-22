@@ -262,7 +262,7 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
       kthid: USE_FAKE_USER,
       display_name: "Test Userson",
       email: "test@email.com",
-      username: "jhsware",
+      username: "testuser",
       hasEduCourses: true,
       hasLadokCourses: true,
       numNewNotifications: 0,
