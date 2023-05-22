@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { useAuthState } from "./state/authState";
-import { getRoutes, TRouterProps } from "./routes";
+import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
 
@@ -21,12 +21,12 @@ declare global {
   }
 }
 
-function createRouter({ ...props }: TRouterProps) {
+function createRouter() {
   return createHashRouter([
     {
       element: <Menu />,
       errorElement: <Menu />,
-      children: getRoutes({ ...props }).map((route) => ({
+      children: getRoutes().map((route) => ({
         index: route.path === "/",
         path: route.path === "/" ? undefined : route.path,
         element: route.element,
@@ -37,16 +37,9 @@ function createRouter({ ...props }: TRouterProps) {
 }
 
 export function App() {
-  const [currentUser] = useAuthState();
-
   return (
     <ErrorBoundary>
-      <RouterProvider
-        router={createRouter({
-          hasStudies: currentUser?.hasLadokCourses ?? false,
-          hasTeaching: currentUser?.hasEduCourses ?? false,
-        })}
-      />
+      <RouterProvider router={createRouter()} />
     </ErrorBoundary>
   );
 }
