@@ -9,7 +9,6 @@ export type TSessionUser = {
   username?: string;
   hasEduCourses?: boolean;
   hasLadokCourses?: boolean;
-  memberOf?: string[];
   numNewNotifications?: number;
   expires: number;
 };
