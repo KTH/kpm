@@ -466,7 +466,7 @@ function CourseAdminDropdown({
       </GroupItem>
       <GroupItem>
         <a
-          href={`https://app.kth.se/studentlistor/kurstillfallen/?courseCode=${courseCode}&term=${currentTerm}`}
+          href={`https://app.kth.se/studentlistor/kurstillfallen?courseCode=${courseCode}&term=${currentTerm}`}
         >
           {i18n("Kursdeltagare")}
         </a>
