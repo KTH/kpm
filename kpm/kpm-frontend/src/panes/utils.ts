@@ -18,14 +18,22 @@ export function createApiUri(path: string) {
   }
 }
 
-export function createFilesUri(path: string) {
+function getMainHost() {
   if (
     typeof window.__kpmPublicUriBase__ === "string" &&
-    path.startsWith("https://app.kth.se/")
+    window.__kpmPublicUriBase__.startsWith("https://app.kth.se/")
   ) {
-    return `https://www.kth.se/files${path}`;
+    return `https://www.kth.se`;
   }
-  return `https://www-r.referens.sys.kth.se/files${path}`;
+  return `https://www-r.referens.sys.kth.se`;
+}
+
+export function createFilesUri(path: string) {
+  return `${getMainHost()}/files${path}`;
+}
+
+export function createProfilesUri(path: string) {
+  return `${getMainHost()}/profile${path}`;
 }
 
 export function useDataFecther<T>(loaderFunc: () => Promise<T>): {
