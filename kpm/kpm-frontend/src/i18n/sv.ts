@@ -80,21 +80,6 @@ export const sv: Record<string, string> = {
   "Find groups": "Sök bland grupper",
   "My Groups": "Mina grupper",
   // Services
-  "Resor (KTH-Res)": "Resor (KTH-Res)",
-  "Publikationer (DiVA)": "Publikationer (DiVA)",
-  "Personalförmåner (KTH för mig)": "Personalförmåner (KTH för mig)",
-  "Lediga datorer i datorsalarna": "Lediga datorer i datorsalarna",
-  "Ladok för personal (administratörer och lärare)":
-    "Ladok för personal (administratörer och lärare)",
-  "Kursadministration ": "Kursadministration ",
-  "Kurs- och programplanering (KOPPS)": "Kurs- och programplanering (KOPPS)",
-  "KTH Play": "KTH Play",
-  "Grupprum i biblioteket": "Grupprum i biblioteket",
-  "Fillagring i molnet (KTH Box)": "Fillagring i molnet (KTH Box)",
-  "Egenrapporteringen (HR+)": "Egenrapporteringen (HR+)",
-  "E-post (Webmail)": "E-post (Webmail)",
-  "Artiklar och böcker (KTH Biblioteket)":
-    "Artiklar och böcker (KTH Biblioteket)",
   "Other Selected Services": "Andra valda tjänster",
   "LADOK for Students": "LADOK för studenter",
   "Services for Students": "Tjänster för studenter",
