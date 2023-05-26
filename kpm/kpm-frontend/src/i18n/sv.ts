@@ -97,6 +97,7 @@ export const sv: Record<string, string> = {
     "Artiklar och böcker (KTH Biblioteket)",
   "Other Selected Services": "Andra valda tjänster",
   "LADOK for Students": "LADOK för studenter",
+  "Services for Students": "Tjänster för studenter",
   "My Services": "Mina tjänster",
   "Current Courses": "Aktuella kurser",
   Other: "Övriga",

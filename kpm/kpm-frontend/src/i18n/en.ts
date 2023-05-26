@@ -99,6 +99,7 @@ export const en: Record<string, string> = {
   "Artiklar och böcker (KTH Biblioteket)": "Articles and books (KTH Library)",
   "Other Selected Services": "Other Selected Services",
   "LADOK for Students": "LADOK for Students",
+  "Services for Students": "Services for Students",
   "My Services": "My Services",
   "Current Courses": "Current Courses",
   Other: "Other",
