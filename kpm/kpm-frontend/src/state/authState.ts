@@ -1,6 +1,6 @@
 import { TSessionUser } from "kpm-backend-interface";
 import { useEffect, useState } from "react";
-import { fetchApi } from "../panes/utils";
+import { createApiUri, fetchApi } from "../panes/utils";
 import { PubSub, TPubSubEvent } from "./PubSub";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -67,18 +67,28 @@ async function checkValidSession() {
   const res = await fetchApi("/api/session");
   const json = await res.json();
 
-  if (res.ok && json.user) {
-    authState.send({ name: "CurrentUser", value: json.user });
-    sendKpmLoaded(true);
-    return;
-  }
+  authState.send({
+    name: "CurrentUser",
+    value: res.ok && json.user ? json.user : undefined,
+  });
+}
 
-  authState.send({ name: "CurrentUser", value: undefined });
-  sendKpmLoaded(false);
+async function checkWithLoginServer() {
+  // The server caches the result so we don't DDoS the login server.
+  const res = await fetchApi("/auth/login_check", {
+    credentials: "include", // We need to send cookies to login server which is on different origin
+    redirect: "follow",
+  });
+
+  if (res.ok) {
+    const json = await res.json();
+    sendKpmLoaded(json.isLoggedIn);
+  }
 }
 
 export function initSessionCheck() {
   document.addEventListener("visibilitychange", checkValidSession);
+  checkWithLoginServer();
   setTimeout(checkValidSession); // Once on startup, without delaying first paint
 }
 
