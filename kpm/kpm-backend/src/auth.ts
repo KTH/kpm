@@ -118,15 +118,6 @@ auth.get("/login", async function checkHandler(req, res) {
   );
   assert(queryPrompt === undefined, "query param 'prompt' is not used");
 
-  // Check server to see how long time has passed since last check
-  const now = Date.now();
-  if (
-    typeof req.session.lastLoginServerCheck === "number" &&
-    req.session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
-  ) {
-    return res.json({ isLoggedIn: !!req.session.loginServerSessionActive });
-  }
-
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
@@ -151,6 +142,15 @@ auth.get("/login_check", async function checkHandler(req, res) {
 
   assert(queryNextUrl === undefined, "query param 'nextUrl' is not used");
   assert(queryPrompt === undefined, "query param 'prompt' is not used");
+
+  // Check server to see how long time has passed since last check
+  const now = Date.now();
+  if (
+    typeof req.session.lastLoginServerCheck === "number" &&
+    req.session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
+  ) {
+    return res.json({ isLoggedIn: !!req.session.loginServerSessionActive });
+  }
 
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", "silentLogin");
