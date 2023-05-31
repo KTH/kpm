@@ -74,9 +74,7 @@ async function checkValidSession() {
 }
 
 async function checkWithLoginServer() {
-  // TODO: Check with login server if session is valid
-  // TODO: Throttle so we don't spam the login server
-  //       - session user needs some kind of timestamp
+  // The server caches the result so we don't DDoS the login server.
   const res = await fetchApi("/auth/login_check", {
     credentials: "include", // We need to send cookies to login server which is on different origin
     redirect: "follow",

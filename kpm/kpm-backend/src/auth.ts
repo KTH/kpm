@@ -19,6 +19,8 @@ declare module "express-session" {
   interface SessionData {
     tmpNonce?: string;
     user?: TSessionUser;
+    lastLoginServerCheck?: number;
+    loginServerSessionActive?: boolean;
   }
 }
 
@@ -30,6 +32,7 @@ const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const LOAD_TEST_TOKEN = process.env.LOAD_TEST_TOKEN;
+const LOGIN_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 export const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
   ? ({} as const)
@@ -115,6 +118,15 @@ auth.get("/login", async function checkHandler(req, res) {
   );
   assert(queryPrompt === undefined, "query param 'prompt' is not used");
 
+  // Check server to see how long time has passed since last check
+  const now = Date.now();
+  if (
+    typeof req.session.lastLoginServerCheck === "number" &&
+    req.session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
+  ) {
+    return res.json({ isLoggedIn: !!req.session.loginServerSessionActive });
+  }
+
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
@@ -177,6 +189,8 @@ auth.use("/callback", async function callbackHandler(req, res, next) {
   // Silent Authentication flow
   if (nextUrl === "silentLogin") {
     const isLoggedIn = !req.query["error"];
+    req.session.loginServerSessionActive = isLoggedIn;
+    req.session.lastLoginServerCheck = Date.now();
     return res.send({ isLoggedIn });
   }
 
