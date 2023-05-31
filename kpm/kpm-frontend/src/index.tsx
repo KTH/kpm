@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { App } from "./app";
-import { authState, initSessionCheck } from "./state/authState";
-import { TPubSubEvent } from "./state/PubSub";
+import { initSessionCheck } from "./state/authState";
 
 // Only mount menu in outermost frame
 if (window.frameElement === null) {

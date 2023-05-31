@@ -16,7 +16,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
-import { createFilesUri } from "./panes/utils";
+import { createApiUri, createFilesUri } from "./panes/utils";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =

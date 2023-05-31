@@ -53,7 +53,7 @@ class CorsError extends MutedOperationalError<TCorsError> {
 }
 
 let corsWhitelist: string[] = [];
-if (IS_STAGE) {
+if (IS_STAGE || IS_DEV) {
   corsWhitelist = [
     "https://app-r.referens.sys.kth.se",
     "https://intra-r.referens.sys.kth.se",
@@ -125,29 +125,33 @@ if (IS_STAGE) {
     "https://www.wasp.kth.se",
   ];
 }
-if (!IS_DEV) {
-  // We are behind a proxy and need to set proper origin etc.
-  // https://expressjs.com/en/guide/behind-proxies.html
-  app.set("trust proxy", true);
-  app.use(
-    cors({
-      origin: function (origin, callback) {
-        if (!origin || corsWhitelist.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(
-            new CorsError({
-              message: `Not allowed by CORS (origin: ${origin})`,
-              type: "InvalidOrigin",
-              details: { origin },
-            })
-          );
-        }
-      },
-      credentials: true,
-    })
-  );
+
+if (IS_DEV) {
+  corsWhitelist.push(`http://localhost:${PORT}`); // Local assets
+  corsWhitelist.push("null"); // We got this origin at /callback during silent auth flow
 }
+
+// We are behind a proxy and need to set proper origin etc.
+// https://expressjs.com/en/guide/behind-proxies.html
+app.set("trust proxy", true);
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || corsWhitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(
+          new CorsError({
+            message: `Not allowed by CORS (origin: ${origin})`,
+            type: "InvalidOrigin",
+            details: { origin },
+          })
+        );
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use(`${PREFIX}`, status);
 app.use(`${PREFIX}/auth`, auth);

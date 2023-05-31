@@ -101,38 +101,62 @@ if (IS_DEV || IS_STAGE) {
   });
 }
 
-// Example: /kpm/auth/login?nextUrl=https://kth.se&prompt=none
+// Initiate code login flow with OpenID Connect
+// - Redirects to provided url after login
+// - Example: /kpm/auth/login?nextUrl=https://kth.se
 auth.get("/login", async function checkHandler(req, res) {
-  const nextUrl = req.query.nextUrl;
+  const queryPrompt = req.query.prompt;
+  const queryNextUrl = req.query.nextUrl;
 
-  if (typeof nextUrl !== "string") {
-    // TODO: better error handling
-    return res.status(400).send("nextUrl should be a string");
-  }
+  assert(
+    typeof queryNextUrl === "string" &&
+      (queryNextUrl?.startsWith(PROXY_HOST) || queryNextUrl?.startsWith("/")),
+    "query param 'nextUrl' should be a valid url or path"
+  );
+  assert(queryPrompt === undefined, "query param 'prompt' is not used");
 
-  // prompt should have value "none". Otherwise it is interpreted as `undefined`
-  const prompt = req.query.prompt === "none" ? "none" : undefined;
+  const redirectUrl = new URL(redirectBaseUrl);
+  redirectUrl.searchParams.set("nextUrl", queryNextUrl);
+
+  const nonce = (req.session.tmpNonce = generators.nonce());
 
   const client = await getOpenIdClient();
-  const nonce = generators.nonce();
-  const redirectUrl = new URL(redirectBaseUrl);
-  redirectUrl.searchParams.set("nextUrl", nextUrl);
-
-  req.session.tmpNonce = nonce;
-
   const url = client.authorizationUrl({
     scope: "openid email profile",
     redirect_uri: redirectUrl.toString(),
     response_mode: "form_post",
-    prompt,
     nonce,
   });
+  res.redirect(url);
+});
 
+// Check if we are still logged in with OpenID Connect
+// - Returns json with status
+// - Example: /kpm/auth/login_check
+auth.get("/login_check", async function checkHandler(req, res) {
+  const queryPrompt = req.query.prompt;
+  const queryNextUrl = req.query.nextUrl;
+
+  assert(queryNextUrl === undefined, "query param 'nextUrl' is not used");
+  assert(queryPrompt === undefined, "query param 'prompt' is not used");
+
+  const redirectUrl = new URL(redirectBaseUrl);
+  redirectUrl.searchParams.set("nextUrl", "silentLogin");
+
+  const nonce = (req.session.tmpNonce = generators.nonce());
+
+  const client = await getOpenIdClient();
+  const url = client.authorizationUrl({
+    redirect_uri: redirectUrl.toString(),
+    prompt: "none",
+    response_mode: "query",
+    nonce,
+  });
   res.redirect(url);
 });
 
 auth.get("/logout", async function logoutHandler(req, res) {
-  const nextUrl = req.query.nextUrl || "https://www.kth.se";
+  const nextUrl = req.query.nextUrl;
   req.session.user = undefined;
   const client = await getOpenIdClient();
   const url = client.endSessionUrl({
@@ -141,7 +165,7 @@ auth.get("/logout", async function logoutHandler(req, res) {
   res.redirect(url);
 });
 
-auth.post("/callback", async function callbackHandler(req, res, next) {
+auth.use("/callback", async function callbackHandler(req, res, next) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
   const nextUrl = req.query.nextUrl;
@@ -150,6 +174,13 @@ auth.post("/callback", async function callbackHandler(req, res, next) {
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", nextUrl);
 
+  // Silent Authentication flow
+  if (nextUrl === "silentLogin") {
+    const isLoggedIn = !req.query["error"];
+    return res.send({ isLoggedIn });
+  }
+
+  // Normal Authentication flow
   try {
     const claims = await client
       .callback(redirectUrl.toString(), params, {
