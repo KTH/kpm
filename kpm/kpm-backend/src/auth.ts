@@ -113,7 +113,7 @@ auth.get("/login", async function checkHandler(req, res) {
 
   assert(
     typeof queryNextUrl === "string" &&
-      (queryNextUrl?.startsWith(PROXY_HOST) || queryNextUrl?.startsWith("/")),
+      (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
     "query param 'nextUrl' should be a valid url or path"
   );
   assert(queryPrompt === undefined, "query param 'prompt' is not used");
