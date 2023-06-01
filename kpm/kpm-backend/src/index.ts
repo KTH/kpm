@@ -75,7 +75,7 @@ if (IS_STAGE || IS_DEV) {
     "https://intra.kth.se",
     "https://ita.ug.kth.se",
     "https://kth.instructure.com",
-    "https://kth.se",
+    // "https://kth.se",
     "https://login.ug.kth.se",
     "https://www-edit.sys.kth.se",
     "https://www.access.kth.se",
