@@ -150,7 +150,7 @@ export function Menu() {
             </ToggleNavLink>
           </li>
           <li className="kpm-mobile-logout kpm-mobile">
-            <a href="#logout">{i18n("Logout")}</a>
+            <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>
           </li>
         </ul>
         <LoadingIndicator isLoading={navigation.state === "loading"} />
