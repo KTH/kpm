@@ -3,16 +3,21 @@
 #kpm-6cf53 div.kpm-services {
   align-items: flex-start;
 
+  // The two diferent flex values makes the left single-column and the
+  // right multi-column split the availiable space in a good way for a
+  // wide variety of parent widths.
   .kpm-col {
     flex: 13em 1;
-  }
 
-  .kpm-col.kpm-services-links {
-    flex: 20em 6;
+    &.kpm-services-links {
+      flex: 20em 6;
 
-    & > ul {
-      column-width: 17em;
-      gap: calc(2 * var(--kpmGap));
+      & > ul {
+        // If the current service names gets more narrow than this, it
+        // looks too crowded.  The value is the lower limit.
+        column-width: 17em;
+        gap: calc(2 * var(--kpmGap));
+      }
     }
   }
 
@@ -26,10 +31,6 @@
   #kpm-6cf53 div.kpm-services .kpm-col.kpm-services-links {
     .kpm-col-header {
       font-size: 2.34em; // Bugfix, can't figure out why this is half size
-    }
-
-    & > ul > li {
-      flex-basis: 100%;
     }
   }
 }
