@@ -210,7 +210,7 @@ exports[`<App /> Can be rendered 1`] = `
       className="kpm-mobile-logout kpm-mobile"
     >
       <a
-        href="#logout"
+        href="/kpm/auth/logout"
       >
         Logout
       </a>
