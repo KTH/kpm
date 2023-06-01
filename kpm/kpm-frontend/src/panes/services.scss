@@ -1,35 +1,18 @@
 @use "../vars" as *;
 
 #kpm-6cf53 div.kpm-services {
-  $rowGap: calc(2 * var(--kpmGap));
-  $colGap: calc(4 * var(--kpmGap));
-  $colCount: 3;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
-
-  display: flex;
-  flex-flow: row wrap;
   align-items: flex-start;
-  gap: $rowGap $colGap;
 
   .kpm-col {
-    width: $colWidth;
-    flex-grow: 0;
+    flex: 13em 1;
   }
 
   .kpm-col.kpm-services-links {
-    width: calc(2 * $colWidth);
+    flex: 20em 6;
 
     & > ul {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: flex-start;
-      gap: $rowGap $colGap;
-
-      & > li {
-        $colCount: 2;
-        width: calc((100% - $colGap) / $colCount);
-        margin-bottom: 0;
-      }
+      column-width: 17em;
+      gap: calc(2 * var(--kpmGap));
     }
   }
 
