@@ -78,6 +78,7 @@ async function checkWithLoginServer() {
   const res = await fetchApi("/auth/login_check", {
     credentials: "include", // We need to send cookies to login server which is on different origin
     redirect: "follow",
+    mode: "cors",
   });
 
   if (res.ok) {
