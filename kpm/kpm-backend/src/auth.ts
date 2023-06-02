@@ -108,6 +108,7 @@ if (IS_DEV || IS_STAGE) {
 // This should be called prior to sending the client
 // javascript bundle to ensure that the user is logged in
 // and that the login-server session is still valid.
+const loginCheckNextUrl = new URL(`${PREFIX}/kpm.js`, PROXY_HOST);
 export async function doLoginServerCheck(session: SessionData) {
   const now = Date.now();
   if (
@@ -115,8 +116,7 @@ export async function doLoginServerCheck(session: SessionData) {
     session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
   ) {
     const redirectUrl = new URL(redirectBaseUrl);
-    const nextUrl = new URL(`${PREFIX}/kpm.js`, PROXY_HOST);
-    redirectUrl.searchParams.set("nextUrl", nextUrl.href);
+    redirectUrl.searchParams.set("nextUrl", loginCheckNextUrl.href);
 
     const nonce = (session.tmpNonce = generators.nonce());
 
@@ -182,7 +182,7 @@ auth.use("/callback", async function callbackHandler(req, res, next) {
   redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
   // Silent Authentication flow
-  if (queryPrompt === "none") {
+  if (queryNextUrl === loginCheckNextUrl.href) {
     const isLoggedIn = !req.query["error"];
     if (isLoggedIn) {
       req.session.lastLoginServerCheck = Date.now();
