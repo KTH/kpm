@@ -73,24 +73,10 @@ async function checkValidSession() {
   });
 }
 
-async function checkWithLoginServer() {
-  // The server caches the result so we don't DDoS the login server.
-  const res = await fetchApi("/auth/login_check", {
-    credentials: "include", // We need to send cookies to login server which is on different origin
-    redirect: "follow",
-    mode: "cors",
-  });
-
-  if (res.ok) {
-    const json = await res.json();
-    sendKpmLoaded(json.isLoggedIn);
-  }
-}
-
 export function initSessionCheck() {
   document.addEventListener("visibilitychange", checkValidSession);
-  checkWithLoginServer();
   setTimeout(checkValidSession); // Once on startup, without delaying first paint
+  sendKpmLoaded();
 }
 
 // Check if session is valid for at least 30 mins every 15 mins
@@ -105,17 +91,15 @@ setInterval(() => {
   }
 }, 15 * 60 * 1000);
 
-function sendKpmLoaded(authorized: boolean) {
-  // Only send this event when the page is visible
-  // to avoid multiple pages getting stuck on the
-  // login screen. Since checkValidSession() is
-  // called on visibilitychange, this event will
-  // be sent when the page is visible again.
+function sendKpmLoaded() {
+  // This event is sent to the parent window to signal that KPM is loaded.
+  // Since we always check if we are logged in before loading, we can assume
+  // that the user is logged in (authorizde) if this event is fired.
   if (!document.hidden) {
     document.dispatchEvent(
       new CustomEvent("kpmLoaded", {
         detail: {
-          authorized,
+          authorized: true,
           lang: window.__kpmSettings__?.["lang"] || "en",
           desc: "This event is fired when KPM is loaded and has checked SSO authorisation.",
         },

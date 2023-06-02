@@ -11,6 +11,7 @@ import {
 } from "kpm-backend-interface";
 import { SESSION_MAX_AGE_MS } from "./session";
 import logger from "skog";
+import { SessionData } from "express-session";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -20,7 +21,6 @@ declare module "express-session" {
     tmpNonce?: string;
     user?: TSessionUser;
     lastLoginServerCheck?: number;
-    loginServerSessionActive?: boolean;
   }
 }
 
@@ -32,7 +32,7 @@ const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const LOAD_TEST_TOKEN = process.env.LOAD_TEST_TOKEN;
-const LOGIN_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const LOGIN_CHECK_INTERVAL_MS = 15 * 1000; // 15 seconds
 
 export const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
   ? ({} as const)
@@ -51,7 +51,7 @@ export const auth = Router();
 
 let client: BaseClient;
 
-async function getOpenIdClient() {
+export async function getOpenIdClient() {
   if (client) return client;
 
   const issuer = await Issuer.discover(process.env.OIDC_URL || "");
@@ -104,6 +104,34 @@ if (IS_DEV || IS_STAGE) {
   });
 }
 
+// Check if we are still logged in with OpenID Connect
+// This should be called prior to sending the client
+// javascript bundle to ensure that the user is logged in
+// and that the login-server session is still valid.
+export async function doLoginServerCheck(session: SessionData) {
+  const now = Date.now();
+  if (
+    typeof session.lastLoginServerCheck === "number" &&
+    session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
+  ) {
+    const redirectUrl = new URL(redirectBaseUrl);
+    const nextUrl = new URL(`${PREFIX}/kpm.js`, PROXY_HOST);
+    redirectUrl.searchParams.set("nextUrl", nextUrl.href);
+
+    const nonce = (session.tmpNonce = generators.nonce());
+
+    const client = await getOpenIdClient();
+    const url = client.authorizationUrl({
+      redirect_uri: redirectUrl.toString(),
+      prompt: "none",
+      response_mode: "query",
+      nonce,
+    });
+
+    return url;
+  }
+}
+
 // Initiate code login flow with OpenID Connect
 // - Redirects to provided url after login
 // - Example: /kpm/auth/login?nextUrl=https://kth.se
@@ -133,40 +161,6 @@ auth.get("/login", async function checkHandler(req, res) {
   res.redirect(url);
 });
 
-// Check if we are still logged in with OpenID Connect
-// - Returns json with status
-// - Example: /kpm/auth/login_check
-auth.get("/login_check", async function checkHandler(req, res) {
-  const queryPrompt = req.query.prompt;
-  const queryNextUrl = req.query.nextUrl;
-
-  assert(queryNextUrl === undefined, "query param 'nextUrl' is not used");
-  assert(queryPrompt === undefined, "query param 'prompt' is not used");
-
-  // Check server to see how long time has passed since last check
-  const now = Date.now();
-  if (
-    typeof req.session.lastLoginServerCheck === "number" &&
-    req.session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
-  ) {
-    return res.json({ isLoggedIn: !!req.session.loginServerSessionActive });
-  }
-
-  const redirectUrl = new URL(redirectBaseUrl);
-  redirectUrl.searchParams.set("nextUrl", "silentLogin");
-
-  const nonce = (req.session.tmpNonce = generators.nonce());
-
-  const client = await getOpenIdClient();
-  const url = client.authorizationUrl({
-    redirect_uri: redirectUrl.toString(),
-    prompt: "none",
-    response_mode: "query",
-    nonce,
-  });
-  res.redirect(url);
-});
-
 auth.get("/logout", async function logoutHandler(req, res) {
   const nextUrl = req.query.nextUrl;
   req.session.user = undefined;
@@ -180,18 +174,26 @@ auth.get("/logout", async function logoutHandler(req, res) {
 auth.use("/callback", async function callbackHandler(req, res, next) {
   const client = await getOpenIdClient();
   const params = client.callbackParams(req);
-  const nextUrl = req.query.nextUrl;
-  assert(typeof nextUrl === "string", "nextUrl should be a string");
+  const queryNextUrl = req.query.nextUrl;
+  const queryPrompt = req.query.prompt;
+  assert(typeof queryNextUrl === "string", "nextUrl should be a string");
 
   const redirectUrl = new URL(redirectBaseUrl);
-  redirectUrl.searchParams.set("nextUrl", nextUrl);
+  redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
   // Silent Authentication flow
-  if (nextUrl === "silentLogin") {
+  if (queryPrompt === "none") {
     const isLoggedIn = !req.query["error"];
-    req.session.loginServerSessionActive = isLoggedIn;
-    req.session.lastLoginServerCheck = Date.now();
-    return res.send({ isLoggedIn });
+    if (isLoggedIn) {
+      req.session.lastLoginServerCheck = Date.now();
+      return res.redirect(queryNextUrl);
+    } else {
+      // clear session
+      req.session.destroy(() => {
+        return res.redirect(queryNextUrl);
+      });
+      return;
+    }
   }
 
   // Normal Authentication flow
@@ -219,16 +221,17 @@ auth.use("/callback", async function callbackHandler(req, res, next) {
     logger.info({ lang, kthid: user?.kthid }, "Language according to social");
 
     req.session.user = user;
+    req.session.lastLoginServerCheck = Date.now();
     if (lang) {
       res.cookie("language", lang, LANG_COOKIE_OPTS);
     }
     setSsoCookie(res);
-    res.redirect(nextUrl);
+    res.redirect(queryNextUrl);
   } catch (err) {
     clearSsoCookie(res);
     if (err instanceof errors.OPError && err.error === "login_required") {
       // user is logged out
-      res.redirect(`${nextUrl}?login_success=false`);
+      res.redirect(`${queryNextUrl}?login_success=false`);
       return;
     }
 
