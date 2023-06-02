@@ -1,34 +1,22 @@
 @use "../vars" as *;
 
 #kpm-6cf53 div.kpm-services {
-  $rowGap: calc(2 * var(--kpmGap));
-  $colGap: calc(4 * var(--kpmGap));
-  $colCount: 3;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
-
-  display: flex;
-  flex-flow: row wrap;
   align-items: flex-start;
-  gap: $rowGap $colGap;
 
+  // The two diferent flex values makes the left single-column and the
+  // right multi-column split the availiable space in a good way for a
+  // wide variety of parent widths.
   .kpm-col {
-    width: $colWidth;
-    flex-grow: 0;
-  }
+    flex: 13em 1;
 
-  .kpm-col.kpm-services-links {
-    width: calc(2 * $colWidth);
+    &.kpm-services-links {
+      flex: 20em 6;
 
-    & > ul {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: flex-start;
-      gap: $rowGap $colGap;
-
-      & > li {
-        $colCount: 2;
-        width: calc((100% - $colGap) / $colCount);
-        margin-bottom: 0;
+      & > ul {
+        // If the current service names gets more narrow than this, it
+        // looks too crowded.  The value is the lower limit.
+        column-width: 17em;
+        gap: calc(2 * var(--kpmGap));
       }
     }
   }
@@ -43,10 +31,6 @@
   #kpm-6cf53 div.kpm-services .kpm-col.kpm-services-links {
     .kpm-col-header {
       font-size: 2.34em; // Bugfix, can't figure out why this is half size
-    }
-
-    & > ul > li {
-      flex-basis: 100%;
     }
   }
 }
