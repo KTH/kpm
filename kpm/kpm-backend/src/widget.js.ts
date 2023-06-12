@@ -2,13 +2,7 @@ import { readFileSync } from "fs";
 import path from "path";
 import { Response, Request, static as staticHandler } from "express";
 import { TSessionUser } from "kpm-backend-interface";
-import {
-  isValidSession,
-  setSsoCookie,
-  clearSsoCookie,
-  getOpenIdClient,
-  doLoginServerCheck,
-} from "./auth";
+import { isValidSession, setSsoCookie, clearSsoCookie } from "./auth";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
@@ -39,12 +33,6 @@ export async function widgetJsHandler(req: Request, res: Response) {
   // kpm session should be cleared by the callback if login server session
   // has expired.
   // QUESTION: Should we sen kpmLoaded with { isLoggedIn: false } if not logged in?
-
-  // Sometimes we check if user session is still active on login server
-  const authUrl = await doLoginServerCheck(req.session);
-  if (authUrl !== undefined) {
-    return res.redirect(authUrl);
-  }
 
   const assets = getLatestDistFileNames();
 

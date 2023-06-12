@@ -104,34 +104,6 @@ if (IS_DEV || IS_STAGE) {
   });
 }
 
-// Check if we are still logged in with OpenID Connect
-// This should be called prior to sending the client
-// javascript bundle to ensure that the user is logged in
-// and that the login-server session is still valid.
-const loginCheckNextUrl = new URL(`${PREFIX}/kpm.js`, PROXY_HOST);
-export async function doLoginServerCheck(session: SessionData) {
-  const now = Date.now();
-  if (
-    typeof session.lastLoginServerCheck === "number" &&
-    session.lastLoginServerCheck < now - LOGIN_CHECK_INTERVAL_MS
-  ) {
-    const redirectUrl = new URL(redirectBaseUrl);
-    redirectUrl.searchParams.set("nextUrl", loginCheckNextUrl.href);
-
-    const nonce = (session.tmpNonce = generators.nonce());
-
-    const client = await getOpenIdClient();
-    const url = client.authorizationUrl({
-      redirect_uri: redirectUrl.toString(),
-      prompt: "none",
-      response_mode: "query",
-      nonce,
-    });
-
-    return url;
-  }
-}
-
 // Initiate code login flow with OpenID Connect
 // - Redirects to provided url after login
 // - Example: /kpm/auth/login?nextUrl=https://kth.se
@@ -180,21 +152,6 @@ auth.use("/callback", async function callbackHandler(req, res, next) {
 
   const redirectUrl = new URL(redirectBaseUrl);
   redirectUrl.searchParams.set("nextUrl", queryNextUrl);
-
-  // Silent Authentication flow
-  if (queryNextUrl === loginCheckNextUrl.href) {
-    const isLoggedIn = !req.query["error"];
-    if (isLoggedIn) {
-      req.session.lastLoginServerCheck = Date.now();
-      return res.redirect(queryNextUrl);
-    } else {
-      // clear session
-      req.session.destroy(() => {
-        return res.redirect(queryNextUrl);
-      });
-      return;
-    }
-  }
 
   // Normal Authentication flow
   try {
