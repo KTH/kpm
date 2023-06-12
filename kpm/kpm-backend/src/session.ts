@@ -13,7 +13,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET || "kpm";
 const PORT = process.env.PORT || 3000;
 const PROXY_HOST = process.env.PROXY_HOST || `http://localhost:${PORT}`;
 const IS_HTTPS = PROXY_HOST.startsWith("https:");
-export const SESSION_MAX_AGE_MS = 14 * 24 * 3600 * 1000;
+export const SESSION_MAX_AGE_MS = 8 * 3600 * 1000; // We are setting this to 8 hours to mitigate issues with the kpmLoaded event. Previously 14 days
 
 const redisClient = getRedisClientForConnect(REDIS_DB_NAMES.SESSION);
 let redisStore: RedisStore | undefined = undefined;
