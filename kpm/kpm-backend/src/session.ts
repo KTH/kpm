@@ -39,6 +39,7 @@ export const sessionMiddleware = expressSession({
 
   // Read more: https://www.npmjs.com/package/express-session#resave
   resave: false,
+  rolling: true,
 
   // Save only sessions when user is authenticated. Setting "saveUnitialized"
   // to "false" prevents creation of sessions when app is accessed via API
