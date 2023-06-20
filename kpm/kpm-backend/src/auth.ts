@@ -107,54 +107,62 @@ if (IS_DEV || IS_STAGE) {
 // Initiate code login flow with OpenID Connect
 // - Redirects to provided url after login
 // - Example: /kpm/auth/login?nextUrl=https://kth.se
-auth.get("/login", async function checkHandler(req, res) {
-  const queryPrompt = req.query.prompt;
-  const queryNextUrl = req.query.nextUrl;
+auth.get("/login", async function checkHandler(req, res, next) {
+  try {
+    const queryPrompt = req.query.prompt;
+    const queryNextUrl = req.query.nextUrl;
 
-  assert(
-    typeof queryNextUrl === "string" &&
-      (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
-    "query param 'nextUrl' should be a valid url or path"
-  );
-  assert(queryPrompt === undefined, "query param 'prompt' is not used");
+    assert(
+      typeof queryNextUrl === "string" &&
+        (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
+      "query param 'nextUrl' should be a valid url or path"
+    );
+    assert(queryPrompt === undefined, "query param 'prompt' is not used");
 
-  const redirectUrl = new URL(redirectBaseUrl);
-  redirectUrl.searchParams.set("nextUrl", queryNextUrl);
+    const redirectUrl = new URL(redirectBaseUrl);
+    redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
-  const nonce = (req.session.tmpNonce = generators.nonce());
+    const nonce = (req.session.tmpNonce = generators.nonce());
 
-  const client = await getOpenIdClient();
-  const url = client.authorizationUrl({
-    scope: "openid email profile",
-    redirect_uri: redirectUrl.toString(),
-    response_mode: "form_post",
-    nonce,
-  });
-  res.redirect(url);
+    const client = await getOpenIdClient();
+    const url = client.authorizationUrl({
+      scope: "openid email profile",
+      redirect_uri: redirectUrl.toString(),
+      response_mode: "form_post",
+      nonce,
+    });
+    res.redirect(url);
+  } catch (err) {
+    next(err);
+  }
 });
 
-auth.get("/logout", async function logoutHandler(req, res) {
-  const nextUrl = req.query.nextUrl;
-  req.session.user = undefined;
-  const client = await getOpenIdClient();
-  const url = client.endSessionUrl({
-    redirect_uri: nextUrl,
-  });
-  res.redirect(url);
+auth.get("/logout", async function logoutHandler(req, res, next) {
+  try {
+    const nextUrl = req.query.nextUrl;
+    req.session.user = undefined;
+    const client = await getOpenIdClient();
+    const url = client.endSessionUrl({
+      redirect_uri: nextUrl,
+    });
+    res.redirect(url);
+  } catch (err) {
+    next(err);
+  }
 });
 
 auth.use("/callback", async function callbackHandler(req, res, next) {
-  const client = await getOpenIdClient();
-  const params = client.callbackParams(req);
   const queryNextUrl = req.query.nextUrl;
-  const queryPrompt = req.query.prompt;
-  assert(typeof queryNextUrl === "string", "nextUrl should be a string");
 
-  const redirectUrl = new URL(redirectBaseUrl);
-  redirectUrl.searchParams.set("nextUrl", queryNextUrl);
-
-  // Normal Authentication flow
   try {
+    const client = await getOpenIdClient();
+    const params = client.callbackParams(req);
+    assert(typeof queryNextUrl === "string", "nextUrl should be a string");
+
+    const redirectUrl = new URL(redirectBaseUrl);
+    redirectUrl.searchParams.set("nextUrl", queryNextUrl);
+
+    // Normal Authentication flow
     const claims = await client
       .callback(redirectUrl.toString(), params, {
         nonce: req.session.tmpNonce,
