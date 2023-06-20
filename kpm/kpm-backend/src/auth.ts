@@ -315,8 +315,8 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
 }
 
 export function requiresValidSessionUser(
-  req: Express.Request,
-  res: Express.Response,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) {
   try {
