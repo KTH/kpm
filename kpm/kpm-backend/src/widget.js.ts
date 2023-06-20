@@ -1,6 +1,11 @@
 import { readFileSync } from "fs";
 import path from "path";
-import { Response, Request, static as staticHandler } from "express";
+import {
+  Response,
+  Request,
+  static as staticHandler,
+  NextFunction,
+} from "express";
 import { TSessionUser } from "kpm-backend-interface";
 import { isValidSession, setSsoCookie, clearSsoCookie } from "./auth";
 
@@ -20,31 +25,36 @@ const distProdProductionPath = path.join(
 /**
  * Responds with the initial javascript file that holds the entire personal menu
  */
-export async function widgetJsHandler(req: Request, res: Response) {
-  // Check "login_success = false" to avoid infinite loops
-  if (req.params.login_success === "false") {
-    clearSsoCookie(res);
-    res.send("personal menu for logged out users");
-    return;
-  }
+export async function widgetJsHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    // Check "login_success = false" to avoid infinite loops
+    if (req.params.login_success === "false") {
+      clearSsoCookie(res);
+      res.send("personal menu for logged out users");
+      return;
+    }
 
-  // TODO: Check if the login server has been pinged within the last 15 minutes
-  // If not, redirect to /auth/login_check with widget.js url as nextUrl
-  // kpm session should be cleared by the callback if login server session
-  // has expired.
-  // QUESTION: Should we sen kpmLoaded with { isLoggedIn: false } if not logged in?
+    // TODO: Check if the login server has been pinged within the last 15 minutes
+    // If not, redirect to /auth/login_check with widget.js url as nextUrl
+    // kpm session should be cleared by the callback if login server session
+    // has expired.
+    // QUESTION: Should we sen kpmLoaded with { isLoggedIn: false } if not logged in?
 
-  const assets = getLatestDistFileNames();
+    const assets = getLatestDistFileNames();
 
-  const loggedIn = isValidSession(req.session.user);
-  const LOGIN_URL = `${publicUriBase}/auth/login`;
-  const lang = req.cookies["language"];
+    const loggedIn = isValidSession(req.session.user);
+    const LOGIN_URL = `${publicUriBase}/auth/login`;
+    const lang = req.cookies["language"];
 
-  if (loggedIn) {
-    // *** LOGGED IN ***
-    const userToFrontend: TSessionUser = req.session.user!;
-    setSsoCookie(res);
-    res.type("text/javascript").send(`(function (js, css) {
+    if (loggedIn) {
+      // *** LOGGED IN ***
+      const userToFrontend: TSessionUser = req.session.user!;
+      setSsoCookie(res);
+      res.type("text/javascript").send(`(function (js, css) {
 document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
 ap = (n) => document.head.appendChild(n);
@@ -55,22 +65,22 @@ n.style.position="fixed";
 document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
 window.__kpmPublicUriBase__ = "${
-      publicUriBase
-      // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
-    }";
+        publicUriBase
+        // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
+      }";
 window.__kpmCurrentUser__ = ${
-      // Inject some user data to allow rendering the menu properly.
-      JSON.stringify(userToFrontend)
-    };
+        // Inject some user data to allow rendering the menu properly.
+        JSON.stringify(userToFrontend)
+      };
 window.__kpmSettings__ = ${JSON.stringify({ lang })};
 })("${publicUriBase}/assets/${
-      assets["index.js"]?.fileName
-    }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
-  } else {
-    // *** NOT LOGGED IN ***
-    // index.css contains Canvas CSS-fixes so we are passing it.
-    clearSsoCookie(res);
-    res.type("text/javascript").send(`(function (js, css) {
+        assets["index.js"]?.fileName
+      }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
+    } else {
+      // *** NOT LOGGED IN ***
+      // index.css contains Canvas CSS-fixes so we are passing it.
+      clearSsoCookie(res);
+      res.type("text/javascript").send(`(function (js, css) {
 document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
 var cr = (t) => document.createElement(t),
 ap = (e) => document.head.appendChild(e);
@@ -87,13 +97,16 @@ nd.append(nda);n.append(nd)
 document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
 })("${publicUriBase}/assets/${
-      assets["index.js"]?.fileName
-    }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");
+        assets["index.js"]?.fileName
+      }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");
 window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
+    }
+    // TODO: What is this used for?:
+    // Need to check
+    // res.redirect("/check");
+  } catch (e) {
+    next(e);
   }
-  // TODO: What is this used for?:
-  // Need to check
-  // res.redirect("/check");
 }
 
 let latestDistFileNames: Record<string, { fileName?: string }> | null = null;
