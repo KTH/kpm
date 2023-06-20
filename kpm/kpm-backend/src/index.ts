@@ -1,5 +1,5 @@
 import "./config";
-import express, { static as staticHandler } from "express";
+import express from "express";
 import { loggingHandler, errorHandler } from "kpm-api-common";
 import { api } from "./api";
 import { status } from "./status";
@@ -10,7 +10,7 @@ import {
   sessionApiHandler,
 } from "./session";
 import log from "skog";
-import { widgetJsHandler, widgetJsAssets, previewHandler } from "./widget.js";
+import { widgetJsHandler, widgetJsAssets } from "./widget.js";
 import cors from "cors";
 import { activation } from "./activation";
 import { MutedOperationalError } from "kpm-api-common/src/errors";
@@ -159,10 +159,6 @@ app.use(`${PREFIX}/api/session`, sessionApiHandler);
 app.use(`${PREFIX}/api`, requiresValidSessionUser, api);
 app.use(`${PREFIX}/kpm.js`, widgetJsHandler);
 app.use(`${PREFIX}/assets`, widgetJsAssets);
-
-/*if (IS_DEV || IS_STAGE) {
-  app.use(`${PREFIX}/index.:ext`, previewHandler);
-}*/
 app.use(`${PREFIX}`, activation);
 
 app.use(errorHandler);

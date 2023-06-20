@@ -132,8 +132,3 @@ export const widgetJsAssets = staticHandler(distProdProductionPath, {
   index: false,
   maxAge: "180 days",
 });
-
-export function previewHandler(req: Request, res: Response) {
-  const { ext } = req.params;
-  res.sendFile(`index.${ext}`, { root: __dirname });
-}
