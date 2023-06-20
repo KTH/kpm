@@ -64,6 +64,22 @@ export abstract class MutedOperationalError<
 }
 
 /**
+ * Use for asserts to check values passed to endpoint handlers.
+ */
+export class InputGuardError extends OperationalError<"InputGuardError"> {
+  // Errors that must be handled by frontend
+  constructor(message: string, details?: any) {
+    super({
+      name: "EndpointError",
+      statusCode: 400,
+      type: "InputGuardError",
+      message,
+      details,
+    });
+  }
+}
+
+/**
  * All errors of type EndpointError must be handled by the API-consumer.
  * These include data validation and failing calls to external APIs.
  * a 3rd party API.

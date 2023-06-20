@@ -2,7 +2,11 @@ import { Router, Request, Response, NextFunction } from "express";
 import log, { runWithSkog } from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
-import { AuthError, MutedAuthError } from "kpm-api-common/src/errors";
+import {
+  AuthError,
+  InputGuardError,
+  MutedAuthError,
+} from "kpm-api-common/src/errors";
 import { getSocial } from "./api/common";
 import {
   APIAuthErrType,
@@ -119,9 +123,14 @@ auth.get(
       assert(
         typeof queryNextUrl === "string" &&
           (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
-        "query param 'nextUrl' should be a valid url or path"
+        new InputGuardError(
+          "query param 'nextUrl' should be a valid url or path"
+        )
       );
-      assert(queryPrompt === undefined, "query param 'prompt' is not used");
+      assert(
+        queryPrompt === undefined,
+        new InputGuardError("query param 'prompt' is not used")
+      );
 
       const redirectUrl = new URL(redirectBaseUrl);
       redirectUrl.searchParams.set("nextUrl", queryNextUrl);
@@ -175,7 +184,10 @@ auth.use(
     try {
       const client = await getOpenIdClient();
       const params = client.callbackParams(req);
-      assert(typeof queryNextUrl === "string", "nextUrl should be a string");
+      assert(
+        typeof queryNextUrl === "string",
+        new InputGuardError("nextUrl should be a string")
+      );
 
       const redirectUrl = new URL(redirectBaseUrl);
       redirectUrl.searchParams.set("nextUrl", queryNextUrl);
