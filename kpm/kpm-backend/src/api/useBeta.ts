@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { APIGroups } from "kpm-backend-interface";
-import { postSocial, sessionUser } from "./common";
-import { handleCommonGotErrors } from "./commonErrors";
+import { sessionUser } from "./common";
 import log from "skog";
 
 // TODO: Add API interface  and error types in kpm-backend-interface
@@ -27,11 +25,4 @@ export async function useBeta(
   } catch (err) {
     next(err);
   }
-}
-
-function socialErr(err: any) {
-  handleCommonGotErrors(err);
-  // TODO: Add API specific error handling
-  Error.captureStackTrace(err, socialErr);
-  throw err;
 }

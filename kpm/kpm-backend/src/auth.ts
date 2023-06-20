@@ -1,4 +1,4 @@
-import { Router, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import log, { runWithSkog } from "skog";
 import { Issuer, BaseClient, generators, errors } from "openid-client";
 import assert from "node:assert/strict";
@@ -11,7 +11,6 @@ import {
 } from "kpm-backend-interface";
 import { SESSION_MAX_AGE_MS } from "./session";
 import logger from "skog";
-import { SessionData } from "express-session";
 
 /**
  * Extends "express-session" by declaring the data stored in session object
@@ -32,7 +31,6 @@ const USE_FAKE_USER = process.env.USE_FAKE_USER;
 const IS_DEV = process.env.NODE_ENV !== "production";
 const IS_STAGE = process.env.DEPLOYMENT === "stage";
 const LOAD_TEST_TOKEN = process.env.LOAD_TEST_TOKEN;
-const LOGIN_CHECK_INTERVAL_MS = 15 * 1000; // 15 seconds
 
 export const LANG_COOKIE_OPTS = PROXY_HOST.includes("localhost")
   ? ({} as const)
@@ -107,102 +105,123 @@ if (IS_DEV || IS_STAGE) {
 // Initiate code login flow with OpenID Connect
 // - Redirects to provided url after login
 // - Example: /kpm/auth/login?nextUrl=https://kth.se
-auth.get("/login", async function checkHandler(req, res, next) {
-  try {
-    const queryPrompt = req.query.prompt;
+auth.get(
+  "/login",
+  async function checkHandler(
+    req: Request,
+    res: Response<void>,
+    next: NextFunction
+  ) {
+    try {
+      const queryPrompt = req.query.prompt;
+      const queryNextUrl = req.query.nextUrl;
+
+      assert(
+        typeof queryNextUrl === "string" &&
+          (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
+        "query param 'nextUrl' should be a valid url or path"
+      );
+      assert(queryPrompt === undefined, "query param 'prompt' is not used");
+
+      const redirectUrl = new URL(redirectBaseUrl);
+      redirectUrl.searchParams.set("nextUrl", queryNextUrl);
+
+      const nonce = (req.session.tmpNonce = generators.nonce());
+
+      const client = await getOpenIdClient();
+      const url = client.authorizationUrl({
+        scope: "openid email profile",
+        redirect_uri: redirectUrl.toString(),
+        response_mode: "form_post",
+        nonce,
+      });
+      res.redirect(url);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+auth.get(
+  "/logout",
+  async function logoutHandler(
+    req: Request,
+    res: Response<void>,
+    next: NextFunction
+  ) {
+    try {
+      const nextUrl = req.query.nextUrl;
+      req.session.user = undefined;
+      const client = await getOpenIdClient();
+      const url = client.endSessionUrl({
+        redirect_uri: nextUrl,
+      });
+      res.redirect(url);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+auth.use(
+  "/callback",
+  async function callbackHandler(
+    req: Request,
+    res: Response<void>,
+    next: NextFunction
+  ) {
     const queryNextUrl = req.query.nextUrl;
 
-    assert(
-      typeof queryNextUrl === "string" &&
-        (queryNextUrl?.startsWith("http") || queryNextUrl?.startsWith("/")),
-      "query param 'nextUrl' should be a valid url or path"
-    );
-    assert(queryPrompt === undefined, "query param 'prompt' is not used");
+    try {
+      const client = await getOpenIdClient();
+      const params = client.callbackParams(req);
+      assert(typeof queryNextUrl === "string", "nextUrl should be a string");
 
-    const redirectUrl = new URL(redirectBaseUrl);
-    redirectUrl.searchParams.set("nextUrl", queryNextUrl);
+      const redirectUrl = new URL(redirectBaseUrl);
+      redirectUrl.searchParams.set("nextUrl", queryNextUrl);
 
-    const nonce = (req.session.tmpNonce = generators.nonce());
+      // Normal Authentication flow
+      const claims = await client
+        .callback(redirectUrl.toString(), params, {
+          nonce: req.session.tmpNonce,
+        })
+        .then((tokenSet) => tokenSet.claims())
+        .catch(openIdErr);
 
-    const client = await getOpenIdClient();
-    const url = client.authorizationUrl({
-      scope: "openid email profile",
-      redirect_uri: redirectUrl.toString(),
-      response_mode: "form_post",
-      nonce,
-    });
-    res.redirect(url);
-  } catch (err) {
-    next(err);
-  }
-});
+      const user =
+        (IS_DEV || IS_STAGE) && USE_FAKE_USER
+          ? getFakeUserForDevelopment()
+          : createValidSesisonUser(claims);
 
-auth.get("/logout", async function logoutHandler(req, res, next) {
-  try {
-    const nextUrl = req.query.nextUrl;
-    req.session.user = undefined;
-    const client = await getOpenIdClient();
-    const url = client.endSessionUrl({
-      redirect_uri: nextUrl,
-    });
-    res.redirect(url);
-  } catch (err) {
-    next(err);
-  }
-});
+      throwIfNotValidSession(user);
 
-auth.use("/callback", async function callbackHandler(req, res, next) {
-  const queryNextUrl = req.query.nextUrl;
+      let lang_resp = await getSocial<LangResponse>(
+        user!,
+        "lang",
+        undefined
+      ).catch(socialErr);
+      let lang = lang_resp.lang;
+      logger.info({ lang, kthid: user?.kthid }, "Language according to social");
 
-  try {
-    const client = await getOpenIdClient();
-    const params = client.callbackParams(req);
-    assert(typeof queryNextUrl === "string", "nextUrl should be a string");
+      req.session.user = user;
+      req.session.lastLoginServerCheck = Date.now();
+      if (lang) {
+        res.cookie("language", lang, LANG_COOKIE_OPTS);
+      }
+      setSsoCookie(res);
+      res.redirect(queryNextUrl);
+    } catch (err) {
+      clearSsoCookie(res);
+      if (err instanceof errors.OPError && err.error === "login_required") {
+        // user is logged out
+        res.redirect(`${queryNextUrl}?login_success=false`);
+        return;
+      }
 
-    const redirectUrl = new URL(redirectBaseUrl);
-    redirectUrl.searchParams.set("nextUrl", queryNextUrl);
-
-    // Normal Authentication flow
-    const claims = await client
-      .callback(redirectUrl.toString(), params, {
-        nonce: req.session.tmpNonce,
-      })
-      .then((tokenSet) => tokenSet.claims())
-      .catch(openIdErr);
-
-    const user =
-      (IS_DEV || IS_STAGE) && USE_FAKE_USER
-        ? getFakeUserForDevelopment()
-        : createValidSesisonUser(claims);
-
-    throwIfNotValidSession(user);
-
-    let lang_resp = await getSocial<LangResponse>(
-      user!,
-      "lang",
-      undefined
-    ).catch(socialErr);
-    let lang = lang_resp.lang;
-    logger.info({ lang, kthid: user?.kthid }, "Language according to social");
-
-    req.session.user = user;
-    req.session.lastLoginServerCheck = Date.now();
-    if (lang) {
-      res.cookie("language", lang, LANG_COOKIE_OPTS);
+      next(err);
     }
-    setSsoCookie(res);
-    res.redirect(queryNextUrl);
-  } catch (err) {
-    clearSsoCookie(res);
-    if (err instanceof errors.OPError && err.error === "login_required") {
-      // user is logged out
-      res.redirect(`${queryNextUrl}?login_success=false`);
-      return;
-    }
-
-    next(err);
   }
-});
+);
 
 const SSO_COOKIE_OPTIONS = {
   domain: ".kth.se",
@@ -286,7 +305,7 @@ export function getFakeUserForDevelopment(): TSessionUser | undefined {
 export function requiresValidSessionUser(
   req: Express.Request,
   res: Express.Response,
-  next: Function
+  next: NextFunction
 ) {
   try {
     // Allow running locally without login
