@@ -43,18 +43,22 @@ const distProdActivationPath = "./kpm-frontend/distProd/activation";
   }
 })();
 
-activation.get("", (req, res) => {
-  // Check "login_success = false" to avoid infinite loops
-  if (!isValidSession(req.session.user)) {
-    const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=${publicUriBase}/`;
-    return res.redirect(LOGIN_URL);
-  }
+activation.get("", (req, res, next) => {
+  try {
+    // Check "login_success = false" to avoid infinite loops
+    if (!isValidSession(req.session.user)) {
+      const LOGIN_URL = `${publicUriBase}/auth/login?nextUrl=${publicUriBase}/`;
+      return res.redirect(LOGIN_URL);
+    }
 
-  const projectRoot = path.join(__dirname, "..", "..");
-  log.info("Serving activation page from: " + projectRoot);
-  res.sendFile(path.join(distProdActivationPath, "index.html"), {
-    root: projectRoot,
-  });
+    const projectRoot = path.join(__dirname, "..", "..");
+    log.info("Serving activation page from: " + projectRoot);
+    res.sendFile(path.join(distProdActivationPath, "index.html"), {
+      root: projectRoot,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 activation.get("/", (req, res) => {
