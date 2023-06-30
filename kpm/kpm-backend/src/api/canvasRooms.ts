@@ -10,11 +10,11 @@ export async function canvasRoomsApiHandler(
 ) {
   try {
     const user = sessionUser(req.session);
-    const { rooms } =
+    const { courseRooms = null, programRooms = null } =
       (await get_canvas_rooms(user.kthid).catch(
         getApiCanvasRoomsErrorHandler
       )) || {};
-    res.send({ rooms: rooms || {} });
+    res.send({ courseRooms, programRooms });
   } catch (err) {
     next(err);
   }

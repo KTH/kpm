@@ -59,7 +59,15 @@ export async function teachingApiHandler(
         [course_code]: getCourseInfo(course_code).catch(koppsErr),
       }))
     );
-    const { rooms } = (await rooms_fut) || {};
+
+    let canvas_data;
+    try {
+      canvas_data = await rooms_fut;
+    } catch (err) {
+      log.error({ err, user }, "Failed to load canvas rooms");
+    }
+    const { courseRooms = null } = canvas_data || {};
+
     log.debug({ elapsed_ms: elapsed_ms() }, "Resolved my-canvas-rooms-api");
 
     let courses: Record<TCourseCode, TTeachingCourse> = {};
@@ -77,7 +85,7 @@ export async function teachingApiHandler(
         creditUnitAbbr: kopps?.creditUnitAbbr,
         state: kopps?.state,
         roles: roles,
-        rooms: rooms ? rooms?.[course_code] || [] : null,
+        rooms: courseRooms ? courseRooms?.[course_code] || [] : null,
         starred: false,
       };
     }

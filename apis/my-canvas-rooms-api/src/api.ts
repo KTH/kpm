@@ -9,8 +9,9 @@ export const api = express.Router();
 api.get("/mine", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await do_getRooms(req, "self");
-    res.send({ rooms: result });
+    res.send({ courseRooms: result.courses, programRooms: result.programs });
   } catch (err) {
+    // Improve error handling "/user/:user"
     next(err);
   }
 });
@@ -20,7 +21,23 @@ api.get(
   async (req: Request, res: Response<APIUser>, next: NextFunction) => {
     try {
       const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
-      res.send({ rooms: result });
+
+      // Flatten nested rooms
+      const flattenedProgramRooms =
+        result.programs &&
+        Object.entries(result.programs).reduce(
+          (acc: APIUser["programRooms"], [program_code, rooms]) => {
+            const tmp = rooms[0];
+            acc![program_code] = tmp;
+            return acc;
+          },
+          {}
+        );
+
+      res.send({
+        courseRooms: result.courses,
+        programRooms: flattenedProgramRooms,
+      });
     } catch (err: any) {
       if (err?.name == "CanvasApiError" && err?.code == 404) {
         next(new UserMissingEndpointError({ err, sisUserId: req.params.user }));
@@ -46,21 +63,43 @@ class UserMissingEndpointError extends EndpointError<APIUserErrType> {
 async function do_getRooms(
   req: Request,
   user: string
-): Promise<Record<string, Link[]>> {
+): Promise<{
+  courses?: Record<string, Link[]> | null;
+  programs?: Record<string, Link[]> | null;
+}> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
 
-  let result: Record<string, Link[]> = {};
+  let courses: Record<string, Link[]> | null = null;
+  let programs: Record<string, Link[]> | null = null;
   try {
     for await (let room of rooms) {
       // Each canvas room may belong to multiple courses, and each
       // course usually has many canvas rooms.
-      let { course_codes, link } = get_rooms_courses_and_link(room);
-      for (let code of course_codes) {
-        if (result[code]) {
-          result[code].push(link);
-        } else {
-          result[code] = [link];
+      const tmpCourse = get_rooms_courses_and_link(room);
+
+      if (tmpCourse) {
+        courses ??= {};
+        const { course_codes, link } = tmpCourse;
+        for (let code of course_codes) {
+          if (courses[code]) {
+            courses[code].push(link);
+          } else {
+            courses[code] = [link];
+          }
+        }
+      }
+
+      const tmpProgram = get_program_rooms(room);
+      if (tmpProgram) {
+        programs ??= {};
+        const { course_codes, link } = tmpProgram;
+        for (let code of course_codes) {
+          if (programs[code]) {
+            programs[code].push(link);
+          } else {
+            programs[code] = [link];
+          }
         }
       }
     }
@@ -73,7 +112,8 @@ async function do_getRooms(
       throw err;
     }
   }
-  return result;
+
+  return { courses, programs };
 }
 
 type TLinkMetaData = {
@@ -109,7 +149,7 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     favorite: canvas_data.is_favorite,
   };
 
-  const { course_codes, link_meta_data } =
+  const tmp =
     getRoomsByRapp(canvas_data) ||
     getRoomsByNewFormat(canvas_data) ||
     getRoomsByOldFormat(canvas_data) ||
@@ -117,6 +157,10 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
     getExamRoomByOldFormat(canvas_data) ||
     getRoomsByAltFormat(canvas_data) ||
     getRoomsFallback(canvas_data);
+
+  if (tmp === undefined) return undefined;
+
+  const { course_codes, link_meta_data } = tmp;
   return {
     course_codes,
     link: {
@@ -124,6 +168,47 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
       ...link_meta_data,
     },
   };
+}
+
+export function get_program_rooms(canvas_data: CanvasRoom) {
+  const room_id = canvas_data.id;
+  const link: Link = {
+    url: new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
+    state: canvas_data.workflow_state,
+    name: canvas_data.name,
+    type: undefined,
+    favorite: canvas_data.is_favorite,
+  };
+
+  const tmp = getProgramRooms(canvas_data);
+  if (tmp !== undefined) {
+    const { course_codes, link_meta_data } = tmp;
+    return {
+      course_codes,
+      link: {
+        ...link,
+        ...link_meta_data,
+      },
+    };
+  }
+}
+
+function getProgramRooms(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
+  const course_codes = new Set<string>();
+
+  // course_id,short_name,long_name,status,account_id
+  // PROG.ARKIT,ARKIT,"ARKIT Programrum för Arkitektutbildning, 300.0 hp",active,PROGRAMME_ROOMS
+  const isProgram = canvas_data.sis_course_id?.startsWith("PROG.");
+  if (isProgram) {
+    course_codes.add(canvas_data.course_code);
+
+    const link_meta_data: TLinkMetaData = {
+      type: "program",
+    };
+    return { course_codes, link_meta_data };
+  }
 }
 
 function getRoomsByRapp(
@@ -385,7 +470,14 @@ function getExamRoomByOldFormat(
   }
 }
 
-function getRoomsFallback(canvas_data: CanvasRoom): TGetRoomsReturnValue {
+function getRoomsFallback(
+  canvas_data: CanvasRoom
+): TGetRoomsReturnValue | undefined {
+  // Exclude program rooms from this catch all resolver
+  if (canvas_data.sis_course_id?.startsWith("PROG.")) {
+    return undefined;
+  }
+
   const course_codes = new Set<string>(["-"]); // The fallback can't determine course code
 
   // Note; It would be nice if we got the sis id for the sections, but that
