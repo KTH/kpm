@@ -1,3 +1,5 @@
+import { TUserCourse, TUserProgram } from "./interfaces";
+
 /*
   Don't panic, it is just a regex! :D The trick is optional match groups (...)? and optional matches |
   This allows us to both match program and kurser but also different lengths of kurser.
@@ -43,16 +45,6 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
   };
 }
 
-export type TCourseCode = string;
-export type TUserCourse = {
-  type: string;
-  course_code: TCourseCode;
-  status?: "antagna" | "godkand" | "registrerade";
-  year?: number;
-  term?: "1" | "2";
-  round?: string;
-};
-
 export function convertToCourseObjects(inp: string[]): TUserCourse[] {
   const courseRegex =
     /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
@@ -71,15 +63,6 @@ export function convertToCourseObjects(inp: string[]): TUserCourse[] {
     };
   });
 }
-
-export type TProgramCode = string;
-export type TUserProgram = {
-  type: "program";
-  program_code: TProgramCode;
-  status?: "antagna" | "godkand" | "registrerade";
-  year?: number;
-  term?: "1" | "2";
-};
 
 export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
   const progrRegex =

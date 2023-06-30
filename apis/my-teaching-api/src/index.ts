@@ -12,6 +12,8 @@ const MY_TEACHING_API_TOKEN = process.env.MY_TEACHING_API_TOKEN!; // Required in
 const authorizationMiddleware: RequestHandler = (req, res, next) => {
   if (req.headers.authorization !== MY_TEACHING_API_TOKEN) {
     // TODO: Formalize structure for error objects
+    // TODO: This should throw an error to next() instead of sending a response
+    // that error is returned by errorHandler
     return res.status(401).send("Invalid access token" as any);
   }
 

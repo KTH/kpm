@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { APILang, APILangParams } from "kpm-backend-interface";
+import { APILang, APISetLangParams } from "kpm-backend-interface";
 import { postSocial, sessionUser } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 import { LANG_COOKIE_OPTS } from "../auth";
 // TODO: Add API interface  and error types in kpm-backend-interface
 export async function langApiHandler(
-  req: Request<void, any, APILangParams>,
+  req: Request<void, any, APISetLangParams>,
   res: Response<APILang>,
   next: NextFunction
 ) {

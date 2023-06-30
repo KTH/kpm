@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
+import { APIUserTeaching, Role } from "./interfaces";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -43,52 +44,53 @@ const ugClient = new UGRestClient({
   clientSecret: CLIENT_SECRET,
 });
 
-api.get("/user/:user", async (req, res, next) => {
-  try {
-    const userName = req.params.user;
+api.get(
+  "/user/:user",
+  async (
+    req: Request,
+    res: Response<APIUserTeaching | string>,
+    next: NextFunction
+  ) => {
+    try {
+      const userName = req.params.user;
 
-    // throw new Error("Test");
+      // throw new Error("Test");
 
-    const perf1 = Date.now();
-    // TODO: Remove these, they are only part of our though process:
-    // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
-    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
-    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups/${userName}`);
-    // NOTE: The following combined filter is VERY slow
-    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
-    // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
+      const perf1 = Date.now();
+      // TODO: Remove these, they are only part of our though process:
+      // const { data, json, statusCode } = await ugClient.get<TUgUser>(`users/${userName}`);
+      // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=members in ('${userName}')`);
+      // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups/${userName}`);
+      // NOTE: The following combined filter is VERY slow
+      // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}') and startswith(name, 'edu.courses.')`);
+      // const { data, json, statusCode } = await ugClient.get<TUgGroup[]>(`groups?$filter=contains(members, '${userName}')`);
 
-    const { data, json, statusCode } =
-      (await ugClient
-        .get<{ memberOf: TUgGroup[] }[]>(
-          `users?$filter=kthid eq '${userName}'&$expand=memberOf`
-        )
-        .catch(ugClientGetErrorHandler)) || {};
-    // console.debug(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
+      const { data, json, statusCode } =
+        (await ugClient
+          .get<{ memberOf: TUgGroup[] }[]>(
+            `users?$filter=kthid eq '${userName}'&$expand=memberOf`
+          )
+          .catch(ugClientGetErrorHandler)) || {};
+      // console.debug(`Time to call UGRestClient(get): ${Date.now() - perf1}ms`);
 
-    if (json === undefined || statusCode !== 200) {
-      if (IS_DEV) {
-        return res.status(statusCode || 500).send(data);
+      if (json === undefined || statusCode !== 200) {
+        if (IS_DEV) {
+          return res.status(statusCode || 500).send(data);
+        } else {
+          // TODO: Implement proper error handling
+          return res.status(statusCode || 500).send("error");
+        }
+      } else if (json.length === 0) {
+        res.status(statusCode || 200).send(null);
       } else {
-        return res.status(statusCode || 500).send("error");
+        const result = teachingResult(json[0]?.memberOf);
+        res.status(statusCode || 200).send(result);
       }
-    } else if (json.length === 0) {
-      res.status(statusCode || 200).send([]);
-    } else {
-      const result = teachingResult(json[0]?.memberOf);
-      res.status(statusCode || 200).send(result);
+    } catch (e: any) {
+      next(e);
     }
-  } catch (e: any) {
-    next(e);
   }
-});
-
-export type Role = {
-  role: string;
-  year: string;
-  term: string;
-  round_id: string;
-};
+);
 
 // Separate function for testability
 export function teachingResult(data: TUgGroup[]): {

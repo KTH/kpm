@@ -11,7 +11,7 @@ import { i18n, LANG } from "../i18n/i18n";
 import "./profile.scss";
 import { useState } from "react";
 import { ErrorMessage } from "../components/common";
-import { APILangParams } from "kpm-backend-interface";
+import { APISetLangParams } from "kpm-backend-interface";
 
 export function Profile() {
   const [currentUser] = useAuthState();
@@ -97,7 +97,7 @@ function useLang(): {
   const [errorSwitchLang, setSwitchLangError] = useState<Error>();
 
   const switchLang = async () => {
-    const res = await postApi<APILangParams>("/api/lang", {
+    const res = await postApi<APISetLangParams>("/api/lang", {
       lang: LANG === "en" ? "sv" : "en",
     }).catch((err: any) => {
       setSwitchLangError(err);

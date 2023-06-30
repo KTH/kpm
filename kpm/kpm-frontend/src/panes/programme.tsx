@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
-import { APIProgrammes } from "kpm-backend-interface";
+import { APIProgrammes, TCanvasRoom } from "kpm-backend-interface";
 import { fetchApi, postApi, useDataFecther } from "./utils";
 import {
   AuthError,
