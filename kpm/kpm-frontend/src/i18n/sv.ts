@@ -95,4 +95,6 @@ export const sv: Record<string, string> = {
   Tillbaka: "Tillbaka",
   "Alla examinationsrum": "Alla examinationsrum",
   "No rooms found in Canvas": "Inga tillhörande rum finns i Canvas",
+  "Program Room": "Programrum",
+  Syllabus: "Kursplan",
 };

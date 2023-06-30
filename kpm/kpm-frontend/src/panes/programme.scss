@@ -1,36 +1,46 @@
 @use "../vars" as *;
 
-#kpm-6cf53 .kpm-programmes {
+#kpm-6cf53 .kpm-programs {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(4 * var(--kpmGap));
-  $colCount: 2;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
 
-  & > ul {
+  display: flex;
+  flex-flow: column nowrap;
+  
+  .kpm-program-item {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     gap: $rowGap $colGap;
-    align-items: flex-start;
     width: 100%;
 
-    & > li {
-      display: flex;
-      align-items: flex-start;
-      width: $colWidth;
-      margin-bottom: 0;
-      gap: $rowGap;
+    align-items: flex-start;
+    padding: calc(2 * var(--kpmPad)) 0;
+    border-bottom: 1px solid var(--kpmPaneSepatorFg);
 
-      .icon.star {
-        // Fix alignment error
-        margin-bottom: 2px;
-      }
+    h2 {
+      font-size: 1em;
+      margin: 0;
+      padding: 0;
+    }
+
+    .kpm-program-item-code {
+      font-weight: 600;
+    }
+
+    .kpm-program-item-name {
+      margin-right: auto;
     }
   }
+
 }
 
 @media #{$mblBreakpoint} {
-  #kpm-6cf53 .kpm-programmes .kpm-programme-item {
-    flex-basis: 100%;
-    font-size: 1.1em;
+  #kpm-6cf53 .kpm-programs {
+    .kpm-program-item {
+      flex-wrap: wrap;
+      a {
+        width: calc(50% - 2 * var(--kpmGap));
+      }
+    }
   }
 }
