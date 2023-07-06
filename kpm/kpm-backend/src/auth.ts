@@ -282,14 +282,14 @@ function openIdErr(err: any) {
     });
   } else if (err instanceof errors.RPError) {
     // This is a setup error with our auth service and should be logged as a proper error
-    throw new AuthError<APIAuthErrType>({
+    throw new MutedAuthError<APIAuthErrType>({
       type: "ClientResponseError",
       message: "Login failed due to invalid response",
       details: err,
     });
   } else if (err instanceof TypeError) {
     // This is a programmer error and should be logged as a proper error
-    throw new AuthError<APIAuthErrType>({
+    throw new MutedAuthError<APIAuthErrType>({
       type: "TypeError",
       message: "Login failed due to unexpected argument types",
       details: err,
