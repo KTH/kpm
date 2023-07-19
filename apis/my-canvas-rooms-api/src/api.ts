@@ -6,38 +6,24 @@ import { EndpointError } from "kpm-api-common/src/errors";
 
 export const api = express.Router();
 
-api.get("/mine", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await do_getRooms(req, "self");
-    res.send({ courseRooms: result.courses, programRooms: result.programs });
-  } catch (err) {
-    // Improve error handling "/user/:user"
-    next(err);
+api.get(
+  "/mine",
+  async (req: Request, res: Response<APIUser>, next: NextFunction) => {
+    try {
+      const result = await do_getRooms(req, "self");
+      res.send(result);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 api.get(
   "/user/:user",
   async (req: Request, res: Response<APIUser>, next: NextFunction) => {
     try {
       const result = await do_getRooms(req, `sis_user_id:${req.params.user}`);
-
-      // Flatten nested rooms
-      const flattenedProgramRooms =
-        result.programs &&
-        Object.entries(result.programs).reduce(
-          (acc: APIUser["programRooms"], [program_code, rooms]) => {
-            const tmp = rooms[0];
-            acc![program_code] = tmp;
-            return acc;
-          },
-          {}
-        );
-
-      res.send({
-        courseRooms: result.courses,
-        programRooms: flattenedProgramRooms,
-      });
+      res.send(result);
     } catch (err: any) {
       if (err?.name == "CanvasApiError" && err?.code == 404) {
         next(new UserMissingEndpointError({ err, sisUserId: req.params.user }));
@@ -60,13 +46,7 @@ class UserMissingEndpointError extends EndpointError<APIUserErrType> {
   }
 }
 
-async function do_getRooms(
-  req: Request,
-  user: string
-): Promise<{
-  courses?: Record<string, Link[]> | null;
-  programs?: Record<string, Link[]> | null;
-}> {
+async function do_getRooms(req: Request, user: string): Promise<APIUser> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
 
@@ -113,7 +93,19 @@ async function do_getRooms(
     }
   }
 
-  return { courses, programs };
+  // Flatten nested rooms
+  const programRooms =
+    programs &&
+    Object.entries(programs).reduce(
+      (acc: APIUser["programRooms"], [program_code, rooms]) => {
+        const tmp = rooms[0];
+        acc![program_code] = tmp;
+        return acc;
+      },
+      {}
+    );
+
+  return { courseRooms: courses, programRooms };
 }
 
 type TLinkMetaData = {
