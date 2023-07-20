@@ -50,8 +50,8 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
 
-  let courses: Record<string, Link[]> | null = null;
-  let programs: Record<string, Link[]> | null = null;
+  let courses: Record<string, Link[]> | undefined = undefined;
+  let programs: Record<string, Link[]> | undefined = undefined;
   try {
     for await (let room of rooms) {
       // Each canvas room may belong to multiple courses, and each
