@@ -51,7 +51,7 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
   const rooms = canvas.getRooms(user);
 
   let courses: Record<string, Link[]> | undefined = undefined;
-  let programs: Record<string, Link[]> | undefined = undefined;
+  let programs: Record<string, Link> | undefined = undefined;
   try {
     for await (let room of rooms) {
       // Each canvas room may belong to multiple courses, and each
@@ -76,9 +76,11 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
         const { course_codes, link } = tmpProgram;
         for (let code of course_codes) {
           if (programs[code]) {
-            programs[code].push(link);
+            log.warn(
+              `Duplicate program room for ${code}: ${programs[code]} and {link}`
+            );
           } else {
-            programs[code] = [link];
+            programs[code] = link;
           }
         }
       }
@@ -93,19 +95,7 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
     }
   }
 
-  // Flatten nested rooms
-  const programRooms =
-    programs &&
-    Object.entries(programs).reduce(
-      (acc: APIUser["programRooms"], [program_code, rooms]) => {
-        const tmp = rooms[0];
-        acc![program_code] = tmp;
-        return acc;
-      },
-      {}
-    );
-
-  return { courseRooms: courses, programRooms };
+  return { courseRooms: courses, programRooms: programs };
 }
 
 type TLinkMetaData = {
