@@ -6,7 +6,7 @@
 
   display: flex;
   flex-flow: column nowrap;
-  
+
   .kpm-program-item {
     display: flex;
     flex-flow: row nowrap;
@@ -31,7 +31,6 @@
       margin-right: auto;
     }
   }
-
 }
 
 @media #{$mblBreakpoint} {
