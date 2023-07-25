@@ -15,6 +15,7 @@ export type APIUserErrType = "NotFound";
 export type APIUser = {
   courseRooms?: Record<string, Link[]>;
   programRooms?: Record<string, Link>;
+  otherRooms?: Link[];
 };
 
 /**

@@ -52,12 +52,13 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
 
   let courses: Record<string, Link[]> | undefined = undefined;
   let programs: Record<string, Link> | undefined = undefined;
+  let otherRooms: Link[] | undefined = undefined;
+
   try {
     for await (let room of rooms) {
       // Each canvas room may belong to multiple courses, and each
       // course usually has many canvas rooms.
       const tmpCourse = get_rooms_courses_and_link(room);
-
       if (tmpCourse) {
         courses ??= {};
         const { course_codes, link } = tmpCourse;
@@ -84,6 +85,10 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
           }
         }
       }
+      if (!tmpCourse && !tmpProgram) {
+        otherRooms ??= [];
+        otherRooms.push(room_link(room, getRoomsFallback(room)));
+      }
     }
   } catch (err) {
     if (err instanceof CanvasApiError && err.code == 404) {
@@ -95,7 +100,11 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
     }
   }
 
-  return { courseRooms: courses, programRooms: programs };
+  return {
+    courseRooms: courses,
+    programRooms: programs,
+    otherRooms,
+  };
 }
 
 type TLinkMetaData = {
@@ -122,57 +131,49 @@ type TGetRoomsReturnValue = {
 */
 
 export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
-  const room_id = canvas_data.id;
-  const link: Link = {
-    url: new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
-    state: canvas_data.workflow_state,
-    name: canvas_data.name,
-    type: undefined,
-    favorite: canvas_data.is_favorite,
-  };
-
   const tmp =
     getRoomsByRapp(canvas_data) ||
     getRoomsByNewFormat(canvas_data) ||
     getRoomsByOldFormat(canvas_data) ||
     getExamRoomByNewFormat(canvas_data) ||
     getExamRoomByOldFormat(canvas_data) ||
-    getRoomsByAltFormat(canvas_data) ||
-    getRoomsFallback(canvas_data);
+    getRoomsByAltFormat(canvas_data);
 
   if (tmp === undefined) return undefined;
 
   const { course_codes, link_meta_data } = tmp;
   return {
     course_codes,
-    link: {
-      ...link,
-      ...link_meta_data,
-    },
+    link: room_link(canvas_data, link_meta_data),
   };
 }
 
 export function get_program_rooms(canvas_data: CanvasRoom) {
-  const room_id = canvas_data.id;
-  const link: Link = {
-    url: new URL(`/courses/${room_id}`, process.env.CANVAS_API_URL),
-    state: canvas_data.workflow_state,
-    name: canvas_data.name,
-    type: undefined,
-    favorite: canvas_data.is_favorite,
-  };
-
   const tmp = getProgramRooms(canvas_data);
   if (tmp !== undefined) {
     const { course_codes, link_meta_data } = tmp;
     return {
       course_codes,
-      link: {
-        ...link,
-        ...link_meta_data,
-      },
+      link: room_link(canvas_data, link_meta_data),
     };
   }
+}
+
+function room_link(canvas_data: CanvasRoom, extra: TLinkMetaData): Link {
+  return {
+    ...basic_link(canvas_data),
+    ...extra,
+  };
+}
+
+function basic_link(canvas_data: CanvasRoom): Link {
+  return {
+    url: new URL(`/courses/${canvas_data.id}`, process.env.CANVAS_API_URL),
+    state: canvas_data.workflow_state,
+    name: canvas_data.name,
+    type: undefined,
+    favorite: canvas_data.is_favorite,
+  };
 }
 
 function getProgramRooms(
@@ -452,18 +453,7 @@ function getExamRoomByOldFormat(
   }
 }
 
-function getRoomsFallback(
-  canvas_data: CanvasRoom
-): TGetRoomsReturnValue | undefined {
-  // Exclude program rooms from this catch all resolver
-  if (canvas_data.sis_course_id?.startsWith("PROG.")) {
-    return undefined;
-  }
-
-  const course_codes = new Set<string>(["-"]); // The fallback can't determine course code
-
-  // Note; It would be nice if we got the sis id for the sections, but that
-  // requires further API calls.
+function getRoomsFallback(canvas_data: CanvasRoom): TLinkMetaData {
   const sections = canvas_data.sections.map((s) => s.name);
 
   // No known kind of room, log some details in case it is something
@@ -478,11 +468,9 @@ function getRoomsFallback(
     "Unmatched canvas room"
   );
 
-  const link_meta_data: TLinkMetaData = {
+  return {
     name: canvas_data.name,
     text: `${canvas_data.course_code} ${sections.join(" ")}`,
-    type: undefined, // We don't know what the type is at this poin,
+    type: undefined, // We don't know what the type is at this point,
   };
-
-  return { course_codes, link_meta_data };
 }
