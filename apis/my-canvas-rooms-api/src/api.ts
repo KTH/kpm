@@ -74,15 +74,13 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
       const tmpProgram = get_program_rooms(room);
       if (tmpProgram) {
         programs ??= {};
-        const { course_codes, link } = tmpProgram;
-        for (let code of course_codes) {
-          if (programs[code]) {
-            log.warn(
-              `Duplicate program room for ${code}: ${programs[code]} and {link}`
-            );
-          } else {
-            programs[code] = link;
-          }
+        const { program_code, link } = tmpProgram;
+        if (programs[program_code]) {
+          log.warn(
+            `Duplicate program room for ${program_code}: ${programs[program_code]} and {link}`
+          );
+        } else {
+          programs[program_code] = link;
         }
       }
       if (!tmpCourse && !tmpProgram) {
@@ -149,12 +147,15 @@ export function get_rooms_courses_and_link(canvas_data: CanvasRoom) {
 }
 
 export function get_program_rooms(canvas_data: CanvasRoom) {
-  const tmp = getProgramRooms(canvas_data);
-  if (tmp !== undefined) {
-    const { course_codes, link_meta_data } = tmp;
+  // course_id,short_name,long_name,status,account_id
+  // PROG.ARKIT,ARKIT,"ARKIT Programrum för Arkitektutbildning, 300.0 hp",active,PROGRAMME_ROOMS
+  const isProgram = canvas_data.sis_course_id?.startsWith("PROG.");
+  if (isProgram) {
+    // What canvas calls `course_code` is really just a shortname.
+    // For program rooms, we have populated that with the program code.
     return {
-      course_codes,
-      link: room_link(canvas_data, link_meta_data),
+      program_code: canvas_data.course_code,
+      link: room_link(canvas_data, { type: "program" }),
     };
   }
 }
@@ -174,24 +175,6 @@ function basic_link(canvas_data: CanvasRoom): Link {
     type: undefined,
     favorite: canvas_data.is_favorite,
   };
-}
-
-function getProgramRooms(
-  canvas_data: CanvasRoom
-): TGetRoomsReturnValue | undefined {
-  const course_codes = new Set<string>();
-
-  // course_id,short_name,long_name,status,account_id
-  // PROG.ARKIT,ARKIT,"ARKIT Programrum för Arkitektutbildning, 300.0 hp",active,PROGRAMME_ROOMS
-  const isProgram = canvas_data.sis_course_id?.startsWith("PROG.");
-  if (isProgram) {
-    course_codes.add(canvas_data.course_code);
-
-    const link_meta_data: TLinkMetaData = {
-      type: "program",
-    };
-    return { course_codes, link_meta_data };
-  }
 }
 
 function getRoomsByRapp(
@@ -469,7 +452,6 @@ function getRoomsFallback(canvas_data: CanvasRoom): TLinkMetaData {
   );
 
   return {
-    name: canvas_data.name,
     text: `${canvas_data.course_code} ${sections.join(" ")}`,
     type: undefined, // We don't know what the type is at this point,
   };
