@@ -6,6 +6,7 @@
   color: var(--kpmMenuText);
   width: 100%;
   flex-grow: 0;
+  border-bottom: solid 1px var(--kpmPaneBg);
 
   ul {
     display: flex;
