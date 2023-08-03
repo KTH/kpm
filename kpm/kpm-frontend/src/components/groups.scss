@@ -67,9 +67,8 @@
   summary {
     position: relative;
     cursor: context-menu;
-    padding: 0; // Override KTH Style
     min-height: 0; // Override KTH Style
-    padding-right: 1rem;
+    padding: 0 1rem 0 0;
     list-style: none; // We use our own icon
   }
 
