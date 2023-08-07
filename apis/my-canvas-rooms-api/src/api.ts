@@ -50,8 +50,8 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
 
-  let courses: Record<string, Link[]> = {};
-  let programs: Record<string, Link> = {};
+  let courseRooms: Record<string, Link[]> = {};
+  let programRooms: Record<string, Link> = {};
   let otherRooms: Link[] = [];
 
   try {
@@ -62,10 +62,10 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
       if (tmpCourse) {
         const { course_codes, link } = tmpCourse;
         for (let code of course_codes) {
-          if (courses[code]) {
-            courses[code].push(link);
+          if (courseRooms[code]) {
+            courseRooms[code].push(link);
           } else {
-            courses[code] = [link];
+            courseRooms[code] = [link];
           }
         }
       }
@@ -73,12 +73,12 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
       const tmpProgram = get_program_rooms(room);
       if (tmpProgram) {
         const { program_code, link } = tmpProgram;
-        if (programs[program_code]) {
+        if (programRooms[program_code]) {
           log.warn(
-            `Duplicate program room for ${program_code}: ${programs[program_code]} and {link}`
+            `Duplicate program room for ${program_code}: ${programRooms[program_code]} and {link}`
           );
         } else {
-          programs[program_code] = link;
+          programRooms[program_code] = link;
         }
       }
       if (!tmpCourse && !tmpProgram) {
@@ -95,11 +95,7 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
     }
   }
 
-  return {
-    courseRooms: courses,
-    programRooms: programs,
-    otherRooms,
-  };
+  return { courseRooms, programRooms, otherRooms };
 }
 
 type TLinkMetaData = {
