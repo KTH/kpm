@@ -50,9 +50,9 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
   const canvas = new CanvasClient(req);
   const rooms = canvas.getRooms(user);
 
-  let courses: Record<string, Link[]> | undefined = undefined;
-  let programs: Record<string, Link> | undefined = undefined;
-  let otherRooms: Link[] | undefined = undefined;
+  let courses: Record<string, Link[]> = {};
+  let programs: Record<string, Link> = {};
+  let otherRooms: Link[] = [];
 
   try {
     for await (let room of rooms) {
@@ -60,7 +60,6 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
       // course usually has many canvas rooms.
       const tmpCourse = get_rooms_courses_and_link(room);
       if (tmpCourse) {
-        courses ??= {};
         const { course_codes, link } = tmpCourse;
         for (let code of course_codes) {
           if (courses[code]) {
@@ -73,7 +72,6 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
 
       const tmpProgram = get_program_rooms(room);
       if (tmpProgram) {
-        programs ??= {};
         const { program_code, link } = tmpProgram;
         if (programs[program_code]) {
           log.warn(
@@ -84,14 +82,13 @@ async function do_getRooms(req: Request, user: string): Promise<APIUser> {
         }
       }
       if (!tmpCourse && !tmpProgram) {
-        otherRooms ??= [];
         otherRooms.push(room_link(room, getRoomsFallback(room)));
       }
     }
   } catch (err) {
     if (err instanceof CanvasApiError && err.code == 404) {
+      // This is not an error, we just say ok, you have no canvas rooms.
       log.warn({ canvasUser: user }, "User not found in canvas; no rooms.");
-      return {};
     } else {
       Error.captureStackTrace(err as any);
       throw err;

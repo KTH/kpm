@@ -13,9 +13,9 @@ export type APIMutedAuthErrType = "MissingAuthToken";
  */
 export type APIUserErrType = "NotFound";
 export type APIUser = {
-  courseRooms?: Record<string, Link[]>;
-  programRooms?: Record<string, Link>;
-  otherRooms?: Link[];
+  courseRooms: Record<string, Link[]>;
+  programRooms: Record<string, Link>;
+  otherRooms: Link[];
 };
 
 /**
