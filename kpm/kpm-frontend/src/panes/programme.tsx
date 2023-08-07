@@ -100,15 +100,20 @@ type TProgramItemProps = { programCode: string; program: TCanvasRoom };
 
 function ProgramItem({ programCode, program }: TProgramItemProps) {
   const displayName = program.name.replace(programCode, "").trim();
+  // TODO: Rasmus changed this and believe it's a UX improvement, but
+  // I'm open for discussion on it.
   return (
     <section className="kpm-program-item" key={`kpm-program-${programCode}`}>
       <h2 className="kpm-program-item-code">{programCode}</h2>
-      <p className="kpm-program-item-name">{displayName}</p>
-      <a
-        href={typeof program.url === "string" ? program.url : program.url?.href}
-      >
-        {i18n("Program Room")}
-      </a>
+      <p className="kpm-program-item-name">
+        <a
+          href={
+            typeof program.url === "string" ? program.url : program.url?.href
+          }
+        >
+          {displayName}
+        </a>
+      </p>
       <a href={`https://www.kth.se/student/kurser/program/${programCode}`}>
         {i18n("Syllabus")}
       </a>
