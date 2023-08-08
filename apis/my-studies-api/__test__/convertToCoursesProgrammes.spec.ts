@@ -2,9 +2,8 @@ import { describe, expect, jest, test } from "@jest/globals";
 import {
   convertToCourseObjects,
   convertToProgrammeObjects,
-  TUserCourse,
-  TUserProgram,
 } from "../src/apiUtils";
+import { TUserCourse, TUserProgram } from "../src/interfaces";
 
 // ladok2.kurser.SE.1020
 // ladok2.kurser.ME.2053.antagna_20222

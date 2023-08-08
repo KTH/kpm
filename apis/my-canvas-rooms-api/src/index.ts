@@ -5,11 +5,10 @@ import log from "skog";
 import { api } from "./api";
 import { status } from "./publicApi";
 import { AuthError } from "kpm-api-common/src/errors";
+import { APIAuthErrType } from "./interface";
 
 const PORT = parseInt(process.env.PORT || "3000");
 const PREFIX = process.env.PROXY_PATH_PREFIX || "/kpm/canvas-rooms";
-
-export type APIAuthErrType = "Unauthorized";
 
 /**
  * In the other apps, unauthorized from another service would be a

@@ -98,4 +98,6 @@ export const en: Record<string, string> = {
   Tillbaka: "Back",
   "Alla examinationsrum": "All exam rooms",
   "No rooms found in Canvas": "No rooms found in Canvas",
+  "Program Room": "Program Room",
+  prog_syllabus: "Syllabus",
 };

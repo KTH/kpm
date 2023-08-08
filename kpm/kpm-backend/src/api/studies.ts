@@ -76,12 +76,11 @@ export async function studiesApiHandler(
     );
     let canvas_data;
     try {
-      canvas_data = (await rooms_fut) || { rooms: {} };
+      canvas_data = await rooms_fut;
     } catch (err) {
       log.error({ err, user }, "Failed to load canvas rooms");
-      canvas_data = { rooms: {} };
     }
-    const { rooms } = canvas_data;
+    const { courseRooms = null } = canvas_data || {};
 
     let courses: Record<TCourseCode, TStudiesCourse> = {};
     for (let [course_code, roles] of Object.entries(studies?.courses || [])) {
@@ -145,7 +144,7 @@ export async function studiesApiHandler(
           title: kopps.title,
           credits: kopps.credits,
           creditUnitAbbr: kopps.creditUnitAbbr,
-          rooms: rooms ? rooms?.[course_code] || [] : null,
+          rooms: courseRooms ? courseRooms?.[course_code] || [] : null,
           completed,
           rounds: [...current_rounds, ...other_rounds],
         };

@@ -1,15 +1,17 @@
-import assert from "node:assert/strict";
 import express, { NextFunction, Request, Response } from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
 import {
   convertToCourseObjects,
   convertToProgrammeObjects,
   getListOfCourseProgrammeNames,
+} from "./apiUtils";
+import {
+  APIUserStudies,
   TCourseCode,
   TProgramCode,
   TUserCourse,
   TUserProgram,
-} from "./apiUtils";
+} from "./interfaces";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in
@@ -45,11 +47,6 @@ export type TUgGroup = {
   name: string;
 };
 
-export type TUserStudies = {
-  courses: Record<TCourseCode, TUserCourse[]>;
-  programmes: Record<TProgramCode, TUserProgram[]>;
-};
-
 const ugClient = new UGRestClient({
   authServerDiscoveryURI: OAUTH_SERVER_BASE_URI,
   resourceBaseURI: UG_REST_BASE_URI,
@@ -59,7 +56,7 @@ const ugClient = new UGRestClient({
 
 api.get(
   "/user/:user",
-  async (req: Request, res: Response<TUserStudies>, next: NextFunction) => {
+  async (req: Request, res: Response<APIUserStudies>, next: NextFunction) => {
     try {
       const userName = req.params.user;
 

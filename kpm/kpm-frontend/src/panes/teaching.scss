@@ -3,8 +3,6 @@
 #kpm-6cf53 .kpm-teaching {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: calc(2 * $rowGap);
-  $colCount: 3;
-  $colWidth: calc(100% / $colCount - $colGap * ($colCount - 1) / $colCount);
 
   display: flex;
   flex-flow: column nowrap;
