@@ -115,7 +115,7 @@ function ProgramItem({ programCode, program }: TProgramItemProps) {
         </a>
       </p>
       <a href={`https://www.kth.se/student/kurser/program/${programCode}`}>
-        {i18n("Syllabus")}
+        {i18n("prog_syllabus")}
       </a>
     </section>
   );

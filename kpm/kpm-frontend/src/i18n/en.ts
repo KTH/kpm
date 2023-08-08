@@ -99,5 +99,5 @@ export const en: Record<string, string> = {
   "Alla examinationsrum": "All exam rooms",
   "No rooms found in Canvas": "No rooms found in Canvas",
   "Program Room": "Program Room",
-  Syllabus: "Syllabus",
+  prog_syllabus: "Syllabus",
 };
