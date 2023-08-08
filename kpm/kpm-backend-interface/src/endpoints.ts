@@ -29,7 +29,7 @@ export type APILangErrType = TGotErrType; // We currently don't have any endpoin
 export type APILang = {
   lang: string | null;
 };
-export type APISetLangParams = {
+export type APILangPostData = {
   lang: string | null;
 };
 
