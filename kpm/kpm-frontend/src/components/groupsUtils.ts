@@ -151,9 +151,9 @@ export function useDropdownToggleListener(
  */
 const PADDING = 10; // This value is used in groups.scss, search for PADDING
 export function usePositionDropdown(
-  detailsRef: RefObject<HTMLElement | null>,
-  summaryRef: RefObject<HTMLElement | null>,
+  menuWrapperRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,
+  isOpenRef: RefObject<boolean>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
@@ -165,7 +165,7 @@ export function usePositionDropdown(
       // We have a scrollTop value which means we are in fullscreen
       // mobile mode
       let scrollOffset = 0;
-      const kpmModalEl = getKpmModal(detailsRef.current);
+      const kpmModalEl = getKpmModal(menuWrapperRef.current);
       if (kpmModalEl) {
         scrollOffset = kpmModalEl.scrollTop;
       }
@@ -178,11 +178,10 @@ export function usePositionDropdown(
     }
 
     // Stop if unmounted
-    const isOpen =
-      (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
-    const outer = summaryRef.current;
-    const dropdown = dropdownRef.current;
-    if (!isOpen || dropdown === null || outer === null) {
+    const isOpen = isOpenRef.current || false;
+    const outer = dropdownRef.current;
+    const menu = menuWrapperRef.current;
+    if (!isOpen || menu === null || outer === null) {
       callback(undefined);
       return (requestRef.current = requestAnimationFrame(calculate));
     }
@@ -191,16 +190,18 @@ export function usePositionDropdown(
     const viewport = window.visualViewport;
     const pageWidth = Math.round(viewport!.width);
     const pageHeight = Math.round(viewport!.height);
-    // 2. get position and size of dropdown
+    // 2. get position and size of menu
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     const rect = outer.getBoundingClientRect();
     const elTop = Math.round(rect.top);
     const elBottom = Math.round(rect.bottom);
     const elLeft = Math.round(rect.left);
     const elRight = Math.round(rect.right);
+    const elHeight = elBottom - elTop;
+    const elWidth = elRight - elLeft;
 
-    const dropdownWidth = dropdown.scrollWidth;
-    const dropdownHeight = dropdown.scrollHeight;
+    const menuWidth = menu.scrollWidth;
+    const menuHeight = menu.scrollHeight;
 
     // 3. Adjust placement and size depending on available space
     const spaceTop = elTop;
@@ -208,12 +209,12 @@ export function usePositionDropdown(
     const spaceLeft = elRight;
     const spaceRight = pageWidth - elLeft;
 
-    // Should the dropdown open up or down? Depends on setting but also available space
+    // Should the menu open up or down? Depends on setting but also available space
     let placeTop;
     if (toTop) {
       if (
-        spaceTop < dropdownHeight + PADDING &&
-        spaceBottom > dropdownHeight + PADDING
+        spaceTop < menuHeight + PADDING &&
+        spaceBottom > menuHeight + PADDING
       ) {
         // Flip to bottom because more space
         placeTop = false;
@@ -222,8 +223,8 @@ export function usePositionDropdown(
       }
     } else {
       if (
-        spaceBottom < dropdownHeight + PADDING &&
-        spaceTop > dropdownHeight + PADDING
+        spaceBottom < menuHeight + PADDING &&
+        spaceTop > menuHeight + PADDING
       ) {
         // Flip to top beacuase more space
         placeTop = true;
@@ -232,39 +233,32 @@ export function usePositionDropdown(
       }
     }
 
-    let deltaY; // may depend on actual height of dropdown
-    if (spaceTop + spaceBottom < dropdownHeight + PADDING) {
-      // Not enough space on on either side, just center
-      // on page,
-      deltaY = PADDING;
+    let deltaY; // may depend on actual height of menu
+    if (spaceTop + spaceBottom < menuHeight + PADDING) {
+      // Not enough space on on either end, fill page
+      deltaY = -elTop - elHeight + PADDING;
     } else if (placeTop) {
-      deltaY = elTop - dropdownHeight;
+      deltaY = -elHeight - menuHeight;
     } else {
-      if (spaceBottom < dropdownHeight + PADDING) {
+      if (spaceBottom < menuHeight + PADDING) {
         // Move up to fit
-        deltaY = elBottom - dropdownHeight + spaceBottom - PADDING;
+        deltaY = spaceBottom - menuHeight - PADDING;
       } else {
-        deltaY = elBottom;
+        deltaY = 0;
       }
     }
 
     // Nudge placement on X axis depending on available space
     let placeRight;
     if (toRight) {
-      if (
-        spaceLeft < dropdownWidth + PADDING &&
-        spaceRight > dropdownWidth + PADDING
-      ) {
+      if (spaceLeft < menuWidth + PADDING && spaceRight > menuWidth + PADDING) {
         // Flip to left aligned because more space
         placeRight = false;
       } else {
         placeRight = true;
       }
     } else {
-      if (
-        spaceRight < dropdownWidth + PADDING &&
-        spaceLeft > dropdownWidth + PADDING
-      ) {
+      if (spaceRight < menuWidth + PADDING && spaceLeft > menuWidth + PADDING) {
         // Flip to right aligned because more space
         placeRight = true;
       } else {
@@ -272,28 +266,9 @@ export function usePositionDropdown(
       }
     }
 
-    let deltaX = placeRight ? elRight - dropdownWidth : elLeft;
+    let deltaX = placeRight ? elWidth - menuWidth : 0;
     if (toRight) {
-      if (deltaX < 0) {
-        deltaX = elRight >= 0 ? 0 : elRight; // perhaps we shouldn't let nudge so far
-      } else if (deltaX + dropdownWidth > pageWidth) {
-        deltaX = pageWidth - dropdownWidth;
-        if (deltaX + dropdownWidth < elLeft) {
-          deltaX = elLeft - dropdownWidth; // perhaps we shouldn't let nudge so far
-        }
-      }
-    } else {
-      if (deltaX < 0) {
-        deltaX = -elLeft;
-        if (deltaX > elRight) {
-          deltaX = elRight; // perhaps we shouldn't let nudge so far
-        }
-      } else if (deltaX + dropdownWidth > pageWidth) {
-        deltaX = pageWidth - dropdownWidth;
-        if (deltaX + dropdownWidth < elLeft) {
-          deltaX = elLeft - dropdownWidth; // perhaps we shouldn't let nudge so far
-        }
-      }
+      deltaX = menuWidth - elWidth;
     }
 
     let newTransform: any = {
