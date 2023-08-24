@@ -34,8 +34,6 @@
     // read comment for usePositionDropdown() for more info.
     position: fixed;
     z-index: 999;
-    top: 0;
-    left: 0;
     max-width: 95%;
     min-height: 200px; // Use a constant value in pixels, otherwise we have problems
     max-height: calc(100vh - 20px); // Same as PADDING in groupsUtils.ts
@@ -46,16 +44,18 @@
     opacity: 0;
     transition: opacity 0.1s ease-in;
 
-    ul {
-      padding: var(--kpmPad);
+    &.open {
+      visibility: visible;
+      opacity: 1;
+    }
 
-      @media #{$mblBreakpoint} {
-        padding: 0;
-      }
+    menu {
+      padding: var(--kpmPad);
+      margin: 0;
     }
 
     li.item {
-      margin: 0;
+      margin: var(--kpmPad) 0;
       padding: 0 calc(2 * var(--kpmPad)) 0 0;
 
       @media #{$mblBreakpoint} {
@@ -64,21 +64,29 @@
     }
   }
 
-  summary {
+  label {
     position: relative;
     cursor: context-menu;
     min-height: 0; // Override KTH Style
     padding: 0 1rem 0 0;
     list-style: none; // We use our own icon
+
+    & > button {
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      cursor: context-menu;
+    }
   }
 
   // Hide arror in Safari and KTH Style
-  & > summary::-webkit-details-marker,
-  & > summary::before {
+  & > label::-webkit-details-marker,
+  & > label::before {
     display: none;
   }
 
-  & > summary:first-of-type::after {
+  & > label:first-of-type::after {
     content: "";
     background: $data-arrow-expand-black-svg no-repeat;
     width: 0.3rem;
@@ -90,7 +98,7 @@
     transition: transform 0.1s ease-in-out;
   }
 
-  &[open] > summary:first-of-type::after {
+  &.open > label:first-of-type::after {
     transform: translateY(-50%) rotate(90deg);
   }
 }
@@ -101,11 +109,11 @@
     flex-basis: 100%;
     font-size: 1rem;
 
-    & > summary {
+    & > label {
       font-size: 1em;
     }
 
-    & > summary:first-of-type::after {
+    & > label:first-of-type::after {
       width: 0.4rem;
       height: 0.65rem;
     }
@@ -127,7 +135,7 @@
     }
   }
 
-  #kpm-6cf53 [open].kpm-dropdownmenu-group {
+  #kpm-6cf53 .kpm-dropdownmenu-group {
     .kpm-link-list.open {
       transform: translate(0, 0) !important;
     }

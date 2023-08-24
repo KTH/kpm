@@ -307,7 +307,9 @@ function CanvasRoomExpandedList({
       {groupKeys.map((year: string) => {
         return (
           <div className="kpm-course-rooms-dd-item">
-            <h3>{year}</h3>
+            <div className="kpm-col">
+              <h3>{year}</h3>
+            </div>
             <div className="kpm-col">
               {groups[year]?.["vt"].map((room: TCanvasRoom) => (
                 <CanvasRoomLink

@@ -28,27 +28,24 @@ export function isOnMobileBp(): boolean | undefined {
   return _isOnMobileBp;
 }
 
-function freezeParentModal(el: HTMLElement | null) {
+function toggleParentModal(
+  el: HTMLElement | null,
+  action: "freeze" | "unfreeze"
+) {
   const kpmModalEl = getKpmModal(el);
 
   if (kpmModalEl) {
-    // Only return scrollTop if we have overflow: hidden
-    // which only happens on mobile when .freeze is set
-    kpmModalEl.classList.add("freeze");
-  }
-}
-
-function unfreezeParentModal(el: HTMLElement | null) {
-  const kpmModalEl = getKpmModal(el);
-
-  if (kpmModalEl) {
-    kpmModalEl.classList.remove("freeze");
+    if (action === "freeze") {
+      kpmModalEl.classList.add("freeze");
+    } else if (action === "unfreeze") {
+      kpmModalEl.classList.remove("freeze");
+    }
   }
 }
 
 export function useDropdownToggleListener(
-  detailsRef: RefObject<HTMLElement | null>,
-  summaryRef: RefObject<HTMLElement | null>,
+  menuWrapperRef: RefObject<HTMLElement | null>,
+  dropDownRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
   setOpen: Function
@@ -59,14 +56,17 @@ export function useDropdownToggleListener(
   const _setOpen = (nextState: boolean) => {
     if (isOpenRef.current && !nextState) {
       // Closing
-      // I initially used navigate(-1) but this fires more than once
-      setSearchParams("", { replace: true });
-      unfreezeParentModal(detailsRef.current);
+      if (isOnMobileBp()) {
+        setSearchParams("", { replace: true });
+      }
+      toggleParentModal(menuWrapperRef.current, "unfreeze");
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
-      freezeParentModal(detailsRef.current);
-      setSearchParams("ddo");
+      toggleParentModal(menuWrapperRef.current, "freeze");
+      if (isOnMobileBp()) {
+        setSearchParams("ddo");
+      }
     }
     setOpen(nextState);
   };
@@ -82,15 +82,15 @@ export function useDropdownToggleListener(
     if (
       e.which === KEY_ENTER &&
       isOpenRef.current &&
-      !detailsRef.current?.contains(e.target)
+      !menuWrapperRef.current?.contains(e.target)
     ) {
       e.preventDefault();
       _setOpen(false);
     }
 
-    // Only toggle if ENTER is fired when on or in <summary>
+    // Only toggle if ENTER is fired when on or in dropdown
     if (e.which === KEY_ENTER) {
-      if (summaryRef.current?.contains(e.target)) {
+      if (dropDownRef.current?.contains(e.target)) {
         e.preventDefault();
         _setOpen(!isOpenRef.current);
       }
@@ -98,8 +98,8 @@ export function useDropdownToggleListener(
   }
 
   function didClick(e: any) {
-    // Toggle when clicking summary
-    if (summaryRef.current?.contains(e.target)) {
+    // Toggle when clicking dropdown
+    if (dropDownRef.current?.contains(e.target)) {
       const currentOpen = isOpenRef.current;
       // Click triggers <detail> open so we need the setTimeout workaround
       setTimeout(() => {
@@ -109,7 +109,7 @@ export function useDropdownToggleListener(
     }
 
     // Close if open and clicking somewhere else than dropdown
-    if (isOpenRef.current && !detailsRef.current?.contains(e.target)) {
+    if (isOpenRef.current && !menuWrapperRef.current?.contains(e.target)) {
       e.preventDefault();
       _setOpen(false);
     }
@@ -129,10 +129,12 @@ export function useDropdownToggleListener(
   }, []);
 
   useEffect(() => {
-    // Close on navigation (listens to changes of navigation)
-    if (isOpenRef.current) {
-      setOpen(false);
-      unfreezeParentModal(detailsRef.current);
+    if (isOnMobileBp()) {
+      // Close on navigation (listens to changes of navigation)
+      if (!searchParams.has("ddo") && isOpenRef.current) {
+        setOpen(false);
+        toggleParentModal(menuWrapperRef.current, "unfreeze");
+      }
     }
     return () => {};
   }, [location]);
@@ -151,9 +153,9 @@ export function useDropdownToggleListener(
  */
 const PADDING = 10; // This value is used in groups.scss, search for PADDING
 export function usePositionDropdown(
-  detailsRef: RefObject<HTMLElement | null>,
-  summaryRef: RefObject<HTMLElement | null>,
+  menuWrapperRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,
+  isOpenRef: RefObject<boolean>,
   toTop: boolean = false,
   toRight: boolean = false,
   callback: Function
@@ -165,7 +167,7 @@ export function usePositionDropdown(
       // We have a scrollTop value which means we are in fullscreen
       // mobile mode
       let scrollOffset = 0;
-      const kpmModalEl = getKpmModal(detailsRef.current);
+      const kpmModalEl = getKpmModal(menuWrapperRef.current);
       if (kpmModalEl) {
         scrollOffset = kpmModalEl.scrollTop;
       }
@@ -178,11 +180,10 @@ export function usePositionDropdown(
     }
 
     // Stop if unmounted
-    const isOpen =
-      (detailsRef.current as unknown as HTMLDetailsElement)?.open || false;
-    const outer = summaryRef.current;
-    const dropdown = dropdownRef.current;
-    if (!isOpen || dropdown === null || outer === null) {
+    const isOpen = isOpenRef.current || false;
+    const outer = dropdownRef.current;
+    const menu = menuWrapperRef.current;
+    if (!isOpen || menu === null || outer === null) {
       callback(undefined);
       return (requestRef.current = requestAnimationFrame(calculate));
     }
@@ -191,16 +192,18 @@ export function usePositionDropdown(
     const viewport = window.visualViewport;
     const pageWidth = Math.round(viewport!.width);
     const pageHeight = Math.round(viewport!.height);
-    // 2. get position and size of dropdown
+    // 2. get position and size of menu
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     const rect = outer.getBoundingClientRect();
     const elTop = Math.round(rect.top);
     const elBottom = Math.round(rect.bottom);
     const elLeft = Math.round(rect.left);
     const elRight = Math.round(rect.right);
+    const elHeight = elBottom - elTop;
+    const elWidth = elRight - elLeft;
 
-    const dropdownWidth = dropdown.scrollWidth;
-    const dropdownHeight = dropdown.scrollHeight;
+    const menuWidth = menu.scrollWidth;
+    const menuHeight = menu.scrollHeight;
 
     // 3. Adjust placement and size depending on available space
     const spaceTop = elTop;
@@ -208,12 +211,12 @@ export function usePositionDropdown(
     const spaceLeft = elRight;
     const spaceRight = pageWidth - elLeft;
 
-    // Should the dropdown open up or down? Depends on setting but also available space
+    // Should the menu open up or down? Depends on setting but also available space
     let placeTop;
     if (toTop) {
       if (
-        spaceTop < dropdownHeight + PADDING &&
-        spaceBottom > dropdownHeight + PADDING
+        spaceTop < menuHeight + PADDING &&
+        spaceBottom > menuHeight + PADDING
       ) {
         // Flip to bottom because more space
         placeTop = false;
@@ -222,8 +225,8 @@ export function usePositionDropdown(
       }
     } else {
       if (
-        spaceBottom < dropdownHeight + PADDING &&
-        spaceTop > dropdownHeight + PADDING
+        spaceBottom < menuHeight + PADDING &&
+        spaceTop > menuHeight + PADDING
       ) {
         // Flip to top beacuase more space
         placeTop = true;
@@ -232,39 +235,32 @@ export function usePositionDropdown(
       }
     }
 
-    let deltaY; // may depend on actual height of dropdown
-    if (spaceTop + spaceBottom < dropdownHeight + PADDING) {
-      // Not enough space on on either side, just center
-      // on page,
-      deltaY = PADDING;
+    let deltaY; // may depend on actual height of menu
+    if (spaceTop + spaceBottom < menuHeight + PADDING) {
+      // Not enough space on on either end, fill page
+      deltaY = -elTop - elHeight + PADDING;
     } else if (placeTop) {
-      deltaY = elTop - dropdownHeight;
+      deltaY = -elHeight - menuHeight;
     } else {
-      if (spaceBottom < dropdownHeight + PADDING) {
+      if (spaceBottom < menuHeight + PADDING) {
         // Move up to fit
-        deltaY = elBottom - dropdownHeight + spaceBottom - PADDING;
+        deltaY = spaceBottom - menuHeight - PADDING;
       } else {
-        deltaY = elBottom;
+        deltaY = 0;
       }
     }
 
     // Nudge placement on X axis depending on available space
     let placeRight;
     if (toRight) {
-      if (
-        spaceLeft < dropdownWidth + PADDING &&
-        spaceRight > dropdownWidth + PADDING
-      ) {
+      if (spaceLeft < menuWidth + PADDING && spaceRight > menuWidth + PADDING) {
         // Flip to left aligned because more space
         placeRight = false;
       } else {
         placeRight = true;
       }
     } else {
-      if (
-        spaceRight < dropdownWidth + PADDING &&
-        spaceLeft > dropdownWidth + PADDING
-      ) {
+      if (spaceRight < menuWidth + PADDING && spaceLeft > menuWidth + PADDING) {
         // Flip to right aligned because more space
         placeRight = true;
       } else {
@@ -272,28 +268,9 @@ export function usePositionDropdown(
       }
     }
 
-    let deltaX = placeRight ? elRight - dropdownWidth : elLeft;
+    let deltaX = placeRight ? elWidth - menuWidth : 0;
     if (toRight) {
-      if (deltaX < 0) {
-        deltaX = elRight >= 0 ? 0 : elRight; // perhaps we shouldn't let nudge so far
-      } else if (deltaX + dropdownWidth > pageWidth) {
-        deltaX = pageWidth - dropdownWidth;
-        if (deltaX + dropdownWidth < elLeft) {
-          deltaX = elLeft - dropdownWidth; // perhaps we shouldn't let nudge so far
-        }
-      }
-    } else {
-      if (deltaX < 0) {
-        deltaX = -elLeft;
-        if (deltaX > elRight) {
-          deltaX = elRight; // perhaps we shouldn't let nudge so far
-        }
-      } else if (deltaX + dropdownWidth > pageWidth) {
-        deltaX = pageWidth - dropdownWidth;
-        if (deltaX + dropdownWidth < elLeft) {
-          deltaX = elLeft - dropdownWidth; // perhaps we shouldn't let nudge so far
-        }
-      }
+      deltaX = menuWidth - elWidth;
     }
 
     let newTransform: any = {

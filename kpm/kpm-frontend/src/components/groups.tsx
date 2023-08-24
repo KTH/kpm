@@ -49,13 +49,12 @@ export function DropdownMenuGroup({
   const [dropdownStyle, setDropdownStyle]: [TStyle, Function] =
     useState(undefined);
 
-  const detailsRef = useRef(null);
-  const summaryRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const menuWrapperRef = useRef(null);
+  const dropDownRef = useRef(null);
   usePositionDropdown(
-    detailsRef,
-    summaryRef,
-    dropdownRef,
+    menuWrapperRef,
+    dropDownRef,
+    isOpenRef,
     revealUp,
     alignRight,
     (newStyle: TStyle) => {
@@ -67,8 +66,8 @@ export function DropdownMenuGroup({
   const eventListenersSetRef = useRef(null);
   isOpenRef.current = open;
   useDropdownToggleListener(
-    detailsRef,
-    summaryRef,
+    menuWrapperRef,
+    dropDownRef,
     eventListenersSetRef,
     isOpenRef,
     setOpen
@@ -102,9 +101,9 @@ export function DropdownMenuGroup({
     innerCls += " open";
   }
   const _inner = (
-    <div style={dropdownStyle} className={innerCls}>
+    <div ref={menuWrapperRef} style={dropdownStyle} className={innerCls}>
       <DropdownMobileHeader onBack={() => navigate(-1)} />
-      <ul ref={dropdownRef}>{children}</ul>
+      <menu>{children}</menu>
     </div>
   );
 
@@ -112,12 +111,17 @@ export function DropdownMenuGroup({
   if (className !== undefined) {
     cls += ` ${className}`;
   }
+  if (open) {
+    cls += " open";
+  }
 
   return (
-    <details ref={detailsRef} className={cls} open={open || visiblyOpen}>
-      <summary ref={summaryRef}>{title}</summary>
+    <div ref={dropDownRef} className={cls}>
+      <label>
+        <button>{title}</button>
+      </label>
       {_inner}
-    </details>
+    </div>
   );
 }
 

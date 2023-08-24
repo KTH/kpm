@@ -24,7 +24,9 @@ export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
     <DropdownMenuGroup title={title}>
       {Object.entries(roomsByYear).map(([year, rooms]) => (
         <div className="kpm-course-rooms-dd-item">
-          <h3>{year}</h3>
+          <div className="kpm-col">
+            <h3>{year}</h3>
+          </div>
           <div className="kpm-col kpm-exam-room-links">
             {rooms.map((room) => (
               <li
