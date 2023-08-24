@@ -51,10 +51,11 @@
 
     menu {
       padding: var(--kpmPad);
+      margin: 0;
     }
 
     li.item {
-      margin: 0;
+      margin: var(--kpmPad) 0;
       padding: 0 calc(2 * var(--kpmPad)) 0 0;
 
       @media #{$mblBreakpoint} {
@@ -69,6 +70,14 @@
     min-height: 0; // Override KTH Style
     padding: 0 1rem 0 0;
     list-style: none; // We use our own icon
+
+    & > button {
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      cursor: context-menu;
+    }
   }
 
   // Hide arror in Safari and KTH Style

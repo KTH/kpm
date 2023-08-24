@@ -116,8 +116,10 @@ export function DropdownMenuGroup({
   }
 
   return (
-    <div ref={dropDownRef} className={cls} tabIndex={0}>
-      <label>{title}</label>
+    <div ref={dropDownRef} className={cls}>
+      <label>
+        <button>{title}</button>
+      </label>
       {_inner}
     </div>
   );

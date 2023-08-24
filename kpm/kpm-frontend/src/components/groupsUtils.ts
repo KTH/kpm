@@ -28,27 +28,24 @@ export function isOnMobileBp(): boolean | undefined {
   return _isOnMobileBp;
 }
 
-function freezeParentModal(el: HTMLElement | null) {
+function toggleParentModal(
+  el: HTMLElement | null,
+  action: "freeze" | "unfreeze"
+) {
   const kpmModalEl = getKpmModal(el);
 
   if (kpmModalEl) {
-    // Only return scrollTop if we have overflow: hidden
-    // which only happens on mobile when .freeze is set
-    kpmModalEl.classList.add("freeze");
-  }
-}
-
-function unfreezeParentModal(el: HTMLElement | null) {
-  const kpmModalEl = getKpmModal(el);
-
-  if (kpmModalEl) {
-    kpmModalEl.classList.remove("freeze");
+    if (action === "freeze") {
+      kpmModalEl.classList.add("freeze");
+    } else if (action === "unfreeze") {
+      kpmModalEl.classList.remove("freeze");
+    }
   }
 }
 
 export function useDropdownToggleListener(
-  detailsRef: RefObject<HTMLElement | null>,
-  summaryRef: RefObject<HTMLElement | null>,
+  menuWrapperRef: RefObject<HTMLElement | null>,
+  dropDownRef: RefObject<HTMLElement | null>,
   eventListenersSetRef: MutableRefObject<boolean | null>,
   isOpenRef: RefObject<boolean>,
   setOpen: Function
@@ -59,14 +56,17 @@ export function useDropdownToggleListener(
   const _setOpen = (nextState: boolean) => {
     if (isOpenRef.current && !nextState) {
       // Closing
-      // I initially used navigate(-1) but this fires more than once
-      setSearchParams("", { replace: true });
-      unfreezeParentModal(detailsRef.current);
+      if (isOnMobileBp()) {
+        setSearchParams("", { replace: true });
+      }
+      toggleParentModal(menuWrapperRef.current, "unfreeze");
     }
     if (!isOpenRef.current && nextState) {
       // Opening, do push
-      freezeParentModal(detailsRef.current);
-      setSearchParams("ddo");
+      toggleParentModal(menuWrapperRef.current, "freeze");
+      if (isOnMobileBp()) {
+        setSearchParams("ddo");
+      }
     }
     setOpen(nextState);
   };
@@ -82,15 +82,15 @@ export function useDropdownToggleListener(
     if (
       e.which === KEY_ENTER &&
       isOpenRef.current &&
-      !detailsRef.current?.contains(e.target)
+      !menuWrapperRef.current?.contains(e.target)
     ) {
       e.preventDefault();
       _setOpen(false);
     }
 
-    // Only toggle if ENTER is fired when on or in <summary>
+    // Only toggle if ENTER is fired when on or in dropdown
     if (e.which === KEY_ENTER) {
-      if (summaryRef.current?.contains(e.target)) {
+      if (dropDownRef.current?.contains(e.target)) {
         e.preventDefault();
         _setOpen(!isOpenRef.current);
       }
@@ -98,8 +98,8 @@ export function useDropdownToggleListener(
   }
 
   function didClick(e: any) {
-    // Toggle when clicking summary
-    if (summaryRef.current?.contains(e.target)) {
+    // Toggle when clicking dropdown
+    if (dropDownRef.current?.contains(e.target)) {
       const currentOpen = isOpenRef.current;
       // Click triggers <detail> open so we need the setTimeout workaround
       setTimeout(() => {
@@ -109,7 +109,7 @@ export function useDropdownToggleListener(
     }
 
     // Close if open and clicking somewhere else than dropdown
-    if (isOpenRef.current && !detailsRef.current?.contains(e.target)) {
+    if (isOpenRef.current && !menuWrapperRef.current?.contains(e.target)) {
       e.preventDefault();
       _setOpen(false);
     }
@@ -129,10 +129,12 @@ export function useDropdownToggleListener(
   }, []);
 
   useEffect(() => {
-    // Close on navigation (listens to changes of navigation)
-    if (isOpenRef.current) {
-      setOpen(false);
-      unfreezeParentModal(detailsRef.current);
+    if (isOnMobileBp()) {
+      // Close on navigation (listens to changes of navigation)
+      if (!searchParams.has("ddo") && isOpenRef.current) {
+        setOpen(false);
+        toggleParentModal(menuWrapperRef.current, "unfreeze");
+      }
     }
     return () => {};
   }, [location]);
