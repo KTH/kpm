@@ -23,12 +23,8 @@ export function FilterOption<T = any>({
   onSelect,
 }: TOptionProps<T>) {
   return (
-    <li
-      tabIndex={0}
-      className={filter === value ? "active" : undefined}
-      onClick={() => onSelect(value)}
-    >
-      {children}
+    <li className={filter === value ? "active" : undefined}>
+      <button onClick={() => onSelect(value)}>{children}</button>
     </li>
   );
 }
