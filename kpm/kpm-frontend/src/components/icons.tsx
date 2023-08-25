@@ -168,24 +168,25 @@ export function IconStar({
   onClick(e: any): void;
 }) {
   return (
-    <svg
-      onClick={onClick}
-      className={starred ? "icon star active" : "icon star"}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 19"
-    >
-      {starred && (
-        <path
-          d="M10,15.27l6.18,3.73-1.64-7.03,5.46-4.73-7.19-.62L10,0l-2.81,6.62L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73Z"
-          fill="currentColor"
-        />
-      )}
-      {!starred && (
-        <path
-          d="M10,13.39l-3.76,2.27,.99-4.28-3.32-2.88,4.38-.37,1.71-4.04,1.71,4.04,4.38,.37-3.32,2.88,.99,4.28m6.24-8.42l-7.19-.61L10,0l-2.81,6.63L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73,6.18,3.73-1.64-7.03s5.46-4.73,5.46-4.73Z"
-          fill="currentColor"
-        />
-      )}
-    </svg>
+    <button className="icon star" onClick={onClick}>
+      <svg
+        className={starred ? "active" : undefined}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 19"
+      >
+        {starred && (
+          <path
+            d="M10,15.27l6.18,3.73-1.64-7.03,5.46-4.73-7.19-.62L10,0l-2.81,6.62L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73Z"
+            fill="currentColor"
+          />
+        )}
+        {!starred && (
+          <path
+            d="M10,13.39l-3.76,2.27,.99-4.28-3.32-2.88,4.38-.37,1.71-4.04,1.71,4.04,4.38,.37-3.32,2.88,.99,4.28m6.24-8.42l-7.19-.61L10,0l-2.81,6.63L0,7.24l5.45,4.73-1.63,7.03,6.18-3.73,6.18,3.73-1.64-7.03s5.46-4.73,5.46-4.73Z"
+            fill="currentColor"
+          />
+        )}
+      </svg>
+    </button>
   );
 }
