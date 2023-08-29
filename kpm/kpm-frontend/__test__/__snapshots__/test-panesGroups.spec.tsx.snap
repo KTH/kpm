@@ -59,18 +59,21 @@ exports[`<Groups /> Can be rendered 1`] = `
       className="kpm-tab-filter"
     >
       <ul>
-        <li
-          onClick={[Function]}
-          tabIndex={0}
-        >
-          Favourites
+        <li>
+          <button
+            onClick={[Function]}
+          >
+            Favourites
+          </button>
         </li>
         <li
           className="active"
-          onClick={[Function]}
-          tabIndex={0}
         >
-          All Subscriptions
+          <button
+            onClick={[Function]}
+          >
+            All Subscriptions
+          </button>
         </li>
       </ul>
     </nav>
@@ -145,18 +148,21 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
       className="kpm-tab-filter"
     >
       <ul>
-        <li
-          onClick={[Function]}
-          tabIndex={0}
-        >
-          Favourites
+        <li>
+          <button
+            onClick={[Function]}
+          >
+            Favourites
+          </button>
         </li>
         <li
           className="active"
-          onClick={[Function]}
-          tabIndex={0}
         >
-          All Subscriptions
+          <button
+            onClick={[Function]}
+          >
+            All Subscriptions
+          </button>
         </li>
       </ul>
     </nav>
@@ -267,16 +273,19 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
       <ul>
         <li
           className="active"
-          onClick={[Function]}
-          tabIndex={0}
         >
-          Favourites
+          <button
+            onClick={[Function]}
+          >
+            Favourites
+          </button>
         </li>
-        <li
-          onClick={[Function]}
-          tabIndex={0}
-        >
-          All Subscriptions
+        <li>
+          <button
+            onClick={[Function]}
+          >
+            All Subscriptions
+          </button>
         </li>
       </ul>
     </nav>

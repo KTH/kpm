@@ -13,12 +13,20 @@
 
   & > ul > li {
     margin-bottom: var(--kpmGap);
-    cursor: pointer;
 
     &.active {
       font-weight: bold;
       border-bottom: 4px solid var(--kpmLink);
       margin-bottom: calc(var(--kpmGap) - 4px);
+    }
+
+    button {
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 1em;
     }
   }
 }
