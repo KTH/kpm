@@ -162,7 +162,8 @@ export async function studiesApiHandler(
 function isRoundCurrent(round?: TKoppsRoundInTerm) {
   if (round) {
     const DAY_IN_MS = 24 * 3600 * 1000;
-    const start = Date.parse(round.firstTuitionDate) - 5 * DAY_IN_MS;
+    // extend the tuition period for preparation and posts-course work.
+    const start = Date.parse(round.firstTuitionDate) - 14 * DAY_IN_MS;
     const end = Date.parse(round.lastTuitionDate) + 25 * DAY_IN_MS;
     const now = Date.now();
     return start < now && end > now;
