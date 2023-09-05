@@ -8,8 +8,10 @@ export const LANG = window.__kpmSettings__?.["lang"] || "en";
 
 export type TLang = "sv" | "en";
 
-export function i18n(strObj: Record<TLang, string> | string): string {
+export function i18n(strObj?: Record<TLang, string> | string): string {
   const lang: TLang = LANG as TLang;
+
+  if (strObj === undefined) return "";
 
   if (typeof strObj === "object") {
     return strObj[lang];

@@ -56,7 +56,7 @@ export type TStudiesCourse = {
 };
 
 export type TStudiesCourseRound = {
-  status: "antagna" | "registrerade";
+  status: "antagna" | "registrerade" | "omregistrerade";
   year: number;
   term: "1" | "2";
   ladokRoundId?: string;

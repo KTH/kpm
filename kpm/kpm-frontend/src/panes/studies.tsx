@@ -124,7 +124,7 @@ function RoundDesc({ round }: { round: TStudiesCourseRound }) {
   return (
     <React.Fragment>
       {i18n("term" + round.term)}
-      {round.year % 100} ({round.shortName || round.ladokRoundId})
+      {round.year % 100} ({i18n(round.shortName) || round.ladokRoundId})
     </React.Fragment>
   );
 }
@@ -139,6 +139,12 @@ function Course({ courseCode, course }: TCourseProps) {
     (c) =>
       c.type !== "exam" && (!c.startTerm || !selTerm || c.startTerm === selTerm)
   );
+
+  // Sort course rounds so Omreg is before regular round
+  course.rounds.sort((a, b) =>
+    a.status === "omregistrerade" && b.status !== "omregistrerade" ? -1 : 0
+  );
+
   return (
     <section className={`kpm-studies-course kpm-${status}`}>
       <h2>
@@ -150,6 +156,7 @@ function Course({ courseCode, course }: TCourseProps) {
           <option selected>Visa</option>
           {course.rounds.map((r) => (
             <option
+              key={`${r.status}-${r.year}-${r.term}`}
               onClick={(e) => {
                 setRoundToShow(r);
                 const p = (e.target as Element).parentElement;
