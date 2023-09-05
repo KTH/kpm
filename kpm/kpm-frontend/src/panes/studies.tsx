@@ -129,6 +129,10 @@ function RoundDesc({ round }: { round: TStudiesCourseRound }) {
   );
 }
 
+function _genRoundKey(round: TStudiesCourseRound) {
+  return `${round.status}-${round.year}-${round.term}-${round.ladokRoundId}`;
+}
+
 function Course({ courseCode, course }: TCourseProps) {
   const [roundToShow, setRoundToShow] = React.useState(course.rounds?.[0]);
   const status = course.completed ? "godkand" : roundToShow?.status;
@@ -152,24 +156,27 @@ function Course({ courseCode, course }: TCourseProps) {
       </h2>
       <p>{i18n(course.title)}</p>
       {course.rounds?.length > 1 && (
-        <select className="kpm-rounds">
-          <option selected>Visa</option>
+        <select
+          className="kpm-rounds"
+          onChange={(e) => {
+            const round = course.rounds.find(
+              (r) => _genRoundKey(r) === e.target.value
+            ) as TStudiesCourseRound;
+            setRoundToShow(round);
+            const p = (e.target as Element).parentElement;
+            (p as HTMLSelectElement).selectedIndex = 0;
+            p?.blur();
+          }}
+          value={_genRoundKey(roundToShow)}
+        >
           {course.rounds.map((r) => (
-            <option
-              key={`${r.status}-${r.year}-${r.term}`}
-              onClick={(e) => {
-                setRoundToShow(r);
-                const p = (e.target as Element).parentElement;
-                (p as HTMLSelectElement).selectedIndex = 0;
-                p?.blur();
-              }}
-            >
+            <option key={_genRoundKey(r)} value={_genRoundKey(r)}>
               <RoundDesc round={r} />
             </option>
           ))}
         </select>
       )}
-      {roundToShow && (
+      {course.rounds?.length <= 1 && (
         <h3>
           <RoundDesc round={roundToShow} />
         </h3>
@@ -180,8 +187,8 @@ function Course({ courseCode, course }: TCourseProps) {
             {i18n("Kurs-PM")}
           </a>
         </li>
-        {filteredRooms?.map((r) => (
-          <li>
+        {filteredRooms?.map((r, index) => (
+          <li key={index}>
             <CanvasRoomLink {...r} />
           </li>
         ))}
@@ -204,7 +211,7 @@ function Course({ courseCode, course }: TCourseProps) {
 }
 
 function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {
-  if (round) {
+  if (round && round.ladokRoundId !== "term") {
     return `https://www.kth.se/kurs-pm/${code}/${round.year}${round.term}/${round.ladokRoundId}`;
   } else {
     return `https://www.kth.se/kurs-pm/${code}/`;

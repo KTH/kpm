@@ -64,8 +64,7 @@
     }
     select.kpm-rounds {
       margin-top: $rowGap;
-      float: right;
-      text-align: right;
+      margin-left: calc(-0.5 * var(--kpmPad));
       background: var(--kpmPaneBg);
       border: 0;
     }
