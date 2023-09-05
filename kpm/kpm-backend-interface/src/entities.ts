@@ -20,7 +20,7 @@ export type TProgramCode = string;
 // QUESTION: Should we import types from the API-packages? Should these types be moved to separate packages?
 // Same as type Link in my-canvas-rooms-api/src/api.ts
 export type TCanvasRoom = {
-  url: string;
+  url: URL;
   name: string;
   state: "unpublished" | "available" | "completed" | "deleted";
   text?: string;
