@@ -121,6 +121,9 @@ type TCourseProps = {
 };
 
 function RoundDesc({ round }: { round: TStudiesCourseRound }) {
+  if (round === undefined)
+    return <React.Fragment>{i18n("om_kursen")}</React.Fragment>;
+
   return (
     <React.Fragment>
       {i18n("term" + round.term)}
