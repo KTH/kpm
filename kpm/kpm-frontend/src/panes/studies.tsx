@@ -38,10 +38,6 @@ export async function loaderStudies({
 
 type TFilter = "current" | "other";
 
-function _isCurrentCourse(course: TStudiesCourse): boolean {
-  return !!course.rounds.find((r) => r.current);
-}
-
 export function Studies() {
   const { res, loading, error } = useDataFecther<APIStudies>(loaderStudies);
   const { courses } = res || {};
@@ -53,9 +49,7 @@ export function Studies() {
   // Switch to all if there are no starred programmes
   useEffect(() => {
     if (filter === undefined && coursesArr.length > 0) {
-      const hasCurrent = !!coursesArr.find(([k, c]) =>
-        c.rounds.find((r) => r.current)
-      );
+      const hasCurrent = !!coursesArr.find(([k, c]) => c.current);
       setFilter(hasCurrent ? "current" : "other");
     }
   }, [courses]);
@@ -63,9 +57,9 @@ export function Studies() {
   const filteredCourseEntries = coursesArr.filter(([key, course]) => {
     switch (filter) {
       case "current":
-        return _isCurrentCourse(course);
+        return course.current;
       case "other":
-        return !_isCurrentCourse(course);
+        return !course.current;
     }
   });
 
@@ -120,7 +114,7 @@ type TCourseProps = {
   course: TStudiesCourse;
 };
 
-function RoundDesc({ round }: { round: TStudiesCourseRound }) {
+function RoundDesc({ round }: { round?: TStudiesCourseRound }) {
   if (round === undefined)
     return <React.Fragment>{i18n("om_kursen")}</React.Fragment>;
 
@@ -132,24 +126,27 @@ function RoundDesc({ round }: { round: TStudiesCourseRound }) {
   );
 }
 
-function _genRoundKey(round: TStudiesCourseRound) {
+function _genRoundKey(round?: TStudiesCourseRound) {
+  if (round === undefined) return "noop";
   return `${round.status}-${round.year}-${round.term}-${round.ladokRoundId}`;
 }
 
 function Course({ courseCode, course }: TCourseProps) {
-  const [roundToShow, setRoundToShow] = React.useState(course.rounds?.[0]);
+  // Start by showing most recent current round
+  const [roundToShow, setRoundToShow] = React.useState(
+    course.rounds?.reduce(
+      (val: TStudiesCourseRound | undefined, r) => r || val,
+      undefined
+    )
+  );
   const status = course.completed ? "godkand" : roundToShow?.status;
   const exams = course.rooms?.filter((c) => c.type === "exam");
   const selTerm = roundToShow ? `${roundToShow.year}${roundToShow.term}` : null;
+
   // Show non-exams rooms for the selected term, but don't hide rooms w/o term.
   const filteredRooms = course.rooms?.filter(
     (c) =>
       c.type !== "exam" && (!c.startTerm || !selTerm || c.startTerm === selTerm)
-  );
-
-  // Sort course rounds so Omreg is before regular round
-  course.rounds.sort((a, b) =>
-    a.status === "omregistrerade" && b.status !== "omregistrerade" ? -1 : 0
   );
 
   return (
@@ -214,7 +211,7 @@ function Course({ courseCode, course }: TCourseProps) {
 }
 
 function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {
-  if (round && round.ladokRoundId !== "term") {
+  if (round?.ladokRoundId !== undefined) {
     return `https://www.kth.se/kurs-pm/${code}/${round.year}${round.term}/${round.ladokRoundId}`;
   } else {
     return `https://www.kth.se/kurs-pm/${code}/`;

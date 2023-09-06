@@ -14,6 +14,7 @@ import {
   sessionUser,
   TKoppsCourseInfo,
   TKoppsRoundInTerm,
+  TCourseRound,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
@@ -88,86 +89,57 @@ export async function studiesApiHandler(
     for (let [course_code, roles] of Object.entries(studies?.courses || [])) {
       const kopps = await kopps_futs[course_code];
 
-      let completed = false;
+      let completed = roles.some((o) => o.status === "godkand");
+
       let mytermrounds: Record<
         string,
-        Record<string, TStudiesCourseRound>
+        Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
       > = {};
       for (let role of roles) {
-        // Skip if course is completed
-        if (role.status === "godkand") {
-          completed = true;
-          continue;
-        }
-
-        // Skip if missing required fields
-        if (!role.status || !role.year || !role.term) {
-          continue;
-        }
+        // Skip entries that don't have a term or year, they aren't proper
+        // course rounds
+        if (role.year === undefined || role.term === undefined) continue;
 
         // Add rounds to course object
         const term = `${role.year}${role.term}`;
-        mytermrounds[term] ??= {};
+        mytermrounds[term] ??= [];
 
-        const roleRound =
-          role.round === undefined && role.status === "omregistrerade"
-            ? "term"
-            : role.round;
+        // Find kopps round entry by round id hack...
+        const round = kopps.rounds[term]?.find(
+          (value) => value.ladokRoundId === role.round
+        );
 
-        // Skip if no round id can be determined
-        if (roleRound === undefined) {
-          continue;
-        }
-
-        // Add the term round object
-        if (!mytermrounds[term][roleRound]) {
-          const round = kopps.rounds[term]?.find(
-            (value) => value.ladokRoundId === roleRound
+        if (role.round && !round) {
+          // omreg doesn't have rounds so we don't log a warning
+          log.warn(
+            { course_code, term, round: role.round },
+            "Round not found in kopps"
           );
-
-          const firstTuitionDate =
-            round?.firstTuitionDate ?? getTermStartDate(role.year, role.term);
-          const lastTuitionDate =
-            round?.lastTuitionDate ?? getTermEndDate(role.year, role.term);
-
-          mytermrounds[term][roleRound] = {
-            status: role.status,
-            year: role.year,
-            term: role.term,
-            ladokRoundId: roleRound,
-            firstTuitionDate: firstTuitionDate,
-            lastTuitionDate: lastTuitionDate,
-            shortName:
-              role.status === "omregistrerade" ? "omreg_lbl" : round?.shortName,
-            // TODO: Consider relaxing how we decide if a course is current by
-            // not strictly checking if there is a current round in kopps.
-            // Rasmus has some thoughts about this.
-            current: isRoundCurrent(firstTuitionDate, lastTuitionDate),
-          };
-          if (!round) {
-            log.warn(
-              { course_code, term, round: roleRound },
-              "Round not found in kopps"
-            );
-          }
         }
 
-        // If term round is missing status, add it
-        if (!mytermrounds[term][roleRound].status) {
-          mytermrounds[term][roleRound].status = role.status;
-        }
+        mytermrounds[term].push({
+          ...role,
+          ...round,
+        });
       }
 
-      let current_rounds: TStudiesCourseRound[] = [];
-      let other_rounds: TStudiesCourseRound[] = [];
+      let courseIsCurrent = false;
+      let courseRounds: TStudiesCourseRound[] = [];
       for (let [_term, rounds] of Object.entries(mytermrounds)) {
-        for (let [_id, round] of Object.entries(rounds)) {
-          if (round.current) {
-            current_rounds.push(round);
-          } else {
-            other_rounds.push(round);
-          }
+        const termRounds = reduceRoundsObject(rounds);
+
+        // If there is a round specific instance we ignore "omreg"
+        if (termRounds[2] || termRounds[1]) {
+          delete termRounds["omreg"];
         }
+
+        let tmp =
+          isRoundCurrent(termRounds[2]) || isRoundCurrent(termRounds[1]);
+        if (tmp === undefined) {
+          tmp = isRoundCurrent(termRounds["omreg"]);
+        }
+        courseIsCurrent = courseIsCurrent || (tmp ?? false);
+        courseRounds = [...courseRounds, ...Object.values(termRounds)];
       }
 
       if (kopps) {
@@ -178,7 +150,8 @@ export async function studiesApiHandler(
           creditUnitAbbr: kopps.creditUnitAbbr,
           rooms: courseRooms ? courseRooms?.[course_code] || [] : null,
           completed,
-          rounds: [...current_rounds, ...other_rounds],
+          rounds: [...courseRounds],
+          current: courseIsCurrent,
         };
       }
     }
@@ -191,7 +164,66 @@ export async function studiesApiHandler(
   }
 }
 
-function isRoundCurrent(firstTuitionDate?: string, lastTuitionDate?: string) {
+function reduceRoundsObject(
+  roundsInTerm: Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
+): Record<string, TStudiesCourseRound> {
+  // Find rounds for a term and determine if it is current based on round start and end date.
+  // Re-registrations without a term registration are considered current for the entire term.
+  const termRounds: Record<string, TStudiesCourseRound> = {};
+  for (let round of roundsInTerm) {
+    if (round.status === undefined) continue;
+
+    const {
+      status,
+      year,
+      term,
+      ladokRoundId,
+      firstTuitionDate,
+      lastTuitionDate,
+      shortName,
+    } = round;
+
+    if (status === undefined) continue;
+    if (year === undefined) continue;
+    if (term === undefined) continue;
+
+    switch (status) {
+      case "registrerade":
+        if (ladokRoundId === undefined) continue;
+        if (termRounds[ladokRoundId] !== undefined) continue;
+      case "godkand":
+        if (ladokRoundId === undefined) continue;
+        termRounds[ladokRoundId] = {
+          status,
+          year,
+          term,
+          ladokRoundId,
+          firstTuitionDate,
+          lastTuitionDate,
+          shortName,
+        };
+        break;
+
+      case "omregistrerade":
+        termRounds["omreg"] = {
+          status,
+          year,
+          term,
+          firstTuitionDate: getTermStartDate(year, term),
+          lastTuitionDate: getTermEndDate(year, term),
+          shortName: "omreg_lbl",
+        };
+        break;
+    }
+  }
+  return termRounds;
+}
+
+function isRoundCurrent(inp: any) {
+  if (inp === undefined) return undefined;
+
+  const { firstTuitionDate, lastTuitionDate } = inp;
+
   if (firstTuitionDate && lastTuitionDate) {
     const DAY_IN_MS = 24 * 3600 * 1000;
     // extend the tuition period for preparation and posts-course work.
