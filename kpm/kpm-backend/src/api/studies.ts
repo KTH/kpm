@@ -126,19 +126,8 @@ export async function studiesApiHandler(
       let courseRounds: TStudiesCourseRound[] = [];
       for (let [_term, rounds] of Object.entries(mytermrounds)) {
         const termRounds = reduceRoundsObject(rounds);
-
-        // If there is a round specific instance we ignore "omreg"
-        if (termRounds[2] || termRounds[1]) {
-          delete termRounds["omreg"];
-        }
-
-        let tmp =
-          isRoundCurrent(termRounds[2]) || isRoundCurrent(termRounds[1]);
-        if (tmp === undefined) {
-          tmp = isRoundCurrent(termRounds["omreg"]);
-        }
-        courseIsCurrent = courseIsCurrent || (tmp ?? false);
-        courseRounds = [...courseRounds, ...Object.values(termRounds)];
+        courseIsCurrent = termRounds.some((o) => isRoundCurrent(o));
+        courseRounds = [...courseRounds, ...termRounds];
       }
 
       if (kopps) {
@@ -165,10 +154,11 @@ export async function studiesApiHandler(
 
 function reduceRoundsObject(
   roundsInTerm: Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
-): Record<string, TStudiesCourseRound> {
+): TStudiesCourseRound[] {
   // Find rounds for a term and determine if it is current based on round start and end date.
   // Re-registrations without a term registration are considered current for the entire term.
   const termRounds: Record<string, TStudiesCourseRound> = {};
+  let hasRegularRound = false;
   for (let round of roundsInTerm) {
     if (round.status === undefined) continue;
 
@@ -201,6 +191,7 @@ function reduceRoundsObject(
           lastTuitionDate,
           shortName,
         };
+        hasRegularRound ||= true;
         break;
 
       case "omregistrerade":
@@ -215,7 +206,14 @@ function reduceRoundsObject(
         break;
     }
   }
-  return termRounds;
+
+  // The output of this function is used to determine if a course is current.
+  // If there is a regular round we shouldn't consider re-registrations.
+  if (hasRegularRound) {
+    delete termRounds["omreg"];
+  }
+
+  return Object.values(termRounds);
 }
 
 function isRoundCurrent(inp: any) {
