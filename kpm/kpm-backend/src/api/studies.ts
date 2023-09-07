@@ -126,7 +126,7 @@ export async function studiesApiHandler(
       let courseRounds: TStudiesCourseRound[] = [];
       for (let [_term, rounds] of Object.entries(mytermrounds)) {
         const termRounds = reduceRoundsObject(rounds);
-        courseIsCurrent = termRounds.some((o) => isRoundCurrent(o));
+        courseIsCurrent ||= termRounds.some((o) => isRoundCurrent(o));
         courseRounds = [...courseRounds, ...termRounds];
       }
 
