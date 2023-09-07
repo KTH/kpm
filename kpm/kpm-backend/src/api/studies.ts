@@ -96,8 +96,7 @@ export async function studiesApiHandler(
         Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
       > = {};
       for (let role of roles) {
-        // Skip entries that don't have a term or year, they aren't proper
-        // course rounds
+        // Skip roles that does not represent a course round
         if (role.year === undefined || role.term === undefined) continue;
 
         // Add rounds to course object
