@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import type { NavigateFunction } from "react-router";
 import { NavLink } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useAuthState } from "../state/authState";
 import { LoginWidget } from "./login";
 
 import "./menu.scss";
+import { useOverflowClipOnDemand } from "./menuUtils";
 
 export function MenuPaneBackdrop({ visible, onClose }: any) {
   const nodeRef = React.useRef<HTMLElement>(null);
@@ -137,13 +138,19 @@ export function MenuPane({
   );
 }
 
-export function MenuPaneWrapper({ nodeRef, className, children }: any) {
+export function MenuPaneWrapper({
+  nodeRef = useRef<HTMLElement>(null),
+  className,
+  children,
+}: any) {
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
   // Simple animation on enter
   useEffect(() => {
     setIsActive(true);
   }, []);
+
+  useOverflowClipOnDemand(nodeRef);
 
   let cls = "kpm-modal";
   if (className) cls += " " + className;
