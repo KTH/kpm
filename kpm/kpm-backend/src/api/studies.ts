@@ -22,13 +22,16 @@ const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
 const MY_STUDIES_API_TOKEN = process.env.MY_STUDIES_API_TOKEN!; // required by .env.in
 
+// TODO: Use or remove
 const COURSE_STATUS_TO_SHOW = ["registrerade", "omregistrerade"];
+
+type TRoundStatus = "antagna" | "registrerade" | "omregistrerade" | "godkand";
 
 // Copied from my-studies-api:
 export type TApiUserCourse = {
   type: "kurser";
   course_code: TCourseCode;
-  status?: "antagna" | "godkand" | "registrerade" | "omregistrerade";
+  status?: TRoundStatus;
   year?: number;
   term?: "1" | "2";
   round?: string;
@@ -176,34 +179,28 @@ function reduceRoundsObject(
     if (year === undefined) continue;
     if (term === undefined) continue;
 
-    switch (status) {
-      case "registrerade":
-        if (ladokRoundId === undefined) continue;
-        if (termRounds[ladokRoundId] !== undefined) continue;
-      case "godkand":
-        if (ladokRoundId === undefined) continue;
-        termRounds[ladokRoundId] = {
-          status,
-          year,
-          term,
-          ladokRoundId,
-          firstTuitionDate,
-          lastTuitionDate,
-          shortName,
-        };
-        hasRegularRound ||= true;
-        break;
-
-      case "omregistrerade":
-        termRounds["omreg"] = {
-          status,
-          year,
-          term,
-          firstTuitionDate: getTermStartDate(year, term),
-          lastTuitionDate: getTermEndDate(year, term),
-          shortName: "omreg_lbl",
-        };
-        break;
+    if (ladokRoundId) {
+      // antagen | registrerad | godkand
+      termRounds[ladokRoundId] = {
+        status: bestStatus(termRounds[ladokRoundId]?.status, status),
+        year,
+        term,
+        ladokRoundId,
+        firstTuitionDate,
+        lastTuitionDate,
+        shortName,
+      };
+      hasRegularRound ||= true;
+    } else {
+      // omregistrerad
+      termRounds["omreg"] = {
+        status,
+        year,
+        term,
+        firstTuitionDate: getTermStartDate(year, term),
+        lastTuitionDate: getTermEndDate(year, term),
+        shortName: "omreg_lbl",
+      };
     }
   }
 
@@ -277,5 +274,24 @@ function getTermEndDate(year: number, term: string): string | undefined {
     return `${year}-08-29`;
   } else if (term === "2") {
     return `${year + 1}-01-16`; // exams are until January following year
+  }
+}
+
+function bestStatus(
+  oldVal: TRoundStatus | undefined,
+  newVal: TRoundStatus
+): TRoundStatus {
+  switch (newVal) {
+    case "antagna":
+    case "registrerade":
+      if (oldVal === "godkand" || oldVal === "registrerade") {
+        return oldVal;
+      } else {
+        return newVal;
+      }
+    case "godkand":
+      return newVal;
+    default:
+      return oldVal ?? newVal;
   }
 }
