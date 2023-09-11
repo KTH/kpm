@@ -121,7 +121,11 @@ function RoundDesc({ round }: { round?: TStudiesCourseRound }) {
   return (
     <React.Fragment>
       {i18n("term" + round.term)}
-      {round.year % 100} ({i18n(round.shortName) || round.ladokRoundId})
+      {round.year % 100} (
+      {round.shortName === "omreg_lbl"
+        ? i18n(round.shortName)
+        : round.ladokRoundId}
+      )
     </React.Fragment>
   );
 }
