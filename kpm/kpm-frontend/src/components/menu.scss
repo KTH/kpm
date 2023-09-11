@@ -33,7 +33,9 @@
   left: unset;
   right: unset;
   margin: unset;
-  overflow-y: auto;
+  // Overflow is dynamically set to allow dropdowns to overflow
+  // when extending below modal
+  // overflow-y: auto;
 
   // Leave som space to the sides of modal on desktop
   width: calc(100% - 4 * var(--kpmMargin));

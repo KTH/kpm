@@ -2,6 +2,7 @@ import React from "react";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import type { TCanvasRoom } from "kpm-backend-interface";
 import "./courseComponents.scss";
+import { i18n } from "../i18n/i18n";
 
 type TExamRoomListProps = {
   rooms?: TCanvasRoom[];
@@ -28,18 +29,13 @@ export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
             <h3>{year}</h3>
           </div>
           <div className="kpm-col kpm-exam-room-links">
-            {rooms.map((room) => (
-              <li
-                key={
-                  room.type !== "rapp"
-                    ? `${room.registrationCode}-${room.startTerm}`
-                    : room.url.toString().split("/course/")[1]
-                }
-                className="kpm-row"
-              >
-                <ExamRoomLink url={room.url} name={room.name} />
-              </li>
-            ))}
+            {rooms.map((room, index) => {
+              return (
+                <li key={index} className="kpm-row">
+                  <ExamRoomLink url={room.url} name={room.name} />
+                </li>
+              );
+            })}
           </div>
         </div>
       ))}

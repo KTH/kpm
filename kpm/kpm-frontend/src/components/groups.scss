@@ -30,9 +30,7 @@
   margin-bottom: 0; // Override KTH Style
 
   .kpm-link-list {
-    // NOTE: Currently this popup menu is layered on top of the menubar
-    // read comment for usePositionDropdown() for more info.
-    position: fixed;
+    position: absolute;
     z-index: 999;
     max-width: 95%;
     min-height: 200px; // Use a constant value in pixels, otherwise we have problems

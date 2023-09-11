@@ -25,6 +25,7 @@
       --border: 1px solid #915b17;
     }
 
+    &.kpm-omregistrerade,
     &.kpm-registrerade {
       --border: 1px solid #d4d4d4;
     }
@@ -63,8 +64,7 @@
     }
     select.kpm-rounds {
       margin-top: $rowGap;
-      float: right;
-      text-align: right;
+      margin-left: calc(-0.5 * var(--kpmPad));
       background: var(--kpmPaneBg);
       border: 0;
     }

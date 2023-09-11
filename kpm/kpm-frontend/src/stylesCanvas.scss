@@ -47,8 +47,8 @@ body.use-personal-menu .bcs__trigger {
 // enough.
 // There are classes on the elements involved, but all of them seem randomized.
 // WARNING: This is fragile, we are asuming that the prefix is stable between releases /jhsware
-// but this is probably the only way to target a subset of menus.
-body > span >span[class*="fOyUs_"] {
+// but this is probably the only way to target a subset of pop-ups.
+body > span > span[class*="fOyUs_"] {
   margin-top: calc(-1 * var(--kpm-bar-height));
 }
 

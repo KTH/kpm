@@ -31,7 +31,10 @@ export const sv: Record<string, string> = {
   hp: "hp", // Högskolepoäng
   antagna: "Antagen",
   registrerade: "Registrerad",
+  omregistrerade: "Omregistrerad",
+  omreg_lbl: "Omregistrerad",
   godkand: "Avklarad",
+  om_kursen: "Kursinformation",
   "Search for interesting groups to follow": "Sök bland grupper att följa",
   "Profile Image": "Profilbild",
   "Help / feedback for the personal menu":

@@ -31,7 +31,10 @@ export const en: Record<string, string> = {
   hp: "credits", // Högskolepoäng
   antagna: "Admitted",
   registrerade: "Registered",
+  omregistrerade: "Re-registered",
+  omreg_lbl: "Re-registered",
   godkand: "Completed",
+  om_kursen: "Course Information",
   "Search for interesting groups to follow":
     "Search for interesting groups to follow",
   "Profile Image": "Profile Image",

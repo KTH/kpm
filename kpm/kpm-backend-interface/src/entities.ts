@@ -53,17 +53,17 @@ export type TStudiesCourse = {
   completed: boolean;
   rounds: TStudiesCourseRound[]; // any rounds that are current comes first.
   rooms: TCanvasRoom[] | null;
+  current: boolean;
 };
 
 export type TStudiesCourseRound = {
-  status: "antagna" | "registrerade";
+  status: "antagna" | "registrerade" | "omregistrerade" | "godkand";
   year: number;
   term: "1" | "2";
   ladokRoundId?: string;
   firstTuitionDate?: string; // "YYYY-MM-DD"
   lastTuitionDate?: string; // "YYYY-MM-DD"
   shortName?: string;
-  current: boolean;
 };
 
 export type TTeachingCourse = {
