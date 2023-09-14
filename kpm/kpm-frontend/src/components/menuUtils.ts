@@ -12,11 +12,11 @@ export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
       const el = elRef.current;
       const viewportHeight = window.visualViewport?.height ?? 0;
       const rect = el.getBoundingClientRect();
-      const elHeight = rect.bottom - rect.top;
       const cs = window.getComputedStyle(el);
+      const elContentHeight = el.scrollHeight;
       const elTop = rect.top;
       const elMarginBottom = parseInt(cs.marginBottom || "0", 10);
-      if (elHeight + elTop + elMarginBottom >= viewportHeight) {
+      if (elContentHeight + elTop + elMarginBottom >= viewportHeight) {
         if (cs.overflowY !== "auto") {
           el.style.overflowY = "auto";
         }
