@@ -9,5 +9,5 @@ packages/evolene-local-packages/package-lock.json
 settings.json
 launch.json
 test-users.txt
-kpm/kpm-backend/.env.dev
-kpm/kpm-backend/.env.prod
+.env.dev
+.env.prod
