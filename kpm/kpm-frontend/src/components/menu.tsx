@@ -158,7 +158,7 @@ export function MenuPaneWrapper({
   if (isActive) cls += " active";
 
   return (
-    <dialog ref={nodeRef} className={cls}>
+    <dialog ref={nodeRef} className={cls} aria-modal="true">
       <button
         className="kpm-modal-back-button kpm-mobile"
         onClick={(e) => {
