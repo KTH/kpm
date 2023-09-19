@@ -103,5 +103,4 @@ export const en: Record<string, string> = {
   "No rooms found in Canvas": "No rooms found in Canvas",
   "Program Room": "Program Room",
   prog_syllabus: "Syllabus",
-  "Profile image for ": "Profile image for ",
 };

@@ -63,7 +63,7 @@ export function Menu() {
             >
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt={i18n("Profile image for ") + currentUser?.display_name}
+                alt="Profile Image"
                 className="kpm-profile-image"
               />
               <span className="kpm-profile-display-name">
@@ -75,7 +75,7 @@ export function Menu() {
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt={i18n("Profile image for ") + currentUser?.display_name}
+                alt="Profile Image"
                 className="kpm-profile-image"
               />
               <span className="kpm-profile-display-name">
@@ -143,7 +143,7 @@ export function Menu() {
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt={i18n("Profile image for ") + currentUser?.display_name}
+                alt="Profile Image"
                 className="kpm-profile-image"
               />
               {i18n("Profile")}

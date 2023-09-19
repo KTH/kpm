@@ -100,5 +100,4 @@ export const sv: Record<string, string> = {
   "No rooms found in Canvas": "Inga tillhörande rum finns i Canvas",
   "Program Room": "Programrum",
   prog_syllabus: "Utbildningsplan",
-  "Profile image for ": "Profilbild för ",
 };
