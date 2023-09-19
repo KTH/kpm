@@ -2,6 +2,7 @@
 
 exports[`<Profile /> Can be rendered 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal"
 >
   <button

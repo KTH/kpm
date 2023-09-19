@@ -2,6 +2,7 @@
 
 exports[`<Services /> Can be rendered 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal"
 >
   <button
@@ -141,6 +142,7 @@ exports[`<Services /> Can be rendered 1`] = `
 
 exports[`<Services /> Can be rendered with data 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal active"
 >
   <button
