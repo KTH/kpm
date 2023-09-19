@@ -9,7 +9,7 @@ import { useAuthState } from "../state/authState";
 import { LoginWidget } from "./login";
 
 import "./menu.scss";
-import { useOverflowClipOnDemand } from "./menuUtils";
+import { useFocusTrap, useOverflowClipOnDemand } from "./menuUtils";
 
 export function MenuPaneBackdrop({ visible, onClose }: any) {
   const nodeRef = React.useRef<HTMLElement>(null);
@@ -151,6 +151,7 @@ export function MenuPaneWrapper({
   }, []);
 
   useOverflowClipOnDemand(nodeRef);
+  useFocusTrap(nodeRef);
 
   let cls = "kpm-modal";
   if (className) cls += " " + className;

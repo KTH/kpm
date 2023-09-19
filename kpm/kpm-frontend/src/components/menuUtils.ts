@@ -34,3 +34,56 @@ export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
     return () => cancelAnimationFrame(requestRef.current);
   }, []);
 }
+
+function getFocusableElements(el: HTMLElement): HTMLElement[] | undefined {
+  const focusableElements = el.querySelectorAll(
+    "a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), summary, audio, video, form"
+  );
+  if (focusableElements.length === 0) {
+    return;
+  }
+
+  const outp = [];
+  for (let el of focusableElements) {
+    const cs = window.getComputedStyle(el);
+    if (cs.display !== "none" && cs.visibility !== "hidden") {
+      outp.push(el as HTMLElement);
+    }
+  }
+
+  return outp;
+}
+
+export function useFocusTrap(elRef: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const el = elRef.current;
+      if (el === null) {
+        return;
+      }
+
+      const els = getFocusableElements(el);
+      const lastEl: HTMLElement | undefined = els?.[
+        els.length - 1
+      ] as HTMLElement;
+      const firstEl: HTMLElement | undefined = els?.[0] as HTMLElement;
+      const activeEl = document.activeElement;
+
+      if (e.key === "Tab") {
+        if (!e.shiftKey && (!el.contains(activeEl) || activeEl === lastEl)) {
+          e.preventDefault();
+          firstEl?.focus();
+        } else if (
+          e.shiftKey &&
+          (!el.contains(activeEl) || activeEl === firstEl)
+        ) {
+          e.preventDefault();
+          lastEl?.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [elRef]);
+}
