@@ -24,7 +24,7 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/notifications/notice_list/";
 
-let menuIsOpen = false;
+let menuIsOpen = (() => location.hash !== "")();
 function useMenuState() {
   const [_isOpen, setIsOpen] = useState(menuIsOpen);
   const toggle = () => {
