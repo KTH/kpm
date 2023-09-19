@@ -25,18 +25,16 @@ export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
     <DropdownMenuGroup title={title}>
       {Object.entries(roomsByYear).map(([year, rooms]) => (
         <div className="kpm-course-rooms-dd-item">
-          <div className="kpm-col">
+          <li>
             <h3>{year}</h3>
-          </div>
-          <div className="kpm-col kpm-exam-room-links">
-            {rooms.map((room, index) => {
-              return (
-                <li key={index} className="kpm-row">
-                  <ExamRoomLink url={room.url} name={room.name} />
-                </li>
-              );
-            })}
-          </div>
+          </li>
+          {rooms.map((room, index) => {
+            return (
+              <li key={index} className="kpm-row">
+                <ExamRoomLink url={room.url} name={room.name} />
+              </li>
+            );
+          })}
         </div>
       ))}
     </DropdownMenuGroup>
