@@ -27,11 +27,11 @@ const KTH_SOCIAL_NOTIFICATIONS_URI =
 let menuIsOpen = (() => location.hash !== "")();
 function useMenuState() {
   const [_isOpen, setIsOpen] = useState(menuIsOpen);
-  const toggle = () => {
-    menuIsOpen = !menuIsOpen;
+  const setMenuIsOpen = (state: boolean) => {
+    menuIsOpen = state;
     setIsOpen(menuIsOpen);
   };
-  return [menuIsOpen, toggle] as const;
+  return [menuIsOpen, setMenuIsOpen] as const;
 }
 
 export function Menu() {
