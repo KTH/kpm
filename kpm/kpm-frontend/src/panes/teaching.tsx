@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useEffect, useState } from "react";
 import type {
   APITeaching,
@@ -303,49 +303,49 @@ function CanvasRoomExpandedList({
   const groupKeys = Object.keys(groups);
   groupKeys.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
   return (
-    <DropdownMenuGroup title={title}>
+    <DropdownMenuGroup className="kpm-course-rooms" title={title}>
       {groupKeys.map((year: string) => {
         return (
-          <div className="kpm-course-rooms-dd-item">
-            <div className="kpm-col">
-              <h3>{year}</h3>
-            </div>
-            <div className="kpm-col">
-              {groups[year]?.["vt"].map((room: TCanvasRoom) => (
-                <CanvasRoomLink
-                  key={`${room.registrationCode}-${room.startTerm}`}
-                  url={room.url}
-                  type={room.type}
-                  code={room.registrationCode}
-                  startTerm={room.startTerm!}
-                />
-              ))}
-              {groups[year]?.["other"].map((room: TCanvasRoom) => (
-                <CanvasRoomLink
-                  key={
-                    room.type !== "rapp"
-                      ? `${room.registrationCode}-${room.startTerm}`
-                      : room.url.toString().split("/course/")[1]
-                  }
-                  url={room.url}
-                  type={room.type}
-                  code={room.registrationCode}
-                  startTerm={room.startTerm!}
-                />
-              ))}
-            </div>
-            <div className="kpm-col">
-              {groups[year]?.["ht"].map((room: TCanvasRoom) => (
-                <CanvasRoomLink
-                  key={`${room.registrationCode}-${room.startTerm}`}
-                  url={room.url}
-                  type={room.type}
-                  code={room.registrationCode}
-                  startTerm={room.startTerm!}
-                />
-              ))}
-            </div>
-          </div>
+          <Fragment>
+            <li className="kpm-row">
+              <div className="kpm-col">
+                <h3>{year}</h3>
+              </div>
+              <div className="kpm-row">
+                {groups[year]?.["vt"].map((room: TCanvasRoom) => (
+                  <CanvasRoomLink
+                    key={`${room.registrationCode}-${room.startTerm}`}
+                    url={room.url}
+                    type={room.type}
+                    code={room.registrationCode}
+                    startTerm={room.startTerm!}
+                  />
+                ))}
+                {groups[year]?.["ht"].map((room: TCanvasRoom) => (
+                  <CanvasRoomLink
+                    key={`${room.registrationCode}-${room.startTerm}`}
+                    url={room.url}
+                    type={room.type}
+                    code={room.registrationCode}
+                    startTerm={room.startTerm!}
+                  />
+                ))}
+                {groups[year]?.["other"].map((room: TCanvasRoom) => (
+                  <CanvasRoomLink
+                    key={
+                      room.type !== "rapp"
+                        ? `${room.registrationCode}-${room.startTerm}`
+                        : room.url.toString().split("/course/")[1]
+                    }
+                    url={room.url}
+                    type={room.type}
+                    code={room.registrationCode}
+                    startTerm={room.startTerm!}
+                  />
+                ))}
+              </div>
+            </li>
+          </Fragment>
         );
       })}
     </DropdownMenuGroup>
