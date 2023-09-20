@@ -35,12 +35,14 @@ export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
   }, []);
 }
 
-function getFocusableElements(el: HTMLElement): HTMLElement[] | undefined {
+function getFirstAndLastFocusableElement(
+  el: HTMLElement
+): [HTMLElement?, HTMLElement?] {
   const focusableElements = el.querySelectorAll(
     "a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), summary, audio, video, form"
   );
   if (focusableElements.length === 0) {
-    return;
+    return [undefined, undefined];
   }
 
   const outp = [];
@@ -51,7 +53,7 @@ function getFocusableElements(el: HTMLElement): HTMLElement[] | undefined {
     }
   }
 
-  return outp;
+  return [outp[0], outp[outp.length - 1]];
 }
 
 export function useFocusTrap(elRef: RefObject<HTMLElement | null>) {
@@ -62,14 +64,10 @@ export function useFocusTrap(elRef: RefObject<HTMLElement | null>) {
         return;
       }
 
-      const els = getFocusableElements(el);
-      const lastEl: HTMLElement | undefined = els?.[
-        els.length - 1
-      ] as HTMLElement;
-      const firstEl: HTMLElement | undefined = els?.[0] as HTMLElement;
-      const activeEl = document.activeElement;
-
       if (e.key === "Tab") {
+        const activeEl = document.activeElement;
+        const [firstEl, lastEl] = getFirstAndLastFocusableElement(el);
+
         if (!e.shiftKey && (!el.contains(activeEl) || activeEl === lastEl)) {
           e.preventDefault();
           firstEl?.focus();
