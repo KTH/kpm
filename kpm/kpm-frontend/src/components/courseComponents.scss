@@ -7,13 +7,13 @@
   flex-flow: column nowrap;
   gap: $rowGap $colGap;
   align-items: flex-start;
+  margin-top: $rowGap;
 
-  & > li {
-    margin: 0!important;
+  &:first-child {
+    margin-top: 0;
   }
 
-  li > h3 {
-    font-size: 1.25em;
+  & > li {
     margin: 0!important;
   }
 

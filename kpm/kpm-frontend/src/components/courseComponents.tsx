@@ -4,6 +4,10 @@ import type { TCanvasRoom } from "kpm-backend-interface";
 import "./courseComponents.scss";
 import { i18n } from "../i18n/i18n";
 
+function sortDatesDesc(a: string, b: string) {
+  return b.localeCompare(a) ?? 0;
+}
+
 type TExamRoomListProps = {
   rooms?: TCanvasRoom[];
   title: string;
@@ -23,20 +27,21 @@ export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
 
   return (
     <DropdownMenuGroup title={title}>
-      {Object.entries(roomsByYear).map(([year, rooms]) => (
-        <div className="kpm-course-rooms-dd-item">
-          <li>
-            <h3>{year}</h3>
-          </li>
-          {rooms.map((room, index) => {
-            return (
-              <li key={index} className="kpm-row">
-                <ExamRoomLink url={room.url} name={room.name} />
-              </li>
-            );
-          })}
-        </div>
-      ))}
+      {Object.entries(roomsByYear)
+        .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
+        .map(([_year, rooms]) => (
+          <div className="kpm-course-rooms-dd-item">
+            {rooms
+              .sort((a, b) => sortDatesDesc(a.examDate ?? "", b.examDate ?? ""))
+              .map((room, index) => {
+                return (
+                  <li key={index} className="kpm-row">
+                    <ExamRoomLink url={room.url} name={room.name} />
+                  </li>
+                );
+              })}
+          </div>
+        ))}
     </DropdownMenuGroup>
   );
 }
