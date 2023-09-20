@@ -1,25 +1,28 @@
 @use "../vars" as *;
 
-#kpm-6cf53 .kpm-course-rooms-dd-item {
+#kpm-6cf53 .kpm-course-rooms {
   $rowGap: calc(3 * var(--kpmGap));
   $colGap: $rowGap;
-  display: flex;
-  flex-flow: column nowrap;
-  gap: $rowGap $colGap;
-  align-items: flex-start;
-  margin-top: $rowGap;
 
-  &:first-child {
-    margin-top: 0;
-  }
+  menu {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: $rowGap $colGap;
+    align-items: flex-start;
 
-  & > li {
-    margin: 0!important;
+    & > li {
+      margin: 0;
+    }
   }
+  
 
   a {
     display: inline;
     word-wrap: normal;
+  }
+
+  .kpm-link-list {
+    min-height: unset!important;
   }
 
   @media #{$mblBreakpoint} {

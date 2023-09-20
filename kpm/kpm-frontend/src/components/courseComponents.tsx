@@ -16,32 +16,17 @@ export function ExamRoomList({ rooms = [], title }: TExamRoomListProps) {
   // Only show this if rooms is array with length > 0
   if (!rooms?.length) return null;
 
-  const roomsByYear: Record<string, TCanvasRoom[]> = {};
-  rooms.forEach((room: TCanvasRoom) => {
-    const examYear = room.examDate?.split("-")[0] || "other";
-    if (roomsByYear[examYear] === undefined) {
-      roomsByYear[examYear] = [];
-    }
-    roomsByYear[examYear].push(room);
-  });
-
   return (
-    <DropdownMenuGroup title={title}>
-      {Object.entries(roomsByYear)
-        .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
-        .map(([_year, rooms]) => (
-          <div className="kpm-course-rooms-dd-item">
-            {rooms
-              .sort((a, b) => sortDatesDesc(a.examDate ?? "", b.examDate ?? ""))
-              .map((room, index) => {
-                return (
-                  <li key={index} className="kpm-row">
-                    <ExamRoomLink url={room.url} name={room.name} />
-                  </li>
-                );
-              })}
-          </div>
-        ))}
+    <DropdownMenuGroup className="kpm-course-rooms" title={title}>
+      {rooms
+        .sort((a, b) => sortDatesDesc(a.examDate ?? "", b.examDate ?? ""))
+        .map((room, index) => {
+          return (
+            <li key={index} className="kpm-row">
+              <ExamRoomLink url={room.url} name={room.name} />
+            </li>
+          );
+        })}
     </DropdownMenuGroup>
   );
 }
