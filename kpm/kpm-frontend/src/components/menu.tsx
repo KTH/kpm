@@ -150,8 +150,18 @@ export function MenuPaneWrapper({
     setIsActive(true);
   }, []);
 
+  const doClose = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    setIsActive(false);
+    // NOTE: This should really listen to transitionEnd
+    // but this is okay and doubles as fallback
+    setTimeout(() => {
+      navigate(-1);
+    }, 310);
+  };
+
   useOverflowClipOnDemand(nodeRef);
-  useFocusTrap(nodeRef);
+  useFocusTrap(nodeRef, doClose);
 
   let cls = "kpm-modal";
   if (className) cls += " " + className;
@@ -159,18 +169,7 @@ export function MenuPaneWrapper({
 
   return (
     <dialog ref={nodeRef} className={cls} aria-modal="true">
-      <button
-        className="kpm-modal-back-button kpm-mobile"
-        onClick={(e) => {
-          e.preventDefault();
-          setIsActive(false);
-          // NOTE: This should really listen to transitionEnd
-          // but this is okay and doubles as fallback
-          setTimeout(() => {
-            navigate(-1);
-          }, 310);
-        }}
-      >
+      <button className="kpm-modal-back-button kpm-mobile" onClick={doClose}>
         {i18n("Tillbaka till personliga menyn")}
       </button>
       {children}

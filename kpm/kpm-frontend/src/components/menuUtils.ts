@@ -1,5 +1,8 @@
 import { RefObject, useEffect, useRef } from "react";
 
+const KEY_TAB = "Tab";
+const KEY_ESC = "Escape";
+
 export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
   const requestRef = useRef(0);
 
@@ -56,7 +59,10 @@ function getFirstAndLastFocusableElement(
   return [outp[0], outp[outp.length - 1]];
 }
 
-export function useFocusTrap(elRef: RefObject<HTMLElement | null>) {
+export function useFocusTrap(
+  elRef: RefObject<HTMLElement | null>,
+  onClose: () => void
+) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const el = elRef.current;
@@ -64,20 +70,28 @@ export function useFocusTrap(elRef: RefObject<HTMLElement | null>) {
         return;
       }
 
-      if (e.key === "Tab") {
+      if (e.key === KEY_TAB) {
         const activeEl = document.activeElement;
         const [firstEl, lastEl] = getFirstAndLastFocusableElement(el);
 
         if (!e.shiftKey && (!el.contains(activeEl) || activeEl === lastEl)) {
           e.preventDefault();
+          e.stopPropagation();
           firstEl?.focus();
         } else if (
           e.shiftKey &&
           (!el.contains(activeEl) || activeEl === firstEl)
         ) {
           e.preventDefault();
+          e.stopPropagation();
           lastEl?.focus();
         }
+      }
+
+      if (e.key === KEY_ESC) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose?.();
       }
     };
 
