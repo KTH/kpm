@@ -47,7 +47,9 @@ export function Menu() {
   // Update CSS --kpm-bar-height
   useSetKpmBarHeight(menuRef);
 
-  const [isOpen, setIsOpen] = useMenuState(location.pathname.startsWith("/"));
+  const [isOpen, setIsOpen] = useMenuState(
+    location.pathname.startsWith("/") && location.pathname.length > 1
+  );
   const [showLogin, setShowLogin] = useLogin();
   const [currentUser] = useAuthState();
 
