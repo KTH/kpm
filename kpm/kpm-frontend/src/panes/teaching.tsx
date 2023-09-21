@@ -274,37 +274,46 @@ function CanvasRoomExpandedList({
   // Only show this if it has any items
   if (rooms.length === 0) return null;
 
-  // Group by startTerm
-  const groups: Record<string, any> = {};
+  // First group rooms by year/other
+  const groups: { [index: string]: TCanvasRoom[] } = {};
   for (const room of rooms) {
     if (room.startTerm === undefined) {
-      if (groups["other"] === undefined)
-        groups["other"] = { vt: [], ht: [], other: [] };
-      groups["other"]["other"].push(room);
-      continue;
-    }
-
-    const year = room.startTerm!.slice(0, 4);
-    const term = room.startTerm!.slice(4, 5);
-    if (groups[year] === undefined)
-      groups[year] = { vt: [], ht: [], other: [] };
-    switch (term) {
-      case "1":
-        groups[year]["vt"].push(room);
-        break;
-      case "2":
-        groups[year]["ht"].push(room);
-        break;
-      default:
-        groups[year]["other"].push(room);
+      groups["other"] ??= [];
+      groups["other"].push(room);
+    } else {
+      const year = room.startTerm!.slice(0, 4);
+      groups[year] ??= [];
+      groups[year].push(room);
     }
   }
 
-  const groupKeys = Object.keys(groups);
-  groupKeys.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
+  // Then sort each group by term
+  const groupedRooms = [];
+  for (const year in groups) {
+    const rooms = groups[year];
+    groupedRooms.push({
+      year,
+      rooms: rooms.sort((a, b) => {
+        if (a.startTerm === b.startTerm) return 0;
+        // Sort terms asc
+        const aTrm = a.startTerm?.slice(4, 6);
+        const bTrm = b.startTerm?.slice(4, 6);
+        if (bTrm === undefined) return -1; // if b has undefined term, it should be sorted last
+        return aTrm?.localeCompare(bTrm) ?? 1; // if a has undefined term, it should be sorted last
+      }),
+    });
+  }
+
+  // Sort groups by year desc with other last
+  groupedRooms.sort((a, b) => {
+    if (a.year === "other") return 1;
+    if (b.year === "other") return -1;
+    return b.year.localeCompare(a.year);
+  });
+
   return (
     <DropdownMenuGroup className="kpm-course-rooms" title={title}>
-      {groupKeys.map((year: string) => {
+      {groupedRooms.map(({ year, rooms }) => {
         return (
           <Fragment>
             <li className="kpm-row">
@@ -312,37 +321,30 @@ function CanvasRoomExpandedList({
                 <h3>{year}</h3>
               </div>
               <div className="kpm-row">
-                {groups[year]?.["vt"].map((room: TCanvasRoom) => (
-                  <CanvasRoomLink
-                    key={`${room.registrationCode}-${room.startTerm}`}
-                    url={room.url}
-                    type={room.type}
-                    code={room.registrationCode}
-                    startTerm={room.startTerm!}
-                  />
-                ))}
-                {groups[year]?.["ht"].map((room: TCanvasRoom) => (
-                  <CanvasRoomLink
-                    key={`${room.registrationCode}-${room.startTerm}`}
-                    url={room.url}
-                    type={room.type}
-                    code={room.registrationCode}
-                    startTerm={room.startTerm!}
-                  />
-                ))}
-                {groups[year]?.["other"].map((room: TCanvasRoom) => (
-                  <CanvasRoomLink
-                    key={
-                      room.type !== "rapp"
-                        ? `${room.registrationCode}-${room.startTerm}`
-                        : room.url.toString().split("/course/")[1]
-                    }
-                    url={room.url}
-                    type={room.type}
-                    code={room.registrationCode}
-                    startTerm={room.startTerm!}
-                  />
-                ))}
+                {year !== "other" &&
+                  groups[year]?.map((room: TCanvasRoom) => (
+                    <CanvasRoomLink
+                      key={`${room.registrationCode}-${room.startTerm}`}
+                      url={room.url}
+                      type={room.type}
+                      code={room.registrationCode}
+                      startTerm={room.startTerm!}
+                    />
+                  ))}
+                {year === "other" &&
+                  groups["other"].map((room: TCanvasRoom) => (
+                    <CanvasRoomLink
+                      key={
+                        room.type !== "rapp"
+                          ? `${room.registrationCode}-${room.startTerm}`
+                          : room.url.toString().split("/course/")[1]
+                      }
+                      url={room.url}
+                      type={room.type}
+                      code={room.registrationCode}
+                      startTerm={room.startTerm!}
+                    />
+                  ))}
               </div>
             </li>
           </Fragment>
