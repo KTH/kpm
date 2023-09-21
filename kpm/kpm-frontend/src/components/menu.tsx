@@ -152,6 +152,8 @@ export function MenuPaneWrapper({
 
   const doClose = (e?: React.MouseEvent) => {
     e?.preventDefault();
+    // The menu element is recreated during navigation, so we need to find it
+    // by id when we want to restore the focus
     const _activeMenuEl: HTMLElement | null = document.querySelector(
       ".kpm-menu > ul > li > .active"
     );
@@ -161,11 +163,14 @@ export function MenuPaneWrapper({
     // but this is okay and doubles as fallback
     setTimeout(() => {
       navigate(-1);
-      // Set focus on the previously active menu item
-      const activeMenuEl: HTMLElement | null = document.querySelector(
-        "#" + activeMenuElId
-      );
-      if (activeMenuEl) activeMenuEl.focus();
+      // Set focus on the previously active menu item, need timeout to allow
+      // navigation updates to complete
+      setTimeout(() => {
+        const activeMenuEl: HTMLElement | null = document.querySelector(
+          "#" + activeMenuElId
+        );
+        if (activeMenuEl) activeMenuEl.focus();
+      }, 100);
     }, 310);
   };
 
