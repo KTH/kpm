@@ -152,11 +152,20 @@ export function MenuPaneWrapper({
 
   const doClose = (e?: React.MouseEvent) => {
     e?.preventDefault();
+    const _activeMenuEl: HTMLElement | null = document.querySelector(
+      ".kpm-menu > ul > li > .active"
+    );
+    const activeMenuElId = _activeMenuEl?.id;
     setIsActive(false);
     // NOTE: This should really listen to transitionEnd
     // but this is okay and doubles as fallback
     setTimeout(() => {
       navigate(-1);
+      // Set focus on the previously active menu item
+      const activeMenuEl: HTMLElement | null = document.querySelector(
+        "#" + activeMenuElId
+      );
+      if (activeMenuEl) activeMenuEl.focus();
     }, 310);
   };
 
