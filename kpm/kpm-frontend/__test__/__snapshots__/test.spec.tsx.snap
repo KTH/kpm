@@ -29,6 +29,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/profile"
+        id="kpmMenuProfile"
         onClick={[Function]}
       >
         <img
@@ -56,6 +57,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/studies"
+        id="kpmMenuStudies"
         onClick={[Function]}
       >
         Studies
@@ -65,6 +67,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/teaching"
+        id="kpmMenuTeaching"
         onClick={[Function]}
       >
         Teaching
@@ -74,6 +77,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/programme"
+        id="kpmMenuProgramme"
         onClick={[Function]}
       >
         Programme
@@ -83,6 +87,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/groups"
+        id="kpmMenuGroups"
         onClick={[Function]}
       >
         Groups
@@ -92,6 +97,7 @@ exports[`<App /> Can be rendered 1`] = `
       <a
         className=""
         href="#/services"
+        id="kpmMenuServices"
         onClick={[Function]}
       >
         Services

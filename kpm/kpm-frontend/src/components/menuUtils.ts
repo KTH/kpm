@@ -1,5 +1,8 @@
 import { RefObject, useEffect, useRef } from "react";
 
+const KEY_TAB = "Tab";
+const KEY_ESC = "Escape";
+
 export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
   const requestRef = useRef(0);
 
@@ -33,4 +36,66 @@ export function useOverflowClipOnDemand(elRef: RefObject<HTMLElement | null>) {
     requestRef.current = requestAnimationFrame(action);
     return () => cancelAnimationFrame(requestRef.current);
   }, []);
+}
+
+function getFirstAndLastFocusableElement(
+  el: HTMLElement
+): [HTMLElement?, HTMLElement?] {
+  const focusableElements = el.querySelectorAll(
+    "a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), summary, audio, video, form"
+  );
+  if (focusableElements.length === 0) {
+    return [undefined, undefined];
+  }
+
+  const outp = [];
+  for (let el of focusableElements) {
+    const cs = window.getComputedStyle(el);
+    if (cs.display !== "none" && cs.visibility !== "hidden") {
+      outp.push(el as HTMLElement);
+    }
+  }
+
+  return [outp[0], outp[outp.length - 1]];
+}
+
+export function useFocusTrap(
+  elRef: RefObject<HTMLElement | null>,
+  onClose: () => void
+) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const el = elRef.current;
+      if (el === null) {
+        return;
+      }
+
+      if (e.key === KEY_TAB) {
+        const activeEl = document.activeElement;
+        const [firstEl, lastEl] = getFirstAndLastFocusableElement(el);
+
+        if (!e.shiftKey && (!el.contains(activeEl) || activeEl === lastEl)) {
+          e.preventDefault();
+          e.stopPropagation();
+          firstEl?.focus();
+        } else if (
+          e.shiftKey &&
+          (!el.contains(activeEl) || activeEl === firstEl)
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          lastEl?.focus();
+        }
+      }
+
+      if (e.key === KEY_ESC) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose?.();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [elRef]);
 }

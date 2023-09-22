@@ -1,8 +1,8 @@
 import { RefObject, useEffect, useRef, MutableRefObject } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 
-const KEY_ENTER = 13;
-const KEY_ESC = 27;
+const KEY_ENTER = "Enter";
+const KEY_ESC = "Escape";
 
 function getKpmModal(el: HTMLElement | null): HTMLElement | null {
   while (el && el !== document.body) {
@@ -71,27 +71,30 @@ export function useDropdownToggleListener(
     setOpen(nextState);
   };
 
-  function didKeyDownDetails(e: any) {
+  function didKeyDownDetails(e: KeyboardEvent) {
     // Always close on ESC if open
-    if (e.which === KEY_ESC && isOpenRef.current) {
+    if (e.key === KEY_ESC && isOpenRef.current) {
       e.preventDefault();
+      e.stopPropagation();
       _setOpen(false);
     }
 
     // Close on ENTER outside dropdown if open
     if (
-      e.which === KEY_ENTER &&
+      e.key === KEY_ENTER &&
       isOpenRef.current &&
-      !menuWrapperRef.current?.contains(e.target)
+      !menuWrapperRef.current?.contains(e.target as Element)
     ) {
       e.preventDefault();
+      e.stopPropagation();
       _setOpen(false);
     }
 
     // Only toggle if ENTER is fired when on or in dropdown
-    if (e.which === KEY_ENTER) {
-      if (dropDownRef.current?.contains(e.target)) {
+    if (e.key === KEY_ENTER) {
+      if (dropDownRef.current?.contains(e.target as Element)) {
         e.preventDefault();
+        e.stopPropagation();
         _setOpen(!isOpenRef.current);
       }
     }

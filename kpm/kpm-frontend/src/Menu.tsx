@@ -89,7 +89,11 @@ export function Menu() {
             </a>
           </li>
           <li className="kpm-profile-item kpm-desktop">
-            <ToggleNavLink to="profile" className={linkClassName}>
+            <ToggleNavLink
+              id="kpmMenuProfile"
+              to="profile"
+              className={linkClassName}
+            >
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt=""
@@ -110,30 +114,50 @@ export function Menu() {
           </li>
           {hasStudies && (
             <li>
-              <ToggleNavLink to="studies" className={linkClassName}>
+              <ToggleNavLink
+                id="kpmMenuStudies"
+                to="studies"
+                className={linkClassName}
+              >
                 {i18n("Studies")}
               </ToggleNavLink>
             </li>
           )}
           {hasTeaching && (
             <li>
-              <ToggleNavLink to="teaching" className={linkClassName}>
+              <ToggleNavLink
+                id="kpmMenuTeaching"
+                to="teaching"
+                className={linkClassName}
+              >
                 {i18n("Teaching")}
               </ToggleNavLink>
             </li>
           )}
           <li>
-            <ToggleNavLink to="programme" className={linkClassName}>
+            <ToggleNavLink
+              id="kpmMenuProgramme"
+              to="programme"
+              className={linkClassName}
+            >
               {i18n("Programme")}
             </ToggleNavLink>
           </li>
           <li>
-            <ToggleNavLink to="groups" className={linkClassName}>
+            <ToggleNavLink
+              id="kpmMenuGroups"
+              to="groups"
+              className={linkClassName}
+            >
               {i18n("Groups")}
             </ToggleNavLink>
           </li>
           <li>
-            <ToggleNavLink to="services" className={linkClassName}>
+            <ToggleNavLink
+              id="kpmMenuServices"
+              to="services"
+              className={linkClassName}
+            >
               {i18n("Services")}
             </ToggleNavLink>
           </li>

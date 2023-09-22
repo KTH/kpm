@@ -2,6 +2,7 @@
 
 exports[`<Groups /> Can be rendered 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal"
 >
   <button
@@ -91,6 +92,7 @@ exports[`<Groups /> Can be rendered 1`] = `
 
 exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal active"
 >
   <button
@@ -220,6 +222,7 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
 
 exports[`<Groups /> Can be rendered with data and one starred 1`] = `
 <dialog
+  aria-modal="true"
   className="kpm-modal active"
 >
   <button

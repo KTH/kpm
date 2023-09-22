@@ -9,7 +9,7 @@ import { useAuthState } from "../state/authState";
 import { LoginWidget } from "./login";
 
 import "./menu.scss";
-import { useOverflowClipOnDemand } from "./menuUtils";
+import { useFocusTrap, useOverflowClipOnDemand } from "./menuUtils";
 
 export function MenuPaneBackdrop({ visible, onClose }: any) {
   const nodeRef = React.useRef<HTMLElement>(null);
@@ -150,26 +150,40 @@ export function MenuPaneWrapper({
     setIsActive(true);
   }, []);
 
+  const doClose = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    // The menu element is recreated during navigation, so we need to find it
+    // by id when we want to restore the focus
+    const _activeMenuEl: HTMLElement | null = document.querySelector(
+      ".kpm-menu > ul > li > .active"
+    );
+    const activeMenuElId = _activeMenuEl?.id;
+    setIsActive(false);
+    // NOTE: This should really listen to transitionEnd
+    // but this is okay and doubles as fallback
+    setTimeout(() => {
+      navigate(-1);
+      // Set focus on the previously active menu item, need timeout to allow
+      // navigation updates to complete
+      setTimeout(() => {
+        const activeMenuEl: HTMLElement | null = document.querySelector(
+          "#" + activeMenuElId
+        );
+        if (activeMenuEl) activeMenuEl.focus();
+      }, 100);
+    }, 310);
+  };
+
   useOverflowClipOnDemand(nodeRef);
+  useFocusTrap(nodeRef, doClose);
 
   let cls = "kpm-modal";
   if (className) cls += " " + className;
   if (isActive) cls += " active";
 
   return (
-    <dialog ref={nodeRef} className={cls}>
-      <button
-        className="kpm-modal-back-button kpm-mobile"
-        onClick={(e) => {
-          e.preventDefault();
-          setIsActive(false);
-          // NOTE: This should really listen to transitionEnd
-          // but this is okay and doubles as fallback
-          setTimeout(() => {
-            navigate(-1);
-          }, 310);
-        }}
-      >
+    <dialog ref={nodeRef} className={cls} aria-modal="true">
+      <button className="kpm-modal-back-button kpm-mobile" onClick={doClose}>
         {i18n("Tillbaka till personliga menyn")}
       </button>
       {children}
