@@ -24,6 +24,21 @@ const KTH_SOCIAL_SUBSCRIPTIONS_URI =
 const KTH_SOCIAL_NOTIFICATIONS_URI =
   "https://www.kth.se/social/notifications/notice_list/";
 
+let menuIsOpen: boolean | undefined;
+function useMenuState(defaultOpen: boolean) {
+  // Only set default on first render
+  if (menuIsOpen === undefined) {
+    menuIsOpen = defaultOpen;
+  }
+
+  const [_isOpen, setIsOpen] = useState(menuIsOpen);
+  const setMenuIsOpen = (state: boolean) => {
+    menuIsOpen = state;
+    setIsOpen(menuIsOpen);
+  };
+  return [menuIsOpen, setMenuIsOpen] as const;
+}
+
 export function Menu() {
   const navigation = useNavigation();
   const location = useLocation();
@@ -32,7 +47,9 @@ export function Menu() {
   // Update CSS --kpm-bar-height
   useSetKpmBarHeight(menuRef);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useMenuState(
+    location.pathname.startsWith("/") && location.pathname.length > 1
+  );
   const [showLogin, setShowLogin] = useLogin();
   const [currentUser] = useAuthState();
 
