@@ -1,20 +1,30 @@
-.kpm-course-rooms-dd-item {
-  $rowGap: 20px;
-  $colGap: $rowGap;
-  display: flex;
-  flex-flow: row nowrap;
-  gap: $rowGap $colGap;
-  align-items: flex-start;
+@use "../vars" as *;
 
-  .kpm-col {
-    min-width: 12ch;
+#kpm-6cf53 .kpm-course-rooms {
+  $rowGap: calc(3 * var(--kpmGap));
+  $colGap: $rowGap;
+
+  menu {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: $rowGap $colGap;
+    align-items: flex-start;
+
+    & > li {
+      margin: 0;
+    }
   }
 
-  .kpm-col.kpm-exam-room-links {
-    max-width: 25ch;
-    a {
-      display: inline;
-      word-wrap: normal;
-    }
+  a {
+    display: inline;
+    word-wrap: normal;
+  }
+
+  .kpm-link-list {
+    min-height: unset!important;
+  }
+
+  @media #{$mblBreakpoint} {
+    padding: 0 calc(3 * var(--kpmPad));
   }
 }

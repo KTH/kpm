@@ -90,7 +90,7 @@ export function Programme() {
       {!isEmpty &&
         programmes &&
         Object.entries(programmes).map(([code, programme]) => (
-          <ProgramItem programCode={code} program={programme} />
+          <ProgramItem key={code} programCode={code} program={programme} />
         ))}
     </MenuPane>
   );
