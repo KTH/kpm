@@ -166,6 +166,7 @@
         & > a:active {
           background-color: var(--kpmMenuHoverBg);
           color: var(--kpmMenuHoverText);
+          outline: none;
 
           &::after {
             background: $data-arrow-expand-black-svg no-repeat;
