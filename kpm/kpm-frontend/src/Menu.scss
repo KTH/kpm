@@ -161,7 +161,9 @@
       height: 100vh;
 
       .kpm-mobile-menu {
-        & > a {
+        & > a,
+        & > a:hover,
+        & > a:active {
           background-color: var(--kpmMenuHoverBg);
           color: var(--kpmMenuHoverText);
 
