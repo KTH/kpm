@@ -14,7 +14,6 @@ import {
   sessionUser,
   TKoppsCourseInfo,
   TKoppsRoundInTerm,
-  TCourseRound,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
