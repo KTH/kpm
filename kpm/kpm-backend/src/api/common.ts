@@ -126,6 +126,7 @@ type TKoppsTermWithCourseRounds = {
 export type TKoppsRoundInTerm = {
   shortName?: string;
   ladokRoundId: string; // A one-digit number
+  applicationCode: string; // A five-digit number
   ladokUID: string; // A full uid
   firstTuitionDate: string; // "YYYY-MM-DD"
   lastTuitionDate: string; // "YYYY-MM-DD"
