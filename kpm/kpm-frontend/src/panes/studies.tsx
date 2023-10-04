@@ -215,8 +215,8 @@ function Course({ courseCode, course }: TCourseProps) {
 }
 
 function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {
-  if (round?.ladokRoundId !== undefined) {
-    return `https://www.kth.se/kurs-pm/${code}/${round.year}${round.term}/${round.ladokRoundId}`;
+  if (round?.applicationCode !== undefined) {
+    return `https://www.kth.se/kurs-pm/${code}/${code}${round.year}${round.term}-${round.applicationCode}`;
   } else {
     return `https://www.kth.se/kurs-pm/${code}/`;
   }

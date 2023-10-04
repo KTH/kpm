@@ -14,7 +14,6 @@ import {
   sessionUser,
   TKoppsCourseInfo,
   TKoppsRoundInTerm,
-  TCourseRound,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
 
@@ -170,6 +169,7 @@ function reduceRoundsObject(
       year,
       term,
       ladokRoundId,
+      applicationCode,
       firstTuitionDate,
       lastTuitionDate,
       shortName,
@@ -186,6 +186,7 @@ function reduceRoundsObject(
         year,
         term,
         ladokRoundId,
+        applicationCode,
         firstTuitionDate,
         lastTuitionDate,
         shortName,

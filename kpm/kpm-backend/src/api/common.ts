@@ -99,15 +99,6 @@ export type TKoppsCourseInfo = {
   rounds: Record<string, TKoppsRoundInTerm[]>; // key is term as "YYYYT"
 };
 
-export type TCourseRound = {
-  term: string; // TODO: Or year + termnumber?
-  shortName?: string;
-  ladokRoundId: string; // A one-digit number
-  ladokUID: string; // A full uid
-  firstTuitionDate: string; // "YYYY-MM-DD"
-  lastTuitionDate: string; // "YYYY-MM-DD"
-};
-
 // This is the relevant parts of what we get from kopps courseroundterms endpoint.
 type TKoppsCourseRoundTerms = {
   course: TKoppsCourseData;
@@ -126,6 +117,7 @@ type TKoppsTermWithCourseRounds = {
 export type TKoppsRoundInTerm = {
   shortName?: string;
   ladokRoundId: string; // A one-digit number
+  applicationCode: string; // A five-digit number
   ladokUID: string; // A full uid
   firstTuitionDate: string; // "YYYY-MM-DD"
   lastTuitionDate: string; // "YYYY-MM-DD"

@@ -61,6 +61,7 @@ export type TStudiesCourseRound = {
   year: number;
   term: "1" | "2";
   ladokRoundId?: string;
+  applicationCode?: string;
   firstTuitionDate?: string; // "YYYY-MM-DD"
   lastTuitionDate?: string; // "YYYY-MM-DD"
   shortName?: string;

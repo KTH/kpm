@@ -13,7 +13,7 @@ export const en: Record<string, string> = {
   cstate_CANCELLED: "Cancelled course",
   cstate_DEACTIVATED: "Deactivated course",
   cstate_ESTABLISHED: "Established course",
-  "Om kursen (kurs-PM m.m.)": "About Course (Course PM etc.)",
+  "Om kursen (kurs-PM m.m.)": "About Course (Course Memo etc.)",
   "Canvas:": "Canvas",
   "Alla kursrum": "All Canvas Rooms",
   "Administrera kurs": "Course Admin",
@@ -22,7 +22,7 @@ export const en: Record<string, string> = {
   Kursdeltagare: "Attendees",
   "Kursinformation i Kopps": "Course Information in Kopps",
   "Redigera introduktion till kursen": "Edit Course Introduction",
-  "Skapa och publicera kurs-PM": "Create and Publish Course PM",
+  "Skapa och publicera kurs-PM": "Create and Publish Course Memo",
   Kursvärdering: "Course Evaluation",
   "Publicera ny kursanalys": "Publish Course Analysis",
   "Se provresultat": "See Results",
@@ -72,7 +72,7 @@ export const en: Record<string, string> = {
   "Export My schedule (e.g. to your mobile phone)":
     "Export My schedule (e.g. to your mobile phone)",
 
-  "Kurs-PM": "Course Description",
+  "Kurs-PM": "Course Memo",
   "i Canvas": "in Canvas",
   VT: "VT",
   HT: "HT",
