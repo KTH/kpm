@@ -16,6 +16,10 @@ import {
   TKoppsRoundInTerm,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
+import {
+  APIUserStudies,
+  TUserCourse as TAPIUserCourse,
+} from "my-studies-api/src/interfaces";
 
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
@@ -26,30 +30,6 @@ const COURSE_STATUS_TO_SHOW = ["registrerade", "omregistrerade"];
 
 type TRoundStatus = "antagna" | "registrerade" | "omregistrerade" | "godkand";
 
-// Copied from my-studies-api:
-export type TApiUserCourse = {
-  type: "kurser";
-  course_code: TCourseCode;
-  status?: TRoundStatus;
-  year?: number;
-  term?: "1" | "2";
-  round?: string;
-};
-// Copied from my-studies-api:
-export type TUserProgramme = {
-  type: "program";
-  program_code: TProgramCode;
-  status?: "antagna" | "godkand" | "registrerade";
-  year?: number;
-  term?: "1" | "2";
-};
-
-// Copied from my-studies-api:
-export type TApiUserStudies = {
-  courses: Record<TCourseCode, TApiUserCourse[]>;
-  programmes: Record<TProgramCode, TUserProgramme[]>;
-};
-
 export async function studiesApiHandler(
   req: Request,
   res: Response<APIStudies>,
@@ -59,7 +39,7 @@ export async function studiesApiHandler(
     const user = sessionUser(req.session);
 
     const studies_fut = got
-      .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
+      .get<APIUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",
         headers: {
           authorization: MY_STUDIES_API_TOKEN,
@@ -95,7 +75,7 @@ export async function studiesApiHandler(
 
       let mytermrounds: Record<
         string,
-        Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
+        Array<TAPIUserCourse & Partial<TKoppsRoundInTerm>>
       > = {};
       for (let role of roles) {
         // Skip roles that does not represent a course round
@@ -155,7 +135,7 @@ export async function studiesApiHandler(
 }
 
 function reduceRoundsObject(
-  roundsInTerm: Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
+  roundsInTerm: Array<TAPIUserCourse & Partial<TKoppsRoundInTerm>>
 ): TStudiesCourseRound[] {
   // Find rounds for a term and determine if it is current based on round start and end date.
   // Re-registrations without a term registration are considered current for the entire term.
