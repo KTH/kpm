@@ -64,7 +64,27 @@ const courseTestCases: { [index: string]: TUserCourse } = {
     course_code: "ÅF210v",
     status: "godkand",
   },
+  "ladok2.kurser.AA.1234.unknown": {
+    type: "kurser",
+    course_code: "AA1234",
+    status: undefined,
+  },
+  "ladok2.kurser.AA.1234.unknown_20211": {
+    type: "kurser",
+    course_code: "AA1234",
+    status: undefined,
+    year: 2021,
+    term: "1",
+  },
 };
+
+// Those are not valid, must return null
+const invalidTestCourses = [
+  "ladok2....",
+  "ladok2.kurser...",
+  "ladok2.kurser..2022",
+  "ladok2.kurser.AA.1234._20211",
+];
 
 const programmeTestCases: { [index: string]: TUserProgram } = {
   "ladok2.program.TIPDM.registrerade_20221": {
@@ -80,7 +100,14 @@ describe("UG REST API response should detect courses", () => {
   test.each(Object.keys(courseTestCases))("%s", (testCase) => {
     const expected = courseTestCases[testCase];
     const output = parseToUserCourse(testCase);
-    expect(expected).toStrictEqual(output);
+    expect(output).toStrictEqual(expected);
+  });
+});
+
+describe("UG REST API response should not return non-course groups", () => {
+  test.each(invalidTestCourses)("%s", (testCase) => {
+    const output = parseToUserCourse(testCase);
+    expect(output).toBeNull();
   });
 });
 
@@ -89,6 +116,6 @@ describe("UG REST API response should detect programmes", () => {
     const expected = programmeTestCases[testCase];
     const output = parseToUserProgram(testCase);
 
-    expect(expected).toStrictEqual(output);
+    expect(output).toStrictEqual(expected);
   });
 });
