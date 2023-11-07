@@ -87,7 +87,9 @@ export async function studiesApiHandler(
 
         // Find kopps round entry by round id hack...
         const round = kopps.rounds[term]?.find(
-          (value) => value.ladokRoundId === role.round
+          (value) =>
+            value.ladokRoundId === role.round ||
+            value.applicationCode === role.round_code
         );
 
         if (role.round && !round) {
