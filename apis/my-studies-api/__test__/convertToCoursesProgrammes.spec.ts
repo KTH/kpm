@@ -77,25 +77,18 @@ const programmeTestCases: { [index: string]: TUserProgram } = {
 };
 
 describe("UG REST API response should detect courses", () => {
-  for (const testCase in courseTestCases) {
+  test.each(Object.keys(courseTestCases))("%s", (testCase) => {
     const expected = courseTestCases[testCase];
-
-    test(testCase, () => {
-      const output = parseToUserCourse(testCase);
-
-      expect(expected).toStrictEqual(output);
-    });
-  }
+    const output = parseToUserCourse(testCase);
+    expect(expected).toStrictEqual(output);
+  });
 });
 
 describe("UG REST API response should detect programmes", () => {
-  for (const testCase in courseTestCases) {
+  test.each(Object.keys(programmeTestCases))("%s", (testCase) => {
     const expected = programmeTestCases[testCase];
+    const output = parseToUserProgram(testCase);
 
-    test(testCase, () => {
-      const output = parseToUserProgram(testCase);
-
-      expect(expected).toStrictEqual(output);
-    });
-  }
+    expect(expected).toStrictEqual(output);
+  });
 });
