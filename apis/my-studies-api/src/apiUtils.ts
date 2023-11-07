@@ -82,14 +82,28 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
 
   const { code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = tmpJson;
 
-  return {
+  const result: TUserCourse = {
     type: "kurser",
     course_code: `${code_pt1}${code_pt2}`,
-    status: ensureInclusion(STUDENT_STATUS, cstatus),
-    year: parseInt(cyear) || undefined,
-    term: ensureInclusion(TERMS, cterm),
-    round: cterm_pt2,
   };
+
+  if (cstatus) {
+    result.status = ensureInclusion(STUDENT_STATUS, cstatus);
+  }
+
+  if (cyear) {
+    result.year = parseInt(cyear, 10) || undefined;
+  }
+
+  if (cterm) {
+    result.term = ensureInclusion(TERMS, cterm);
+  }
+
+  if (cterm_pt2) {
+    result.round = cterm_pt2;
+  }
+
+  return result;
 }
 
 export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
@@ -101,15 +115,26 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
     return null;
   }
 
-  const { code, pstatus, pyear, pterm } = tmpJson;
+  const { type, code, pstatus, pyear, pterm } = tmpJson;
 
-  return {
+  const result: TUserProgram = {
     type: "program",
     program_code: code,
-    status: ensureInclusion(STUDENT_STATUS, pstatus),
-    year: parseInt(pyear) || undefined,
-    term: ensureInclusion(TERMS, pterm),
   };
+
+  if (pstatus) {
+    result.status = ensureInclusion(STUDENT_STATUS, pstatus);
+  }
+
+  if (pyear) {
+    result.year = parseInt(pyear, 10) || undefined;
+  }
+
+  if (pterm) {
+    result.term = ensureInclusion(TERMS, pterm);
+  }
+
+  return result;
 }
 
 /**
@@ -142,4 +167,41 @@ export function convertToObjects(ugGroupNames: string[]): APIUserStudies {
   }
 
   return result;
+}
+
+export function convertToCourseObjects(inp: string[]): TUserCourse[] {
+  const courseRegex =
+    /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
+  const tmpJson = inp
+    ?.map((o) => o.match(courseRegex)?.groups)
+    .filter((o) => o && o.type === "kurser");
+  return tmpJson?.map((o: any) => {
+    const { type, code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = o;
+    return {
+      type,
+      course_code: `${code_pt1}${code_pt2}`,
+      status: cstatus,
+      year: parseInt(cyear) || undefined,
+      term: cterm,
+      round: cterm_pt2, // QUESTION: Is this really round id or perhaps section or something similar? Matches the last number of "registrerade_20221.1"
+    };
+  });
+}
+
+export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
+  const progrRegex =
+    /^ladok2\.(?<type>program)\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+  const tmpJson = inp
+    ?.map((o) => o.match(progrRegex)?.groups)
+    .filter((o) => o && o.type === "program");
+  return tmpJson?.map((o: any) => {
+    const { type, code, pstatus, pyear, pterm } = o;
+    return {
+      type,
+      program_code: code,
+      status: pstatus,
+      year: parseInt(pyear) || undefined,
+      term: pterm,
+    };
+  });
 }
