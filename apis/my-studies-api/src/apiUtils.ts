@@ -66,7 +66,7 @@ function ensureInclusion<T extends U, U>(
 }
 
 const courseRegex =
-  /^ladok2\.kurser\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cstatus>[^\._]+)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
 
 /**
  * Parse a UG group name
@@ -108,7 +108,7 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
 
 export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   const progrRegex =
-    /^ladok2\.program\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+    /^ladok2\.program\.(?<code>[^\.]+)\.((?<pstatus>[^\._]+)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
   const tmpJson = ugGroupName.match(progrRegex)?.groups;
 
   if (!tmpJson) {
