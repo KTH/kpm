@@ -10,14 +10,17 @@ export type APIUserStudies = {
 
 // TODO: Missing APIXXXErrType definitions
 
+export const STUDENT_STATUS = ["antagna", "godkand", "registrerade"] as const;
+export const TERMS = ["1", "2"] as const;
+
 /**
  * Entities
  */
 export type TCourseCode = string;
 export type TUserCourse = {
-  type: string;
+  type: "kurser";
   course_code: TCourseCode;
-  status?: "antagna" | "godkand" | "registrerade";
+  status?: (typeof STUDENT_STATUS)[number];
   year?: number;
   term?: "1" | "2";
   round?: string;
@@ -27,7 +30,7 @@ export type TProgramCode = string;
 export type TUserProgram = {
   type: "program";
   program_code: TProgramCode;
-  status?: "antagna" | "godkand" | "registrerade";
+  status?: (typeof STUDENT_STATUS)[number];
   year?: number;
   term?: "1" | "2";
 };

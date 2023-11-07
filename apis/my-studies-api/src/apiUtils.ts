@@ -1,4 +1,10 @@
-import { TUserCourse, TUserProgram } from "./interfaces";
+import {
+  APIUserStudies,
+  STUDENT_STATUS,
+  TERMS,
+  TUserCourse,
+  TUserProgram,
+} from "./interfaces";
 
 /*
   Don't panic, it is just a regex! :D The trick is optional match groups (...)? and optional matches |
@@ -45,39 +51,95 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
   };
 }
 
-export function convertToCourseObjects(inp: string[]): TUserCourse[] {
-  const courseRegex =
-    /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
-  const tmpJson = inp
-    ?.map((o) => o.match(courseRegex)?.groups)
-    .filter((o) => o && o.type === "kurser");
-  return tmpJson?.map((o: any) => {
-    const { type, code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = o;
-    return {
-      type,
-      course_code: `${code_pt1}${code_pt2}`,
-      status: cstatus,
-      year: parseInt(cyear) || undefined,
-      term: cterm,
-      round: cterm_pt2, // QUESTION: Is this really round id or perhaps section or something similar? Matches the last number of "registrerade_20221.1"
-    };
-  });
+/**
+ * Given an array `arr` and an element `el`, returns `el` if  is member of `arr`,
+ * `undefined` otherwise.
+ *
+ * If `arr` is defined as narrower type of array, ensures that returned element
+ * has the narrow type
+ */
+function ensureInclusion<T extends U, U>(
+  arr: ReadonlyArray<T>,
+  el: U
+): T | undefined {
+  return arr.includes(el as T) ? (el as T) : undefined;
 }
 
-export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
+const courseRegex =
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
+
+/**
+ * Parse a UG group name
+ *
+ * @return a course if the group name is a course, null otherwise
+ */
+export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
+  const tmpJson = ugGroupName.match(courseRegex)?.groups;
+
+  if (!tmpJson) {
+    return null;
+  }
+
+  const { code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = tmpJson;
+
+  return {
+    type: "kurser",
+    course_code: `${code_pt1}${code_pt2}`,
+    status: ensureInclusion(STUDENT_STATUS, cstatus),
+    year: parseInt(cyear) || undefined,
+    term: ensureInclusion(TERMS, cterm),
+    round: cterm_pt2,
+  };
+}
+
+export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   const progrRegex =
-    /^ladok2\.(?<type>program)\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
-  const tmpJson = inp
-    ?.map((o) => o.match(progrRegex)?.groups)
-    .filter((o) => o && o.type === "program");
-  return tmpJson?.map((o: any) => {
-    const { type, code, pstatus, pyear, pterm } = o;
-    return {
-      type,
-      program_code: code,
-      status: pstatus,
-      year: parseInt(pyear) || undefined,
-      term: pterm,
-    };
-  });
+    /^ladok2\.program\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+  const tmpJson = ugGroupName.match(progrRegex)?.groups;
+
+  if (!tmpJson) {
+    return null;
+  }
+
+  const { code, pstatus, pyear, pterm } = tmpJson;
+
+  return {
+    type: "program",
+    program_code: code,
+    status: ensureInclusion(STUDENT_STATUS, pstatus),
+    year: parseInt(pyear) || undefined,
+    term: ensureInclusion(TERMS, pterm),
+  };
+}
+
+/**
+ * Get program and course objects from a list of UG group names.
+ */
+export function convertToObjects(ugGroupNames: string[]): APIUserStudies {
+  const result: APIUserStudies = {
+    courses: {},
+    programmes: {},
+  };
+
+  const allCourseGroups = ugGroupNames.map(parseToUserCourse);
+  for (const course of allCourseGroups) {
+    if (!course) {
+      continue;
+    }
+
+    result.courses[course.course_code] ??= [];
+    result.courses[course.course_code].push(course);
+  }
+
+  const allProgramGroups = ugGroupNames.map(parseToUserProgram);
+  for (const program of allProgramGroups) {
+    if (!program) {
+      continue;
+    }
+
+    result.courses[program.program_code] ??= [];
+    result.programmes[program.program_code].push(program);
+  }
+
+  return result;
 }

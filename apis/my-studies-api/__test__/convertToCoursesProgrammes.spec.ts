@@ -1,7 +1,9 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import {
-  convertToCourseObjects,
-  convertToProgrammeObjects,
+  parseToUserCourse,
+  parseToUserProgram,
+  // convertToCourseObjects,
+  // convertToProgrammeObjects,
 } from "../src/apiUtils";
 import { TUserCourse, TUserProgram } from "../src/interfaces";
 
@@ -75,21 +77,25 @@ const programmeTestCases: { [index: string]: TUserProgram } = {
 };
 
 describe("UG REST API response should detect courses", () => {
-  for (const testCase of Object.keys(courseTestCases)) {
+  for (const testCase in courseTestCases) {
+    const expected = courseTestCases[testCase];
+
     test(testCase, () => {
-      const tmp = convertToCourseObjects([testCase]);
-      const res = JSON.parse(JSON.stringify(tmp[0]));
-      expect(res).toStrictEqual(courseTestCases[testCase]);
+      const output = parseToUserCourse(testCase);
+
+      expect(expected).toStrictEqual(output);
     });
   }
 });
 
 describe("UG REST API response should detect programmes", () => {
-  for (const testCase of Object.keys(programmeTestCases)) {
+  for (const testCase in courseTestCases) {
+    const expected = programmeTestCases[testCase];
+
     test(testCase, () => {
-      const tmp = convertToProgrammeObjects([testCase]);
-      const res = JSON.parse(JSON.stringify(tmp[0]));
-      expect(res).toStrictEqual(programmeTestCases[testCase]);
+      const output = parseToUserProgram(testCase);
+
+      expect(expected).toStrictEqual(output);
     });
   }
 });
