@@ -65,8 +65,11 @@ function ensureInclusion<T extends U, U>(
   return arr.includes(el as T) ? (el as T) : undefined;
 }
 
-const courseRegex =
-  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cstatus>[^\._]+)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
+const courseRegexOld =
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cstatus>[^\.\d]+)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
+
+const courseRegexNew =
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<roundCode>\w+)(\.(?<cstatus>[^\.]+)?)?)?)?$/i;
 
 /**
  * Parse a UG group name
@@ -74,7 +77,7 @@ const courseRegex =
  * @return a course if the group name is a course, null otherwise
  */
 export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
-  const tmpJson = ugGroupName.match(courseRegex)?.groups;
+  const tmpJson = ugGroupName.match(courseRegexOld)?.groups;
 
   if (!tmpJson) {
     return null;
@@ -101,6 +104,48 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
 
   if (cterm_pt2) {
     result.round = cterm_pt2;
+  }
+
+  return result;
+}
+
+export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
+  const tmpJson = ugGroupName.match(courseRegexNew)?.groups;
+
+  if (!tmpJson) {
+    return null;
+  }
+
+  const { code_pt1, code_pt2, cyear, cterm, roundCode, cstatus } = tmpJson;
+
+  const result: TUserCourse = {
+    type: "kurser",
+    course_code: `${code_pt1}${code_pt2}`,
+  };
+
+  // New status are called "registrerad", "antagen" and "godkand"
+  if (cstatus === "registrerad") {
+    result.status = "registrerade";
+  }
+
+  if (cstatus === "antagen") {
+    result.status = "antagna";
+  }
+
+  if (cstatus === "godkand") {
+    result.status = "godkand";
+  }
+
+  if (cyear) {
+    result.year = parseInt(cyear, 10) || undefined;
+  }
+
+  if (cterm) {
+    result.term = ensureInclusion(TERMS, cterm);
+  }
+
+  if (roundCode) {
+    result.round_code = roundCode;
   }
 
   return result;
@@ -146,7 +191,9 @@ export function convertToObjects(ugGroupNames: string[]): APIUserStudies {
     programmes: {},
   };
 
-  const allCourseGroups = ugGroupNames.map(parseToUserCourse);
+  const allCourseGroups = ugGroupNames.map(
+    (name) => parseToUserCourse(name) ?? parseToUserCourseNew(name)
+  );
   for (const course of allCourseGroups) {
     if (!course) {
       continue;

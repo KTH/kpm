@@ -24,6 +24,7 @@ export type TUserCourse = {
   year?: number;
   term?: "1" | "2";
   round?: string;
+  round_code?: string;
 };
 
 export type TProgramCode = string;
