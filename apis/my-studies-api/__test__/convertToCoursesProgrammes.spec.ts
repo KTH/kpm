@@ -1,10 +1,5 @@
-import { describe, expect, jest, test } from "@jest/globals";
-import {
-  parseToUserCourse,
-  parseToUserProgram,
-  // convertToCourseObjects,
-  // convertToProgrammeObjects,
-} from "../src/apiUtils";
+import { describe, expect, test } from "@jest/globals";
+import { parseToUserCourse, parseToUserProgram } from "../src/apiUtils";
 import { TUserCourse, TUserProgram } from "../src/interfaces";
 
 // ladok2.kurser.SE.1020
