@@ -96,6 +96,14 @@ const programmeTestCases: { [index: string]: TUserProgram } = {
   },
 };
 
+// Those are not valid, must return null
+const invalidTestProgrammes = [
+  "ladok2....",
+  "ladok2.program...",
+  "ladok2.program..2022",
+  "ladok2.program.A._20211",
+];
+
 describe("UG REST API response should detect courses", () => {
   test.each(Object.keys(courseTestCases))("%s", (testCase) => {
     const expected = courseTestCases[testCase];
@@ -117,5 +125,12 @@ describe("UG REST API response should detect programmes", () => {
     const output = parseToUserProgram(testCase);
 
     expect(output).toStrictEqual(expected);
+  });
+});
+
+describe("UG REST API response should not return non-course groups", () => {
+  test.each(invalidTestProgrammes)("%s", (testCase) => {
+    const output = parseToUserProgram(testCase);
+    expect(output).toBeNull();
   });
 });
