@@ -7,7 +7,7 @@ import {
   getListOfCourseProgrammeNames,
 } from "./apiUtils";
 import {
-  APIUserStudies,
+  TAPIUserStudies,
   TCourseCode,
   TProgramCode,
   TUserCourse,
@@ -57,7 +57,7 @@ const ugClient = new UGRestClient({
 
 api.get(
   "/user/:user",
-  async (req: Request, res: Response<APIUserStudies>, next: NextFunction) => {
+  async (req: Request, res: Response<TAPIUserStudies>, next: NextFunction) => {
     try {
       const userName = req.params.user;
 

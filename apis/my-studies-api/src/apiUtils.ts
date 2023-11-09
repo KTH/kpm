@@ -1,5 +1,5 @@
 import {
-  APIUserStudies,
+  TAPIUserStudies,
   STUDENT_STATUS,
   TERMS,
   TUserCourse,
@@ -185,8 +185,8 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
 /**
  * Get program and course objects from a list of UG group names.
  */
-export function convertToObjects(ugGroupNames: string[]): APIUserStudies {
-  const result: APIUserStudies = {
+export function convertToObjects(ugGroupNames: string[]): TAPIUserStudies {
+  const result: TAPIUserStudies = {
     courses: {},
     programmes: {},
   };

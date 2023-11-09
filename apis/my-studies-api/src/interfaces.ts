@@ -3,7 +3,7 @@
  *
  * Each endpoint has a payload type definition and an error type definition.
  */
-export type APIUserStudies = {
+export type TAPIUserStudies = {
   courses: Record<TCourseCode, TUserCourse[]>;
   programmes: Record<TProgramCode, TUserProgram[]>;
 };
