@@ -58,11 +58,11 @@ export function getListOfCourseProgrammeNames(inp: string[]) {
  * If `arr` is defined as narrower type of array, ensures that returned element
  * has the narrow type
  */
-function ensureInclusion<T extends U, U>(
+function typedFind<T extends U, U>(
   arr: ReadonlyArray<T>,
   el: U
 ): T | undefined {
-  return arr.includes(el as T) ? (el as T) : undefined;
+  return arr.find((e) => e === el);
 }
 
 const courseRegexOld =
@@ -91,7 +91,7 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
   };
 
   if (cstatus) {
-    result.status = ensureInclusion(STUDENT_STATUS, cstatus);
+    result.status = typedFind(STUDENT_STATUS, cstatus);
   }
 
   if (cyear) {
@@ -99,7 +99,7 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
   }
 
   if (cterm) {
-    result.term = ensureInclusion(TERMS, cterm);
+    result.term = typedFind(TERMS, cterm);
   }
 
   if (cterm_pt2) {
@@ -141,7 +141,7 @@ export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
   }
 
   if (cterm) {
-    result.term = ensureInclusion(TERMS, cterm);
+    result.term = typedFind(TERMS, cterm);
   }
 
   if (roundCode) {
@@ -168,7 +168,7 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   };
 
   if (pstatus) {
-    result.status = ensureInclusion(STUDENT_STATUS, pstatus);
+    result.status = typedFind(STUDENT_STATUS, pstatus);
   }
 
   if (pyear) {
@@ -176,7 +176,7 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   }
 
   if (pterm) {
-    result.term = ensureInclusion(TERMS, pterm);
+    result.term = typedFind(TERMS, pterm);
   }
 
   return result;
