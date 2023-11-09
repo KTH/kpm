@@ -77,11 +77,9 @@ api.get(
         }
       }
 
-      const { courseNames, programmeNames } = getListOfCourseProgrammeNames(
-        json![0]?.memberOf.map((o) => o.name)
-      );
+      const allGroupNames = json![0]?.memberOf.map((o) => o.name);
 
-      res.status(statusCode || 200).send(convertToObjects(courseNames));
+      res.status(statusCode || 200).send(parseUgGroupNames(allGroupNames));
     } catch (err) {
       next(err);
     }
