@@ -85,13 +85,13 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
 }
 
 export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
-  const tmpJson = ugGroupName.match(courseRegexNew)?.groups;
+  const regexMatch = ugGroupName.match(courseRegexNew)?.groups;
 
-  if (!tmpJson) {
+  if (!regexMatch) {
     return null;
   }
 
-  const { code_pt1, code_pt2, cyear, cterm, roundCode, cstatus } = tmpJson;
+  const { code_pt1, code_pt2, cyear, cterm, roundCode, cstatus } = regexMatch;
 
   const result: TUserCourse = {
     type: "kurser",
@@ -129,13 +129,13 @@ export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
 export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   const progrRegex =
     /^ladok2\.program\.(?<code>[^\.]+)\.((?<pstatus>[^\._]+)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
-  const tmpJson = ugGroupName.match(progrRegex)?.groups;
+  const regexMatch = ugGroupName.match(progrRegex)?.groups;
 
-  if (!tmpJson) {
+  if (!regexMatch) {
     return null;
   }
 
-  const { type, code, pstatus, pyear, pterm } = tmpJson;
+  const { type, code, pstatus, pyear, pterm } = regexMatch;
 
   const result: TUserProgram = {
     type: "program",
