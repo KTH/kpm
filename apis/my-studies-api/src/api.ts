@@ -1,18 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
-import {
-  convertToObjects,
-  // convertToCourseObjects,
-  // convertToProgrammeObjects,
-  getListOfCourseProgrammeNames,
-} from "./apiUtils";
-import {
-  TAPIUserStudies,
-  TCourseCode,
-  TProgramCode,
-  TUserCourse,
-  TUserProgram,
-} from "./interfaces";
+import { parseUgGroupNames } from "./apiUtils";
+import { TAPIUserStudies } from "./interfaces";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in

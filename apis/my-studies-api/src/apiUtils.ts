@@ -25,31 +25,6 @@ import {
   ladok2.kurser.ÅF.2102.godkand
   ladok2.kurser.ÅF.210v.godkand
 */
-export function getListOfCourseProgrammeNames(inp: string[]) {
-  if (inp === undefined)
-    return {
-      courseNames: [],
-      programmeNames: [],
-    };
-
-  const splitRegex = /^ladok2\.(?<type>[^\.]*)\./i;
-  const courseNames: string[] = [];
-  const programmeNames: string[] = [];
-  inp.forEach((name) => {
-    const tmp = name.match(splitRegex)?.groups;
-    if (tmp?.type === "kurser") {
-      return courseNames.push(name);
-    }
-    if (tmp?.type === "program") {
-      return programmeNames.push(name);
-    }
-  });
-
-  return {
-    courseNames,
-    programmeNames,
-  };
-}
 
 /**
  * Given an array `arr` and an element `el`, returns `el` if  is member of `arr`,
@@ -185,7 +160,7 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
 /**
  * Get program and course objects from a list of UG group names.
  */
-export function convertToObjects(ugGroupNames: string[]): TAPIUserStudies {
+export function parseUgGroupNames(ugGroupNames: string[]): TAPIUserStudies {
   const result: TAPIUserStudies = {
     courses: {},
     programmes: {},
