@@ -12,6 +12,7 @@ export type APIUserStudies = {
 
 export const STUDENT_STATUS = ["antagna", "godkand", "registrerade"] as const;
 export const TERMS = ["1", "2"] as const;
+export type TStudentStatus = (typeof STUDENT_STATUS)[number];
 
 /**
  * Entities
@@ -20,7 +21,7 @@ export type TCourseCode = string;
 export type TUserCourse = {
   type: "kurser";
   course_code: TCourseCode;
-  status?: (typeof STUDENT_STATUS)[number];
+  status?: TStudentStatus;
   year?: number;
   term?: "1" | "2";
   round?: string;
@@ -31,7 +32,7 @@ export type TProgramCode = string;
 export type TUserProgram = {
   type: "program";
   program_code: TProgramCode;
-  status?: (typeof STUDENT_STATUS)[number];
+  status?: TStudentStatus;
   year?: number;
   term?: "1" | "2";
 };
