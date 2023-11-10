@@ -4,7 +4,7 @@ import {
   parseToUserCourseNew,
   parseToUserProgram,
 } from "../src/apiUtils";
-import { TUserCourse, TUserProgram } from "../src/interfaces";
+import { TApiUserCourse, TUserProgram } from "../src/interfaces";
 
 // ladok2.kurser.SE.1020
 // ladok2.kurser.ME.2053.antagna_20222
@@ -16,7 +16,7 @@ import { TUserCourse, TUserProgram } from "../src/interfaces";
 // ladok2.kurser.ÅF.2102.godkand
 // ladok2.kurser.ÅF.210v.godkand
 
-const courseTestCases: { [index: string]: TUserCourse } = {
+const courseTestCases: { [index: string]: TApiUserCourse } = {
   "ladok2.kurser.SE.1020": {
     type: "kurser",
     course_code: "SE1020",

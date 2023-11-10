@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { useAuthState } from "./state/authState";
 import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";

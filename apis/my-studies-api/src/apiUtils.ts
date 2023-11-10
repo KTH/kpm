@@ -1,8 +1,8 @@
 import {
-  TAPIUserStudies,
+  APIUserStudies,
   STUDENT_STATUS,
   TERMS,
-  TUserCourse,
+  TApiUserCourse,
   TUserProgram,
 } from "./interfaces";
 
@@ -51,7 +51,7 @@ const courseRegexNew =
  *
  * @return a course if the group name is a course, null otherwise
  */
-export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
+export function parseToUserCourse(ugGroupName: string): TApiUserCourse | null {
   const tmpJson = ugGroupName.match(courseRegexOld)?.groups;
 
   if (!tmpJson) {
@@ -60,7 +60,7 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
 
   const { code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = tmpJson;
 
-  const result: TUserCourse = {
+  const result: TApiUserCourse = {
     type: "kurser",
     course_code: `${code_pt1}${code_pt2}`,
   };
@@ -84,7 +84,9 @@ export function parseToUserCourse(ugGroupName: string): TUserCourse | null {
   return result;
 }
 
-export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
+export function parseToUserCourseNew(
+  ugGroupName: string
+): TApiUserCourse | null {
   const regexMatch = ugGroupName.match(courseRegexNew)?.groups;
 
   if (!regexMatch) {
@@ -93,7 +95,7 @@ export function parseToUserCourseNew(ugGroupName: string): TUserCourse | null {
 
   const { code_pt1, code_pt2, cyear, cterm, roundCode, cstatus } = regexMatch;
 
-  const result: TUserCourse = {
+  const result: TApiUserCourse = {
     type: "kurser",
     course_code: `${code_pt1}${code_pt2}`,
   };
@@ -160,8 +162,8 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
 /**
  * Get program and course objects from a list of UG group names.
  */
-export function parseUgGroupNames(ugGroupNames: string[]): TAPIUserStudies {
-  const result: TAPIUserStudies = {
+export function parseUgGroupNames(ugGroupNames: string[]): APIUserStudies {
+  const result: APIUserStudies = {
     courses: {},
     programmes: {},
   };

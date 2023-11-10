@@ -16,10 +16,7 @@ import {
   TKoppsRoundInTerm,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
-import {
-  APIUserStudies,
-  TUserCourse as TAPIUserCourse,
-} from "my-studies-api/src/interfaces";
+import { APIUserStudies, TApiUserCourse } from "my-studies-api/src/interfaces";
 
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
@@ -75,7 +72,7 @@ export async function studiesApiHandler(
 
       let mytermrounds: Record<
         string,
-        Array<TAPIUserCourse & Partial<TKoppsRoundInTerm>>
+        Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
       > = {};
       for (let role of roles) {
         // Skip roles that does not represent a course round
@@ -137,7 +134,7 @@ export async function studiesApiHandler(
 }
 
 function reduceRoundsObject(
-  roundsInTerm: Array<TAPIUserCourse & Partial<TKoppsRoundInTerm>>
+  roundsInTerm: Array<TApiUserCourse & Partial<TKoppsRoundInTerm>>
 ): TStudiesCourseRound[] {
   // Find rounds for a term and determine if it is current based on round start and end date.
   // Re-registrations without a term registration are considered current for the entire term.

@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
 import { parseUgGroupNames } from "./apiUtils";
-import { TAPIUserStudies } from "./interfaces";
+import { APIUserStudies } from "./interfaces";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in
@@ -46,7 +46,7 @@ const ugClient = new UGRestClient({
 
 api.get(
   "/user/:user",
-  async (req: Request, res: Response<TAPIUserStudies>, next: NextFunction) => {
+  async (req: Request, res: Response<APIUserStudies>, next: NextFunction) => {
     try {
       const userName = req.params.user;
 

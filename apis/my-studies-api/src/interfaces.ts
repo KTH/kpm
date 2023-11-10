@@ -3,8 +3,8 @@
  *
  * Each endpoint has a payload type definition and an error type definition.
  */
-export type TAPIUserStudies = {
-  courses: Record<TCourseCode, TUserCourse[]>;
+export type APIUserStudies = {
+  courses: Record<TCourseCode, TApiUserCourse[]>;
   programmes: Record<TProgramCode, TUserProgram[]>;
 };
 
@@ -18,7 +18,7 @@ export type TStudentStatus = (typeof STUDENT_STATUS)[number];
  * Entities
  */
 export type TCourseCode = string;
-export type TUserCourse = {
+export type TApiUserCourse = {
   type: "kurser";
   course_code: TCourseCode;
   status?: TStudentStatus;
