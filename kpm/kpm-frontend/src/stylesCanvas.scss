@@ -46,7 +46,8 @@ body.use-personal-menu .bcs__trigger {
 // what canvas uses for tooltips, so here's hoping this is specific
 // enough.
 // WARNING: This is fragile, we are asuming that the Popover designation is consitently used. /jhsware
-body > span > span[data-position-content*="Popover"] {
+body > span > span[data-position-content*="Popover"],
+body > span > span[data-position-content*="Menu"] {
   margin-top: calc(-1 * var(--kpm-bar-height));
 }
 
