@@ -1,17 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { UGRestClient, UGRestClientError } from "kpm-ug-rest-client";
-import {
-  convertToCourseObjects,
-  convertToProgrammeObjects,
-  getListOfCourseProgrammeNames,
-} from "./apiUtils";
-import {
-  APIUserStudies,
-  TCourseCode,
-  TProgramCode,
-  TUserCourse,
-  TUserProgram,
-} from "./interfaces";
+import { parseUgGroupNames } from "./apiUtils";
+import { APIUserStudies } from "./interfaces";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 const CLIENT_ID = process.env.CLIENT_ID!; // Required in .env.in
@@ -76,33 +66,9 @@ api.get(
         }
       }
 
-      const { courseNames, programmeNames } = getListOfCourseProgrammeNames(
-        json![0]?.memberOf.map((o) => o.name)
-      );
+      const allGroupNames = json![0]?.memberOf.map((o) => o.name);
 
-      let courses: { [index: TCourseCode]: TUserCourse[] } = {};
-      for (const obj of convertToCourseObjects(courseNames)) {
-        let course_code = obj.course_code;
-        if (courses[course_code]) {
-          courses[course_code].push(obj);
-        } else {
-          courses[course_code] = [obj];
-        }
-      }
-      let programmes: { [index: TProgramCode]: TUserProgram[] } = {};
-      for (const obj of convertToProgrammeObjects(programmeNames)) {
-        let program_code = obj.program_code;
-        if (programmes[program_code]) {
-          programmes[program_code].push(obj);
-        } else {
-          programmes[program_code] = [obj];
-        }
-      }
-
-      res.status(statusCode || 200).send({
-        courses,
-        programmes,
-      });
+      res.status(statusCode || 200).send(parseUgGroupNames(allGroupNames));
     } catch (err) {
       next(err);
     }

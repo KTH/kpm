@@ -1,4 +1,10 @@
-import { TUserCourse, TUserProgram } from "./interfaces";
+import {
+  APIUserStudies,
+  STUDENT_STATUS,
+  TERMS,
+  TApiUserCourse,
+  TUserProgram,
+} from "./interfaces";
 
 /*
   Don't panic, it is just a regex! :D The trick is optional match groups (...)? and optional matches |
@@ -19,65 +25,156 @@ import { TUserCourse, TUserProgram } from "./interfaces";
   ladok2.kurser.ÅF.2102.godkand
   ladok2.kurser.ÅF.210v.godkand
 */
-export function getListOfCourseProgrammeNames(inp: string[]) {
-  if (inp === undefined)
-    return {
-      courseNames: [],
-      programmeNames: [],
-    };
 
-  const splitRegex = /^ladok2\.(?<type>[^\.]*)\./i;
-  const courseNames: string[] = [];
-  const programmeNames: string[] = [];
-  inp.forEach((name) => {
-    const tmp = name.match(splitRegex)?.groups;
-    if (tmp?.type === "kurser") {
-      return courseNames.push(name);
-    }
-    if (tmp?.type === "program") {
-      return programmeNames.push(name);
-    }
-  });
+const courseRegexOld =
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cstatus>[^\.\d]+)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
 
-  return {
-    courseNames,
-    programmeNames,
+const courseRegexNew =
+  /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<roundCode>\w+)(\.(?<cstatus>[^\.]+)?)?)?)?$/i;
+
+/**
+ * Parse a UG group name
+ *
+ * @return a course if the group name is a course, null otherwise
+ */
+export function parseToUserCourse(ugGroupName: string): TApiUserCourse | null {
+  const tmpJson = ugGroupName.match(courseRegexOld)?.groups;
+
+  if (!tmpJson) {
+    return null;
+  }
+
+  const { code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = tmpJson;
+
+  const result: TApiUserCourse = {
+    type: "kurser",
+    course_code: `${code_pt1}${code_pt2}`,
   };
+
+  if (cstatus) {
+    result.status = STUDENT_STATUS.find((s) => s === cstatus);
+  }
+
+  if (cyear) {
+    result.year = parseInt(cyear, 10) || undefined;
+  }
+
+  if (cterm) {
+    result.term = TERMS.find((t) => t === cterm);
+  }
+
+  if (cterm_pt2) {
+    result.round = cterm_pt2;
+  }
+
+  return result;
 }
 
-export function convertToCourseObjects(inp: string[]): TUserCourse[] {
-  const courseRegex =
-    /^ladok2\.(?<type>kurser)\.(?<code_pt1>[^\.]*)\.(?<code_pt2>[^\.]*)(\.(?<cstatus>[^\._]*)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
-  const tmpJson = inp
-    ?.map((o) => o.match(courseRegex)?.groups)
-    .filter((o) => o && o.type === "kurser");
-  return tmpJson?.map((o: any) => {
-    const { type, code_pt1, code_pt2, cstatus, cyear, cterm, cterm_pt2 } = o;
-    return {
-      type,
-      course_code: `${code_pt1}${code_pt2}`,
-      status: cstatus,
-      year: parseInt(cyear) || undefined,
-      term: cterm,
-      round: cterm_pt2, // QUESTION: Is this really round id or perhaps section or something similar? Matches the last number of "registrerade_20221.1"
-    };
-  });
+export function parseToUserCourseNew(
+  ugGroupName: string
+): TApiUserCourse | null {
+  const regexMatch = ugGroupName.match(courseRegexNew)?.groups;
+
+  if (!regexMatch) {
+    return null;
+  }
+
+  const { code_pt1, code_pt2, cyear, cterm, roundCode, cstatus } = regexMatch;
+
+  const result: TApiUserCourse = {
+    type: "kurser",
+    course_code: `${code_pt1}${code_pt2}`,
+  };
+
+  // New status are called "registrerad", "antagen" and "godkand"
+  if (cstatus === "registrerad") {
+    result.status = "registrerade";
+  }
+
+  if (cstatus === "antagen") {
+    result.status = "antagna";
+  }
+
+  if (cstatus === "godkand") {
+    result.status = "godkand";
+  }
+
+  if (cyear) {
+    result.year = parseInt(cyear, 10) || undefined;
+  }
+
+  if (cterm) {
+    result.term = TERMS.find((t) => t === cterm);
+  }
+
+  if (roundCode) {
+    result.round_code = roundCode;
+  }
+
+  return result;
 }
 
-export function convertToProgrammeObjects(inp: string[]): TUserProgram[] {
+export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   const progrRegex =
-    /^ladok2\.(?<type>program)\.(?<code>[^\.]*)\.((?<pstatus>[^\._]*)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
-  const tmpJson = inp
-    ?.map((o) => o.match(progrRegex)?.groups)
-    .filter((o) => o && o.type === "program");
-  return tmpJson?.map((o: any) => {
-    const { type, code, pstatus, pyear, pterm } = o;
-    return {
-      type,
-      program_code: code,
-      status: pstatus,
-      year: parseInt(pyear) || undefined,
-      term: pterm,
-    };
-  });
+    /^ladok2\.program\.(?<code>[^\.]+)\.((?<pstatus>[^\._]+)_(?<pyear>\d{4})(?<pterm>\d{1}))$/i;
+  const regexMatch = ugGroupName.match(progrRegex)?.groups;
+
+  if (!regexMatch) {
+    return null;
+  }
+
+  const { type, code, pstatus, pyear, pterm } = regexMatch;
+
+  const result: TUserProgram = {
+    type: "program",
+    program_code: code,
+  };
+
+  if (pstatus) {
+    result.status = STUDENT_STATUS.find((s) => s === pstatus);
+  }
+
+  if (pyear) {
+    result.year = parseInt(pyear, 10) || undefined;
+  }
+
+  if (pterm) {
+    result.term = TERMS.find((t) => t === pterm);
+  }
+
+  return result;
+}
+
+/**
+ * Get program and course objects from a list of UG group names.
+ */
+export function parseUgGroupNames(ugGroupNames: string[]): APIUserStudies {
+  const result: APIUserStudies = {
+    courses: {},
+    programmes: {},
+  };
+
+  const allCourseGroups = ugGroupNames.map(
+    (name) => parseToUserCourse(name) ?? parseToUserCourseNew(name)
+  );
+  for (const course of allCourseGroups) {
+    if (!course) {
+      continue;
+    }
+
+    result.courses[course.course_code] ??= [];
+    result.courses[course.course_code].push(course);
+  }
+
+  const allProgramGroups = ugGroupNames.map(parseToUserProgram);
+  for (const program of allProgramGroups) {
+    if (!program) {
+      continue;
+    }
+
+    result.courses[program.program_code] ??= [];
+    result.programmes[program.program_code].push(program);
+  }
+
+  return result;
 }

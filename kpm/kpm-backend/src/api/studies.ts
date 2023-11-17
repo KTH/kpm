@@ -16,6 +16,7 @@ import {
   TKoppsRoundInTerm,
 } from "./common";
 import { handleCommonGotErrors } from "./commonErrors";
+import { APIUserStudies, TApiUserCourse } from "my-studies-api/src/interfaces";
 
 const MY_STUDIES_API_URI =
   process.env.MY_STUDIES_API_URI || "http://localhost:3003/kpm/studies";
@@ -26,30 +27,6 @@ const COURSE_STATUS_TO_SHOW = ["registrerade", "omregistrerade"];
 
 type TRoundStatus = "antagna" | "registrerade" | "omregistrerade" | "godkand";
 
-// Copied from my-studies-api:
-export type TApiUserCourse = {
-  type: "kurser";
-  course_code: TCourseCode;
-  status?: TRoundStatus;
-  year?: number;
-  term?: "1" | "2";
-  round?: string;
-};
-// Copied from my-studies-api:
-export type TUserProgramme = {
-  type: "program";
-  program_code: TProgramCode;
-  status?: "antagna" | "godkand" | "registrerade";
-  year?: number;
-  term?: "1" | "2";
-};
-
-// Copied from my-studies-api:
-export type TApiUserStudies = {
-  courses: Record<TCourseCode, TApiUserCourse[]>;
-  programmes: Record<TProgramCode, TUserProgramme[]>;
-};
-
 export async function studiesApiHandler(
   req: Request,
   res: Response<APIStudies>,
@@ -59,7 +36,7 @@ export async function studiesApiHandler(
     const user = sessionUser(req.session);
 
     const studies_fut = got
-      .get<TApiUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
+      .get<APIUserStudies>(`${MY_STUDIES_API_URI}/user/${user.kthid}`, {
         responseType: "json",
         headers: {
           authorization: MY_STUDIES_API_TOKEN,
@@ -107,7 +84,9 @@ export async function studiesApiHandler(
 
         // Find kopps round entry by round id hack...
         const round = kopps.rounds[term]?.find(
-          (value) => value.ladokRoundId === role.round
+          (value) =>
+            value.ladokRoundId === role.round ||
+            value.applicationCode === role.round_code
         );
 
         if (role.round && !round) {
