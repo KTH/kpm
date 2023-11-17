@@ -26,20 +26,6 @@ import {
   ladok2.kurser.ÅF.210v.godkand
 */
 
-/**
- * Given an array `arr` and an element `el`, returns `el` if  is member of `arr`,
- * `undefined` otherwise.
- *
- * If `arr` is defined as narrower type of array, ensures that returned element
- * has the narrow type
- */
-function typedFind<T extends U, U>(
-  arr: ReadonlyArray<T>,
-  el: U
-): T | undefined {
-  return arr.find((e) => e === el);
-}
-
 const courseRegexOld =
   /^ladok2\.kurser\.(?<code_pt1>[^\.]+)\.(?<code_pt2>[^\.]+)(\.(?<cstatus>[^\.\d]+)(_(?<cyear>\d{4})(?<cterm>\d{1})(\.(?<cterm_pt2>\d{1}))?)?)?$/i;
 
@@ -66,7 +52,7 @@ export function parseToUserCourse(ugGroupName: string): TApiUserCourse | null {
   };
 
   if (cstatus) {
-    result.status = typedFind(STUDENT_STATUS, cstatus);
+    result.status = STUDENT_STATUS.find((s) => s === cstatus);
   }
 
   if (cyear) {
@@ -74,7 +60,7 @@ export function parseToUserCourse(ugGroupName: string): TApiUserCourse | null {
   }
 
   if (cterm) {
-    result.term = typedFind(TERMS, cterm);
+    result.term = TERMS.find((t) => t === cterm);
   }
 
   if (cterm_pt2) {
@@ -118,7 +104,7 @@ export function parseToUserCourseNew(
   }
 
   if (cterm) {
-    result.term = typedFind(TERMS, cterm);
+    result.term = TERMS.find((t) => t === cterm);
   }
 
   if (roundCode) {
@@ -145,7 +131,7 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   };
 
   if (pstatus) {
-    result.status = typedFind(STUDENT_STATUS, pstatus);
+    result.status = STUDENT_STATUS.find((s) => s === pstatus);
   }
 
   if (pyear) {
@@ -153,7 +139,7 @@ export function parseToUserProgram(ugGroupName: string): TUserProgram | null {
   }
 
   if (pterm) {
-    result.term = typedFind(TERMS, pterm);
+    result.term = TERMS.find((t) => t === pterm);
   }
 
   return result;
