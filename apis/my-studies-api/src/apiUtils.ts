@@ -172,7 +172,7 @@ export function parseUgGroupNames(ugGroupNames: string[]): APIUserStudies {
       continue;
     }
 
-    result.courses[program.program_code] ??= [];
+    result.programmes[program.program_code] ??= [];
     result.programmes[program.program_code].push(program);
   }
 
