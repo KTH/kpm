@@ -20,19 +20,17 @@ import { ExamRoomList } from "../components/courseComponents";
 import { useEffect, useState } from "react";
 import { FilterOption, TabFilter } from "../components/filter";
 
-export async function loaderStudies({
-  request,
-}: any = {}): Promise<APIStudies> {
-  const res = await fetchApi("/api/studies", {
-    signal: request?.signal,
-  });
+export async function fetchStudies(): Promise<APIStudies> {
+  const res = await fetchApi("/api/studies");
   const json = await res.json();
+
   if (res.ok) {
     return json;
   } else {
     if (res.status === 401) {
       throw new AuthError(json.message);
     }
+
     throw new Error(json.message);
   }
 }
