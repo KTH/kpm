@@ -5,7 +5,8 @@ import {
   TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { fetchApi, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm } from "./utils";
+import { useDataFecther } from "../hooks/dataFetcher";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
