@@ -38,8 +38,29 @@ export async function fetchStudies(): Promise<APIStudies> {
 type TFilter = "current" | "other";
 
 export function Studies() {
-  const { res, loading, error } = useDataFecther<APIStudies>(loaderStudies);
-  const { courses } = res || {};
+  const { res, loading, error, state } =
+    useDataFecther<APIStudies>(fetchStudies);
+
+  // Handle error and loading states first
+  if (state === "error") {
+    return (
+      <MenuPane error={error}>
+        <span />
+      </MenuPane>
+    );
+  }
+
+  if (state === "loading") {
+    return (
+      <MenuPane>
+        <LoadingPlaceholder />
+      </MenuPane>
+    );
+  }
+
+  // From here on "state" can only be "success"
+
+  const { courses } = res;
   // const { courses, programmes } = useLoaderData() as APIStudies;
   const coursesArr = Object.entries(courses || {});
 
