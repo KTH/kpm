@@ -9,7 +9,7 @@ import { Services } from "./panes/services";
 import { Groups } from "./panes/groups";
 
 export function getRoutes(): RouteObject[] {
-  const routes: RouteObject[] = [
+  return [
     {
       path: "/profile",
       element: <Profile />,
@@ -39,6 +39,4 @@ export function getRoutes(): RouteObject[] {
       element: <Services />,
     },
   ];
-
-  return routes.filter((i) => i);
 }
