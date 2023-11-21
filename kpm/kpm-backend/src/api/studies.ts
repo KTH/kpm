@@ -214,7 +214,7 @@ function isRoundCurrent(inp: TStudiesCourseRound) {
 
       return start < now && end > now;
     } else {
-      // The rest of students ("registered", "omregistrerade", "godkand") needs
+      // The rest of students ("registrerade", "omregistrerade", "godkand") need
       // access to a course before it starts and after it finishes:
       // - 14 days before course start (for preparation)
       // - 25 days after course end (for post-course work)
