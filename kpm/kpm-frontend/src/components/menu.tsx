@@ -134,15 +134,17 @@ export function MenuPane({
   useFocusTrap(nodeRef, doClose);
 
   let cls = "kpm-modal";
-  if (className) cls += " " + className;
   if (isActive) cls += " active";
+
+  let clsContent = "kpm-modal-content";
+  if (className) clsContent += " " + className;
 
   return (
     <dialog ref={nodeRef} className={cls} aria-modal="true">
       <button className="kpm-modal-back-button kpm-mobile" onClick={doClose}>
         {i18n("Tillbaka till personliga menyn")}
       </button>
-      {children}
+      <div className={clsContent}>{children}</div>
     </dialog>
   );
 }
