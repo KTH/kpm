@@ -193,9 +193,7 @@ function reduceRoundsObject(
   return Object.values(termRounds);
 }
 
-function isRoundCurrent(inp: any) {
-  if (inp === undefined) return undefined;
-
+function isRoundCurrent(inp: TStudiesCourseRound) {
   const { firstTuitionDate, lastTuitionDate } = inp;
 
   if (firstTuitionDate && lastTuitionDate) {
