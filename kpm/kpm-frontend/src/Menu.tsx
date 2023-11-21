@@ -41,23 +41,6 @@ function useMenuState(defaultOpen: boolean) {
   return [menuIsOpen, setMenuIsOpen] as const;
 }
 
-export function useLogin(): [show: boolean, setShow: (val: boolean) => void] {
-  const [show, setShow] = useState(false);
-
-  const doLoginStateChange = (event: TPubSubEvent<TAuthStateEvents>) => {
-    const { value } = event;
-    setShow(!value);
-  };
-
-  // Continue polling until unmounted
-  useEffect(() => {
-    authState.subscribe(doLoginStateChange);
-    return () => authState.unsubscribe(doLoginStateChange);
-  }, []);
-
-  return [show, setShow];
-}
-
 export function Menu() {
   const navigation = useNavigation();
   const location = useLocation();
@@ -69,7 +52,7 @@ export function Menu() {
   const [isOpen, setIsOpen] = useMenuState(
     location.pathname.startsWith("/") && location.pathname.length > 1
   );
-  const [showLogin, setShowLogin] = useLogin();
+
   const [currentUser] = useAuthState();
 
   const hasMatch: boolean = !!getRoutes().find(
