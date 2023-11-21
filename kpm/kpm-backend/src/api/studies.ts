@@ -193,16 +193,35 @@ function reduceRoundsObject(
   return Object.values(termRounds);
 }
 
+/**
+ * Returns `true` if the `inp` course round is considered "current" for the student
+ */
 function isRoundCurrent(inp: TStudiesCourseRound) {
   const { firstTuitionDate, lastTuitionDate } = inp;
 
   if (firstTuitionDate && lastTuitionDate) {
     const DAY_IN_MS = 24 * 3600 * 1000;
-    // extend the tuition period for preparation and posts-course work.
-    const start = Date.parse(firstTuitionDate) - 14 * DAY_IN_MS;
-    const end = Date.parse(lastTuitionDate) + 25 * DAY_IN_MS;
     const now = Date.now();
-    return start < now && end > now;
+
+    if (inp.status === "antagna") {
+      // An "antagna" student needs access only when they can register to the
+      // course. After the registration period, is no longer considered
+      // "current"
+      // - 14 days before course start
+      // - 10 days after course start
+      const start = Date.parse(firstTuitionDate) - 14 * DAY_IN_MS;
+      const end = Date.parse(firstTuitionDate) + 10 * DAY_IN_MS;
+
+      return start < now && end > now;
+    } else {
+      // The rest of students ("registered", "omregistrerade", "godkand") needs
+      // access to a course before it starts and after it finishes:
+      // - 14 days before course start (for preparation)
+      // - 25 days after course end (for post-course work)
+      const start = Date.parse(firstTuitionDate) - 14 * DAY_IN_MS;
+      const end = Date.parse(lastTuitionDate) + 25 * DAY_IN_MS;
+      return start < now && end > now;
+    }
   } else {
     return false;
   }
