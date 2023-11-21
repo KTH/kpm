@@ -1,12 +1,8 @@
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import type { NavigateFunction } from "react-router";
-import { NavLink } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { i18n } from "../i18n/i18n";
-import { useAuthState } from "../state/authState";
-import { LoginWidget } from "./login";
 
 import "./menu.scss";
 import { useFocusTrap, useOverflowClipOnDemand } from "./menuUtils";
@@ -98,47 +94,7 @@ function Backdrop({
   );
 }
 
-type TMenuPaneProps = {
-  className?: string | undefined | null;
-  error?: Error | undefined;
-  children: any;
-};
-
 export function MenuPane({
-  className = undefined,
-  error = undefined,
-  children,
-}: TMenuPaneProps) {
-  let cls = "kpm-modal-content";
-  if (className) {
-    cls += ` ${className}`;
-  }
-
-  let navigate: NavigateFunction;
-  navigate = useNavigate();
-  const [currentUser] = useAuthState();
-
-  return (
-    <MenuPaneWrapper>
-      <div className={cls}>
-        {currentUser ? (
-          children
-        ) : (
-          <div className="kpm-error-message">
-            <h2>{i18n("Your session has expired")}</h2>
-            <LoginWidget
-              onDismiss={() => {
-                navigate(-1);
-              }}
-            />
-          </div>
-        )}
-      </div>
-    </MenuPaneWrapper>
-  );
-}
-
-export function MenuPaneWrapper({
   nodeRef = useRef<HTMLElement>(null),
   className,
   children,

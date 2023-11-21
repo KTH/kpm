@@ -5,6 +5,9 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom";
+import { authState, TAuthStateEvents } from "./state/authState";
+import { TPubSubEvent } from "./state/PubSub";
+
 import { linkClassName } from "./components/utils";
 import { MenuPaneBackdrop } from "./components/menu";
 import { getRoutes } from "./routes";
@@ -14,7 +17,6 @@ import { i18n } from "./i18n/i18n";
 import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
 import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
-import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
 import { createApiUri, createFilesUri } from "./panes/utils";
 
@@ -37,6 +39,23 @@ function useMenuState(defaultOpen: boolean) {
     setIsOpen(menuIsOpen);
   };
   return [menuIsOpen, setMenuIsOpen] as const;
+}
+
+export function useLogin(): [show: boolean, setShow: (val: boolean) => void] {
+  const [show, setShow] = useState(false);
+
+  const doLoginStateChange = (event: TPubSubEvent<TAuthStateEvents>) => {
+    const { value } = event;
+    setShow(!value);
+  };
+
+  // Continue polling until unmounted
+  useEffect(() => {
+    authState.subscribe(doLoginStateChange);
+    return () => authState.unsubscribe(doLoginStateChange);
+  }, []);
+
+  return [show, setShow];
 }
 
 export function Menu() {
@@ -197,7 +216,6 @@ export function Menu() {
         <LoadingIndicator isLoading={navigation.state === "loading"} />
       </nav>
       <Outlet />
-      {/* <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} /> */}
     </React.Fragment>
   );
 }
