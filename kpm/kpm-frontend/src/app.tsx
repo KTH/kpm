@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { useAuthState } from "./state/authState";
 import { getRoutes } from "./routes";
 import { Menu } from "./Menu";
 import { ErrorBoundary } from "./error";
@@ -24,14 +23,10 @@ declare global {
 function createRouter() {
   return createHashRouter([
     {
+      path: "/",
       element: <Menu />,
       errorElement: <Menu />,
-      children: getRoutes().map((route) => ({
-        index: route.path === "/",
-        path: route.path === "/" ? undefined : route.path,
-        element: route.element,
-        loader: route.loader,
-      })),
+      children: getRoutes(),
     },
   ]);
 }

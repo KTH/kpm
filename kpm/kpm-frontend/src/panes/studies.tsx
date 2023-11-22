@@ -5,33 +5,31 @@ import {
   TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { fetchApi, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm } from "./utils";
+import { useDataFecther } from "../hooks/dataFetcher";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
 import {
   AuthError,
   EmptyPlaceholder,
-  ErrorMessage,
   LoadingPlaceholder,
 } from "../components/common";
 import { ExamRoomList } from "../components/courseComponents";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FilterOption, TabFilter } from "../components/filter";
 
-export async function loaderStudies({
-  request,
-}: any = {}): Promise<APIStudies> {
-  const res = await fetchApi("/api/studies", {
-    signal: request?.signal,
-  });
+export async function fetchStudies(): Promise<APIStudies> {
+  const res = await fetchApi("/api/studies");
   const json = await res.json();
+
   if (res.ok) {
     return json;
   } else {
     if (res.status === 401) {
       throw new AuthError(json.message);
     }
+
     throw new Error(json.message);
   }
 }
@@ -39,20 +37,34 @@ export async function loaderStudies({
 type TFilter = "current" | "other";
 
 export function Studies() {
-  const { res, loading, error } = useDataFecther<APIStudies>(loaderStudies);
-  const { courses } = res || {};
-  // const { courses, programmes } = useLoaderData() as APIStudies;
-  const coursesArr = Object.entries(courses || {});
+  const { res, loading, error, state } =
+    useDataFecther<APIStudies>(fetchStudies);
 
-  const [filter, setFilter] = useState<TFilter>();
+  // Handle error and loading states first
+  if (state === "error") {
+    return (
+      <MenuPane error={error}>
+        <span />
+      </MenuPane>
+    );
+  }
 
-  // Switch to all if there are no starred programmes
-  useEffect(() => {
-    if (filter === undefined && coursesArr.length > 0) {
-      const hasCurrent = !!coursesArr.find(([k, c]) => c.current);
-      setFilter(hasCurrent ? "current" : "other");
-    }
-  }, [courses]);
+  if (state === "loading") {
+    return (
+      <MenuPane>
+        <LoadingPlaceholder />
+      </MenuPane>
+    );
+  }
+
+  // From here on "state" can only be "success"
+  const { courses } = res;
+  const coursesArr = Object.entries(courses);
+  const hasCurrent =
+    coursesArr.length > 0 && coursesArr.some(([key, course]) => course.current);
+  const [filter, setFilter] = useState<TFilter>(
+    hasCurrent ? "current" : "other"
+  );
 
   const filteredCourseEntries = coursesArr.filter(([key, course]) => {
     switch (filter) {
@@ -63,9 +75,7 @@ export function Studies() {
     }
   });
 
-  const isEmpty = !loading && !error && filteredCourseEntries.length === 0;
-
-  const coursesToShow = Object.fromEntries(filteredCourseEntries);
+  const isEmpty = filteredCourseEntries.length === 0;
 
   return (
     <MenuPane error={error}>
@@ -85,16 +95,14 @@ export function Studies() {
           {i18n("Other")}
         </FilterOption>
       </TabFilter>
-      {loading && <LoadingPlaceholder />}
-      {error && <ErrorMessage error={error} />}
       {isEmpty && (
         <EmptyPlaceholder>
           {i18n("You aren't studying any courses.")}
         </EmptyPlaceholder>
       )}
-      {coursesToShow && (
+      {!isEmpty && (
         <ul className="kpm-studies">
-          {Object.entries(coursesToShow)?.map(([course_code, course]) => {
+          {filteredCourseEntries.map(([course_code, course]) => {
             return (
               <Course
                 key={course_code}

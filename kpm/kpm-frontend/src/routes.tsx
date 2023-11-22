@@ -9,11 +9,10 @@ import { Services } from "./panes/services";
 import { Groups } from "./panes/groups";
 
 export function getRoutes(): RouteObject[] {
-  const routes = [
+  return [
     {
       path: "/profile",
       element: <Profile />,
-      // loader: loaderProfile,
     },
     {
       path: "/schedule",
@@ -22,12 +21,10 @@ export function getRoutes(): RouteObject[] {
     {
       path: "/studies",
       element: <Studies />,
-      // loader: loaderStudies,
     },
     {
       path: "/teaching",
       element: <Teaching />,
-      // loader: loaderTeaching,
     },
     {
       path: "/programme",
@@ -42,6 +39,4 @@ export function getRoutes(): RouteObject[] {
       element: <Services />,
     },
   ];
-
-  return routes.filter((i) => i) as RouteObject[];
 }
