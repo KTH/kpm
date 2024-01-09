@@ -63,7 +63,8 @@
   }
 
   // Use for profile image and icons
-  $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad));
+  // Default pad is mainly a type hint for validators
+  $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad, 1em));
 
   .kpm-mobile-menu > a,
   .kpm-profile-item > a {
@@ -98,8 +99,9 @@
     a {
       display: flex;
       flex-grow: 1;
-      height: calc(0.75em + 2 * var(--kpmPad));
-      width: calc(0.75em + 2 * var(--kpmPad));
+      // Default pad is mainly a type hint for validators
+      height: calc(0.75em + 2 * var(--kpmPad, 1em));
+      width: calc(0.75em + 2 * var(--kpmPad, 1em));
       // height: $fullMenuHeight;
       // width: $fullMenuHeight;
       padding: calc(var(--kpmPad));
