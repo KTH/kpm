@@ -24,14 +24,10 @@ declare global {
 function createRouter() {
   return createHashRouter([
     {
+      path: "/",
       element: <Menu />,
       errorElement: <Menu />,
-      children: getRoutes().map((route) => ({
-        index: route.path === "/",
-        path: route.path === "/" ? undefined : route.path,
-        element: route.element,
-        loader: route.loader,
-      })),
+      children: getRoutes(),
     },
   ]);
 }

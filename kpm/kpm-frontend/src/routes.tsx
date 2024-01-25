@@ -13,7 +13,6 @@ export function getRoutes(): RouteObject[] {
     {
       path: "/profile",
       element: <Profile />,
-      // loader: loaderProfile,
     },
     {
       path: "/schedule",
@@ -22,12 +21,10 @@ export function getRoutes(): RouteObject[] {
     {
       path: "/studies",
       element: <Studies />,
-      // loader: loaderStudies,
     },
     {
       path: "/teaching",
       element: <Teaching />,
-      // loader: loaderTeaching,
     },
     {
       path: "/programme",
