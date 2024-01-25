@@ -11,11 +11,6 @@ import { Groups } from "./panes/groups";
 export function getRoutes(): RouteObject[] {
   const routes = [
     {
-      path: "/",
-      element: null,
-      // loader: loaderProfile,
-    },
-    {
       path: "/profile",
       element: <Profile />,
       // loader: loaderProfile,
