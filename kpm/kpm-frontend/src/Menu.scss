@@ -1,3 +1,4 @@
+@use "@kth/style/scss/utils/mixins";
 @use "vars" as *;
 
 #kpm-6cf53 .kpm-menu {
@@ -9,13 +10,8 @@
   border-bottom: solid 1px var(--kpmPaneBg);
 
   ul {
+    @include mixins.container;
     display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 80rem;
-    margin: 0 auto;
     gap: 0 1rem;
   }
 
@@ -33,6 +29,12 @@
       padding: 0 0.4em;
       font-size: 60%;
     }
+  }
+
+  a.kth-menu-item.active {
+    text-underline-offset: 0.5rem;
+    text-decoration: underline;
+    text-decoration-thickness: 0.25rem;
   }
 
   // Use for profile image and icons
