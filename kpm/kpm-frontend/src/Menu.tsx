@@ -105,7 +105,10 @@ export function Menu() {
             </ToggleNavLink>
           </li>
           <li className="kpm-schedule-item">
-            <a href="https://www.kth.se/social/home/calendar/">
+            <a
+              href="https://www.kth.se/social/home/calendar/"
+              className="kth-menu-item"
+            >
               {i18n("Schedule")}
             </a>
             {/* <ToggleNavLink to="schedule" className={linkClassName}>
@@ -119,7 +122,7 @@ export function Menu() {
                 to="studies"
                 className={linkClassName}
               >
-                {i18n("Studies")}
+                <span>{i18n("Studies")}</span>
               </ToggleNavLink>
             </li>
           )}
@@ -130,7 +133,7 @@ export function Menu() {
                 to="teaching"
                 className={linkClassName}
               >
-                {i18n("Teaching")}
+                <span>{i18n("Teaching")}</span>
               </ToggleNavLink>
             </li>
           )}
@@ -140,7 +143,7 @@ export function Menu() {
               to="programme"
               className={linkClassName}
             >
-              {i18n("Programme")}
+              <span>{i18n("Programme")}</span>
             </ToggleNavLink>
           </li>
           <li>
@@ -149,7 +152,7 @@ export function Menu() {
               to="groups"
               className={linkClassName}
             >
-              {i18n("Groups")}
+              <span>{i18n("Groups")}</span>
             </ToggleNavLink>
           </li>
           <li>
@@ -158,7 +161,7 @@ export function Menu() {
               to="services"
               className={linkClassName}
             >
-              {i18n("Services")}
+              <span>{i18n("Services")}</span>
             </ToggleNavLink>
           </li>
           <div className="kpm-menu-shotcuts">

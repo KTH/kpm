@@ -3,6 +3,7 @@
 @use "stylesCanvas";
 @use "stylesMobile";
 @use "vars" as *;
+@use "@kth/style/scss/components/menu-item";
 
 #kpm-6cf53 {
   pointer-events: none;

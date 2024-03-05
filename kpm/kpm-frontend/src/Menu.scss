@@ -23,34 +23,6 @@
     list-style: none;
     cursor: pointer;
 
-    a {
-      position: relative;
-      display: inline-block;
-      color: var(--kpmMenuText);
-      text-decoration: none;
-      padding: var(--kpmPad) calc(3.5 * var(--kpmPad)) var(--kpmPad)
-        calc(2 * var(--kpmPad));
-
-      &::after {
-        content: "";
-        background: $data-arrow-expand-white-svg no-repeat;
-        width: 0.3rem;
-        height: 0.5rem;
-        position: absolute;
-        top: 50%;
-        right: calc(1.5 * var(--kpmPad));
-        transform: translate(-50%, -50%) rotate(90deg);
-      }
-    }
-
-    a.active,
-    a:hover {
-      color: var(--kpmMenuHoverText);
-      background-color: var(--kpmMenuHoverBg);
-      &::after {
-        background: $data-arrow-expand-black-svg no-repeat;
-      }
-    }
     &.kpm-try span {
       background: var(--kpmMenuText);
       border-radius: 50%;
