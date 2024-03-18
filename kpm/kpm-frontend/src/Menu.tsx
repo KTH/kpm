@@ -88,22 +88,7 @@ export function Menu() {
               </span>
             </a>
           </li>
-          <li className="kpm-profile-item kpm-desktop">
-            <ToggleNavLink
-              id="kpmMenuProfile"
-              to="profile"
-              className={linkClassName}
-            >
-              <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt=""
-                className="kpm-profile-image"
-              />
-              <span className="kpm-profile-display-name">
-                {currentUser?.display_name ?? ""}
-              </span>
-            </ToggleNavLink>
-          </li>
+
           <li className="kpm-schedule-item">
             <a
               href="https://www.kth.se/social/home/calendar/"
@@ -162,6 +147,22 @@ export function Menu() {
               className={linkClassName}
             >
               <span>{i18n("Services")}</span>
+            </ToggleNavLink>
+          </li>
+          <li className="kpm-profile-item kpm-desktop">
+            <ToggleNavLink
+              id="kpmMenuProfile"
+              to="profile"
+              className={linkClassName}
+            >
+              <img
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                alt=""
+                className="kpm-profile-image"
+              />
+              <span className="kpm-profile-display-name">
+                {currentUser?.display_name ?? ""}
+              </span>
             </ToggleNavLink>
           </li>
           <div className="kpm-menu-shotcuts">
