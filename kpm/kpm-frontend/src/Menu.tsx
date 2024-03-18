@@ -95,9 +95,6 @@ export function Menu() {
             >
               {i18n("Schedule")}
             </a>
-            {/* <ToggleNavLink to="schedule" className={linkClassName}>
-              {i18n("Schedule")}
-            </ToggleNavLink> */}
           </li>
           {hasStudies && (
             <li>
