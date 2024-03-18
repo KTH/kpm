@@ -10,7 +10,7 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
 
 #kpm-6cf53 .kpm-icon-button {
   display: flex;
-  width: 2.5rem;
+  width: 2.25rem;
   height: 2.5rem;
   align-items: center;
   justify-content: center;
@@ -46,6 +46,7 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   > ul {
     @include mixins.container;
     display: flex;
+    justify-content: flex-end;
     gap: 0 1rem;
   }
 
