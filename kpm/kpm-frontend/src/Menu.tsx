@@ -11,7 +11,7 @@ import { getRoutes } from "./routes";
 import { LoadingIndicator } from "./components/loading";
 import { ToggleNavLink } from "./components/links";
 import { i18n } from "./i18n/i18n";
-import { IconMail, IconNewsfeed, IconNotifications } from "./components/icons";
+import { IconNotifications } from "./components/icons";
 import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { useLogin } from "./components/login";
@@ -161,25 +161,33 @@ export function Menu() {
               />
             </ToggleNavLink>
           </li>
-          <div className="kpm-menu-shotcuts">
-            <li className="kpm-try">
-              <a href="https://app.kth.se/kpm/" title={i18n("BetaTooltip")}>
-                <span>‽</span>
-              </a>
-            </li>
-            <li>
-              <IconMail href={KTH_MAIL_URI} />
-            </li>
-            <li>
-              <IconNewsfeed href={KTH_SOCIAL_SUBSCRIPTIONS_URI} />
-            </li>
-            <li>
-              <IconNotifications
-                href={KTH_SOCIAL_NOTIFICATIONS_URI}
-                nNew={numNewNotifications}
-              />
-            </li>
-          </div>
+          <li>
+            <a
+              className="kpm-icon-button interrobang"
+              href="https://app.kth.se/kpm/"
+            >
+              <span className="kth-visually-hidden">{i18n("BetaTooltip")}</span>
+            </a>
+          </li>
+          <li>
+            <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
+              <span className="kth-visually-hidden">{i18n("KTH Webmail")}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              className="kpm-icon-button feed"
+              href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
+            >
+              <span className="kth-visually-hidden">{i18n("News feed")}</span>
+            </a>
+          </li>
+          <li>
+            <IconNotifications
+              href={KTH_SOCIAL_NOTIFICATIONS_URI}
+              nNew={numNewNotifications}
+            />
+          </li>
           <li className="kpm-profile-item kpm-mobile">
             <ToggleNavLink to="profile" className={linkClassName}>
               <img
