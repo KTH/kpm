@@ -27,10 +27,10 @@ export function IconNotifications({ href, nNew }: TNotificationIconProps) {
         {i18n("Direct notifications")}
       </span>
       {has_new && (
-        <Fragment>
-          <span className="kpm-notice-new">{nNew}</span>
+        <span className="kpm-notice-new">
+          {nNew}
           <span className="kth-visually-hidden">{i18n("dn-new")}</span>
-        </Fragment>
+        </span>
       )}
     </a>
   );

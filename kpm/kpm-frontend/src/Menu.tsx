@@ -159,42 +159,53 @@ export function Menu() {
             </ToggleNavLink>
           </li>
           <li>
-            <a
-              className="kpm-icon-button interrobang"
-              href="https://app.kth.se/kpm/"
-            >
-              <span className="kth-visually-hidden">{i18n("BetaTooltip")}</span>
-            </a>
+            <ul className="kpm-menu-shotcuts">
+              <li>
+                <a
+                  className="kpm-icon-button interrobang"
+                  href="https://app.kth.se/kpm/"
+                >
+                  <span className="kth-visually-hidden">
+                    {i18n("BetaTooltip")}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
+                  <span className="kth-visually-hidden">
+                    {i18n("KTH Webmail")}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  className="kpm-icon-button feed"
+                  href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
+                >
+                  <span className="kth-visually-hidden">
+                    {i18n("News feed")}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <IconNotifications
+                  href={KTH_SOCIAL_NOTIFICATIONS_URI}
+                  nNew={numNewNotifications}
+                />
+              </li>
+              <li className="kpm-profile-item kpm-mobile">
+                <ToggleNavLink to="profile" className={linkClassName}>
+                  <img
+                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    alt=""
+                    className="kpm-profile-image"
+                  />
+                  {i18n("Profile")}
+                </ToggleNavLink>
+              </li>
+            </ul>
           </li>
-          <li>
-            <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
-              <span className="kth-visually-hidden">{i18n("KTH Webmail")}</span>
-            </a>
-          </li>
-          <li>
-            <a
-              className="kpm-icon-button feed"
-              href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
-            >
-              <span className="kth-visually-hidden">{i18n("News feed")}</span>
-            </a>
-          </li>
-          <li>
-            <IconNotifications
-              href={KTH_SOCIAL_NOTIFICATIONS_URI}
-              nNew={numNewNotifications}
-            />
-          </li>
-          <li className="kpm-profile-item kpm-mobile">
-            <ToggleNavLink to="profile" className={linkClassName}>
-              <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt=""
-                className="kpm-profile-image"
-              />
-              {i18n("Profile")}
-            </ToggleNavLink>
-          </li>
+
           <li className="kpm-mobile-logout kpm-mobile">
             <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>
           </li>
