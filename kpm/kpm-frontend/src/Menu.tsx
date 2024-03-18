@@ -77,15 +77,14 @@ export function Menu() {
                 e.preventDefault();
                 setIsOpen(!isOpen);
               }}
+              className="kth-menu-item dropdown"
             >
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
                 alt=""
                 className="kpm-profile-image"
               />
-              <span className="kpm-profile-display-name">
-                {currentUser?.display_name ?? ""}
-              </span>
+              <span>{i18n("Personal menu")}</span>
             </a>
           </li>
 
@@ -157,12 +156,9 @@ export function Menu() {
             >
               <img
                 src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt=""
+                alt={i18n("Profile")}
                 className="kpm-profile-image"
               />
-              <span className="kpm-profile-display-name">
-                {currentUser?.display_name ?? ""}
-              </span>
             </ToggleNavLink>
           </li>
           <div className="kpm-menu-shotcuts">

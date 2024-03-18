@@ -1,4 +1,5 @@
 export const sv: Record<string, string> = {
+  "Personal menu": "Personliga menyn",
   lang_other: "In English",
   Groups: "Grupper",
   Profile: "Profil",

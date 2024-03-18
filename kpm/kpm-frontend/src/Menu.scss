@@ -150,21 +150,6 @@
 
     & > .kpm-mobile-menu {
       display: inline-flex;
-
-      & > a {
-        width: unset;
-        padding-right: 1.5em;
-        background-color: var(--kpmMenuBg);
-        color: var(--kpmMenuText);
-      }
-
-      & > a::after {
-        width: 0.4rem;
-        height: 0.65rem;
-        right: 0.5rem;
-        transform: translate(-50%, -50%) rotate(90deg);
-        background: $data-arrow-expand-white-svg no-repeat;
-      }
     }
 
     & > .kpm-menu-shotcuts {
@@ -210,14 +195,6 @@
           // }
         }
       }
-
-      & > a::after {
-        width: 0.6rem;
-        height: 1rem;
-        transform: translate(-50%, -50%);
-        right: 1rem;
-        background: $data-arrow-expand-black-svg no-repeat;
-      }
     }
   }
 }
@@ -226,9 +203,5 @@
   body #kpm-6cf53 > .kpm-menu {
     font-size: 0.9em;
     --kpmPad: 0.4rem;
-
-    .kpm-profile-display-name {
-      display: none;
-    }
   }
 }
