@@ -145,6 +145,16 @@ export function Menu() {
               <span>{i18n("Services")}</span>
             </ToggleNavLink>
           </li>
+          <li className="kpm-profile-item kpm-mobile">
+            <ToggleNavLink to="profile" className={linkClassName}>
+              <img
+                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                alt=""
+                className="kpm-profile-image"
+              />
+              {i18n("Profile")}
+            </ToggleNavLink>
+          </li>
           <li className="kpm-profile-item kpm-desktop">
             <ToggleNavLink
               id="kpmMenuProfile"
@@ -192,16 +202,6 @@ export function Menu() {
                   href={KTH_SOCIAL_NOTIFICATIONS_URI}
                   nNew={numNewNotifications}
                 />
-              </li>
-              <li className="kpm-profile-item kpm-mobile">
-                <ToggleNavLink to="profile" className={linkClassName}>
-                  <img
-                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                    alt=""
-                    className="kpm-profile-image"
-                  />
-                  {i18n("Profile")}
-                </ToggleNavLink>
               </li>
             </ul>
           </li>
