@@ -62,16 +62,6 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
     display: block;
     list-style: none;
     cursor: pointer;
-
-    &.kpm-try span {
-      background: var(--kpmMenuText);
-      border-radius: 50%;
-      color: var(--kpmMenuBg);
-      display: inline-block;
-      line-height: 1.2;
-      padding: 0 0.4em;
-      font-size: 60%;
-    }
   }
 
   a.kth-menu-item.active {
@@ -84,8 +74,7 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   // Default pad is mainly a type hint for validators
   $fullMenuHeight: calc(1.5em + 2 * var(--kpmPad, 1em));
 
-  .kpm-mobile-menu > a,
-  .kpm-profile-item > a {
+  .kpm-mobile-menu > a {
     $rowGap: calc(2 * var(--kpmGap));
     $colGap: $rowGap;
 
@@ -93,11 +82,11 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
     align-items: center;
     gap: $rowGap $colGap;
     padding: 0 calc(3.5 * var(--kpmPad)) 0 0;
+  }
 
-    .kpm-profile-image {
-      height: $fullMenuHeight;
-      width: $fullMenuHeight;
-    }
+  .kpm-profile-item .kpm-profile-image {
+    height: 1.5rem;
+    width: 1.5rem;
   }
 
   .kpm-menu-shotcuts {
