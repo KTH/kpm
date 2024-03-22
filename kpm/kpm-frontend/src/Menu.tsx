@@ -68,152 +68,175 @@ export function Menu() {
 
   return (
     <React.Fragment>
-      <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
-      <nav ref={menuRef} className={cls}>
-        <ul>
-          <li className="kpm-mobile-menu kpm-mobile">
-            <a
-              onClick={(e: any) => {
-                e.preventDefault();
-                setIsOpen(!isOpen);
-              }}
-              className="kth-menu-item dropdown"
-            >
-              <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt=""
-                className="kpm-profile-image"
-              />
-              <span>{i18n("Personal menu")}</span>
-            </a>
-          </li>
-
-          <li className="kpm-schedule-item">
-            <a
-              href="https://www.kth.se/social/home/calendar/"
-              className="kth-menu-item"
-            >
-              {i18n("Schedule")}
-            </a>
-          </li>
-          {hasStudies && (
-            <li>
-              <ToggleNavLink
-                id="kpmMenuStudies"
-                to="studies"
-                className={linkClassName}
-              >
-                <span>{i18n("Studies")}</span>
-              </ToggleNavLink>
-            </li>
-          )}
-          {hasTeaching && (
-            <li>
-              <ToggleNavLink
-                id="kpmMenuTeaching"
-                to="teaching"
-                className={linkClassName}
-              >
-                <span>{i18n("Teaching")}</span>
-              </ToggleNavLink>
-            </li>
-          )}
-          <li>
-            <ToggleNavLink
-              id="kpmMenuProgramme"
-              to="programme"
-              className={linkClassName}
-            >
-              <span>{i18n("Programme")}</span>
-            </ToggleNavLink>
-          </li>
-          <li>
-            <ToggleNavLink
-              id="kpmMenuGroups"
-              to="groups"
-              className={linkClassName}
-            >
-              <span>{i18n("Groups")}</span>
-            </ToggleNavLink>
-          </li>
-          <li>
-            <ToggleNavLink
-              id="kpmMenuServices"
-              to="services"
-              className={linkClassName}
-            >
-              <span>{i18n("Services")}</span>
-            </ToggleNavLink>
-          </li>
-          <li className="kpm-profile-item kpm-mobile">
-            <ToggleNavLink to="profile" className={linkClassName}>
-              <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt=""
-                className="kpm-profile-image"
-              />
-              {i18n("Profile")}
-            </ToggleNavLink>
-          </li>
-          <li className="kpm-profile-item kpm-desktop">
-            <ToggleNavLink
-              id="kpmMenuProfile"
-              to="profile"
-              className={linkClassName}
-            >
-              <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                alt={i18n("Profile")}
-                className="kpm-profile-image"
-              />
-            </ToggleNavLink>
-          </li>
-          <li>
-            <ul className="kpm-menu-shotcuts">
+      <div className="kth-kpm">
+        <div className="kth-kpm__container">
+          <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
+          <nav className="kth-entrances" aria-label="Webbplatser">
+            <ul>
               <li>
-                <a
-                  className="kpm-icon-button interrobang"
-                  href="https://app.kth.se/kpm/"
-                >
-                  <span className="kth-visually-hidden">
-                    {i18n("BetaTooltip")}
-                  </span>
+                <a href="https://kth.se" className="kth-menu-item">
+                  kth.se
                 </a>
               </li>
               <li>
-                <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
-                  <span className="kth-visually-hidden">
-                    {i18n("KTH Webmail")}
-                  </span>
+                <a href="https://kth.se/student" className="kth-menu-item">
+                  Studentwebben
                 </a>
               </li>
               <li>
-                <a
-                  className="kpm-icon-button feed"
-                  href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
-                >
-                  <span className="kth-visually-hidden">
-                    {i18n("News feed")}
-                  </span>
+                <a href="https://intra.kth.se" className="kth-menu-item">
+                  Intranät
                 </a>
-              </li>
-              <li>
-                <IconNotifications
-                  href={KTH_SOCIAL_NOTIFICATIONS_URI}
-                  nNew={numNewNotifications}
-                />
               </li>
             </ul>
-          </li>
+          </nav>
+          <nav ref={menuRef} className={cls}>
+            <ul>
+              <li className="kpm-mobile-menu kpm-mobile">
+                <a
+                  onClick={(e: any) => {
+                    e.preventDefault();
+                    setIsOpen(!isOpen);
+                  }}
+                  className="kth-menu-item dropdown"
+                >
+                  <img
+                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    alt=""
+                    className="kpm-profile-image"
+                  />
+                  <span>{i18n("Personal menu")}</span>
+                </a>
+              </li>
 
-          <li className="kpm-mobile-logout kpm-mobile">
-            <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>
-          </li>
-        </ul>
-        <LoadingIndicator isLoading={navigation.state === "loading"} />
-      </nav>
+              <li className="kpm-schedule-item">
+                <a
+                  href="https://www.kth.se/social/home/calendar/"
+                  className="kth-menu-item"
+                >
+                  {i18n("Schedule")}
+                </a>
+              </li>
+              {hasStudies && (
+                <li>
+                  <ToggleNavLink
+                    id="kpmMenuStudies"
+                    to="studies"
+                    className={linkClassName}
+                  >
+                    <span>{i18n("Studies")}</span>
+                  </ToggleNavLink>
+                </li>
+              )}
+              {hasTeaching && (
+                <li>
+                  <ToggleNavLink
+                    id="kpmMenuTeaching"
+                    to="teaching"
+                    className={linkClassName}
+                  >
+                    <span>{i18n("Teaching")}</span>
+                  </ToggleNavLink>
+                </li>
+              )}
+              <li>
+                <ToggleNavLink
+                  id="kpmMenuProgramme"
+                  to="programme"
+                  className={linkClassName}
+                >
+                  <span>{i18n("Programme")}</span>
+                </ToggleNavLink>
+              </li>
+              <li>
+                <ToggleNavLink
+                  id="kpmMenuGroups"
+                  to="groups"
+                  className={linkClassName}
+                >
+                  <span>{i18n("Groups")}</span>
+                </ToggleNavLink>
+              </li>
+              <li>
+                <ToggleNavLink
+                  id="kpmMenuServices"
+                  to="services"
+                  className={linkClassName}
+                >
+                  <span>{i18n("Services")}</span>
+                </ToggleNavLink>
+              </li>
+              <li className="kpm-profile-item kpm-mobile">
+                <ToggleNavLink to="profile" className={linkClassName}>
+                  <img
+                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    alt=""
+                    className="kpm-profile-image"
+                  />
+                  {i18n("Profile")}
+                </ToggleNavLink>
+              </li>
+              <li className="kpm-profile-item kpm-desktop">
+                <ToggleNavLink
+                  id="kpmMenuProfile"
+                  to="profile"
+                  className={linkClassName}
+                >
+                  <img
+                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    alt={i18n("Profile")}
+                    className="kpm-profile-image"
+                  />
+                </ToggleNavLink>
+              </li>
+              <li>
+                <ul className="kpm-menu-shotcuts">
+                  <li>
+                    <a
+                      className="kpm-icon-button interrobang"
+                      href="https://app.kth.se/kpm/"
+                    >
+                      <span className="kth-visually-hidden">
+                        {i18n("BetaTooltip")}
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
+                      <span className="kth-visually-hidden">
+                        {i18n("KTH Webmail")}
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="kpm-icon-button feed"
+                      href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
+                    >
+                      <span className="kth-visually-hidden">
+                        {i18n("News feed")}
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <IconNotifications
+                      href={KTH_SOCIAL_NOTIFICATIONS_URI}
+                      nNew={numNewNotifications}
+                    />
+                  </li>
+                </ul>
+              </li>
+
+              <li className="kpm-mobile-logout kpm-mobile">
+                <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>
+              </li>
+            </ul>
+            <LoadingIndicator isLoading={navigation.state === "loading"} />
+          </nav>
+          {/* <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} /> */}
+        </div>
+      </div>
       <Outlet />
-      {/* <LoginModal show={showLogin} onDismiss={() => setShowLogin(false)} /> */}
     </React.Fragment>
   );
 }

@@ -4,6 +4,8 @@
 @use "stylesMobile";
 @use "vars" as *;
 @use "@kth/style/scss/components/menu-item";
+@use "@kth/style/scss/components/kpm";
+@use "@kth/style/scss/components/entrances";
 
 #kpm-6cf53 {
   pointer-events: none;
@@ -26,6 +28,11 @@
   @media print {
     display: none;
   }
+}
+
+#kpm-6cf53 .kth-kpm__container {
+  width: 100%;
+  pointer-events: all;
 }
 
 // Global styling

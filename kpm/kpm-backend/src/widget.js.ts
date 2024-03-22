@@ -61,6 +61,7 @@ ap = (n) => document.head.appendChild(n);
 let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
+n.classList.add('kth-kpm');
 n.style.position="fixed";
 document.body.classList.add('use-personal-menu');
 document.body.prepend(n);
@@ -86,6 +87,7 @@ var cr = (t) => document.createElement(t),
 ap = (e) => document.head.appendChild(e);
 let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
 let n = cr('div'); n.id = "kpm-6cf53";
+n.classList.add('kth-kpm');
 let s = n.style;s.pointerEvents="all";s.inset="0";s.position="fixed";s.display="flex";s.alignItems="center";s.height="calc(2em + 1px)";s.padding="0 1rem";s.justifyContent="center";s.margin="0 auto";s.backgroundColor="#65656c";s.borderBottom = "solid 1px var(--kpmPaneBg, #fff)";
 let nd = cr('div');
 s = nd.style;s.width="100%";s.maxWidth="1228px";s.display="flex";s.alignItems="center";
