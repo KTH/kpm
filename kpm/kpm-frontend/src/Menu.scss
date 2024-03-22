@@ -17,13 +17,13 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   border-block: 0.25rem transparent solid;
 
   &:hover {
-    border-block-end-color: var(--color-primary);
+    border-block-end-color: var(--kpmMenuText);
   }
 
   &::before {
     width: 1.5rem;
     height: 1.5rem;
-    background: var(--color-primary);
+    background: var(--kpmMenuText);
   }
 
   &.interrobang::before {
