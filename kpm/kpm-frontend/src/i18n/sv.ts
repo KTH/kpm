@@ -1,4 +1,8 @@
 export const sv: Record<string, string> = {
+  // Nav labels
+  Websites: "Webbplatser",
+  "Student web": "Studentwebben",
+  Intranet: "Intranät",
   "Personal menu": "Personliga menyn",
   lang_other: "In English",
   Groups: "Grupper",

@@ -1,0 +1,14 @@
+@use "../vars" as *;
+
+.kth-entrances {
+  display: none;
+}
+
+@media screen and (min-width: $breakpoint-xl) {
+  .kth-entrances {
+    display: block;
+  }
+  .kth-entrances-expandable {
+    display: none;
+  }
+}

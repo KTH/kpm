@@ -17,6 +17,7 @@ import "./Menu.scss";
 import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
 import { createApiUri, createFilesUri } from "./panes/utils";
+import { Entrances } from "./components/entrances";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
 const KTH_SOCIAL_SUBSCRIPTIONS_URI =
@@ -71,25 +72,7 @@ export function Menu() {
       <div className="kth-kpm">
         <div className="kth-kpm__container">
           <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
-          <nav className="kth-entrances" aria-label="Webbplatser">
-            <ul>
-              <li>
-                <a href="https://kth.se" className="kth-menu-item">
-                  kth.se
-                </a>
-              </li>
-              <li>
-                <a href="https://kth.se/student" className="kth-menu-item">
-                  Studentwebben
-                </a>
-              </li>
-              <li>
-                <a href="https://intra.kth.se" className="kth-menu-item">
-                  Intranät
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <Entrances />
           <nav ref={menuRef} className={cls}>
             <ul>
               <li className="kpm-mobile-menu kpm-mobile">
