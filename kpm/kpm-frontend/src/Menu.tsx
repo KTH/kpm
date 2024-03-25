@@ -176,19 +176,7 @@ export function Menu() {
                   {i18n("Profile")}
                 </ToggleNavLink>
               </li>
-              <li className="kpm-profile-item kpm-desktop">
-                <ToggleNavLink
-                  id="kpmMenuProfile"
-                  to="profile"
-                  className={linkClassName}
-                >
-                  <img
-                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
-                    alt={i18n("Profile")}
-                    className="kpm-profile-image"
-                  />
-                </ToggleNavLink>
-              </li>
+
               <li>
                 <ul className="kpm-menu-shotcuts">
                   <li>
@@ -226,7 +214,19 @@ export function Menu() {
                   </li>
                 </ul>
               </li>
-
+              <li className="kpm-profile-item kpm-desktop">
+                <ToggleNavLink
+                  id="kpmMenuProfile"
+                  to="profile"
+                  className={linkClassName}
+                >
+                  <img
+                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    alt={i18n("Profile")}
+                    className="kpm-profile-image"
+                  />
+                </ToggleNavLink>
+              </li>
               <li className="kpm-mobile-logout kpm-mobile">
                 <a href={createApiUri("/auth/logout")}>{i18n("Logout")}</a>
               </li>

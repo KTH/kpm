@@ -92,6 +92,7 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   .kpm-menu-shotcuts {
     display: flex;
     flex-direction: row;
+    padding: 0;
 
     .kpm-loading {
       opacity: 0.8;
