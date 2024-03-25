@@ -1,13 +1,15 @@
 @use "vars" as *;
 
-@media #{$desktopBreakpoint} {
+#kpm-6cf53 .kpm-desktop {
+  display: none !important;
+}
+
+@media screen and (min-width: $breakpoint-l) {
   #kpm-6cf53 .kpm-mobile {
     display: none !important;
   }
-}
 
-@media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-desktop {
-    display: none !important;
+    display: block !important;
   }
 }

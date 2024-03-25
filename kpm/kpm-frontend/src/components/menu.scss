@@ -90,12 +90,12 @@
 }
 
 // Menu panes
-@media #{$mblBreakpoint} {
-  body #kpm-6cf53 > .kpm-modal-backdrop {
+@media screen and (max-width: $breakpoint-l) {
+  body #kpm-6cf53 .kpm-modal-backdrop {
     display: none;
   }
 
-  body #kpm-6cf53 > .kpm-modal {
+  body #kpm-6cf53 .kpm-modal {
     position: fixed;
     top: 0;
     left: 0;
