@@ -6,10 +6,7 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "targets": {
     "default": {
-      "source": [
-        "src/index.html",
-        "src/widget.html"
-      ]
+      "source": "src/index.html"
     },
     "production": {
       "source": "src/index.tsx",
