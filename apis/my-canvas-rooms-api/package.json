@@ -26,7 +26,7 @@
     "@kth/canvas-api": "^4.2.2",
     "@kth/reqvars": "^2.0.1",
     "dotenv": "^16.0.2",
-    "express": "^4.18.1",
+    "express": "^4.19.2",
     "kpm-api-common": "^0.1.0",
     "skog": "^3.0.2",
     "ts-node": "^10.9.1"
