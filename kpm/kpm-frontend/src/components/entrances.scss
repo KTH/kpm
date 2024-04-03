@@ -1,14 +1,18 @@
 @use "../vars" as *;
 
-.kth-entrances {
+.kth-menu-item {
+  white-space: nowrap;
+}
+
+.kpm-entrances {
   display: none;
 }
 
 @media screen and (min-width: $breakpoint-xl) {
-  .kth-entrances {
+  .kpm-entrances {
     display: block;
   }
-  .kth-entrances-expandable {
+  .kpm-entrances-expandable {
     display: none;
   }
 }

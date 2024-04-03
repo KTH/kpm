@@ -9,10 +9,13 @@ import "./entrances.scss";
 export function Entrances() {
   return (
     <React.Fragment>
-      <nav className="kth-entrances-expandable">
+      <nav className="kpm-entrances-expandable">
         <button className="kth-menu-item dropdown">kth.se</button>
       </nav>
-      <nav className="kth-entrances" aria-label={i18n("Websites")}>
+      <nav
+        className="kth-entrances kpm-entrances"
+        aria-label={i18n("Websites")}
+      >
         <ul>
           <li>
             <a href="https://kth.se" className="kth-menu-item">
