@@ -1,3 +1,5 @@
+@use "@kth/style/scss/tokens/colors" as c;
+@use "@kth/style/scss/tokens/typography" as t;
 @use "../vars" as *;
 
 .kth-menu-item {
@@ -6,6 +8,31 @@
 
 .kpm-entrances {
   display: none;
+}
+
+// TODO: move this to KTH Style
+.kpm-mini-dialog {
+  position: absolute;
+  list-style: none;
+  background: var(--color-background, c.$color-white);
+  margin: 0;
+  padding: 1rem 2rem;
+  top: var(--kpm-bar-height, 2.5rem);
+  box-shadow: 0 0.25rem 0.25rem 0 rgb(0 0 0 / 20%);
+
+  h2 {
+    @include t.font-heading-xs;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding-block: 4px;
+  }
 }
 
 @media screen and (min-width: $breakpoint-xl) {
