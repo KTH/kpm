@@ -120,10 +120,6 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
 
 // Menu for mobile
 @media screen and (max-width: $breakpoint-l) {
-  body {
-    background-color: pink;
-  }
-
   body #kpm-6cf53 .kpm-menu {
     height: 2.5rem;
     overflow: hidden;
