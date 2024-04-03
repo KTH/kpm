@@ -47,7 +47,7 @@ export function App() {
     return (
       <Page id="mainContent" lang={lang}>
         <h1>New Personal Menu (Beta)</h1>
-        <div className="alert alert-info" role="alert">
+        <div className="alert alert-info">
           From the 22nd of April a new version of the Personal Menu with new
           menu options will be launched and the old version of the Personal Menu
           won’t be usable anymore.
@@ -126,6 +126,11 @@ export function App() {
   return (
     <Page id="mainContent" lang={lang}>
       <h1>Nya personliga menyn (Beta)</h1>
+      <div className="alert alert-info">
+        Från och med den 22 april kommer en ny version av den Personliga Menyn
+        med nya menyval att lanseras och den gamla versionen av den Personliga
+        Menyn kommer inte gå att använda mer
+      </div>
       <div className="lead">
         <p>
           Välkommen till den öppna betan av den nya personliga menyn. Du kan
