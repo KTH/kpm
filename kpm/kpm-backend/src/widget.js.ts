@@ -74,8 +74,8 @@ export async function widgetJsHandler(
           `${publicUriBase}/assets/${assets["index.css"]?.fileName}`
         )
         .replace("{{KPM_PUBLIC_URI_BASE}}", publicUriBase)
-        .replace("{{KPM_CURRENT_USER}}", JSON.stringify(userToFrontend))
-        .replace("{{KPM_SETTINGS}}", JSON.stringify({ lang }));
+        .replace('"{{KPM_CURRENT_USER}}"', JSON.stringify(userToFrontend))
+        .replace('"{{KPM_SETTINGS}}"', JSON.stringify({ lang }));
 
       res.type("text/javascript").send(content);
     } else {
