@@ -47,6 +47,11 @@ export function App() {
     return (
       <Page id="mainContent" lang={lang}>
         <h1>New Personal Menu (Beta)</h1>
+        <div className="alert alert-info" role="alert">
+          From the 22nd of April a new version of the Personal Menu with new
+          menu options will be launched and the old version of the Personal Menu
+          won’t be usable anymore.
+        </div>
         <div className="lead">
           <p>
             Welcome to the open Beta of the KTH Personal Menu. You can toggle
