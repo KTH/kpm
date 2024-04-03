@@ -51,7 +51,6 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   color: var(--kpmMenuText);
   width: 100%;
   flex-grow: 0;
-  border-bottom: solid 1px var(--kpmPaneBg);
 
   > ul {
     @include mixins.container;
