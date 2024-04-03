@@ -8,10 +8,12 @@ exports[`<App /> Can be rendered 1`] = `
     className="kth-kpm__container"
   >
     <nav
+      aria-label="Websites"
       className="kpm-entrances-expandable"
     >
       <button
         className="kth-menu-item dropdown"
+        onClick={[Function]}
       >
         kth.se
       </button>
@@ -23,6 +25,7 @@ exports[`<App /> Can be rendered 1`] = `
       <ul>
         <li>
           <a
+            aria-current={false}
             className="kth-menu-item"
             href="https://kth.se"
           >
@@ -31,6 +34,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
+            aria-current={false}
             className="kth-menu-item"
             href="https://kth.se/student"
           >
@@ -39,6 +43,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
+            aria-current={false}
             className="kth-menu-item"
             href="https://intra.kth.se"
           >
