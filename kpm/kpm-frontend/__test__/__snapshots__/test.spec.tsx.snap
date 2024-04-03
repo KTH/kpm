@@ -8,7 +8,7 @@ exports[`<App /> Can be rendered 1`] = `
     className="kth-kpm__container"
   >
     <nav
-      className="kth-entrances-expandable"
+      className="kpm-entrances-expandable"
     >
       <button
         className="kth-menu-item dropdown"
@@ -18,7 +18,7 @@ exports[`<App /> Can be rendered 1`] = `
     </nav>
     <nav
       aria-label="Websites"
-      className="kth-entrances"
+      className="kth-entrances kpm-entrances"
     >
       <ul>
         <li>
