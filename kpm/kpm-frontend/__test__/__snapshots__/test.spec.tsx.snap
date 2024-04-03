@@ -1,205 +1,253 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<App /> Can be rendered 1`] = `
-<nav
-  className="kpm-menu"
+<div
+  className="kth-kpm"
 >
-  <ul>
-    <li
-      className="kpm-mobile-menu kpm-mobile"
+  <div
+    className="kth-kpm__container"
+  >
+    <nav
+      className="kth-entrances-expandable"
     >
-      <a
+      <button
         className="kth-menu-item dropdown"
-        onClick={[Function]}
       >
-        <img
-          alt=""
-          className="kpm-profile-image"
-          src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
-        />
-        <span>
-          Personal menu
-        </span>
-      </a>
-    </li>
-    <li
-      className="kpm-schedule-item"
+        kth.se
+      </button>
+    </nav>
+    <nav
+      aria-label="Websites"
+      className="kth-entrances"
     >
-      <a
-        className="kth-menu-item"
-        href="https://www.kth.se/social/home/calendar/"
-      >
-        Schedule
-      </a>
-    </li>
-    <li>
-      <a
-        className="kth-menu-item dropdown"
-        href="#/studies"
-        id="kpmMenuStudies"
-        onClick={[Function]}
-      >
-        <span>
-          Studies
-        </span>
-      </a>
-    </li>
-    <li>
-      <a
-        className="kth-menu-item dropdown"
-        href="#/teaching"
-        id="kpmMenuTeaching"
-        onClick={[Function]}
-      >
-        <span>
-          Teaching
-        </span>
-      </a>
-    </li>
-    <li>
-      <a
-        className="kth-menu-item dropdown"
-        href="#/programme"
-        id="kpmMenuProgramme"
-        onClick={[Function]}
-      >
-        <span>
-          Programme
-        </span>
-      </a>
-    </li>
-    <li>
-      <a
-        className="kth-menu-item dropdown"
-        href="#/groups"
-        id="kpmMenuGroups"
-        onClick={[Function]}
-      >
-        <span>
-          Groups
-        </span>
-      </a>
-    </li>
-    <li>
-      <a
-        className="kth-menu-item dropdown"
-        href="#/services"
-        id="kpmMenuServices"
-        onClick={[Function]}
-      >
-        <span>
-          Services
-        </span>
-      </a>
-    </li>
-    <li
-      className="kpm-profile-item kpm-mobile"
-    >
-      <a
-        className="kth-menu-item dropdown"
-        href="#/profile"
-        onClick={[Function]}
-      >
-        <img
-          alt=""
-          className="kpm-profile-image"
-          src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
-        />
-        Profile
-      </a>
-    </li>
-    <li
-      className="kpm-profile-item kpm-desktop"
-    >
-      <a
-        className="kth-menu-item dropdown"
-        href="#/profile"
-        id="kpmMenuProfile"
-        onClick={[Function]}
-      >
-        <img
-          alt="Profile"
-          className="kpm-profile-image"
-          src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
-        />
-      </a>
-    </li>
-    <li>
-      <ul
-        className="kpm-menu-shotcuts"
-      >
+      <ul>
         <li>
           <a
-            className="kpm-icon-button interrobang"
-            href="https://app.kth.se/kpm/"
+            className="kth-menu-item"
+            href="https://kth.se"
           >
-            <span
-              className="kth-visually-hidden"
-            >
-              Give us feedback or disable the beta
-            </span>
+            kth.se
           </a>
         </li>
         <li>
           <a
-            className="kpm-icon-button mail"
-            href="https://webmail.kth.se/"
+            className="kth-menu-item"
+            href="https://kth.se/student"
           >
-            <span
-              className="kth-visually-hidden"
-            >
-              KTH Webmail
-            </span>
+            Student web
           </a>
         </li>
         <li>
           <a
-            className="kpm-icon-button feed"
-            href="https://www.kth.se/social/home/subscriptions/"
+            className="kth-menu-item"
+            href="https://intra.kth.se"
           >
-            <span
-              className="kth-visually-hidden"
-            >
-              News feed
-            </span>
-          </a>
-        </li>
-        <li>
-          <a
-            className="kpm-icon-button notifications kpm-has-new-notices"
-            href="https://www.kth.se/social/notifications/notice_list/"
-          >
-            <span
-              className="kth-visually-hidden"
-            >
-              Direct notifications
-            </span>
-            <span
-              className="kpm-notice-new"
-            >
-              3
-              <span
-                className="kth-visually-hidden"
-              >
-                new
-              </span>
-            </span>
+            Intranet
           </a>
         </li>
       </ul>
-    </li>
-    <li
-      className="kpm-mobile-logout kpm-mobile"
+    </nav>
+    <nav
+      className="kpm-menu"
     >
-      <a
-        href="/kpm/auth/logout"
-      >
-        Logout
-      </a>
-    </li>
-  </ul>
-  <div
-    className="kpm-loading-indicator"
-  />
-</nav>
+      <ul>
+        <li
+          className="kpm-mobile-menu kpm-mobile"
+        >
+          <a
+            className="kth-menu-item dropdown"
+            onClick={[Function]}
+          >
+            <img
+              alt=""
+              className="kpm-profile-image"
+              src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
+            />
+            <span>
+              Personal menu
+            </span>
+          </a>
+        </li>
+        <li
+          className="kpm-schedule-item"
+        >
+          <a
+            className="kth-menu-item"
+            href="https://www.kth.se/social/home/calendar/"
+          >
+            Schedule
+          </a>
+        </li>
+        <li>
+          <a
+            className="kth-menu-item dropdown"
+            href="#/studies"
+            id="kpmMenuStudies"
+            onClick={[Function]}
+          >
+            <span>
+              Studies
+            </span>
+          </a>
+        </li>
+        <li>
+          <a
+            className="kth-menu-item dropdown"
+            href="#/teaching"
+            id="kpmMenuTeaching"
+            onClick={[Function]}
+          >
+            <span>
+              Teaching
+            </span>
+          </a>
+        </li>
+        <li>
+          <a
+            className="kth-menu-item dropdown"
+            href="#/programme"
+            id="kpmMenuProgramme"
+            onClick={[Function]}
+          >
+            <span>
+              Programme
+            </span>
+          </a>
+        </li>
+        <li>
+          <a
+            className="kth-menu-item dropdown"
+            href="#/groups"
+            id="kpmMenuGroups"
+            onClick={[Function]}
+          >
+            <span>
+              Groups
+            </span>
+          </a>
+        </li>
+        <li>
+          <a
+            className="kth-menu-item dropdown"
+            href="#/services"
+            id="kpmMenuServices"
+            onClick={[Function]}
+          >
+            <span>
+              Services
+            </span>
+          </a>
+        </li>
+        <li
+          className="kpm-profile-item kpm-mobile"
+        >
+          <a
+            className="kth-menu-item dropdown"
+            href="#/profile"
+            onClick={[Function]}
+          >
+            <img
+              alt=""
+              className="kpm-profile-image"
+              src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
+            />
+            Profile
+          </a>
+        </li>
+        <li>
+          <ul
+            className="kpm-menu-shotcuts"
+          >
+            <li>
+              <a
+                className="kpm-icon-button interrobang"
+                href="https://app.kth.se/kpm/"
+              >
+                <span
+                  className="kth-visually-hidden"
+                >
+                  Give us feedback or disable the beta
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                className="kpm-icon-button mail"
+                href="https://webmail.kth.se/"
+              >
+                <span
+                  className="kth-visually-hidden"
+                >
+                  KTH Webmail
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                className="kpm-icon-button feed"
+                href="https://www.kth.se/social/home/subscriptions/"
+              >
+                <span
+                  className="kth-visually-hidden"
+                >
+                  News feed
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                className="kpm-icon-button notifications kpm-has-new-notices"
+                href="https://www.kth.se/social/notifications/notice_list/"
+              >
+                <span
+                  className="kth-visually-hidden"
+                >
+                  Direct notifications
+                </span>
+                <span
+                  className="kpm-notice-new"
+                >
+                  3
+                  <span
+                    className="kth-visually-hidden"
+                  >
+                    new
+                  </span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          className="kpm-profile-item kpm-desktop"
+        >
+          <a
+            className="kth-menu-item dropdown"
+            href="#/profile"
+            id="kpmMenuProfile"
+            onClick={[Function]}
+          >
+            <img
+              alt="Profile"
+              className="kpm-profile-image"
+              src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
+            />
+          </a>
+        </li>
+        <li
+          className="kpm-mobile-logout kpm-mobile"
+        >
+          <a
+            href="/kpm/auth/logout"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+      <div
+        className="kpm-loading-indicator"
+      />
+    </nav>
+  </div>
+</div>
 `;
