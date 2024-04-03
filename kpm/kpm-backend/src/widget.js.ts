@@ -22,6 +22,16 @@ const distProdProductionPath = path.join(
   "../../kpm-frontend/distProd/production"
 );
 
+const loggedInScriptTemplate = readFileSync(
+  path.join(__dirname, "./widget.js/loggedIn.js"),
+  {
+    encoding: "utf-8",
+  }
+);
+const notLoggedInScriptTemplate = readFileSync(
+  path.join(__dirname, "./widget.js/notLoggedIn.js"),
+  { encoding: "utf-8" }
+);
 /**
  * Responds with the initial javascript file that holds the entire personal menu
  */
@@ -54,54 +64,35 @@ export async function widgetJsHandler(
       // *** LOGGED IN ***
       const userToFrontend: TSessionUser = req.session.user!;
       setSsoCookie(res);
-      res.type("text/javascript").send(`(function (js, css) {
-document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
-var cr = (t) => document.createElement(t),
-ap = (n) => document.head.appendChild(n);
-let sc = cr('script'); sc.defer = true; sc.src = js; ap(sc);
-let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53";
-n.classList.add('kth-kpm');
-n.style.position="fixed";
-document.body.classList.add('use-personal-menu');
-document.body.prepend(n);
-window.__kpmPublicUriBase__ = "${
-        publicUriBase
-        // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
-      }";
-window.__kpmCurrentUser__ = ${
-        // Inject some user data to allow rendering the menu properly.
-        JSON.stringify(userToFrontend)
-      };
-window.__kpmSettings__ = ${JSON.stringify({ lang })};
-})("${publicUriBase}/assets/${
-        assets["index.js"]?.fileName
-      }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");`);
+      const content = loggedInScriptTemplate
+        .replace(
+          "{{JS_ASSET}}",
+          `${publicUriBase}/assets/${assets["index.js"]?.fileName}`
+        )
+        .replace(
+          "{{CSS_ASSET}}",
+          `${publicUriBase}/assets/${assets["index.css"]?.fileName}`
+        )
+        .replace("{{KPM_PUBLIC_URI_BASE}}", publicUriBase)
+        .replace("{{KPM_CURRENT_USER}}", JSON.stringify(userToFrontend))
+        .replace("{{KPM_SETTINGS}}", JSON.stringify({ lang }));
+
+      res.type("text/javascript").send(content);
     } else {
       // *** NOT LOGGED IN ***
       // index.css contains Canvas CSS-fixes so we are passing it.
       clearSsoCookie(res);
-      res.type("text/javascript").send(`(function (js, css) {
-document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
-var cr = (t) => document.createElement(t),
-ap = (e) => document.head.appendChild(e);
-let st = cr('link'); st.rel = "stylesheet"; st.href = css; ap(st);
-let n = cr('div'); n.id = "kpm-6cf53";
-n.classList.add('kth-kpm');
-let s = n.style;s.pointerEvents="all";s.inset="0";s.position="fixed";s.display="flex";s.alignItems="center";s.height="calc(2em + 1px)";s.padding="0 1rem";s.justifyContent="center";s.margin="0 auto";s.backgroundColor="#65656c";s.borderBottom = "solid 1px var(--kpmPaneBg, #fff)";
-let nd = cr('div');
-s = nd.style;s.width="100%";s.maxWidth="1228px";s.display="flex";s.alignItems="center";
-let nda = cr('a');
-nda.append("Login");
-nda.href = '${LOGIN_URL}?nextUrl=' + location.href;
-s = nda.style;s.marginLeft="auto";s.color="white";
-nd.append(nda);n.append(nd)
-document.body.classList.add('use-personal-menu');
-document.body.prepend(n);
-})("${publicUriBase}/assets/${
-        assets["index.js"]?.fileName
-      }", "${publicUriBase}/assets/${assets["index.css"]?.fileName}");
-window.__kpmSettings__ = ${JSON.stringify({ lang })};`);
+      const content = notLoggedInScriptTemplate
+        .replace(
+          "{{JS_ASSET}}",
+          `${publicUriBase}/assets/${assets["index.js"]?.fileName}`
+        )
+        .replace(
+          "{{CSS_ASSET}}",
+          `${publicUriBase}/assets/${assets["index.css"]?.fileName}`
+        )
+        .replace("{{LOGIN_URL}}", LOGIN_URL);
+      res.type("text/javascript").send(content);
     }
     // TODO: What is this used for?:
     // Need to check
