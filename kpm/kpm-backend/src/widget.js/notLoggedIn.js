@@ -39,14 +39,7 @@
   s.pointerEvents = "all";
   s.inset = "0";
   s.position = "fixed";
-  s.display = "flex";
-  s.alignItems = "center";
-  s.height = "calc(2em + 1px)";
-  s.padding = "0 1rem";
-  s.justifyContent = "center";
-  s.margin = "0 auto";
-  s.backgroundColor = "#65656c";
-  s.borderBottom = "solid 1px var(--kpmPaneBg, #fff)";
+  s.height = "2.5rem";
 
   let lis = links
     .map((link) => {
@@ -54,7 +47,7 @@
         ? "aria-current='true'"
         : "";
 
-      return `<li><a href=${link.href} ${current} class="kth-menu-item">${link.label[lang]}</a></li>`;
+      return `<li><a href=${link.href} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
     })
     .join("");
 
@@ -62,7 +55,7 @@
 
   n.innerHTML = `
     <div class="kth-kpm__container" style="gap: 1rem; overflow-x: auto">
-    <nav class="kth-entrances" aria-label="${lbls.w[language]}">
+    <nav class="kth-entrances" aria-label="${lbls.w[lang]}">
     <ul>${lis}</ul>
     </nav>
     ${login}
