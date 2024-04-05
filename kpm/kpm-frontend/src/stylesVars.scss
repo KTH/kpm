@@ -4,9 +4,9 @@
 
 #kpm-6cf53 {
   // --kpmMenuBg: #{colors.$grey};
-  --kpmMenuBg: var(--color-background, #{c.$color-white});
-  --kpmMenuText: var(--color-text, #{c.$color-blue-kth});
-  --kpmMenuHoverBg: #{colors.$white};
+  --kpmMenuBg: var(--color-header, #{c.$color-white});
+  --kpmMenuText: var(--color-on-header, #{c.$color-blue-marine});
+  // --kpmMenuHoverBg: #{colors.$white};
   --kpmMenuHoverText: #2d2d31;
   --kpmAlertBg: #{colors.$infoYellowIcon};
 
