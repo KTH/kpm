@@ -10,19 +10,26 @@
   display: none;
 }
 
+#kpm-6cf53-entrances {
+  display: none;
+}
+
+button[aria-controls="kpm-6cf53-entrances"][aria-expanded="true"]
+  + #kpm-6cf53-entrances {
+  display: block;
+}
+
 // TODO: move this to KTH Style
 .kpm-mini-dialog {
+  @include c.theme-default;
   position: absolute;
-  list-style: none;
-  background: var(--color-background, c.$color-white);
-  margin: 0;
-  padding: 1rem 2rem;
-  top: var(--kpm-bar-height, 2.5rem);
-  box-shadow: 0 0.25rem 0.25rem 0 rgb(0 0 0 / 20%);
+  width: 22.5rem;
+  background-color: var(--color-background);
 
-  h2 {
-    @include t.font-heading-xs;
-  }
+  // TODO: tokenize this shadow
+  box-shadow: 0 0.125rem 0.5rem 0 rgb(0 0 0 /0.15);
+  border: none;
+  padding: 1rem 2rem;
 
   ul {
     list-style: none;
@@ -35,6 +42,18 @@
   }
 }
 
+// When logged out, show "mobile" version only in small screens
+@media screen and (min-width: $breakpoint-s) {
+  .kpm-logged-out .kpm-entrances {
+    display: block;
+  }
+
+  .kpm-logged-out .kpm-entrances-expandable {
+    display: none;
+  }
+}
+
+// When logged in, show "mobile" version in screens smaller than XL
 @media screen and (min-width: $breakpoint-xl) {
   .kpm-entrances {
     display: block;

@@ -41,6 +41,9 @@
   s.position = "fixed";
   s.height = "2.5rem";
 
+  const currentLink =
+    links.find((l) => l.test(window.location.toString())) || links[0];
+
   let lis = links
     .map((link) => {
       let c = link.test(window.location.toString())
@@ -51,18 +54,33 @@
     })
     .join("");
 
+  let lis2 = links
+    .map((link) => {
+      return `<li><a href=${link.href}>${link.label[lang]}</a></li>`;
+    })
+    .join("");
+
   let login = `<a class="kth-menu-item kpm-login" href="${url}?nextUrl=${location.href}">${lbls.l[lang]}</a>`;
 
   n.innerHTML = `
-    <div class="kth-kpm__container">
-    <nav class="kth-entrances" aria-label="${lbls.w[lang]}">
+    <div class="kth-kpm__container kpm-logged-out">
+    <nav class="kpm-entrances-expandable" aria-label="${lbls.w[lang]}">
+    <button class="kth-menu-item dropdown" aria-expanded="false" aria-controls="kpm-6cf53-entrances">${currentLink.label[lang]}</button>
+    <div class="kpm-mini-dialog" id="kpm-6cf53-entrances"><ul>${lis2}</ul></div>
+    </nav>
+    <nav class="kpm-entrances kth-entrances" aria-label="${lbls.w[lang]}">
     <ul>${lis}</ul>
     </nav>
     ${login}
+    </div>
   `;
 
-  let ne = cr("div");
-  ne.classList.add("kth-kpm__container");
   document.body.classList.add("use-personal-menu");
   document.body.prepend(n);
+  let btn = document.querySelector(
+    "button[aria-controls='kpm-6cf53-entrances']"
+  );
+  btn.addEventListener("click", () => {
+    btn.ariaExpanded = btn.ariaExpanded === "false" ? "true" : "false";
+  });
 })("{{JS_ASSET}}", "{{CSS_ASSET}}", "{{LOGIN_URL}}");

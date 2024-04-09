@@ -39,28 +39,27 @@ export function Entrances() {
       <nav className="kpm-entrances-expandable" aria-label={i18n("Websites")}>
         <button
           className="kth-menu-item dropdown"
+          aria-expanded={expanded ? "true" : "false"}
+          aria-controls="kpm-6cf53-entrances"
           onClick={() => {
             setExpanded(!expanded);
           }}
         >
           {currentSite ? labels[currentSite] : labels["external"]}
         </button>
-        {expanded && (
-          <div className="kpm-mini-dialog">
-            <h2 id="kpm-entrances-mobile-title">{i18n("Websites")}</h2>
-            <ul>
-              <li>
-                <a href="https://kth.se">kth.se</a>
-              </li>
-              <li>
-                <a href="https://kth.se/student">{i18n("Student web")}</a>
-              </li>
-              <li>
-                <a href="https://intra.kth.se">{i18n("Intranet")}</a>
-              </li>
-            </ul>
-          </div>
-        )}
+        <div className="kpm-mini-dialog" id="kpm-6cf53-entrances">
+          <ul>
+            <li>
+              <a href="https://kth.se">kth.se</a>
+            </li>
+            <li>
+              <a href="https://kth.se/student">{i18n("Student web")}</a>
+            </li>
+            <li>
+              <a href="https://intra.kth.se">{i18n("Intranet")}</a>
+            </li>
+          </ul>
+        </div>
       </nav>
       <nav
         className="kth-entrances kpm-entrances"

@@ -6,6 +6,7 @@
 @use "@kth/style/scss/components/menu-item";
 @use "@kth/style/scss/components/kpm";
 @use "@kth/style/scss/components/entrances";
+@use "components/entrances.scss" as e;
 
 #kpm-6cf53 {
   pointer-events: none;
