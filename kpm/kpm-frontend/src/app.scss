@@ -33,6 +33,8 @@
 #kpm-6cf53 .kth-kpm__container {
   width: 100%;
   pointer-events: all;
+  // Overwrite KTH Style: minimum margin is `0rem` instead of `1rem`
+  padding-inline: clamp(0rem, 3.33333vw, 2rem);
 }
 
 // Global styling
