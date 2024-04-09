@@ -51,10 +51,10 @@
     })
     .join("");
 
-  let login = `<a class="kth-menu-item" style="margin-inline-start: auto; margin-inline-end: 0.25rem" href="${url}?nextUrl=${location.href}">${lbls.l[lang]}</a>`;
+  let login = `<a class="kth-menu-item kpm-login" href="${url}?nextUrl=${location.href}">${lbls.l[lang]}</a>`;
 
   n.innerHTML = `
-    <div class="kth-kpm__container" style="gap: 0; overflow: hidden">
+    <div class="kth-kpm__container">
     <nav class="kth-entrances" aria-label="${lbls.w[lang]}">
     <ul>${lis}</ul>
     </nav>

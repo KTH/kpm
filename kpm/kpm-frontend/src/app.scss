@@ -33,6 +33,8 @@
 #kpm-6cf53 .kth-kpm__container {
   width: 100%;
   pointer-events: all;
+  gap: 0;
+  overflow: hidden;
   // Overwrite KTH Style: minimum margin is `0rem` instead of `1rem`
   padding-inline: clamp(0rem, 3.33333vw, 2rem);
 }
@@ -119,6 +121,12 @@
       border-bottom-color: var(--kpmButtonHoverText);
     }
   }
+}
+
+// "Login" link when user is logged out
+#kpm-6cf53 .kpm-login {
+  margin-inline-start: auto;
+  margin-inline-end: 0.25rem;
 }
 
 // Typography in menu panes
