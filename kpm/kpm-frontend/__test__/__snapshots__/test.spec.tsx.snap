@@ -12,11 +12,41 @@ exports[`<App /> Can be rendered 1`] = `
       className="kpm-entrances-expandable"
     >
       <button
+        aria-controls="kpm-6cf53-entrances"
+        aria-expanded="false"
         className="kth-menu-item dropdown"
         onClick={[Function]}
       >
         kth.se
       </button>
+      <div
+        className="kpm-mini-dialog"
+        id="kpm-6cf53-entrances"
+      >
+        <ul>
+          <li>
+            <a
+              href="https://kth.se"
+            >
+              kth.se
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://kth.se/student"
+            >
+              Student web
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://intra.kth.se"
+            >
+              Intranet
+            </a>
+          </li>
+        </ul>
+      </div>
     </nav>
     <nav
       aria-label="Websites"
