@@ -1,5 +1,5 @@
 (function (js, css) {
-  document.body.style.setProperty("--kpm-bar-height", "calc(2em + 1px)");
+  document.body.style.setProperty("--kpm-bar-height", "2.5rem");
   var cr = (t) => document.createElement(t),
     ap = (n) => document.head.appendChild(n);
   let sc = cr("script");

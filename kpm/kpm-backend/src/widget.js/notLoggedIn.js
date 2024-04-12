@@ -25,7 +25,7 @@
     l: { en: "Login", sv: "Logga in" },
   };
 
-  document.body.style.setProperty("--kpm-bar-height", "calc(2.5rem + 1px)");
+  document.body.style.setProperty("--kpm-bar-height", "2.5rem");
   let cr = (t) => document.createElement(t);
   let st = cr("link");
   st.rel = "stylesheet";

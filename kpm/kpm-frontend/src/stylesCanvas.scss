@@ -55,7 +55,7 @@ body > span > span[data-position-content*="Menu"] {
 // the hosting page CSS. Specifically for iFrames in Canvas (SpeedGrader)
 body {
   border-top: none !important;
-  margin-top: calc(var(--kpm-bar-height) + 1px) !important;
+  margin-top: var(--kpm-bar-height) !important;
   padding-top: 0;
   position: relative !important;
   scroll-padding-top: var(--kpm-bar-height);
