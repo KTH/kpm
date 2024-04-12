@@ -1,6 +1,48 @@
-@use "@kth/style/scss/tokens/colors" as c;
-@use "@kth/style/scss/tokens/typography" as t;
+@use "@kth/style/scss/tokens/spacing.scss";
+@use "@kth/style/scss/tokens/colors.scss";
+@use "@kth/style/scss/tokens/typography.scss";
+@use "@kth/style/scss/utils/mixins.scss";
 @use "../vars" as *;
+
+// This `kth-entrances` class is a copy of @kth/style/scss/components/entrances
+//  but outside of CSS layer "kth-style".
+//
+// TODO: convert this to a mixin in KTH Style and import from there
+#kpm-6cf53 nav.kth-entrances {
+  > ul {
+    @include mixins.horizontal-list();
+    gap: spacing.$space-4;
+  }
+
+  // Special case for "kth.se" link.
+  // It has a fixed width
+  a:not([href*="intra"], [href*="student"]) {
+    // TODO: this "4rem" should be a token (logotype width)
+    inline-size: 4rem;
+    justify-content: center;
+  }
+
+  a[href*="intra"],
+  a[href*="student"] {
+    padding-inline: spacing.$space-8;
+  }
+
+  a[aria-current="true"] {
+    background: var(--color-header, transparent);
+  }
+
+  a:not([href*="intra"], [href*="student"])[aria-current="true"] {
+    @include colors.theme-inverse;
+  }
+
+  a[href*="student"][aria-current="true"] {
+    @include colors.theme-student-web;
+  }
+
+  a[href*="intra"][aria-current="true"] {
+    @include colors.theme-intranet;
+  }
+}
 
 .kth-menu-item {
   white-space: nowrap;
@@ -21,7 +63,7 @@ button[aria-controls="kpm-6cf53-entrances"][aria-expanded="true"]
 
 // TODO: move this to KTH Style
 .kpm-mini-dialog {
-  @include c.theme-default;
+  @include colors.theme-default;
   position: absolute;
   width: 22.5rem;
   background-color: var(--color-background);

@@ -2,8 +2,6 @@
   $generate-css: false
 );
 
-@layer kth-style.reset {
-  #kpm-6cf53 {
-    @include reset.reset;
-  }
+#kpm-6cf53 {
+  @include reset.reset;
 }

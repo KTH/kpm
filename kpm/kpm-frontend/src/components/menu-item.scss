@@ -1,0 +1,42 @@
+@use "@kth/style/scss//tokens/spacing";
+@use "@kth/style/scss/tokens/icons";
+@use "@kth/style/scss/tokens/sizing";
+@use "@kth/style/scss/tokens/colors";
+
+// This `kth-menu-item` class is a copy of @kth/style/scss/components/menu-item
+// but outside of CSS layer "kth-style".
+//
+// TODO: convert this to a mixin in KTH Style and import from there
+#kpm-6cf53 .kth-menu-item {
+  color: var(--color-on-header, colors.$color-blue-marine);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: spacing.$space-4;
+  padding-block: spacing.$space-8;
+
+  // Fixes for buttons:
+  border: none;
+  background: none;
+
+  &.collapsable {
+    margin-inline-start: spacing.$space-16;
+  }
+
+  @media (min-width: sizing.$breakpoint-64) {
+    &.collapsable {
+      display: none;
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: spacing.$space-4;
+    text-underline-offset: spacing.$space-8;
+  }
+
+  &.dropdown::after {
+    @include icons.icon-caret-down;
+    background-color: var(--color-on-header, colors.$color-blue-marine);
+  }
+}
