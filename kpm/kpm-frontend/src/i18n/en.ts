@@ -1,4 +1,10 @@
 export const en: Record<string, string> = {
+  // Nav labels
+  "shortcut.websites": "Websites",
+  "shortcut.studentweb": "Student web",
+  "shortcut.intranet": "Intranet",
+  "shortcut.personal-menu": "Personal menu",
+
   lang_other: "På svenska",
   Groups: "Groups",
   Profile: "Profile",

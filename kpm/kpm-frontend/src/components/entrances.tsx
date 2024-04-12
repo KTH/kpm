@@ -9,8 +9,8 @@ const INTRA_REGEX = /^https?:\/\/intra\.kth\.se/;
 
 const labels = {
   external: "kth.se",
-  intra: i18n("Intranet"),
-  student: i18n("Student web"),
+  intra: i18n("shortcut.intranet"),
+  student: i18n("shortcut.studentweb"),
 };
 
 /** Get the current site */
@@ -36,7 +36,10 @@ export function Entrances() {
 
   return (
     <React.Fragment>
-      <nav className="kpm-entrances-expandable" aria-label={i18n("Websites")}>
+      <nav
+        className="kpm-entrances-expandable"
+        aria-label={i18n("shortcut.websites")}
+      >
         <button
           className="kth-menu-item dropdown"
           aria-expanded={expanded ? "true" : "false"}
@@ -53,17 +56,17 @@ export function Entrances() {
               <a href="https://kth.se">kth.se</a>
             </li>
             <li>
-              <a href="https://kth.se/student">{i18n("Student web")}</a>
+              <a href="https://kth.se/student">{i18n("shortcut.studentweb")}</a>
             </li>
             <li>
-              <a href="https://intra.kth.se">{i18n("Intranet")}</a>
+              <a href="https://intra.kth.se">{i18n("shortcut.intranet")}</a>
             </li>
           </ul>
         </div>
       </nav>
       <nav
         className="kth-entrances kpm-entrances"
-        aria-label={i18n("Websites")}
+        aria-label={i18n("shortcut.websites")}
       >
         <ul>
           <li>
@@ -81,7 +84,7 @@ export function Entrances() {
               className="kth-menu-item"
               aria-current={currentSite === "student"}
             >
-              {i18n("Student web")}
+              {i18n("shortcut.studentweb")}
             </a>
           </li>
           <li>
@@ -90,7 +93,7 @@ export function Entrances() {
               className="kth-menu-item"
               aria-current={currentSite === "intra"}
             >
-              {i18n("Intranet")}
+              {i18n("shortcut.intranet")}
             </a>
           </li>
         </ul>
