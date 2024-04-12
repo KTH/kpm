@@ -118,7 +118,6 @@
     }
 
     .kpm-link-list {
-      display: none;
       position: fixed;
       max-width: unset;
       max-height: unset;
@@ -137,7 +136,6 @@
 
   #kpm-6cf53 .kpm-dropdownmenu-group {
     .kpm-link-list.open {
-      display: block;
       transform: translate(0, 0) !important;
     }
   }
