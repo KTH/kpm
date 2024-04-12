@@ -4,7 +4,7 @@ export const en: Record<string, string> = {
   "shortcut.studentweb": "Student web",
   "shortcut.intranet": "Intranet",
 
-  "Personal menu": "Personliga menyn",
+  "Personal menu": "Personal menu",
 
   lang_other: "På svenska",
   Groups: "Groups",

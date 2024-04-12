@@ -115,7 +115,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/studies"
             id="kpmMenuStudies"
             onClick={[Function]}
@@ -127,7 +127,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/teaching"
             id="kpmMenuTeaching"
             onClick={[Function]}
@@ -139,7 +139,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/programme"
             id="kpmMenuProgramme"
             onClick={[Function]}
@@ -151,7 +151,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/groups"
             id="kpmMenuGroups"
             onClick={[Function]}
@@ -163,7 +163,7 @@ exports[`<App /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/services"
             id="kpmMenuServices"
             onClick={[Function]}
@@ -177,7 +177,7 @@ exports[`<App /> Can be rendered 1`] = `
           className="kpm-profile-item kpm-mobile"
         >
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/profile"
             onClick={[Function]}
           >
@@ -257,7 +257,7 @@ exports[`<App /> Can be rendered 1`] = `
           className="kpm-profile-item kpm-desktop"
         >
           <a
-            className="kth-menu-item dropdown"
+            className="kpm-menu-item kth-menu-item dropdown"
             href="#/profile"
             id="kpmMenuProfile"
             onClick={[Function]}
