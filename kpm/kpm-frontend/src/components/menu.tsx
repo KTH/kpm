@@ -63,15 +63,15 @@ function Backdrop({
     oldOverflow = style.overflow;
     style.overflow = "hidden";
     // If has scrollbar, set padding to avoid jumping
-    // if (body.scrollHeight > (window.visualViewport?.height || 0)) {
-    //   oldPaddingRight = style.paddingRight;
-    //   style.paddingRight = `${getScrollBarWidth()}px`;
-    //   if (parentNode) {
-    //     (
-    //       parentNode as HTMLElement
-    //     ).style.marginRight = `${getScrollBarWidth()}px`;
-    //   }
-    // }
+    if (body.scrollHeight > (window.visualViewport?.height || 0)) {
+      oldPaddingRight = style.paddingRight;
+      style.paddingRight = `${getScrollBarWidth()}px`;
+      if (parentNode) {
+        (
+          parentNode as HTMLElement
+        ).style.marginRight = `${getScrollBarWidth()}px`;
+      }
+    }
 
     return () => {
       const style = document.body.style;

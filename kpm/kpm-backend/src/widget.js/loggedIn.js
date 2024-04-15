@@ -1,6 +1,5 @@
 (function (js, css) {
   document.body.style.setProperty("--kpm-bar-height", "2.5rem");
-  document.documentElement.style.setProperty("scrollbar-gutter", "stable");
   var cr = (t) => document.createElement(t),
     ap = (n) => document.head.appendChild(n);
   let sc = cr("script");
