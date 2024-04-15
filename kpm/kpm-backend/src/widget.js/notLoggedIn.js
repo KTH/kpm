@@ -26,6 +26,7 @@
   };
 
   document.body.style.setProperty("--kpm-bar-height", "2.5rem");
+  document.documentElement.style.setProperty("scrollbar-gutter", "stable");
   let cr = (t) => document.createElement(t);
   let st = cr("link");
   st.rel = "stylesheet";
