@@ -32,7 +32,8 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
   &.mail::before {
     @include icons.with-icon($icon-kpm-mail);
   }
-  &.feed::before {
+  // Canvas uses classname "feed", we need to prefix ours.
+  &.kpm-feed::before {
     @include icons.with-icon($icon-kpm-feed);
   }
   &.notifications::before {

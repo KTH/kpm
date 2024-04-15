@@ -181,7 +181,7 @@ export function Menu() {
                   </li>
                   <li>
                     <a
-                      className="kpm-icon-button feed"
+                      className="kpm-icon-button kpm-feed"
                       href={KTH_SOCIAL_SUBSCRIPTIONS_URI}
                     >
                       <span className="kth-visually-hidden">
