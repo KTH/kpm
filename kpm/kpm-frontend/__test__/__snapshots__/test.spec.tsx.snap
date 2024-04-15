@@ -219,7 +219,7 @@ exports[`<App /> Can be rendered 1`] = `
             </li>
             <li>
               <a
-                className="kpm-icon-button feed"
+                className="kpm-icon-button kpm-feed"
                 href="https://www.kth.se/social/home/subscriptions/"
               >
                 <span
