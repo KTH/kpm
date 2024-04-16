@@ -65,7 +65,7 @@
     accent-color: var(--kpmPaneFg);
     display: flex;
     flex-flow: row wrap;
-    gap: $rowGap $colGap;
+    gap: 0 $colGap;
   }
 
   .kpm-modal-content-header {
