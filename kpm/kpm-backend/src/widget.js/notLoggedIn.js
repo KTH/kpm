@@ -26,12 +26,14 @@
   };
 
   document.body.style.setProperty("--kpm-bar-height", "2.5rem");
+  document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
   let cr = (t) => document.createElement(t);
   let st = cr("link");
   st.rel = "stylesheet";
   st.href = css;
   document.head.appendChild(st);
 
+  // <div id="kpm-6cf53" style="pointer-events: all"...>
   let n = cr("div");
   n.id = "kpm-6cf53";
   n.classList.add("kth-kpm");
