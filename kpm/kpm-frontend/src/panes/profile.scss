@@ -1,5 +1,19 @@
 @use "../vars" as *;
+@use "@kth/style/scss/tokens/typography";
 
+#kpm-6cf53 div.kpm-profile {
+  h3 {
+    @include typography.font-heading-s;
+    margin-block-start: 1rem;
+    margin-block-end: 0.25rem;
+  }
+
+  h4 {
+    @include typography.font-heading-xs;
+    margin-block-start: 0.25rem;
+    margin-block-end: 0.125rem;
+  }
+}
 #kpm-6cf53 .kpm-profile .kpm-profile-link {
   $rowGap: calc(2 * var(--kpmGap));
   $colGap: $rowGap;

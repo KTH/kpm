@@ -66,12 +66,6 @@
   flex-flow: column nowrap;
   justify-content: flex-start;
   flex-grow: 1;
-
-  .kpm-col-header {
-    font-size: 1.17em;
-    font-weight: bold;
-    margin-bottom: var(--kpmMargin);
-  }
 }
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-col {
