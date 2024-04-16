@@ -7,7 +7,6 @@ import { teachingApiHandler } from "./teaching";
 import { studiesApiHandler } from "./studies";
 import { starApiHandler } from "./star";
 import { langApiHandler } from "./lang";
-import { useBeta } from "./useBeta";
 
 export const api = express.Router();
 
@@ -39,5 +38,3 @@ api.get("/programmes", programmesApiHandler);
 api.get("/services", servicesApiHandler);
 
 api.post("/star", starApiHandler);
-
-api.post("/use_beta", useBeta);
