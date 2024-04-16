@@ -92,14 +92,6 @@ export function Menu() {
                 </a>
               </li>
 
-              <li className="kpm-schedule-item">
-                <a
-                  href="https://www.kth.se/social/home/calendar/"
-                  className="kth-menu-item"
-                >
-                  {i18n("Schedule")}
-                </a>
-              </li>
               {hasStudies && (
                 <li>
                   <ToggleNavLink
@@ -158,6 +150,15 @@ export function Menu() {
                   />
                   {i18n("Profile")}
                 </ToggleNavLink>
+              </li>
+
+              <li className="kpm-schedule-item">
+                <a
+                  href="https://www.kth.se/social/home/calendar/"
+                  className="kth-menu-item"
+                >
+                  {i18n("Schedule")}
+                </a>
               </li>
 
               <li>
