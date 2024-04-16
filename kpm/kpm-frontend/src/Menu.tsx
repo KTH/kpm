@@ -163,16 +163,6 @@ export function Menu() {
               <li>
                 <ul className="kpm-menu-shotcuts">
                   <li>
-                    <a
-                      className="kpm-icon-button interrobang"
-                      href="https://app.kth.se/kpm/"
-                    >
-                      <span className="kth-visually-hidden">
-                        {i18n("BetaTooltip")}
-                      </span>
-                    </a>
-                  </li>
-                  <li>
                     <a className="kpm-icon-button mail" href={KTH_MAIL_URI}>
                       <span className="kth-visually-hidden">
                         {i18n("KTH Webmail")}

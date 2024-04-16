@@ -195,18 +195,6 @@ exports[`<App /> Can be rendered 1`] = `
           >
             <li>
               <a
-                className="kpm-icon-button interrobang"
-                href="https://app.kth.se/kpm/"
-              >
-                <span
-                  className="kth-visually-hidden"
-                >
-                  Give us feedback or disable the beta
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
                 className="kpm-icon-button mail"
                 href="https://webmail.kth.se/"
               >
