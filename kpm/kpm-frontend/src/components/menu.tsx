@@ -186,9 +186,11 @@ export function MenuPaneWrapper({
 
   return (
     <dialog ref={nodeRef} className={cls} aria-modal="true">
-      <button className="kpm-modal-back-button kpm-mobile" onClick={doClose}>
-        {i18n("Tillbaka till personliga menyn")}
-      </button>
+      <div className="kpm-mobile">
+        <button className="kth-button back" onClick={doClose}>
+          {i18n("Tillbaka till personliga menyn")}
+        </button>
+      </div>
       {children}
     </dialog>
   );

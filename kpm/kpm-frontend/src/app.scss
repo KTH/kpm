@@ -42,6 +42,8 @@
 #kpm-6cf53 .kpm-modal {
   pointer-events: all;
   max-width: 1200px;
+  padding-inline: 2rem;
+  padding-block: 1rem;
 }
 
 #kpm-6cf53 .kpm-modal-backdrop {
@@ -124,7 +126,7 @@
 
 // Typography in menu panes
 #kpm-6cf53 .kpm-modal-content {
-  padding: calc(2 * var(--kpmPad));
+  // padding: calc(2 * var(--kpmPad));
 
   h1 {
     margin-top: 0;

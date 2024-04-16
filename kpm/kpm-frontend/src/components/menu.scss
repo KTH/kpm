@@ -1,4 +1,5 @@
 @use "../vars" as *;
+@use "@kth/style/scss/components/button";
 
 #kpm-6cf53 .KpmModalBackdropAnim {
   &-enter {
@@ -60,7 +61,7 @@
   }
 
   .kpm-modal-content {
-    padding: calc(4 * var(--kpmPad));
+    // padding: calc(4 * var(--kpmPad));
     accent-color: var(--kpmPaneFg);
     display: flex;
     flex-flow: row wrap;

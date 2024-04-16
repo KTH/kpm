@@ -139,9 +139,7 @@ export function Services() {
             <ul>
               {servicelinks?.map((links) => (
                 <li key={links.url}>
-                  <h4>
-                    <a href={links.url}>{links.name}</a>
-                  </h4>
+                  <a href={links.url}>{links.name}</a>
                 </li>
               ))}
             </ul>
