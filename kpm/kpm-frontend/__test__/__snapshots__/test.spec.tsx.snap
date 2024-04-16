@@ -103,16 +103,6 @@ exports[`<App /> Can be rendered 1`] = `
             </span>
           </a>
         </li>
-        <li
-          className="kpm-schedule-item"
-        >
-          <a
-            className="kth-menu-item"
-            href="https://www.kth.se/social/home/calendar/"
-          >
-            Schedule
-          </a>
-        </li>
         <li>
           <a
             className="kpm-menu-item kth-menu-item dropdown"
@@ -187,6 +177,16 @@ exports[`<App /> Can be rendered 1`] = `
               src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
             />
             Profile
+          </a>
+        </li>
+        <li
+          className="kpm-schedule-item"
+        >
+          <a
+            className="kth-menu-item"
+            href="https://www.kth.se/social/home/calendar/"
+          >
+            Schedule
           </a>
         </li>
         <li>
