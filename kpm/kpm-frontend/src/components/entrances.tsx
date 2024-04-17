@@ -53,13 +53,17 @@ export function Entrances() {
         <div className="kpm-mini-dialog" id="kpm-6cf53-entrances">
           <ul>
             <li>
-              <a href="https://kth.se">kth.se</a>
+              <a href={i18n("shortcut.external.href")}>kth.se</a>
             </li>
             <li>
-              <a href="https://kth.se/student">{i18n("shortcut.studentweb")}</a>
+              <a href={i18n("shortcut.studentweb.href")}>
+                {i18n("shortcut.studentweb")}
+              </a>
             </li>
             <li>
-              <a href="https://intra.kth.se">{i18n("shortcut.intranet")}</a>
+              <a href={i18n("shortcut.intra.href")}>
+                {i18n("shortcut.intranet")}
+              </a>
             </li>
           </ul>
         </div>

@@ -5,17 +5,18 @@
   let lang = document.documentElement.lang.startsWith("sv") ? "sv" : "en";
   let links = [
     {
-      href: "https://kth.se",
+      href: { sv: "https://kth.se", en: "https://kth.se/en" },
       label: { en: "kth.se", sv: "kth.se" },
       test: (url) => RE.test(url),
     },
     {
+      href: { sv: "https://kth.se/student", en: "https://kth.se/en/student" },
       href: "https://kth.se/student",
       label: { en: "Student web", sv: "Studentwebben" },
       test: (url) => RS.test(url),
     },
     {
-      href: "https://intra.kth.se",
+      href: { sv: "https://intra.kth.se", en: "https://intra.kth.se/en" },
       label: { en: "Intranet", sv: "Intranät" },
       test: (url) => RI.test(url),
     },
@@ -52,13 +53,13 @@
         ? "aria-current='true'"
         : "";
 
-      return `<li><a href=${link.href} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
+      return `<li><a href=${link.href[lang]} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
     })
     .join("");
 
   let lis2 = links
     .map((link) => {
-      return `<li><a href=${link.href}>${link.label[lang]}</a></li>`;
+      return `<li><a href=${link.href[lang]}>${link.label[lang]}</a></li>`;
     })
     .join("");
 
