@@ -75,7 +75,7 @@ export function Entrances() {
         <ul>
           <li>
             <a
-              href="https://kth.se"
+              href={i18n("shortcut.external.href")}
               className="kth-menu-item"
               aria-current={currentSite === "external"}
             >
@@ -84,7 +84,7 @@ export function Entrances() {
           </li>
           <li>
             <a
-              href="https://kth.se/student"
+              href={i18n("shortcut.studentweb.href")}
               className="kth-menu-item"
               aria-current={currentSite === "student"}
             >
@@ -93,7 +93,7 @@ export function Entrances() {
           </li>
           <li>
             <a
-              href="https://intra.kth.se"
+              href={i18n("shortcut.intra.href")}
               className="kth-menu-item"
               aria-current={currentSite === "intra"}
             >
