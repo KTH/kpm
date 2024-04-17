@@ -11,7 +11,6 @@
     },
     {
       href: { sv: "https://kth.se/student", en: "https://kth.se/en/student" },
-      href: "https://kth.se/student",
       label: { en: "Student web", sv: "Studentwebben" },
       test: (url) => RS.test(url),
     },
