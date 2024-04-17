@@ -26,21 +26,21 @@ exports[`<App /> Can be rendered 1`] = `
         <ul>
           <li>
             <a
-              href="https://kth.se"
+              href="https://kth.se/en"
             >
               kth.se
             </a>
           </li>
           <li>
             <a
-              href="https://kth.se/student"
+              href="https://kth.se/en/student"
             >
               Student web
             </a>
           </li>
           <li>
             <a
-              href="https://intra.kth.se"
+              href="https://intra.kth.se/en"
             >
               Intranet
             </a>
