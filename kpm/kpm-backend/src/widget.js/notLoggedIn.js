@@ -5,12 +5,15 @@
   let lang = document.documentElement.lang.startsWith("sv") ? "sv" : "en";
   let links = [
     {
-      href: { sv: "https://kth.se", en: "https://kth.se/en" },
+      href: { sv: "https://www.kth.se", en: "https://www.kth.se/en" },
       label: { en: "kth.se", sv: "kth.se" },
       test: (url) => RE.test(url),
     },
     {
-      href: { sv: "https://kth.se/student", en: "https://kth.se/en/student" },
+      href: {
+        sv: "https://www.kth.se/student",
+        en: "https://www.kth.se/en/student",
+      },
       label: { en: "Student web", sv: "Studentwebben" },
       test: (url) => RS.test(url),
     },

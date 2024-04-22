@@ -4,9 +4,9 @@ export const sv: Record<string, string> = {
   "shortcut.studentweb": "Studentwebben",
   "shortcut.intranet": "Intranät",
 
-  "shortcut.studentweb.href": "https://kth.se/student",
+  "shortcut.studentweb.href": "https://www.kth.se/student",
   "shortcut.intra.href": "https://intra.kth.se",
-  "shortcut.external.href": "https://kth.se",
+  "shortcut.external.href": "https://www.kth.se",
 
   "Personal menu": "Personliga menyn",
 

@@ -26,14 +26,14 @@ exports[`<App /> Can be rendered 1`] = `
         <ul>
           <li>
             <a
-              href="https://kth.se/en"
+              href="https://www.kth.se/en"
             >
               kth.se
             </a>
           </li>
           <li>
             <a
-              href="https://kth.se/en/student"
+              href="https://www.kth.se/en/student"
             >
               Student web
             </a>
@@ -57,7 +57,7 @@ exports[`<App /> Can be rendered 1`] = `
           <a
             aria-current={false}
             className="kth-menu-item"
-            href="https://kth.se/en"
+            href="https://www.kth.se/en"
           >
             kth.se
           </a>
@@ -66,7 +66,7 @@ exports[`<App /> Can be rendered 1`] = `
           <a
             aria-current={false}
             className="kth-menu-item"
-            href="https://kth.se/en/student"
+            href="https://www.kth.se/en/student"
           >
             Student web
           </a>
