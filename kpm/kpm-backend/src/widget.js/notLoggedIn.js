@@ -55,7 +55,9 @@
     current = "external";
   }
 
-  let lis = ["external", "student", "intra"]
+  let keys = ["external", "student", "intra"];
+
+  let lis = keys
     .map((key) => {
       let c = key === current ? "aria-current='true'" : "";
       let link = links[key];
@@ -64,8 +66,9 @@
     })
     .join("");
 
-  let lis2 = links
-    .map((link) => {
+  let lis2 = keys
+    .map((key) => {
+      let link = links[key];
       return `<li><a href=${link.href[lang]}>${link.label[lang]}</a></li>`;
     })
     .join("");
