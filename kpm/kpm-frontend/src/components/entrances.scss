@@ -1,0 +1,106 @@
+@use "@kth/style/scss/tokens/spacing.scss";
+@use "@kth/style/scss/tokens/colors.scss";
+@use "@kth/style/scss/tokens/typography.scss";
+@use "@kth/style/scss/utils/mixins.scss";
+@use "../vars" as *;
+
+// This `kth-entrances` class is a copy of @kth/style/scss/components/entrances
+//  but outside of CSS layer "kth-style".
+//
+// TODO: convert this to a mixin in KTH Style and import from there
+#kpm-6cf53 nav.kth-entrances {
+  > ul {
+    @include mixins.horizontal-list();
+    gap: spacing.$space-4;
+  }
+
+  // Special case for "kth.se" link.
+  // It has a fixed width
+  a:not([href*="intra"], [href*="student"]) {
+    // TODO: this "4rem" should be a token (logotype width)
+    inline-size: 4rem;
+    justify-content: center;
+  }
+
+  a[href*="intra"],
+  a[href*="student"] {
+    padding-inline: spacing.$space-8;
+  }
+
+  a[aria-current="true"] {
+    background: var(--color-header, transparent);
+  }
+
+  a:not([href*="intra"], [href*="student"])[aria-current="true"] {
+    @include colors.theme-inverse;
+  }
+
+  a[href*="student"][aria-current="true"] {
+    @include colors.theme-student-web;
+  }
+
+  a[href*="intra"][aria-current="true"] {
+    @include colors.theme-intranet;
+  }
+}
+
+.kth-menu-item {
+  white-space: nowrap;
+}
+
+.kpm-entrances {
+  display: none;
+}
+
+#kpm-6cf53-entrances {
+  display: none;
+}
+
+button[aria-controls="kpm-6cf53-entrances"][aria-expanded="true"]
+  + #kpm-6cf53-entrances {
+  display: block;
+}
+
+// TODO: move this to KTH Style
+.kpm-mini-dialog {
+  @include colors.theme-default;
+  position: absolute;
+  width: 22.5rem;
+  background-color: var(--color-background);
+
+  // TODO: tokenize this shadow
+  box-shadow: 0 0.125rem 0.5rem 0 rgb(0 0 0 /0.15);
+  border: none;
+  padding: 1rem 2rem;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding-block: 4px;
+  }
+}
+
+// When logged out, show "mobile" version only in small screens
+@media screen and (min-width: $breakpoint-s) {
+  .kpm-logged-out .kpm-entrances {
+    display: block;
+  }
+
+  .kpm-logged-out .kpm-entrances-expandable {
+    display: none;
+  }
+}
+
+// When logged in, show "mobile" version in screens smaller than XL
+@media screen and (min-width: $breakpoint-xl) {
+  .kpm-entrances {
+    display: block;
+  }
+  .kpm-entrances-expandable {
+    display: none;
+  }
+}

@@ -1,5 +1,7 @@
 export function linkClassName({ isActive }: { isActive: boolean }) {
-  return isActive ? "active" : "";
+  return isActive
+    ? "kpm-menu-item kth-menu-item dropdown active"
+    : "kpm-menu-item kth-menu-item dropdown";
 }
 
 export function formatDisplayName(name?: string) {

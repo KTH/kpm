@@ -1,4 +1,5 @@
 @use "../vars" as *;
+@use "@kth/style/scss/components/button";
 
 #kpm-6cf53 .KpmModalBackdropAnim {
   &-enter {
@@ -60,11 +61,11 @@
   }
 
   .kpm-modal-content {
-    padding: calc(4 * var(--kpmPad));
+    // padding: calc(4 * var(--kpmPad));
     accent-color: var(--kpmPaneFg);
     display: flex;
     flex-flow: row wrap;
-    gap: $rowGap $colGap;
+    gap: 0 $colGap;
   }
 
   .kpm-modal-content-header {
@@ -90,12 +91,12 @@
 }
 
 // Menu panes
-@media #{$mblBreakpoint} {
-  body #kpm-6cf53 > .kpm-modal-backdrop {
+@media screen and (max-width: $breakpoint-l) {
+  body #kpm-6cf53 .kpm-modal-backdrop {
     display: none;
   }
 
-  body #kpm-6cf53 > .kpm-modal {
+  body #kpm-6cf53 .kpm-modal {
     position: fixed;
     top: 0;
     left: 0;

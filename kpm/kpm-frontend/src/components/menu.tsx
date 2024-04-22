@@ -62,16 +62,19 @@ function Backdrop({
     const style = body.style;
     oldOverflow = style.overflow;
     style.overflow = "hidden";
+
+    // FIXME: The scrollbar padding has to be added to the "root" node,
+    // (#kpm-6cf53) not to `parentNode`
     // If has scrollbar, set padding to avoid jumping
-    if (body.scrollHeight > (window.visualViewport?.height || 0)) {
-      oldPaddingRight = style.paddingRight;
-      style.paddingRight = `${getScrollBarWidth()}px`;
-      if (parentNode) {
-        (
-          parentNode as HTMLElement
-        ).style.marginRight = `${getScrollBarWidth()}px`;
-      }
-    }
+    // if (body.scrollHeight > (window.visualViewport?.height || 0)) {
+    //   oldPaddingRight = style.paddingRight;
+    //   style.paddingRight = `${getScrollBarWidth()}px`;
+    //   if (parentNode) {
+    //     (
+    //       parentNode as HTMLElement
+    //     ).style.marginRight = `${getScrollBarWidth()}px`;
+    //   }
+    // }
 
     return () => {
       const style = document.body.style;
@@ -183,9 +186,11 @@ export function MenuPaneWrapper({
 
   return (
     <dialog ref={nodeRef} className={cls} aria-modal="true">
-      <button className="kpm-modal-back-button kpm-mobile" onClick={doClose}>
-        {i18n("Tillbaka till personliga menyn")}
-      </button>
+      <div className="kpm-mobile">
+        <button className="kth-button back" onClick={doClose}>
+          {i18n("Tillbaka till personliga menyn")}
+        </button>
+      </div>
       {children}
     </dialog>
   );

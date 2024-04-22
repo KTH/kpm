@@ -1,3 +1,4 @@
+@use "@kth/style/scss/tokens/typography";
 @use "../vars" as *;
 
 #kpm-6cf53 div.kpm-services {
@@ -21,6 +22,18 @@
     }
   }
 
+  h3 {
+    @include typography.font-heading-s;
+    margin-block-start: 1rem;
+    margin-block-end: 0.25rem;
+  }
+
+  h4 {
+    @include typography.font-heading-xs;
+    margin-block-start: 0.25rem;
+    margin-block-end: 0.125rem;
+  }
+
   .kpm-empty-placeholder,
   .kpm-loading-placeholder {
     min-height: 5rem;
@@ -30,7 +43,7 @@
 @media #{$mblBreakpoint} {
   #kpm-6cf53 div.kpm-services .kpm-col.kpm-services-links {
     .kpm-col-header {
-      font-size: 2.34em; // Bugfix, can't figure out why this is half size
+      // font-size: 2.34em; // Bugfix, can't figure out why this is half size
     }
   }
 }

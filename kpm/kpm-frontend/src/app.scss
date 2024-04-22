@@ -1,8 +1,10 @@
 @use "stylesVars";
 @use "stylesReset";
 @use "stylesCanvas";
-@use "stylesMobile";
 @use "vars" as *;
+@use "@kth/style/scss/components/kpm";
+@use "components/entrances.scss" as e;
+@use "components/menu-item";
 
 #kpm-6cf53 {
   pointer-events: none;
@@ -17,7 +19,7 @@
   flex-direction: column;
   align-items: center;
 
-  font-family: "Open Sans", Arial, "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Figtree", sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -27,10 +29,21 @@
   }
 }
 
+#kpm-6cf53 .kth-kpm__container {
+  width: 100%;
+  pointer-events: all;
+  gap: 0;
+  overflow: hidden;
+  // Overwrite KTH Style: minimum margin is `0rem` instead of `1rem`
+  padding-inline: clamp(0rem, 3.33333vw, 2rem);
+}
+
 // Global styling
 #kpm-6cf53 .kpm-modal {
   pointer-events: all;
   max-width: 1200px;
+  padding-inline: 2rem;
+  padding-block: 1rem;
 }
 
 #kpm-6cf53 .kpm-modal-backdrop {
@@ -55,12 +68,6 @@
   flex-flow: column nowrap;
   justify-content: flex-start;
   flex-grow: 1;
-
-  .kpm-col-header {
-    font-size: 1.17em;
-    font-weight: bold;
-    margin-bottom: var(--kpmMargin);
-  }
 }
 @media #{$mblBreakpoint} {
   #kpm-6cf53 .kpm-col {
@@ -111,9 +118,15 @@
   }
 }
 
+// "Login" link when user is logged out
+#kpm-6cf53 .kpm-login {
+  margin-inline-start: auto;
+  margin-inline-end: 0.25rem;
+}
+
 // Typography in menu panes
 #kpm-6cf53 .kpm-modal-content {
-  padding: calc(2 * var(--kpmPad));
+  // padding: calc(2 * var(--kpmPad));
 
   h1 {
     margin-top: 0;

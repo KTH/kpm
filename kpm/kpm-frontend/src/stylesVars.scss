@@ -1,10 +1,12 @@
 @use "kth-style/public/sass/variables/colors";
+@use "@kth/style/scss/tokens/colors" as c;
 // TODO: Remaining hex values here should probably be replace with kth-style values.
 
-html {
-  --kpmMenuBg: #{colors.$grey};
-  --kpmMenuText: #{colors.$white};
-  --kpmMenuHoverBg: #{colors.$white};
+#kpm-6cf53 {
+  // --kpmMenuBg: #{colors.$grey};
+  --kpmMenuBg: var(--color-header, #{c.$color-white});
+  --kpmMenuText: var(--color-on-header, #{c.$color-blue-marine});
+  // --kpmMenuHoverBg: #{colors.$white};
   --kpmMenuHoverText: #2d2d31;
   --kpmAlertBg: #{colors.$infoYellowIcon};
 

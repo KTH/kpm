@@ -5,12 +5,16 @@ exports[`<Services /> Can be rendered 1`] = `
   aria-modal="true"
   className="kpm-modal"
 >
-  <button
-    className="kpm-modal-back-button kpm-mobile"
-    onClick={[Function]}
+  <div
+    className="kpm-mobile"
   >
-    Back to Personal Menu
-  </button>
+    <button
+      className="kth-button back"
+      onClick={[Function]}
+    >
+      Back to Personal Menu
+    </button>
+  </div>
   <div
     className="kpm-modal-content kpm-services"
   >
@@ -145,12 +149,16 @@ exports[`<Services /> Can be rendered with data 1`] = `
   aria-modal="true"
   className="kpm-modal active"
 >
-  <button
-    className="kpm-modal-back-button kpm-mobile"
-    onClick={[Function]}
+  <div
+    className="kpm-mobile"
   >
-    Back to Personal Menu
-  </button>
+    <button
+      className="kth-button back"
+      onClick={[Function]}
+    >
+      Back to Personal Menu
+    </button>
+  </div>
   <div
     className="kpm-modal-content kpm-services"
   >
@@ -285,13 +293,11 @@ exports[`<Services /> Can be rendered with data 1`] = `
       </h3>
       <ul>
         <li>
-          <h4>
-            <a
-              href="//:test/test/service"
-            >
-              Test Service Link
-            </a>
-          </h4>
+          <a
+            href="//:test/test/service"
+          >
+            Test Service Link
+          </a>
         </li>
       </ul>
     </div>

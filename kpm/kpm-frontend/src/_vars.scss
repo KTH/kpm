@@ -6,3 +6,14 @@ $mblBreakpoint: "screen and (max-width: 430px)";
 $desktopBreakpoint: "screen and (min-width: 431px)";
 $desktopMediumBreakpoint: "screen and (min-width: 431px) and (max-width: 928px)";
 $desktopLargeBreakpoint: "screen and (min-width: 929px)";
+
+// TODO: move these variables to kth stylea:
+
+// equivalent to 480px
+$breakpoint-s: 30rem;
+
+// equivalent to 1024px
+$breakpoint-l: 64rem;
+
+// equivalent to 1280px
+$breakpoint-xl: 80rem;

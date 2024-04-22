@@ -5,12 +5,16 @@ exports[`<Profile /> Can be rendered 1`] = `
   aria-modal="true"
   className="kpm-modal"
 >
-  <button
-    className="kpm-modal-back-button kpm-mobile"
-    onClick={[Function]}
+  <div
+    className="kpm-mobile"
   >
-    Back to Personal Menu
-  </button>
+    <button
+      className="kth-button back"
+      onClick={[Function]}
+    >
+      Back to Personal Menu
+    </button>
+  </div>
   <div
     className="kpm-modal-content kpm-profile"
   >
