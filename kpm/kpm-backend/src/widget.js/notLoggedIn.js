@@ -1,28 +1,25 @@
 (function (js, css, url) {
-  let RS = /^https?:\/\/(www\.)?kth.se\/student($|\/)/;
-  let RE = /^https?:\/\/(www\.)?kth.se\/(?!student($|\/))/;
+  let RS = /^https?:\/\/(www\.)?kth.se\/(en\/)?student($|\/)/;
+  let RE = /^https?:\/\/(www\.)?kth.se($|\/)/;
   let RI = /^https?:\/\/intra\.kth\.se/;
   let lang = document.documentElement.lang.startsWith("sv") ? "sv" : "en";
-  let links = [
-    {
+  let links = {
+    external: {
       href: { sv: "https://www.kth.se", en: "https://www.kth.se/en" },
       label: { en: "kth.se", sv: "kth.se" },
-      test: (url) => RE.test(url),
     },
-    {
+    student: {
       href: {
         sv: "https://www.kth.se/student",
         en: "https://www.kth.se/en/student",
       },
       label: { en: "Student web", sv: "Studentwebben" },
-      test: (url) => RS.test(url),
     },
-    {
+    intra: {
       href: { sv: "https://intra.kth.se", en: "https://intra.kth.se/en" },
       label: { en: "Intranet", sv: "Intranät" },
-      test: (url) => RI.test(url),
     },
-  ];
+  };
   let lbls = {
     w: { en: "Websites", sv: "Webbplatser" },
     l: { en: "Login", sv: "Logga in" },
@@ -46,14 +43,22 @@
   s.position = "fixed";
   s.height = "2.5rem";
 
-  const currentLink =
-    links.find((l) => l.test(window.location.toString())) || links[0];
+  const l = window.location.toString();
+  let current = "";
 
-  let lis = links
-    .map((link) => {
-      let c = link.test(window.location.toString())
-        ? "aria-current='true'"
-        : "";
+  // Note: "student" must be checked before "external"
+  if (RS.test(l)) {
+    current = "student";
+  } else if (RI.test(l)) {
+    current = "intra";
+  } else if (RE.test(l)) {
+    current = "external";
+  }
+
+  let lis = ["external", "student", "intra"]
+    .map((key) => {
+      let c = key === current ? "aria-current='true'" : "";
+      let link = links[key];
 
       return `<li><a href=${link.href[lang]} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
     })

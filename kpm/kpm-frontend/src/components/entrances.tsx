@@ -2,9 +2,8 @@ import React from "react";
 import { i18n } from "../i18n/i18n";
 import "./entrances.scss";
 
-const STUDENT_REGEX1 = /^https?:\/\/student\.kth\.se/;
-const STUDENT_REGEX2 = /^https?:\/\/(www\.)?kth.se\/student($|\/)/;
-const EXTERNAL_REGEX = /^https?:\/\/(www\.)?kth.se\/(?!student($|\/))/;
+const STUDENT_REGEX2 = /^https?:\/\/(www\.)?kth.se\/(en\/)?student($|\/)/;
+const EXTERNAL_REGEX = /^https?:\/\/(www\.)?kth.se($|\/)/;
 const INTRA_REGEX = /^https?:\/\/intra\.kth\.se/;
 
 const labels = {
@@ -17,7 +16,7 @@ const labels = {
 function getCurrentSite(): "external" | "intra" | "student" | undefined {
   const currentPage = window.location.toString();
 
-  if (STUDENT_REGEX1.test(currentPage)) {
+  if (STUDENT_REGEX2.test(currentPage)) {
     return "student";
   } else if (INTRA_REGEX.test(currentPage)) {
     return "intra";
