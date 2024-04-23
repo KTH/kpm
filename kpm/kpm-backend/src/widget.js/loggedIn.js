@@ -1,8 +1,19 @@
 (function (js, css) {
-  document.body.style.setProperty("--kpm-bar-height", "2.5rem");
-  document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
   var cr = (t) => document.createElement(t),
     ap = (n) => document.head.appendChild(n);
+
+  // Create "<div id='kpm-6cf53' class='kth-kpm'>"
+  let root = document.querySelector(".kth-kpm");
+
+  if (!root) {
+    root = cr("div");
+    document.body.style.setProperty("--kpm-bar-height", "2.5rem");
+    document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
+    document.body.prepend(n);
+  }
+
+  root.style.position = "fixed";
+  root.id = "kpm-6cf53";
   let sc = cr("script");
   sc.defer = true;
   sc.src = js;
@@ -11,11 +22,8 @@
   st.rel = "stylesheet";
   st.href = css;
   ap(st);
-  let n = cr("div");
-  n.id = "kpm-6cf53";
-  n.style.position = "fixed";
+
   document.body.classList.add("use-personal-menu");
-  document.body.prepend(n);
   // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
   window.__kpmPublicUriBase__ = "{{KPM_PUBLIC_URI_BASE}}";
   // Inject some user data to allow rendering the menu properly.
