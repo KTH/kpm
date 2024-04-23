@@ -25,6 +25,7 @@
     l: { en: "Login", sv: "Logga in" },
   };
 
+  let cr = (t) => document.createElement(t);
   let root = document.querySelector(".kth-kpm");
   if (!root) {
     // <div id="kpm-6cf53" style="pointer-events: all"...>
@@ -35,7 +36,6 @@
 
   root.classList.remove("kth-kpm");
   root.id = "kpm-6cf53";
-  let cr = (t) => document.createElement(t);
   let st = cr("link");
   st.rel = "stylesheet";
   st.href = css;
@@ -95,7 +95,7 @@
     </div>
   `;
 
-  document.body.prepend(n);
+  document.body.prepend(root);
   let btn = document.querySelector(
     "button[aria-controls='kpm-6cf53-entrances']"
   );

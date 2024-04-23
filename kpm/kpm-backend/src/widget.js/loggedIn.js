@@ -8,7 +8,7 @@
   if (!root) {
     root = cr("div");
     document.body.style.setProperty("--kpm-bar-height", "2.5rem");
-    document.body.prepend(n);
+    document.body.prepend(root);
     document.body.classList.add("use-personal-menu");
   }
 
