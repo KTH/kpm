@@ -2,10 +2,6 @@ import React from "react";
 import { i18n } from "../i18n/i18n";
 import "./entrances.scss";
 
-const STUDENT_REGEX2 = /^https?:\/\/(www\.)?kth.se\/(en\/)?student($|\/)/;
-const EXTERNAL_REGEX = /^https?:\/\/(www\.)?kth.se($|\/)/;
-const INTRA_REGEX = /^https?:\/\/intra\.kth\.se/;
-
 const labels = {
   external: "kth.se",
   intra: i18n("shortcut.intranet"),
@@ -14,15 +10,11 @@ const labels = {
 
 /** Get the current site */
 function getCurrentSite(): "external" | "intra" | "student" | undefined {
-  const currentPage = window.location.toString();
+  const SITES = ["external", "intra", "student"] as const;
 
-  if (STUDENT_REGEX2.test(currentPage)) {
-    return "student";
-  } else if (INTRA_REGEX.test(currentPage)) {
-    return "intra";
-  } else if (EXTERNAL_REGEX.test(currentPage)) {
-    return "external";
-  }
+  return SITES.find((site) =>
+    document.querySelector("kth-header")?.classList.contains(site)
+  );
 }
 
 /**
