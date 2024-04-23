@@ -30,7 +30,6 @@
     // <div id="kpm-6cf53" style="pointer-events: all"...>
     root = cr("div");
     document.body.style.setProperty("--kpm-bar-height", "2.5rem");
-    document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
     document.body.classList.add("use-personal-menu");
   }
 
