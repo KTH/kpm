@@ -10,6 +10,7 @@
     document.body.style.setProperty("--kpm-bar-height", "2.5rem");
     document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
     document.body.prepend(n);
+    document.body.classList.add("use-personal-menu");
   }
 
   root.style.position = "fixed";
@@ -23,7 +24,6 @@
   st.href = css;
   ap(st);
 
-  document.body.classList.add("use-personal-menu");
   // NOTE: This global variable is read in kpm-backend/src/panes/utils.ts
   window.__kpmPublicUriBase__ = "{{KPM_PUBLIC_URI_BASE}}";
   // Inject some user data to allow rendering the menu properly.
