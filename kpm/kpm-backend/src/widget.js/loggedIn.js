@@ -12,6 +12,7 @@
     document.body.classList.add("use-personal-menu");
   }
 
+  root.classList.remove("kth-kpm");
   root.style.position = "fixed";
   root.id = "kpm-6cf53";
   let sc = cr("script");

@@ -32,9 +32,9 @@
     root = cr("div");
     document.body.style.setProperty("--kpm-bar-height", "2.5rem");
     document.body.classList.add("use-personal-menu");
+    document.body.prepend(root);
   }
 
-  root.classList.remove("kth-kpm");
   root.id = "kpm-6cf53";
   let st = cr("link");
   st.rel = "stylesheet";
@@ -95,7 +95,6 @@
     </div>
   `;
 
-  document.body.prepend(root);
   let btn = document.querySelector(
     "button[aria-controls='kpm-6cf53-entrances']"
   );
