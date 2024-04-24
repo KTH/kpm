@@ -30,6 +30,7 @@
   if (!root) {
     // <div id="kpm-6cf53" style="pointer-events: all"...>
     root = cr("div");
+    root.classList.add("kth-kpm");
     document.body.style.setProperty("--kpm-bar-height", "2.5rem");
     document.body.classList.add("use-personal-menu");
     document.body.prepend(root);
