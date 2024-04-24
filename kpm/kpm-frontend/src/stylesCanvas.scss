@@ -53,7 +53,7 @@ body > span > span[data-position-content*="Menu"] {
 
 // Provide space at top of <body> for kpm on pages where this isn't done by
 // the hosting page CSS. Specifically for iFrames in Canvas (SpeedGrader)
-body {
+body.use-personal-menu {
   border-top: none !important;
   margin-top: var(--kpm-bar-height) !important;
   padding-top: 0;

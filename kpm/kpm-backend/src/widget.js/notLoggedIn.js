@@ -25,19 +25,23 @@
     l: { en: "Login", sv: "Logga in" },
   };
 
-  document.body.style.setProperty("--kpm-bar-height", "2.5rem");
-  document.body.style.setProperty("margin-top", "var(--kpm-bar-height)");
   let cr = (t) => document.createElement(t);
+  let root = document.querySelector(".kth-kpm");
+  if (!root) {
+    // <div id="kpm-6cf53" style="pointer-events: all"...>
+    root = cr("div");
+    document.body.style.setProperty("--kpm-bar-height", "2.5rem");
+    document.body.classList.add("use-personal-menu");
+  }
+
+  root.classList.remove("kth-kpm");
+  root.id = "kpm-6cf53";
   let st = cr("link");
   st.rel = "stylesheet";
   st.href = css;
   document.head.appendChild(st);
 
-  // <div id="kpm-6cf53" style="pointer-events: all"...>
-  let n = cr("div");
-  n.id = "kpm-6cf53";
-  n.classList.add("kth-kpm");
-  let s = n.style;
+  let s = root.style;
   s.pointerEvents = "all";
   s.inset = "0";
   s.position = "fixed";
@@ -78,7 +82,7 @@
   let currentLabel =
     current === "" ? links.external.label[lang] : links[current].label[lang];
 
-  n.innerHTML = `
+  root.innerHTML = `
     <div class="kth-kpm__container kpm-logged-out">
     <nav class="kpm-entrances-expandable" aria-label="${lbls.w[lang]}">
     <button class="kth-menu-item dropdown" aria-expanded="false" aria-controls="kpm-6cf53-entrances">${currentLabel}</button>
@@ -91,8 +95,7 @@
     </div>
   `;
 
-  document.body.classList.add("use-personal-menu");
-  document.body.prepend(n);
+  document.body.prepend(root);
   let btn = document.querySelector(
     "button[aria-controls='kpm-6cf53-entrances']"
   );
