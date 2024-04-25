@@ -85,7 +85,7 @@
 
   root.innerHTML = `
     <div class="kth-kpm__container kpm-logged-out">
-    <nav class="kpm-entrances-expandable" aria-label="${lbls.w[lang]}">
+    <nav class="kth-entrances-expandable kpm-entrances-expandable" aria-label="${lbls.w[lang]}">
     <button class="kth-menu-item dropdown" aria-expanded="false" aria-controls="kpm-6cf53-entrances">${currentLabel}</button>
     <div class="kpm-mini-dialog" id="kpm-6cf53-entrances"><ul>${lis2}</ul></div>
     </nav>
