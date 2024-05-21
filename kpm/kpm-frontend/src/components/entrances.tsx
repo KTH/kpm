@@ -13,7 +13,7 @@ function getCurrentSite(): "external" | "intra" | "student" | undefined {
   const SITES = ["external", "intra", "student"] as const;
 
   return SITES.find((site) =>
-    document.querySelector("kth-header")?.classList.contains(site)
+    document.querySelector(".kth-header")?.classList.contains(site)
   );
 }
 
