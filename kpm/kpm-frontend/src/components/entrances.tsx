@@ -4,13 +4,13 @@ import "./entrances.scss";
 
 const labels = {
   external: "kth.se",
-  intra: i18n("shortcut.intranet"),
-  student: i18n("shortcut.studentweb"),
-};
+  intranet: i18n("shortcut.intranet"),
+  "student-web": i18n("shortcut.studentweb"),
+} as const;
 
 /** Get the current site */
-function getCurrentSite(): "external" | "intra" | "student" | undefined {
-  const SITES = ["external", "intra", "student"] as const;
+function getCurrentSite(): keyof typeof labels | undefined {
+  const SITES = ["external", "intranet", "student-web"] as const;
 
   return SITES.find((site) =>
     document.querySelector(".kth-header")?.classList.contains(site)
@@ -77,7 +77,7 @@ export function Entrances() {
             <a
               href={i18n("shortcut.studentweb.href")}
               className="kth-menu-item"
-              aria-current={currentSite === "student"}
+              aria-current={currentSite === "student-web"}
             >
               {i18n("shortcut.studentweb")}
             </a>
@@ -86,7 +86,7 @@ export function Entrances() {
             <a
               href={i18n("shortcut.intra.href")}
               className="kth-menu-item"
-              aria-current={currentSite === "intra"}
+              aria-current={currentSite === "intranet"}
             >
               {i18n("shortcut.intranet")}
             </a>
