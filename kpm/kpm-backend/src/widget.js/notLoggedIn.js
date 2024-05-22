@@ -55,7 +55,6 @@
       let c = header?.classList.contains(link.className)
         ? "aria-current='true'"
         : "";
-      let link = links[key];
 
       return `<li><a href=${link.href[lang]} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
     })
