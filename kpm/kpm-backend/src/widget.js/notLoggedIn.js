@@ -1,25 +1,26 @@
 (function (js, css, url) {
-  let RS = /^https?:\/\/(www\.)?kth.se\/(en\/)?student($|\/)/;
-  let RE = /^https?:\/\/(www\.)?kth.se($|\/)/;
-  let RI = /^https?:\/\/intra\.kth\.se/;
   let lang = document.documentElement.lang.startsWith("sv") ? "sv" : "en";
-  let links = {
-    external: {
+  let links = [
+    {
+      className: "external",
       href: { sv: "https://www.kth.se", en: "https://www.kth.se/en" },
       label: { en: "kth.se", sv: "kth.se" },
     },
-    student: {
+    {
+      className: "student-web",
       href: {
         sv: "https://www.kth.se/student",
         en: "https://www.kth.se/en/student",
       },
       label: { en: "Student web", sv: "Studentwebben" },
     },
-    intra: {
+    {
+      className: "intranet",
       href: { sv: "https://intra.kth.se", en: "https://intra.kth.se/en" },
       label: { en: "Intranet", sv: "Intranät" },
     },
-  };
+  ];
+
   let lbls = {
     w: { en: "Websites", sv: "Webbplatser" },
     l: { en: "Login", sv: "Logga in" },
@@ -48,40 +49,28 @@
   s.position = "fixed";
   s.height = "2.5rem";
 
-  const l = window.location.toString();
-  let current = "";
-
-  // Note: "student" must be checked before "external"
-  if (RS.test(l)) {
-    current = "student";
-  } else if (RI.test(l)) {
-    current = "intra";
-  } else if (RE.test(l)) {
-    current = "external";
-  }
-
-  let keys = ["external", "student", "intra"];
-
-  let lis = keys
-    .map((key) => {
-      let c = key === current ? "aria-current='true'" : "";
-      let link = links[key];
+  let header = document.querySelector(".kth-header");
+  let lis = links
+    .map((link) => {
+      let c = header?.classList.contains(link.className)
+        ? "aria-current='true'"
+        : "";
 
       return `<li><a href=${link.href[lang]} ${c} class="kth-menu-item">${link.label[lang]}</a></li>`;
     })
     .join("");
 
-  let lis2 = keys
-    .map((key) => {
-      let link = links[key];
+  let lis2 = links
+    .map((link) => {
       return `<li><a href=${link.href[lang]}>${link.label[lang]}</a></li>`;
     })
     .join("");
 
   let login = `<a class="kth-menu-item kpm-login" href="${url}?nextUrl=${location.href}">${lbls.l[lang]}</a>`;
-
-  let currentLabel =
-    current === "" ? links.external.label[lang] : links[current].label[lang];
+  let currentItem = links.find((link) =>
+    header?.classList.contains(link.className)
+  );
+  let currentLabel = currentItem?.label[lang] ?? links[0].label[lang];
 
   root.innerHTML = `
     <div class="kth-kpm__container kpm-logged-out">

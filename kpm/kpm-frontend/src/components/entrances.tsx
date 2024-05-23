@@ -2,27 +2,19 @@ import React from "react";
 import { i18n } from "../i18n/i18n";
 import "./entrances.scss";
 
-const STUDENT_REGEX2 = /^https?:\/\/(www\.)?kth.se\/(en\/)?student($|\/)/;
-const EXTERNAL_REGEX = /^https?:\/\/(www\.)?kth.se($|\/)/;
-const INTRA_REGEX = /^https?:\/\/intra\.kth\.se/;
-
 const labels = {
   external: "kth.se",
-  intra: i18n("shortcut.intranet"),
-  student: i18n("shortcut.studentweb"),
-};
+  intranet: i18n("shortcut.intranet"),
+  "student-web": i18n("shortcut.studentweb"),
+} as const;
 
 /** Get the current site */
-function getCurrentSite(): "external" | "intra" | "student" | undefined {
-  const currentPage = window.location.toString();
+function getCurrentSite(): keyof typeof labels | undefined {
+  const SITES = ["external", "intranet", "student-web"] as const;
 
-  if (STUDENT_REGEX2.test(currentPage)) {
-    return "student";
-  } else if (INTRA_REGEX.test(currentPage)) {
-    return "intra";
-  } else if (EXTERNAL_REGEX.test(currentPage)) {
-    return "external";
-  }
+  return SITES.find((site) =>
+    document.querySelector(".kth-header")?.classList.contains(site)
+  );
 }
 
 /**
@@ -85,7 +77,7 @@ export function Entrances() {
             <a
               href={i18n("shortcut.studentweb.href")}
               className="kth-menu-item"
-              aria-current={currentSite === "student"}
+              aria-current={currentSite === "student-web"}
             >
               {i18n("shortcut.studentweb")}
             </a>
@@ -94,7 +86,7 @@ export function Entrances() {
             <a
               href={i18n("shortcut.intra.href")}
               className="kth-menu-item"
-              aria-current={currentSite === "intra"}
+              aria-current={currentSite === "intranet"}
             >
               {i18n("shortcut.intranet")}
             </a>
