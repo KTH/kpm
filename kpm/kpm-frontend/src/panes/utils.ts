@@ -3,6 +3,31 @@ import { AuthError } from "../components/common";
 import { i18n, LANG } from "../i18n/i18n";
 import { authState } from "../state/authState";
 
+// Hosts. They are set up when compiling, not runtime
+const HOSTS = {
+  www: "https://www.kth.se",
+  app: "https://app.kth.se",
+  intra: "https://intra.kth.se",
+  canvas: "https://canvas.kth.se",
+};
+
+const REF_HOSTS: typeof HOSTS = {
+  www: "https://www-r.referens.sys.kth.se",
+  app: "https://app-r.referens.sys.kth.se",
+  intra: "https://intra-r.referens.sys.kth.se",
+  canvas: "https://kth.test.instructure.com",
+};
+
+export function prefixHost(key: keyof typeof HOSTS, path: string) {
+  if (
+    typeof window.__kpmPublicUriBase__ === "string" &&
+    window.__kpmPublicUriBase__.startsWith("https://app.kth.se/")
+  ) {
+    return HOSTS[key] + path;
+  }
+  return REF_HOSTS[key] + path;
+}
+
 declare global {
   interface Window {
     // NOTE: This global variable is set in widget.js.ts
@@ -16,24 +41,6 @@ export function createApiUri(path: string) {
   } else {
     return `/kpm${path}`;
   }
-}
-
-function getMainHost() {
-  if (
-    typeof window.__kpmPublicUriBase__ === "string" &&
-    window.__kpmPublicUriBase__.startsWith("https://app.kth.se/")
-  ) {
-    return `https://www.kth.se`;
-  }
-  return `https://www-r.referens.sys.kth.se`;
-}
-
-export function createFilesUri(path: string) {
-  return `${getMainHost()}/files${path}`;
-}
-
-export function createProfilesUri(path: string) {
-  return `${getMainHost()}/profile${path}`;
 }
 
 export function useDataFecther<T>(loaderFunc: () => Promise<T>): {

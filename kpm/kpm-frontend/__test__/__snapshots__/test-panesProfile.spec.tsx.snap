@@ -65,7 +65,7 @@ exports[`<Profile /> Can be rendered 1`] = `
         </li>
         <li>
           <a
-            href="https://www.kth.se/emailforward"
+            href="https://www-r.referens.sys.kth.se/emailforward"
           >
             Forward KTH email
           </a>
@@ -92,14 +92,14 @@ exports[`<Profile /> Can be rendered 1`] = `
       <ul>
         <li>
           <a
-            href="https://www.kth.se/social/home/settings/"
+            href="https://www-r.referens.sys.kth.se/social/home/settings/"
           >
             Subscriptions, my schedule
           </a>
         </li>
         <li>
           <a
-            href="https://www.kth.se/social/home/calendar/settings/"
+            href="https://www-r.referens.sys.kth.se/social/home/calendar/settings/"
           >
             Export My schedule (e.g. to your mobile phone)
           </a>

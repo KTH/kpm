@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIGroups } from "kpm-backend-interface";
-import { fetchApi, postApi, useDataFecther } from "./utils";
+import { fetchApi, postApi, useDataFecther, prefixHost } from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -122,14 +122,19 @@ export function Groups() {
       <MenuPaneHeader title={i18n("My Groups")}>
         <a
           title={i18n("Search for interesting groups to follow")}
-          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          href={prefixHost(
+            "www",
+            "/search/?entityFilter=social-group&filterLabel=Groups"
+          )}
         >
           {i18n("Find groups")}
         </a>
-        <a href="https://www.kth.se/social/group-create/">
+        <a href={prefixHost("www", "/social/group-create/")}>
           {i18n("Create new group")}
         </a>
-        <IconSettings href="https://www.kth.se/social/home/settings/groups" />
+        <IconSettings
+          href={prefixHost("www", "/social/home/settings/groups")}
+        />
       </MenuPaneHeader>
       <TabFilter>
         <FilterOption<TFilter>

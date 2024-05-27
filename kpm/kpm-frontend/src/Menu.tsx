@@ -16,7 +16,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import "./Menu.scss";
 import { useLogin } from "./components/login";
 import { useAuthState } from "./state/authState";
-import { createApiUri, createFilesUri } from "./panes/utils";
+import { createApiUri, prefixHost } from "./panes/utils";
 import { Entrances } from "./components/entrances";
 
 const KTH_MAIL_URI = "https://webmail.kth.se/";
@@ -84,7 +84,10 @@ export function Menu() {
                   className="kth-menu-item dropdown"
                 >
                   <img
-                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    src={prefixHost(
+                      "www",
+                      `/files/thumbnail/${currentUser?.username}`
+                    )}
                     alt=""
                     className="kpm-profile-image"
                   />
@@ -144,7 +147,10 @@ export function Menu() {
               <li className="kpm-profile-item kpm-mobile">
                 <ToggleNavLink to="profile" className={linkClassName}>
                   <img
-                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    src={prefixHost(
+                      "www",
+                      `/files/thumbnail/${currentUser?.username}`
+                    )}
                     alt=""
                     className="kpm-profile-image"
                   />
@@ -195,7 +201,10 @@ export function Menu() {
                   className={linkClassName}
                 >
                   <img
-                    src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                    src={prefixHost(
+                      "www",
+                      `/files/thumbnail/${currentUser?.username}`
+                    )}
                     alt={i18n("Profile")}
                     className="kpm-profile-image"
                   />

@@ -55,6 +55,7 @@ class CorsError extends MutedOperationalError<TCorsError> {
 let corsWhitelist: string[] = [];
 if (IS_STAGE || IS_DEV) {
   corsWhitelist = [
+    "http://localhost:4321",
     "https://app-r.referens.sys.kth.se",
     "https://intra-r.referens.sys.kth.se",
     "https://kth.beta.instructure.com",

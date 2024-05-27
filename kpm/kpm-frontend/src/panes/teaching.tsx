@@ -11,7 +11,13 @@ import { MenuPane } from "../components/menu";
 import { DropdownMenuGroup, GroupItem } from "../components/groups";
 import { FilterOption, TabFilter } from "../components/filter";
 import { ExamRoomList } from "../components/courseComponents";
-import { fetchApi, postApi, formatTerm, useDataFecther } from "./utils";
+import {
+  fetchApi,
+  postApi,
+  formatTerm,
+  useDataFecther,
+  prefixHost,
+} from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -189,7 +195,7 @@ type TCourseProps = {
 
 function Course({ courseCode, course, setStar }: TCourseProps) {
   const courseName = i18n(course.title); // TODO: perhaps convert i18n to i18nHook that fetches language and returns i18n function
-  const aboutCourseUrl = `https://www.kth.se/kurs-pm/${courseCode}/om-kurs-pm`;
+  const aboutCourseUrl = prefixHost("www", `/kurs-pm/${courseCode}/om-kurs-pm`);
   // TODO: These should be changed to course rooms, check backend
   const {
     shortList = [],
@@ -458,48 +464,60 @@ function CourseAdminDropdown({
     >
       <GroupItem>
         <a
-          href={`https://www.kth.se/social/course/${courseCode}/editassistants/`}
+          href={prefixHost(
+            "www",
+            `/social/course/${courseCode}/editassistants/`
+          )}
         >
           {i18n("Administrera assistenter")}
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={`https://www.kth.se/social/course/${courseCode}/subgroup/`}>
+        <a href={prefixHost("www", `/social/course/${courseCode}/subgroup/`)}>
           {i18n("Hantera Omgångar/grupper")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
-          href={`https://app.kth.se/studentlistor/kurstillfallen/?courseCode=${courseCode}&term=${currentTerm}`}
+          href={prefixHost(
+            "app",
+            `/studentlistor/kurstillfallen/?courseCode=${courseCode}&term=${currentTerm}`
+          )}
         >
           {i18n("Kursdeltagare")}
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={`https://app.kth.se/kopps/admin/courses/${courseCode}/`}>
+        <a href={prefixHost("app", `/kopps/admin/courses/${courseCode}/`)}>
           {i18n("Kursinformation i Kopps")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
-          href={`https://app.kth.se/kursinfoadmin/kurser/kurs/edit/${courseCode}`}
+          href={prefixHost(
+            "app",
+            `/kursinfoadmin/kurser/kurs/edit/${courseCode}`
+          )}
         >
           {i18n("Redigera introduktion till kursen")}
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={`https://app.kth.se/kursinfoadmin/kurs-pm-data/${courseCode}`}>
+        <a href={prefixHost("app", `kursinfoadmin/kurs-pm-data/${courseCode}`)}>
           {i18n("Skapa och publicera kurs-PM")}
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={`https://www.kth.se/social/course/${courseCode}/survey/`}>
+        <a href={prefixHost("www", `/social/course/${courseCode}/survey/`)}>
           {i18n("Kursvärdering")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
-          href={`https://app.kth.se/kursinfoadmin/kursutveckling/${courseCode}`}
+          href={prefixHost(
+            "app",
+            `/kursinfoadmin/kursutveckling/${courseCode}`
+          )}
         >
           {i18n("Publicera ny kursanalys")}
         </a>
@@ -512,13 +530,16 @@ function CourseAdminDropdown({
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={`https://www.kth.se/social/course/${courseCode}/students/`}>
+        <a href={prefixHost("www", `/social/course/${courseCode}/students/`)}>
           {i18n("Studentgruppen / Prenumeranter")}
         </a>
       </GroupItem>
       <GroupItem>
         <a
-          href={`https://app.kth.se/aktivitetstillfallen/schema?courseCode=${courseCode}`}
+          href={prefixHost(
+            "app",
+            `/aktivitetstillfallen/schema?courseCode=${courseCode}`
+          )}
         >
           {i18n("Sök tentamen")}
         </a>
