@@ -503,7 +503,9 @@ function CourseAdminDropdown({
         </a>
       </GroupItem>
       <GroupItem>
-        <a href={prefixHost("app", `kursinfoadmin/kurs-pm-data/${courseCode}`)}>
+        <a
+          href={prefixHost("app", `/kursinfoadmin/kurs-pm-data/${courseCode}`)}
+        >
           {i18n("Skapa och publicera kurs-PM")}
         </a>
       </GroupItem>
