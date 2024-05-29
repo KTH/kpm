@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIProgrammes, TCanvasRoom } from "kpm-backend-interface";
-import { fetchApi, postApi, useDataFecther } from "./utils";
+import { fetchApi, postApi, prefixHost, useDataFecther } from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -74,11 +74,16 @@ export function Programme() {
       <MenuPaneHeader title={i18n("My Programmes")}>
         <a
           title="Help / feedback for the personal menu in connection with the transition to new Ladok"
-          href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
+          href={prefixHost(
+            "www",
+            "/social/group/feedback-fran-anvand/page/personliga-menyn/"
+          )}
         >
           Help / feedback
         </a>
-        <IconSettings href="https://www.kth.se/social/home/settings/programmes" />
+        <IconSettings
+          href={prefixHost("www", "/social/home/settings/programmes")}
+        />
       </MenuPaneHeader>
       {loading && <LoadingPlaceholder />}
       {error && <ErrorMessage error={error} />}
@@ -114,7 +119,7 @@ function ProgramItem({ programCode, program }: TProgramItemProps) {
           {displayName}
         </a>
       </p>
-      <a href={`https://www.kth.se/student/kurser/program/${programCode}`}>
+      <a href={prefixHost("www", `/student/kurser/program/${programCode}`)}>
         {i18n("prog_syllabus")}
       </a>
     </section>

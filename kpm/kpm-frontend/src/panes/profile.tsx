@@ -1,11 +1,6 @@
 import * as React from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
-import {
-  createApiUri,
-  createFilesUri,
-  createProfilesUri,
-  postApi,
-} from "./utils";
+import { createApiUri, postApi, prefixHost } from "./utils";
 import { useAuthState } from "../state/authState";
 import { i18n, LANG } from "../i18n/i18n";
 import "./profile.scss";
@@ -40,17 +35,20 @@ export function Profile() {
           <li>
             <a
               className="kpm-profile-link"
-              href={createProfilesUri(`/${currentUser?.username}`)}
+              href={prefixHost("www", `/profile/${currentUser?.username}`)}
             >
               <img
-                src={createFilesUri(`/thumbnail/${currentUser?.username}`)}
+                src={prefixHost(
+                  "www",
+                  `/files/thumbnail/${currentUser?.username}`
+                )}
                 alt={i18n("Profile Image")}
               />
               {i18n("My Profile")}
             </a>
           </li>
           <li>
-            <a href="https://www.kth.se/emailforward">
+            <a href={prefixHost("www", "/emailforward")}>
               {i18n("Forward KTH email")}
             </a>
           </li>
@@ -66,12 +64,12 @@ export function Profile() {
         <h3 className="kpm-col-header">{i18n("My Settings")}</h3>
         <ul>
           <li>
-            <a href="https://www.kth.se/social/home/settings/">
+            <a href={prefixHost("www", "/social/home/settings/")}>
               {i18n("Subscriptions, my schedule")}
             </a>
           </li>
           <li>
-            <a href="https://www.kth.se/social/home/calendar/settings/">
+            <a href={prefixHost("www", "/social/home/calendar/settings/")}>
               {i18n("Export My schedule (e.g. to your mobile phone)")}
             </a>
           </li>

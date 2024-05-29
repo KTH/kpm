@@ -5,7 +5,7 @@ import {
   TStudiesCourseRound,
 } from "kpm-backend-interface";
 import { MenuPane } from "../components/menu";
-import { fetchApi, formatTerm, useDataFecther } from "./utils";
+import { fetchApi, formatTerm, prefixHost, useDataFecther } from "./utils";
 import { i18n } from "../i18n/i18n";
 
 import "./studies.scss";
@@ -216,9 +216,12 @@ function Course({ courseCode, course }: TCourseProps) {
 
 function getCourseInfoUrl(code: string, round?: TStudiesCourseRound) {
   if (round?.applicationCode !== undefined) {
-    return `https://www.kth.se/kurs-pm/${code}/${code}${round.year}${round.term}-${round.applicationCode}`;
+    return prefixHost(
+      "www",
+      `/kurs-pm/${code}/${code}${round.year}${round.term}-${round.applicationCode}`
+    );
   } else {
-    return `https://www.kth.se/kurs-pm/${code}/`;
+    return prefixHost("www", `/kurs-pm/${code}/`);
   }
 }
 

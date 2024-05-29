@@ -28,19 +28,19 @@ exports[`<Groups /> Can be rendered 1`] = `
         className="kpm-modal-content-header-actions"
       >
         <a
-          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          href="https://www-r.referens.sys.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
           title="Search for interesting groups to follow"
         >
           Find groups
         </a>
         <a
-          href="https://www.kth.se/social/group-create/"
+          href="https://www-r.referens.sys.kth.se/social/group-create/"
         >
           Create new group
         </a>
         <a
           className="icon"
-          href="https://www.kth.se/social/home/settings/groups"
+          href="https://www-r.referens.sys.kth.se/social/home/settings/groups"
         >
           <svg
             height="1.2em"
@@ -122,19 +122,19 @@ exports[`<Groups /> Can be rendered with data and none starred 1`] = `
         className="kpm-modal-content-header-actions"
       >
         <a
-          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          href="https://www-r.referens.sys.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
           title="Search for interesting groups to follow"
         >
           Find groups
         </a>
         <a
-          href="https://www.kth.se/social/group-create/"
+          href="https://www-r.referens.sys.kth.se/social/group-create/"
         >
           Create new group
         </a>
         <a
           className="icon"
-          href="https://www.kth.se/social/home/settings/groups"
+          href="https://www-r.referens.sys.kth.se/social/home/settings/groups"
         >
           <svg
             height="1.2em"
@@ -256,19 +256,19 @@ exports[`<Groups /> Can be rendered with data and one starred 1`] = `
         className="kpm-modal-content-header-actions"
       >
         <a
-          href="https://www.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
+          href="https://www-r.referens.sys.kth.se/search/?entityFilter=social-group&filterLabel=Groups"
           title="Search for interesting groups to follow"
         >
           Find groups
         </a>
         <a
-          href="https://www.kth.se/social/group-create/"
+          href="https://www-r.referens.sys.kth.se/social/group-create/"
         >
           Create new group
         </a>
         <a
           className="icon"
-          href="https://www.kth.se/social/home/settings/groups"
+          href="https://www-r.referens.sys.kth.se/social/home/settings/groups"
         >
           <svg
             height="1.2em"

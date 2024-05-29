@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { MenuPane, MenuPaneHeader } from "../components/menu";
 import { APIServices } from "kpm-backend-interface";
-import { fetchApi, useDataFecther } from "./utils";
+import { fetchApi, useDataFecther, prefixHost } from "./utils";
 import {
   AuthError,
   EmptyPlaceholder,
@@ -46,11 +46,14 @@ export function Services() {
       <MenuPaneHeader title={i18n("My Services")}>
         <a
           title={i18n("Help / feedback for the personal menu")}
-          href="https://www.kth.se/social/group/feedback-fran-anvand/page/personliga-menyn/"
+          href={prefixHost(
+            "www",
+            "/social/group/feedback-fran-anvand/page/personliga-menyn/"
+          )}
         >
           Help / feedback
         </a>
-        <IconSettings href="https://www.kth.se/social/servicelinks" />
+        <IconSettings href={prefixHost("www", "/social/servicelinks")} />
       </MenuPaneHeader>
       <Fragment>
         <div className="kpm-col">
