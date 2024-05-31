@@ -74,7 +74,7 @@ export function Menu() {
           <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
           <Entrances />
           <nav ref={menuRef} className={cls}>
-            <div className="kpm-mobile-menu">
+            <div className="kpm-mobile-menu-opener">
               <button
                 onClick={(e: any) => {
                   e.preventDefault();
