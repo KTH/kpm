@@ -85,24 +85,24 @@ exports[`<App /> Can be rendered 1`] = `
     <nav
       className="kpm-menu"
     >
-      <ul>
-        <li
-          className="kpm-mobile-menu kpm-mobile"
+      <div
+        className="kpm-mobile-menu-opener"
+      >
+        <button
+          className="kth-menu-item dropdown"
+          onClick={[Function]}
         >
-          <a
-            className="kth-menu-item dropdown"
-            onClick={[Function]}
-          >
-            <img
-              alt=""
-              className="kpm-profile-image"
-              src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
-            />
-            <span>
-              Personal menu
-            </span>
-          </a>
-        </li>
+          <img
+            alt=""
+            className="kpm-profile-image"
+            src="https://www-r.referens.sys.kth.se/files/thumbnail/jhsware"
+          />
+          <span>
+            Personal menu
+          </span>
+        </button>
+      </div>
+      <ul>
         <li>
           <a
             className="kpm-menu-item kth-menu-item dropdown"
