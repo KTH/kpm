@@ -74,27 +74,27 @@ export function Menu() {
           <MenuPaneBackdrop visible={hasMatch} onClose={() => navigate(-1)} />
           <Entrances />
           <nav ref={menuRef} className={cls}>
-            <ul>
-              <li className="kpm-mobile-menu kpm-mobile">
-                <a
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    setIsOpen(!isOpen);
-                  }}
-                  className="kth-menu-item dropdown"
-                >
-                  <img
-                    src={prefixHost(
-                      "www",
-                      `/files/thumbnail/${currentUser?.username}`
-                    )}
-                    alt=""
-                    className="kpm-profile-image"
-                  />
-                  <span>{i18n("Personal menu")}</span>
-                </a>
-              </li>
+            <div className="kpm-mobile-menu-opener">
+              <button
+                onClick={(e: any) => {
+                  e.preventDefault();
+                  setIsOpen(!isOpen);
+                }}
+                className="kth-menu-item dropdown"
+              >
+                <img
+                  src={prefixHost(
+                    "www",
+                    `/files/thumbnail/${currentUser?.username}`
+                  )}
+                  alt=""
+                  className="kpm-profile-image"
+                />
+                <span>{i18n("Personal menu")}</span>
+              </button>
+            </div>
 
+            <ul>
               {hasStudies && (
                 <li>
                   <ToggleNavLink
