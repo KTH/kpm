@@ -150,12 +150,15 @@ $icon-kpm-notifications: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%
     }
 
     &.active > ul {
-      display: block;
+      visibility: visible;
+      opacity: 1;
     }
   }
 
   body #kpm-6cf53 .kpm-menu > ul {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
     flex-direction: column;
 
     .kpm-profile-item {
