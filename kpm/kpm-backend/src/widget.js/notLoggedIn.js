@@ -1,4 +1,7 @@
 (function (js, css, url) {
+  if (window.frameElement) {
+    return;
+  }
   let lang = document.documentElement.lang.startsWith("sv") ? "sv" : "en";
   let links = [
     {
