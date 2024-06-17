@@ -1,4 +1,7 @@
 (function (js, css) {
+  if (window.frameElement) {
+    return;
+  }
   var cr = (t) => document.createElement(t),
     ap = (n) => document.head.appendChild(n);
 
