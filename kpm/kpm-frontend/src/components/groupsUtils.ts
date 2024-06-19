@@ -146,15 +146,15 @@ export function useDropdownToggleListener(
 /**
  Adjust size of dropdown to avoid overflow and switch side (vertical only) to allow
  best use of available screen realestate.
- 
+
  We do this continuosly on animation frame becuase there are lots of layout changes
  that can affect the placement and don't generate events.
- 
+
  Currently we aren't aware of the menubar so the popup needs to be layered on top to make
  sure we don't hide it with the menubar. This looks wierd if we aren't in modal mode
  (default) but not worth pursuing a fix for now.
  */
-const PADDING = 10; // This value is used in groups.scss, search for PADDING
+const PADDING = 60; // This value is used in groups.scss, search for PADDING
 export function usePositionDropdown(
   menuWrapperRef: RefObject<HTMLElement | null>,
   dropdownRef: RefObject<HTMLElement | null>,

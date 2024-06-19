@@ -41,6 +41,7 @@
   // Leave som space to the sides of modal on desktop
   width: calc(100% - 4 * var(--kpmMargin));
   max-width: 80rem;
+  min-height: 40rem;
 
   // Styling
   padding: 0;
