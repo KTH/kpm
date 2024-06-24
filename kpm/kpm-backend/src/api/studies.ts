@@ -78,6 +78,8 @@ export async function studiesApiHandler(
         // Skip roles that does not represent a course round
         if (role.year === undefined || role.term === undefined) continue;
 
+        if (role.round === undefined && role.round_code === undefined) continue;
+
         // Add rounds to course object
         const term = `${role.year}${role.term}`;
         mytermrounds[term] ??= [];
