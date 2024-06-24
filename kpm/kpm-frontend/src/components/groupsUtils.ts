@@ -176,8 +176,6 @@ export function usePositionDropdown(
       }
       callback({
         top: `${scrollOffset}px`,
-        visibility: "visible",
-        opacity: "1",
       });
       return (requestRef.current = requestAnimationFrame(calculate));
     }
@@ -278,8 +276,6 @@ export function usePositionDropdown(
 
     let newTransform: any = {
       transform: `translate(${deltaX}px, ${deltaY}px)`,
-      visibility: "visible",
-      opacity: "1",
     };
     callback(newTransform);
     requestRef.current = requestAnimationFrame(calculate);
